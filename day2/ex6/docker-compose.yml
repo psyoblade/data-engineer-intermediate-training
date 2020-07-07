@@ -1,0 +1,59 @@
+version: "3"
+services:
+  web:
+    container_name: web
+    image: httpd
+    ports:
+      - 80:80
+    links:
+      - fluentd
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24224
+        tag: httpd.access
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    volumes:
+      - $PROJECT_HOME/fluentd/fluent.conf:/fluentd/etc/fluent.conf
+    links:
+      - elasticsearch
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.8.0
+    command: elasticsearch
+    environment:
+      - cluster.name=demo-es
+      - discovery.type=single-node
+      - http.cors.enabled=true
+      - http.cors.allow-credentials=true
+      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
+      - http.cors.allow-origin=/https?:\/\/localhost(:[0-9]+)?/
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    expose:
+      - 9200
+    ports:
+      - 9200:9200
+    volumes:
+      - $PROJECT_HOME/elasticsearch/data:/usr/share/elasticsearch/data
+      - $PROJECT_HOME/elasticsearch/logs:/usr/share/elasticsearch/logs
+    healthcheck:
+      test: curl -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  kibana:
+    container_name: kibana
+    image: kibana:7.8.0
+    links:
+      - elasticsearch
+    ports:
+      - 5601:5601
