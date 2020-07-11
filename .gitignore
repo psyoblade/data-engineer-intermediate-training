@@ -1,5 +1,7 @@
 # Custom
 data/
+datanode/
+namenode/
 source/
 target/
 
