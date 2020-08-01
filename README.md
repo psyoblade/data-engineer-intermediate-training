@@ -5,22 +5,16 @@ $ export PROJECT_HOME=`pwd`
 $ docker-compose up -d
 ```
 
-## Day 1. 데이터 엔지니어링
+## [Basic. 데이터 엔지니어링](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/basic)
         
-## Day 2. 관계형 데이터 수집
+## [Day 1. 관계형 데이터 수집](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day1)
         
-## Day 3. 파일 데이터 수집
+## [Day 2. 파일 데이터 수집](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day2)
         
-## Day 4. 데이터 변환 1부
+## [Day 3. 데이터 변환](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day3)
         
-## Day 5. 데이터 변환 2부
+## [Day 4. 데이터 적재](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day4)
         
-## Day 6. 데이터 적재
-        
-## Day 7. 데이터 코디네이팅
-        
-## Day 8. 아키텍처 설계
-        
-## Day 9. 조별 프로젝트 1부
+## [Day 5. 조별 프로젝트](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day5)
 
-## Day10. 조별 프로젝트 2부
+
