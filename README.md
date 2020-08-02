@@ -6,7 +6,13 @@ $ docker-compose up -d
 ```
 
 * 목차
-  * [데이터 엔지니어링 기초](#Basic.-데이터-엔지니어링)
+  * [데이터 엔지니어링 기초1](#Day 5. 조별 프로젝트)
+  * [데이터 엔지니어링 기초5](#Day-5.-조별-프로젝트)
+
+
+
+
+
 
 ## [Basic. 데이터 엔지니어링](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/basic)
         
