@@ -5,7 +5,7 @@ $ export PROJECT_HOME=`pwd`
 $ docker-compose up -d
 ```
 
-## [Basic. 데이터 엔지니어링](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/basic)
+## [Basic. 데이터 엔지니어링](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/basic/README.md)
 
 ## [Day 1. 관계형 데이터 수집](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day1/REAMDE.md)
         
