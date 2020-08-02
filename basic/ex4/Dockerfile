@@ -1,6 +1,6 @@
 ARG BASE_CONTAINER=mysql:5.7
 FROM $BASE_CONTAINER
-LABEL maintainer="my@email.com"
+LABEL maintainer="student@lg.com"
 
 ADD ./init /docker-entrypoint-initdb.d
 

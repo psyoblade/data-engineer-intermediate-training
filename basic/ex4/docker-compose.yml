@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  mysql:
+    container_name: mysql
+    image: local/mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql

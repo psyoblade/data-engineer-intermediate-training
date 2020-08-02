@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./custom:/etc/myslq/conf.d
+      - mysql_utf8:/etc/myslq/conf.d

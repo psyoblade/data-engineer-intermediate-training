@@ -2,9 +2,9 @@
 > 도커 엔진의 기본적인 동작 방식을 이해하기 위한 실습을 수행합니다
 
 - Table of Contents 
-  * [1. 도커 기본 명령어 실습](#도커-기본-명령어-실습)
-  * [2. 도커 컨테이너 다운로드 및 실행](#도커-컨테이너-다운로드-및-실행)
-  * [3. 도커 이미지 빌드 및 실행](#도커-이미지-빌드-및-실행)
+  * [Ex 1. 도커 기본 명령어 실습](#도커-기본-명령어-실습)
+  * [Ex 2. 도커 컨테이너 다운로드 및 실행](#도커-컨테이너-다운로드-및-실행)
+  * [Ex 3. 도커 이미지 빌드 및 실행](#도커-이미지-빌드-및-실행)
 
 
 ## 도커 기본 명령어 실습
@@ -45,17 +45,17 @@ $ apk del vim
 
 ### 각종 기본 도커 명령어 실습
 ```bash
-docker inspect upbeat_jackson
+docker inspect {CONTAINER_NAME}
 docker image prune
-docker stats upbeat_jackson
+docker stats {CONTAINER_NAME}
 ```
 
-### 메모리 설정을 변경한 상태 확인 - https://docs.docker.com/config/containers/start-containers-automatically/
+### [메모리 설정을 변경한 상태 확인](https://docs.docker.com/config/containers/start-containers-automatically)
 ```bash
 docker run -it -m 500m ubuntu
 docker run -it --restart=on-failure:3 -m 500m ubuntu
 docker run -it --restart=always -m 500m ubuntu
-docker stats stoic_shamir
+docker stats {CONTAINER_NAME}
 docker container prune
 ```
 
@@ -71,7 +71,12 @@ docker run --rm -it ubuntu /bin/bash
 
 ### [MySQL 데이터베이스 기동](https://hub.docker.com/_/mysql)
 ```bash
-$> docker run --name mysql -e MYSQL_ROOT_PASSWORD=rootpass -e MYSQL_DATABASE=testdb -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -d mysql
+$> docker run --name mysql 
+    -e MYSQL_ROOT_PASSWORD=rootpass \
+    -e MYSQL_DATABASE=testdb \
+    -e MYSQL_USER=user \
+    -e MYSQL_PASSWORD=pass \
+    -d mysql
 $> docker exec -it mysql mysql -u user -p
 
 mysql> use testdb;
@@ -81,24 +86,41 @@ mysql> select * from foo;
 ```
 
 ### 볼륨을 추가하여 저장소 관리하기 
+* 아래와 같이 호스트의 현재 경로 혹은 절대경로를 넣으면 호스트와 쉐어할 수 있습니다
 ```bash
-$> docker run --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=testdb -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -v myvolume:/var/lib/mysql -d mysql
-$> docker exec -it mysql mysql -u user -p
+$> docker run --name mysql 
+    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes 
+    -e MYSQL_DATABASE=testdb 
+    -e MYSQL_USER=user 
+    -e MYSQL_PASSWORD=pass 
+    -v ./data:/var/lib/mysql 
+    -d mysql
 
+$> docker exec -it mysql mysql -u user -p
 mysql> use testdb;
 mysql> create table foo (id int, name varchar(300));
 mysql> insert into foo values (1, 'my name');
 mysql> select * from foo;
 
 $> docker volume ls
-$> docker volume rm myvolume
-$> mkdir myvolume
-$> export PROJECT_HOME=`pwd`
-$> docker run --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=testdb -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -v $PROJECT_HOME/myvolume:/var/lib/mysql -d mysql
-```
 
+$> docker run --name mysql 
+    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes 
+    -e MYSQL_DATABASE=testdb 
+    -e MYSQL_USER=user 
+    -e MYSQL_PASSWORD=pass 
+    -v ./data:/var/lib/mysql 
+    -d mysql
+```
+* 일반적으로 볼륨은 파일이 많이 발생하므로 굳이 쉐어하지 않는 편이 좋습니다
 ```bash
-$> docker run --name mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=testdb -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -v $PROJECT_HOME/myvolume:/var/lib/mysql -v $PROJECT_HOME/custom:/etc/mysql/conf.d -d mysql
+$> docker run --name mysql 
+    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes 
+    -e MYSQL_DATABASE=testdb 
+    -e MYSQL_USER=user 
+    -e MYSQL_PASSWORD=pass 
+    -v mysql_default:/var/lib/mysql 
+    -d mysql
 ```
 
 ### 도커 컴포즈를 통한 기동
@@ -117,7 +139,7 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     volumes:
-      - $PROJECT_HOME/myvolume:/var/lib/mysql
+      - mysql_default:/var/lib/mysql
 ```
 
 ### 캐릭터셋 변경 적용하기
@@ -154,11 +176,13 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     volumes:
-      - $PROJECT_HOME/custom:/etc/myslq/conf.d
+      - ./custom:/etc/myslq/conf.d
+      - mysql_utf8:/etc/myslq/conf.d
 ```
 
 
 ## 도커 이미지 빌드 및 실행
+* 아래와 같이 초기화 파일을 생성합니다
 ```bash
 $> cat init/testdb.sql
 DROP TABLE IF EXISTS `seoul_popular_trip`;
@@ -174,11 +198,13 @@ CREATE TABLE `seoul_popular_trip` (
 LOCK TABLES `seoul_popular_trip` WRITE;
 INSERT INTO `seoul_popular_trip` VALUES (0,25931,'통인가게 ','110-300 서울 종로구 관훈동 16 ','03148 서울 종로구 인사동길 32 (관훈동) ','02-733-4867','오래된가게,고미술,통인정신,통인가게,공예샵,현대공예');
 UNLOCK TABLES;
+```
+* 도커파일을 생성합니다
 ```bash
 $> cat Dockerfile
 ARG BASE_CONTAINER=mysql:5.7
 FROM $BASE_CONTAINER
-LABEL maintainer="my@email.com"
+LABEL maintainer="student@lg.com"
 
 ADD ./init /docker-entrypoint-initdb.d
 
@@ -186,8 +212,9 @@ EXPOSE 3306
 
 CMD ["mysqld"]
 ```
+* 로컬에서 도커 이미지를 빌드합니다
 ```bash
-$> docker build -t psyoblade/mysql:5.7 .
+$> docker build -t local/mysql:5.7 .
 ```
 
 ### 빌드된 이미지로 다시 테스트
@@ -199,7 +226,7 @@ version: "3"
 services:
   mysql:
     container_name: mysql
-    image: psyoblade/mysql:5.7
+    image: local/mysql:5.7
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
@@ -207,7 +234,8 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     volumes:
-      - $PROJECT_HOME/myvolume:/var/lib/mysql
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
 
 $> docker exec -it mysql mysql -u user -p
 $> use testdb;
@@ -230,7 +258,8 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     volumes:
-      - $PROJECT_HOME/custom:/etc/mysql/conf.d
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
   php:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
@@ -269,7 +298,8 @@ services:
       timeout: 1s
       retries: 3
     volumes:
-      - $PROJECT_HOME/custom:/etc/mysql/conf.d
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
   php:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin

@@ -2,7 +2,7 @@ version: "3"
 
 services:
   mysql:
-    image: psyoblade/mysql:5.7
+    image: local/mysql:5.7
     container_name: mysql
     restart: always
     environment:
@@ -16,7 +16,8 @@ services:
       timeout: 1s
       retries: 3
     volumes:
-      - $PROJECT_HOME/custom:/etc/mysql/conf.d
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
   php:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
