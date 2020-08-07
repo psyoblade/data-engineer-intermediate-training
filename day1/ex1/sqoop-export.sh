@@ -10,8 +10,8 @@ fi
 args=$@
 
 if [ x"$args" == x"" ]; then
-    echo "./sqoop.sh import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table users --target-dir /tmp/sqoop/users"
+    echo "./sqoop-export.sh -m <num-of-mappers> --table <table-name> --export-dir <export-dir>"
 else
     echo "다음 명령을 수행합니다 - '$@'"
-    docker exec -it sqoop sqoop $@
+    docker exec -it sqoop sqoop export --connect jdbc:mysql://mysql:3306/testdb --username user --password pass $@
 fi
