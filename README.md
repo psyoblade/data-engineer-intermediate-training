@@ -7,14 +7,14 @@ $ docker-compose up -d
 
 ## [Basic. 데이터 엔지니어링](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/basic/README.md)
 
-## [Day 1. 관계형 데이터 수집](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day1/REAMDE.md)
+## [Day 1. 관계형 데이터 수집](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day1/README.md)
         
-## [Day 2. 파일 데이터 수집](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day2/REAMDE.md)
+## [Day 2. 파일 데이터 수집](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day2/README.md)
         
-## [Day 3. 데이터 변환](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day3/REAMDE.md)
+## [Day 3. 데이터 변환](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day3/README.md)
         
-## [Day 4. 데이터 적재](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day4/REAMDE.md)
+## [Day 4. 데이터 적재](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day4/README.md)
         
-## [Day 5. 조별 프로젝트](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day5/REAMDE.md)
+## [Day 5. 조별 프로젝트](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day5/README.md)
 
 
