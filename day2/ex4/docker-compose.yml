@@ -1,15 +1,11 @@
 version: "3"
 services:
-  application:
-    container_name: application
-    image: ubuntu
-    volumes:
-      - $PROJECT_HOME/forwarder.conf:/fluentd/etc/fluent.conf
-  aggregator:
-    container_name: aggregator
-    image: fluent/fluentd
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    user: fluent
+    tty: true
     ports:
-      - 24224:24224
+      - 8080:8080
     volumes:
-      - $PROJECT_HOME/aggregator.conf:/fluentd/etc/fluent.conf
-      - $PROJECT_HOME/target:/fluentd/target
+      - $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf
