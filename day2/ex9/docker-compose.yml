@@ -1,0 +1,21 @@
+version: "3"
+services:
+  forwarder:
+    container_name: forwarder
+    image: fluent/fluentd
+    ports:
+      - 9880:9880
+      - 9881:9881
+      - 24224:24224
+    volumes:
+      - $PROJECT_HOME/forwarder.conf:/fluentd/etc/fluent.conf
+  aggregator-primary:
+    container_name: aggregator-primary
+    image: fluent/fluentd
+    volumes:
+      - $PROJECT_HOME/aggregator.conf:/fluentd/etc/fluent.conf
+  aggreagtor-secondary:
+    container_name: aggreagtor-secondary
+    image: fluent/fluentd
+    volumes:
+      - $PROJECT_HOME/aggregator.conf:/fluentd/etc/fluent.conf
