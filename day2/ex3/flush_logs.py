@@ -28,7 +28,6 @@ for x in range(0, 10):
     fw.close()
     print("file flushed ... sleep 10 secs")
     time.sleep(10)
-    # os.rename("source/accesslogs", "source/accesslogs.%d" % x)
     shutil.move("source/accesslogs", "source/accesslogs.%d" % x)
     print("renamed accesslogs.%d" % x)
 fr.close()

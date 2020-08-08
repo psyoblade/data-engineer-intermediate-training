@@ -1,21 +1,39 @@
-version: "3"
+version: '2' 
 services:
-  forwarder:
-    container_name: forwarder
-    image: fluent/fluentd
+  namenode:
+    container_name: namenode
+    image: bde2020/hadoop-namenode:1.1.0-hadoop2.8-java8
+    volumes:
+      - ./hadoop/namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop/hadoop.env
+    ports:
+      - 50070:50070
+  datanode:
+    container_name: datanode
+    image: bde2020/hadoop-datanode:1.1.0-hadoop2.8-java8
+    depends_on: 
+      - namenode
+    volumes:
+      - ./hadoop/datanode:/hadoop/dfs/data
+    env_file:
+      - ./hadoop/hadoop.env
+    ports:
+      - 50075:50075
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    depends_on: 
+      - namenode
+      - datanode
+    user: fluent
     ports:
       - 9880:9880
-      - 9881:9881
-      - 24224:24224
+    tty: true
     volumes:
-      - $PROJECT_HOME/forwarder.conf:/fluentd/etc/fluent.conf
-  aggregator-primary:
-    container_name: aggregator-primary
-    image: fluent/fluentd
-    volumes:
-      - $PROJECT_HOME/aggregator.conf:/fluentd/etc/fluent.conf
-  aggreagtor-secondary:
-    container_name: aggreagtor-secondary
-    image: fluent/fluentd
-    volumes:
-      - $PROJECT_HOME/aggregator.conf:/fluentd/etc/fluent.conf
+      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
+volumes:
+  namenode:
+  datanode:

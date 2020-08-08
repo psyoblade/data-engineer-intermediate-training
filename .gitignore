@@ -2,6 +2,8 @@
 data/
 datanode/
 namenode/
+nodes/
+logs/
 source/
 target/
 

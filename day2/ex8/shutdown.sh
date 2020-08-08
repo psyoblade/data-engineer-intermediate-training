@@ -1,4 +1,4 @@
 #!/bin/bash
-
-echo "docker rm `docker ps -a | grep ex8 | awk '{ print $1 }'`"
-docker rm `docker ps -a | grep ex8 | awk '{ print $1 }'`
+name="multi-process-ex"
+container_name=`docker ps -a --filter name=$name | grep -v 'CONTAINER' | awk '{ print $1 }'`
+docker rm -f $container_name
