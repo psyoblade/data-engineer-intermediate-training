@@ -4,11 +4,11 @@ services:
     container_name: namenode
     image: bde2020/hadoop-namenode:1.1.0-hadoop2.8-java8
     volumes:
-      - $PROJECT_HOME/hadoop/namenode:/hadoop/dfs/name
+      - ./hadoop/namenode:/hadoop/dfs/name
     environment:
       - CLUSTER_NAME=test
     env_file:
-      - $PROJECT_HOME/hadoop/hadoop.env
+      - ./hadoop/hadoop.env
     ports:
       - 50070:50070
   datanode:
@@ -17,9 +17,9 @@ services:
     depends_on: 
       - namenode
     volumes:
-      - $PROJECT_HOME/hadoop/datanode:/hadoop/dfs/data
+      - ./hadoop/datanode:/hadoop/dfs/data
     env_file:
-      - $PROJECT_HOME/hadoop/hadoop.env
+      - ./hadoop/hadoop.env
     ports:
       - 50075:50075
   fluentd:
@@ -33,7 +33,7 @@ services:
       - 9880:9880
     tty: true
     volumes:
-      - $PROJECT_HOME/fluentd/fluent.conf:/fluentd/etc/fluent.conf
+      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
 volumes:
   namenode:
   datanode:

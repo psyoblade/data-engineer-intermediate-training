@@ -16,7 +16,7 @@ services:
     container_name: fluentd
     image: psyoblade/data-engineer-intermediate-day2-fluentd
     volumes:
-      - $PROJECT_HOME/fluentd/fluent.conf:/fluentd/etc/fluent.conf
+      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
     links:
       - elasticsearch
     ports:
@@ -43,8 +43,8 @@ services:
     ports:
       - 9200:9200
     volumes:
-      - $PROJECT_HOME/elasticsearch/data:/usr/share/elasticsearch/data
-      - $PROJECT_HOME/elasticsearch/logs:/usr/share/elasticsearch/logs
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/logs:/usr/share/elasticsearch/logs
     healthcheck:
       test: curl -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
       interval: 30s

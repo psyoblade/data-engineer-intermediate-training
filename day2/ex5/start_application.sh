@@ -1,12 +1,10 @@
 #!/bin/bash
-if [ ! -e $PROJECT_HOME ]; then
-    echo "\$PROJECT_HOME 이 지정되지 않았습니다"
-    exit 1
-fi
+# https://docs.docker.com/config/containers/logging/fluentd/ - By default, the logging driver connects to localhost:24224
+docker run --rm --log-driver=fluentd ubuntu echo '{"message":"null tag message"}'
+docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.ID}} ubuntu echo '{"message":"send message with id"}'
+docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.Name}} ubuntu echo '{"message":"send message with name"}'
+docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.FullID}} ubuntu echo '{"message":"send message with full-id"}'
 
-# docker run --log-driver=fluentd ubuntu echo '{"message":"Hello Fluentd!!"}'
-# docker run --log-driver=fluentd --log-opt tag=docker.helloworld --log-opt fluentd-address=192.168.128.3:24225 ubuntu echo '{"message":"Hello Fluentd!!"}'
-# docker run --log-driver=fluentd --log-opt tag=docker.{{.ID}} ubuntu echo '{"message":"Hello Fluentd!!"}'
-# docker run --log-driver=fluentd --log-opt tag=docker.{{.FullID}} ubuntu echo '{"message":"Hello Fluentd!!"}'
-# docker run --log-driver=fluentd --log-opt tag=docker.{{.Name}} ubuntu echo '{"message":"Hello Fluentd!!"}'
-docker run --log-driver=fluentd --log-opt tag=docker.helloworld --log-opt fluentd-address=192.168.128.3:24225 ubuntu echo '{"message":"Hello Fluentd!!"}'
+# in case of connect other container 
+aggregator_address=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' aggregator`
+docker run --rm --log-driver=fluentd --log-opt tag=docker.helloworld --log-opt fluentd-address=$aggregator_address:24224 ubuntu echo '{"message":"exact ip send message"}'

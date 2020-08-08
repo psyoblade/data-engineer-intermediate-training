@@ -6,6 +6,6 @@ services:
     user: fluent
     tty: true
     volumes:
-      - $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf
-      - $PROJECT_HOME/source:/fluentd/source
-      - $PROJECT_HOME/target:/fluentd/target
+      - ./fluent.conf:/fluentd/etc/fluent.conf
+      - ./source:/fluentd/source
+      - ./target:/fluentd/target
