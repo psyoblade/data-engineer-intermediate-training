@@ -1,0 +1,15 @@
+version: "3"
+services:
+  application:
+    container_name: application
+    image: ubuntu
+    volumes:
+      - $PROJECT_HOME/forwarder.conf:/fluentd/etc/fluent.conf
+  aggregator:
+    container_name: aggregator
+    image: fluent/fluentd
+    ports:
+      - 24224:24224
+    volumes:
+      - $PROJECT_HOME/aggregator.conf:/fluentd/etc/fluent.conf
+      - $PROJECT_HOME/target:/fluentd/target
