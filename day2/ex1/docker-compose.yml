@@ -8,4 +8,4 @@ services:
     ports:
       - 9880:9880
     volumes:
-      - $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf
+      - ./fluent.conf:/fluentd/etc/fluent.conf
