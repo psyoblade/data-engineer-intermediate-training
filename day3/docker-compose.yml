@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  notebook:
+    user: root
+    privileged: true
+    image: psyoblade/data-engineer-intermediate-day3-notebook
+    restart: always
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    environment:
+      - GRANT_SUDO=yes
+    ports:
+      - "4040:4040"
+      - "4041:4041"
+      - "8888:8888"
