@@ -11,15 +11,11 @@
 
 
 ## 하이브 서비스 기동
-* 하이브 도커 이미지를 다운로드 후, 서비스를 기동합니다
+* 하이브 서버를 띄운 후, 테이블 생성에 필요한 파일을 서버로 복사합니다
 ```bash
-git clone https://github.com/psyoblade/docker-hive.git
-cd docker-hive
+bash>
 docker-compose up -d
-```
-* 테이블 생성에 필요한 파일을 서버로 복사합니다
-```bash
-docker cp data/imdb.tsv hive_hive-server_1:/opt/hive/examples/imdb.tsv
+docker cp data/imdb.tsv day4_hive-server_1:/opt/hive/examples/imdb.tsv
 ```
 
 
