@@ -106,8 +106,87 @@ explain select rank, title, metascore from imdb_parquet_small order by metascore
 ```
 
 ### 3 비정규화를 통한 성능 개선
+> 일반적으로 관계형 데이터베이스의 경우 Redundent 한 데이터 적재를 피해야만 Consistency 문제를 회피할 수 있고 변경 시에 일관된 데이터를 저장할 수 있습니다. 그래서 PK, FK 등으로 Normalization & Denormalization 과정을 거치면서 모델링을 하게 됩니다. 하지만 분산 환경에서의 정규화 했을 때의 관리 비용 보다 Join 에 의한 리소스 비용이 더 큰 경우가 많고 Join 의 문제는 Columnar Storage 나 Spark 의 도움으로 많은 부분 해소될 수 있기 때문에 Denormalization 을 통해 Superset 데이터를 가지는 경우가 더 많습니다. 
+> Daily Batch 작업에서 아주 큰 Dimension 데이터를 생성하고 Daily Logs 와 Join 한 모든 데이터를 가진 Fact 데이터를 생성 (User + Daily logs) 하고 이 데이터를 바탕으로 일 별 Summary 혹은 다양한 분석 지표를 생성하는 것이 효과적인 경우가 많습니다
+* 분산 환경의 대부분의 프레임워크나 엔진들은 트랜잭션 및 Consistency 성능을 희생하여 처리량과 조회 레이턴시를 향상시키는 경우가 많습니다
+* OLTP 가 아니라 OLAP 성 데이터 분석 및 조회의 경우에는 Join 을 통해 실시간 데이터 보다 Redundent 한 데이터를 가지고 빠른 분석이 더 유용한 경우가 많습니다
+* 특히 Spark 의 경우에도 RDD 는 Immutable 이며 모든 RDD 는 새로 생성되는 구조인 점을 보면 더 이해가 빠르실 것입니다 
 
 ### 4 글로벌 정렬 회피를 통한 성능 개선
+>  Order By, Group By, Distribute By, Sort By, Cluster By 실습을 통해 차이점을 이해하고 활용합니다
+* Q1) 예제 emp.txt 파일은 중복된 레코드가 많아서 어떻게 하면 중복을 제거하고 emp.uniq.txt 파일을 생성할 수 있을까요?
+  * Hint) cat, sort and redirection
+```bash
+bash>
+docker exec -it hive_hive-server_1 bash
+cd /opt/hive/examples
+cat emp.txt
+```
+* 비라인을 통해 직원 및 부서 테이블을 생성합니다
+```bash
+bash>
+beeline jdbc:hive2://localhost:10000 scott tiger
+use default;
+
+beeline>
+drop table if exists employee;
+create table employee (name string, dept_id int, seq int) row format delimited fields terminated by '|';
+load data local inpath '/opt/hive/examples/files/emp.uniq.txt' into table employee;
+
+drop table if exists department;
+create table department (id int, name string) row format delimited fields terminated by '|';
+load data local inpath '/opt/hive/examples/files/dept.txt' into table department;
+```
+* Q2) 테이블의 정보를 조회하고 어떻게 조인해야 employee + department 정보를 가진 테이블을 조회할 수 있을까요?
+  * Hint) SELECT a.kly, b.key FROM tableA a JOIN tableB b ON A.key = B.key
+```bash
+beeline>
+desc employee;
+desc department;
+```
+* Q3) 직원 이름, 지원 부서 아이디, 직원 부서 이름을 가진 users 테이블을 생성할 수 있을까요?
+  * Hint) CREATE TABLE users AS SELECT ...
+```bash
+beeline>
+```
+* Order By - 모든 데이터가 해당 키에 대해 정렬됨을 보장합니다
+```bash
+beeline>
+select * from employee order by dept_id;
+```
+* Group By - 군집 후 집계함수를 사용할 수 있습니다
+```bash
+beeline>
+select dept_id, count(*) from employee group by dept_id;
+```
+* Sort By - 해당 파티션 내에서만 정렬을 보장합니다 - mapred.reduce.task = 2 라면 2개의 개별 파티션 내에서만 정렬됩니다
+```bash
+beeline>
+set mapred.reduce.task = 2;
+select * from employee sort by dept_id desc;
+```
+* Distribute By - 단순히 해당 파티션 별로 구분되어 실행됨을 보장합니다 - 정렬을 보장하지 않습니다.
+```bash
+beeline>
+select * from employee distribute by dept_id;
+```
+* Distribute By Sort By - 파티션과 해당 필드에 대해 모두 정렬을 보장합니다
+```bash
+beeline>
+select * from employee distribute by dept_id sort by dept_id asc, seq desc;
+```
+* Cluster By - 파티션 정렬만 보장합니다 - 특정필드의 정렬이 필요하면 Distribute By Sort By 를 사용해야 합니다
+```bash
+beeline>
+select * from employee cluster by dept_id;
+```
+* 전체 Global Order 대신 어떤 방법을 쓸 수 있을까?
+  * Differences between rank and row\_number : rank 는 tiebreak 시에 같은 등수를 매기고 다음 등수가 없으나 row\_number 는 아님
+```bash
+beeline>
+select * from ( select name, dept_id, seq, rank() over (partition by dept_id order by seq desc) as rank from employee ) t where rank < 2;
+```
+
 
 ### 5 버킷팅을 통한 성능 개선
 > 버킷팅을 통해 생성된 테이블의 조회 성능이 일반 파케이 테이블과 얼마나 성능에 차이가 나는지 비교해봅니다
