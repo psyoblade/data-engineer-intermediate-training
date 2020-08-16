@@ -1,0 +1,51 @@
+0: jdbc:hive2://localhost:10000> explain select rank, title, year from imdb_parquet where year > 2000 and title like 'Texas%';
++----------------------------------------------------+
+|                      Explain                       |
++----------------------------------------------------+
+| STAGE DEPENDENCIES:                                |
+|   Stage-0 is a root stage                          |
+|                                                    |
+| STAGE PLANS:                                       |
+|   Stage: Stage-0                                   |
+|     Fetch Operator                                 |
+|       limit: -1                                    |
+|       Processor Tree:                              |
+|         TableScan                                  |
+|           alias: imdb_parquet                      |
+|           Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE |
+|           Filter Operator                          |
+|             predicate: ((UDFToDouble(year) > 2000.0) and (title like 'Texas%')) (type: boolean) |
+|             Statistics: Num rows: 166 Data size: 1992 Basic stats: COMPLETE Column stats: NONE |
+|             Select Operator                        |
+|               expressions: rank (type: int), title (type: string), year (type: string) |
+|               outputColumnNames: _col0, _col1, _col2 |
+|               Statistics: Num rows: 166 Data size: 1992 Basic stats: COMPLETE Column stats: NONE |
+|               ListSink                             |
+|                                                    |
++----------------------------------------------------+
+
+0: jdbc:hive2://localhost:10000> explain select metascore, title from imdb_parquet where metascore > 80;
++----------------------------------------------------+
+|                      Explain                       |
++----------------------------------------------------+
+| STAGE DEPENDENCIES:                                |
+|   Stage-0 is a root stage                          |
+|                                                    |
+| STAGE PLANS:                                       |
+|   Stage: Stage-0                                   |
+|     Fetch Operator                                 |
+|       limit: -1                                    |
+|       Processor Tree:                              |
+|         TableScan                                  |
+|           alias: imdb_parquet                      |
+|           Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE |
+|           Filter Operator                          |
+|             predicate: (metascore > 80) (type: boolean) |
+|             Statistics: Num rows: 333 Data size: 3996 Basic stats: COMPLETE Column stats: NONE |
+|             Select Operator                        |
+|               expressions: metascore (type: int), title (type: string) |
+|               outputColumnNames: _col0, _col1      |
+|               Statistics: Num rows: 333 Data size: 3996 Basic stats: COMPLETE Column stats: NONE |
+|               ListSink                             |
+|                                                    |
++----------------------------------------------------+
