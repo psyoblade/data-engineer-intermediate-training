@@ -1,5 +1,22 @@
 # 데이터 엔지니어링 변환 도구
 
+* 목차
+  * 스파크 기본 명령어 이해
+    * [1. 스파크 기본 명령어 이해](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_1.html)
+    * [2. 기본 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_2.html)
+    * [3. 데이터 타입 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_3.html)
+    * [4. 조인 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_4.html)
+    * [5. 집계 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_5.html)
+    * [6. 스파크 JDBC to MySQL](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_6.html)
+    * [7. 스파크 JDBC to MongoDB](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_7.html)
+  * 스파크 고급 명령어 이해
+    * [1. Repartition vs. Coalesce Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_1.html)
+    * [2. Skewness Problem Resolutions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_2.html)
+    * [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_3.html)
+    * [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_4.html)
+    * [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_5.html)
+
+
 ## 스파크 성능 개선 방향
 > 과거 한 대의 장비에서 최대한 높은 성능의 장비에서 모든 데이터를 넣어두고 데이터 처리를 하는 환경에서 분산 저장소에 데이터를 저장하고 병렬처리를 하는 환경에서는 접근 방법이 다를 수 밖에 없습니다. 기본적으로 하둡 기반의 데이터 처리에 있어서는 모든 데이터가 물리적으로 다른 장비에 고르게 분산되어 저장되어 있다는 가정이 있으며 특정 레코드나 특정 범위의 데이터를 가져오는 것 자체가 어려울 수 있습니다. 하여 분산 환경에서 특히 하둡 + 스파크 환경에서 성능을 개선할 수 있는 방향에 대해 정리해 보았습니다
 > 실무에서 사용하는 대부분의 작업은 데이터를 통해 인사이트를 얻기 위한 탐험적 분석(EDA) 혹은 그러한 탐험적 분석을 통해 의미있는 지표가 나왔다면 이러한 지표를 KPI 로 정하고 일간, 주간, 월간 지표를 뽑기 위한 정형화된 데이터 처리를 수행하는 것이 일반적인 데이터웨어하우스의 사용접근 방법일 것입니다. 그리고 이러한 지표들은 단순한 조회가 아니라 Group By, Join 혹은 Union 등의 복잡한 데이터 처리 과정을 거쳐서 생성되기 마련인데 이러한 연산에는 반드시 Sorting (Shuffling)이 발생할 수 밖에 없으며 이러한 것이 전체적인 성능을 떨어뜨리는 가장 큰 요인입니다.
