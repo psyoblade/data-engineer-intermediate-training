@@ -13,8 +13,11 @@ $ docker-compose up -d
         
 ## [Day 3. 데이터 변환](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day3/README.md)
         
-## [Day 4. 데이터 적재](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day4/README.md)
+## [Day 4. 데이터 적재 - 하이브](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day4/README.md)
         
-## [Day 5. 조별 프로젝트](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day5/README.md)
+## [Day 5. 데이터 적재 - 몽고디비](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day5/README.md)
+
+## [Day 6. 조별 프로젝트](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day6/README.md)
+
 
 
