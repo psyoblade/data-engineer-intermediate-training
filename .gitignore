@@ -1,4 +1,5 @@
 # Custom
+.ipynb_checkpoints/
 data/
 datanode/
 namenode/
