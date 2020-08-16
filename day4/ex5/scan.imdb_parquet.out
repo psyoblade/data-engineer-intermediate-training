@@ -1,4 +1,4 @@
-0: jdbc:hive2://localhost:10000> explain select count(1) from artist where id < 10;
+0: jdbc:hive2://localhost:10000> explain select rank, metascore, title from imdb_parquet where year = '2006' and rank < 101 order by metascore desc;
 +----------------------------------------------------+
 |                      Explain                       |
 +----------------------------------------------------+
@@ -11,31 +11,28 @@
 |     Map Reduce                                     |
 |       Map Operator Tree:                           |
 |           TableScan                                |
-|             alias: artist                          |
-|             Statistics: Num rows: 13990894 Data size: 55963576 Basic stats: COMPLETE Column stats: NONE |
+|             alias: imdb_parquet                    |
+|             Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE |
 |             Filter Operator                        |
-|               predicate: (id < 10) (type: boolean) |
-|               Statistics: Num rows: 4663631 Data size: 18654524 Basic stats: COMPLETE Column stats: NONE |
+|               predicate: ((year = '2006') and (rank < 101)) (type: boolean) |
+|               Statistics: Num rows: 166 Data size: 1992 Basic stats: COMPLETE Column stats: NONE |
 |               Select Operator                      |
-|                 Statistics: Num rows: 4663631 Data size: 18654524 Basic stats: COMPLETE Column stats: NONE |
-|                 Group By Operator                  |
-|                   aggregations: count(1)           |
-|                   mode: hash                       |
-|                   outputColumnNames: _col0         |
-|                   Statistics: Num rows: 1 Data size: 8 Basic stats: COMPLETE Column stats: NONE |
-|                   Reduce Output Operator           |
-|                     sort order:                    |
-|                     Statistics: Num rows: 1 Data size: 8 Basic stats: COMPLETE Column stats: NONE |
-|                     value expressions: _col0 (type: bigint) |
+|                 expressions: rank (type: int), metascore (type: int), title (type: string) |
+|                 outputColumnNames: _col0, _col1, _col2 |
+|                 Statistics: Num rows: 166 Data size: 1992 Basic stats: COMPLETE Column stats: NONE |
+|                 Reduce Output Operator             |
+|                   key expressions: _col1 (type: int) |
+|                   sort order: -                    |
+|                   Statistics: Num rows: 166 Data size: 1992 Basic stats: COMPLETE Column stats: NONE |
+|                   value expressions: _col0 (type: int), _col2 (type: string) |
 |       Reduce Operator Tree:                        |
-|         Group By Operator                          |
-|           aggregations: count(VALUE._col0)         |
-|           mode: mergepartial                       |
-|           outputColumnNames: _col0                 |
-|           Statistics: Num rows: 1 Data size: 8 Basic stats: COMPLETE Column stats: NONE |
+|         Select Operator                            |
+|           expressions: VALUE._col0 (type: int), KEY.reducesinkkey0 (type: int), VALUE._col1 (type: string) |
+|           outputColumnNames: _col0, _col1, _col2   |
+|           Statistics: Num rows: 166 Data size: 1992 Basic stats: COMPLETE Column stats: NONE |
 |           File Output Operator                     |
 |             compressed: false                      |
-|             Statistics: Num rows: 1 Data size: 8 Basic stats: COMPLETE Column stats: NONE |
+|             Statistics: Num rows: 166 Data size: 1992 Basic stats: COMPLETE Column stats: NONE |
 |             table:                                 |
 |                 input format: org.apache.hadoop.mapred.SequenceFileInputFormat |
 |                 output format: org.apache.hadoop.hive.ql.io.HiveSequenceFileOutputFormat |
@@ -48,3 +45,4 @@
 |         ListSink                                   |
 |                                                    |
 +----------------------------------------------------+
+42 rows selected (0.102 seconds)
