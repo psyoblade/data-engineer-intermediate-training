@@ -11,6 +11,23 @@
 
 
 ## 0 도커 기본 명령어 실습
+### 도커 설치 및 서비스 기동
+```bash
+bash>
+curl -fsSL https://get.docker.com/ | sudo sh    # 설치 스크립트 다운로드 및 설치
+sudo usermod -a -G docker $USER    # sudo 없이 명령어를 실행하기 위해 현재 접속 중인 사용자 ($USER)에게 권한 주기
+sudo usermod -a -G docker psyoblade   # 혹은 임의의 사용자 (psyoblade) 에게 권한 주기 - 다시 로그인 해야 적용됩니다
+
+docker info    # sudo 없이 docker 명령이 실행이 가능한 지 테스트 합니다
+
+sudo chmod 666 /var/run/docker.sock    # docker info 실행이 되지 않는다면 docker.sock 파일의 권한 때문일 수 있습니다
+docker --version
+
+sudo apt install docker-compose
+docker-compose --version
+```
+
+### 코드 클론 및 환경설정
 > 알파인 및 우분투 이미지를 통해 도커 컨테이너가 어떻게 동작하는지 이해하고, 기본 명령어를 통해 컨테이너 생성 및 삭제를 수행합니다
 ```bash
 git clone https://github.com/psyoblade/data-engineer-intermediate-training.git
