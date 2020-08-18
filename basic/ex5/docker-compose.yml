@@ -17,7 +17,6 @@ services:
       retries: 3
     volumes:
       - ./custom:/etc/mysql/conf.d
-      - mysql_utf8:/var/lib/mysql
   php:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin

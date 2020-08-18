@@ -12,4 +12,3 @@ services:
       MYSQL_PASSWORD: pass
     volumes:
       - ./custom:/etc/mysql/conf.d
-      - mysql_utf8:/var/lib/mysql

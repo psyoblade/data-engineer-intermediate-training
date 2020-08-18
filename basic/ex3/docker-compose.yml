@@ -11,5 +11,4 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     volumes:
-      - ./custom:/etc/myslq/conf.d
-      - mysql_utf8:/etc/myslq/conf.d
+      - ./custom:/etc/mysql/conf.d
