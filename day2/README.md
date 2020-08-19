@@ -442,12 +442,22 @@ docker ps -a
 
 
 ## 예제 7 멀티 프로세스를 통한 성능 향상
-### 1. 
+### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex7
-docker-compose up -d
-docker ps
+./startup.sh
 ```
+### 2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
+* 첫 번째 프로세스가 파일로 받은 입력을 표준 출력으로 내보내는 프로세스입니다
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex7
+for x in $(seq 1 1000); do echo "{\"hello\":\"world\"}" >> source/start.log; done
+```
+* 두 번째 프로세스는 HTTP 로 입력 받은 내용을 표준 출력으로 내보내는 프로세스입니다
+```bash
+curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
+```
+### 3. Fluentd 구성 파일을 분석합니다
 * fluent.conf
 ```conf
 <system>
@@ -479,22 +489,25 @@ docker ps
     </match>
 </worker>
 ```
-* execute startup.sh
+* startup.sh
 ```bash
 #!/bin/bash
-if [ -z $PROJECT_HOME ]; then
-    echo "\$PROJECT_HOME 이 지정되지 않았습니다"
-    exit 1
-fi
-
-echo "docker run --name multi-process -u fluent -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/   fluentd/target -it psyoblade/fluentd-debian"
-docker run --name multi-process -u fluent -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/ target -it psyoblade/fluentd-debian
+export PROJECT_HOME=`pwd`
+name="multi-process"
+echo "docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd"
+docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd
 ```
-* append source/start.log & access localhost:9880
-  * [Advanced REST Client @ chrome plugin](https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo)
+* shutdown.sh
 ```bash
-for x in $(seq 1 1000); do echo "{\"hello\":\"world\"}" >> source/start.log; done
-curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
+#!/bin/bash
+name="multi-process"
+container_name=`docker ps -a --filter name=$name | grep -v 'CONTAINER' | awk '{ print $1 }'`
+docker rm -f $container_name
+```
+### 4. 기동된 Fluentd 를 종료합니다
+```bash
+./shutdown.sh
+docker ps -a
 ```
 
 
