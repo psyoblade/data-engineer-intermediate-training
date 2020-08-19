@@ -19,6 +19,7 @@
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex1
 docker-compose up -d
+docker logs -f fluentd
 ```
 ### 2. HTTP 로 Fluentd 서버 동작 유무 확인
 ```bash
@@ -64,6 +65,7 @@ docker ps -a
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex2
 docker-compose up -d
+docker logs -f fluentd
 ```
 ### 2. 로컬 경로에 파일이 저장되는 지 확인
 * target 경로에 로그가 1분 단위로 플러시 됩니다
@@ -137,6 +139,7 @@ docker ps -a
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex3
 mkdir source
 docker-compose up -d
+docker logs -f fluentd
 ```
 ### 2. 시스템 로그를 임의로 생성
 * 로그 생성기를 통해 accesslog 파일을 계속 source 경로에 append 하고, target 경로에서는 수집되는지 확인합니다
@@ -248,16 +251,32 @@ docker ps -a
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex4
 docker-compose up -d
+docker logs -f fluentd
 ```
-### 2. 로컬 경로에 파일이 저장되는 지 확인
-* target 경로에 로그가 1분 단위로 플러시 됩니다
+### 2. http://student#.lgebigdata.com:8080/test 위치로 POST 데이터를 전송합니다
+* ARC Rest Client 를 사용해도 되고 curl 을 사용해도 됩니다
+  * Epoch 시간은 https://www.epochconverter.com/ 사이트를 이용합니다
 ```bash
-ls -al target
-tree target
+POST: http://student{no}.lgebigdata.com:8080/test
+BODY: { "column1":"1", "column2":"hello-world", "logtime": 1593379470 }
+
+curl -X POST -d '{ "column1":"1", "column2":"hello-world", "logtime": 1593379470 }' http://student{no}.lgebigdata.com:8080/test
+```
+### 3. 수신된 데이터가 로그에 정상 출력됨을 확인합니다
+### 4. 기동된 Fluentd 를 종료합니다
+```bash
+docker-compose down
+docker ps -a
 ```
 
 
 ## 예제 5 컨테이너 환경에서의 로그 전송
+### 1. 도커 컨테이너 기동
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex5
+docker-compose up -d
+docker logs -f fluentd
+```
 * aggregator.conf
 ```conf
 <source>
