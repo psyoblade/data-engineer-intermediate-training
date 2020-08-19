@@ -35,6 +35,7 @@ docker exec -it sqoop hadoop fs -cat /tmp/sqoop/seoul_popular_trip/part-m-00000
 ```bash
 docker stop sqoop
 docker rm sqoop
+export PROJECT_HOME=`pwd`
 docker run --name sqoop --network sqoop-mysql -v $PROJECT_HOME/jars:/jdbc -p 8042:8042 -p 8088:8088 -p 19888:19888 -p 50070:50070 -dit psyoblade/data-engineer-intermediate-day1-sqoop
 ```
 
