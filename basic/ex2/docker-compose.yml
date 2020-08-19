@@ -11,4 +11,6 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     volumes:
-      - ./mysql_default:/var/lib/mysql
+      - mysql_default:/var/lib/mysql
+volumes:
+  mysql_default:
