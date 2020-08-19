@@ -45,7 +45,7 @@ services:
   fluentd:
     container_name: fluentd
     image: psyoblade/data-engineer-intermediate-day2-fluentd
-    user: fluent
+    user: root
     tty: true
     ports:
       - 9880:9880
@@ -117,7 +117,7 @@ services:
   fluentd:
     container_name: fluentd
     image: psyoblade/data-engineer-intermediate-day2-fluentd
-    user: fluent
+    user: root
     tty: true
     volumes:
       - ./fluent.conf:/fluentd/etc/fluent.conf
@@ -132,9 +132,10 @@ docker ps -a
 
 
 ## 예제 3 시스템 로그를 테일링 하면서 표준 출력으로 전달
-### 1. 도커 컨테이너 기동
+### 1. 도커 컨테이너 기동 및 수집해야 할 로그폴더(source)를 생성합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex3
+mkdir source
 docker-compose up -d
 ```
 ### 2. 시스템 로그를 임의로 생성
@@ -228,7 +229,7 @@ services:
   fluentd:
     container_name: fluentd
     image: psyoblade/data-engineer-intermediate-day2-fluentd
-    user: fluent
+    user: root
     tty: true
     volumes:
       - ./fluent.conf:/fluentd/etc/fluent.conf
@@ -242,8 +243,18 @@ docker ps -a
 ```
 
 
-## 예제 4 ~~싱글 노드에서 성능 향상 방안~~
-> 싱글노드에서 성능향상은 멀티프로세스 혹은 설정변경 수준이상으로 성능 개선의 여지가 없어 제외합니다
+## 예제 4 트랜스포머를 통한 시간 데이터 변환
+### 1. 도커 컨테이너 기동
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex4
+docker-compose up -d
+```
+### 2. 로컬 경로에 파일이 저장되는 지 확인
+* target 경로에 로그가 1분 단위로 플러시 됩니다
+```bash
+ls -al target
+tree target
+```
 
 
 ## 예제 5 컨테이너 환경에서의 로그 전송
@@ -304,6 +315,11 @@ docker run --rm --log-driver=fluentd --log-opt tag=docker.helloworld --log-opt f
 ```bash
 docker stop aggregator
 docker rm aggregator
+```
+### 4. 기동된 Fluentd 를 종료합니다
+```bash
+docker-compose down
+docker ps -a
 ```
 
 
@@ -380,6 +396,11 @@ docker-compose up -d
 * stop container
 ```bash
 docker-compose down
+```
+### 4. 기동된 Fluentd 를 종료합니다
+```bash
+docker-compose down
+docker ps -a
 ```
 
 
@@ -515,6 +536,11 @@ name="multi-process-ex"
 container_name=`docker ps -a --filter name=$name | grep -v 'CONTAINER' | awk '{ print $1 }'`
 docker rm -f $container_name
 ```
+### 4. 기동된 Fluentd 를 종료합니다
+```bash
+docker-compose down
+docker ps -a
+```
 
 
 ## 예제 9 전송되는 데이터를 분산 저장소에 저장
@@ -550,7 +576,7 @@ services:
     depends_on:
       - namenode
       - datanode
-    user: fluent
+    user: root
     ports:
       - 9880:9880
     tty: true
@@ -577,6 +603,11 @@ for number in $(seq 0 $max); do
 done
 ```
 * [Browse HDFS Directory](http://localhost:50070/explorer.html)
+### 4. 기동된 Fluentd 를 종료합니다
+```bash
+docker-compose down
+docker ps -a
+```
 
 
 
