@@ -19,15 +19,15 @@
 ### 아파치 스쿱 테이블 수집 예제 테이블
 * import seoul_popular_trip table on local
 ```bash
-docker exec -it sqoop sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /tmp/sqoop/users
-docker exec -it sqoop ls /tmp/sqoop/users
-docker exec -it sqoop cat /tmp/sqoop/users/part-m-00000
+docker exec -it sqoop sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
+docker exec -it sqoop ls /tmp/sqoop/seoul_popular_trip
+docker exec -it sqoop cat /tmp/sqoop/seoul_popular_trip/part-m-00000
 ```
 * import seoul_popular_trip table on cluster
 ```bash
-docker exec -it sqoop sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /tmp/sqoop/users
-docker exec -it sqoop hadoop fs -ls /tmp/sqoop/users
-docker exec -it sqoop hadoop fs -cat /tmp/sqoop/users/part-m-00000
+docker exec -it sqoop sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
+docker exec -it sqoop hadoop fs -ls /tmp/sqoop/seoul_popular_trip
+docker exec -it sqoop hadoop fs -cat /tmp/sqoop/seoul_popular_trip/part-m-00000
 ```
 
 ### 리소스 매니저 접근을 위한 포트 오픈
