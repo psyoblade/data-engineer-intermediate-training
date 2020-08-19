@@ -271,12 +271,22 @@ docker ps -a
 
 
 ## 예제 5 컨테이너 환경에서의 로그 전송
-### 1. 도커 컨테이너 기동
+> 도커 어플리케이션에서 발생하는 로그를 플루언트디로 적재합니다
+### 1. 도커 로그 수집 컨테이너를 기동합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex5
-docker-compose up -d
-docker logs -f fluentd
+./start_fluentd.sh
 ```
+* 위와 같이 명령을 수행하고 Ctrl+P,Q 를 누르고 컨테이너를 종료하지 않고 밖으로 빠져나옵니다
+### 2. 더미 어플리케이션을 기동하여 도커로그 수집기로 로그를 전송합니다
+```bash
+./start_application.sh
+```
+### 3. 다시 로그 수집기(aggregator)에 로그가 정상적으로 수신되는지 확인합니다
+```bash
+docker logs -f aggregator
+```
+### 3. Fluentd 구성 파일을 분석합니다
 * aggregator.conf
 ```conf
 <source>
@@ -337,12 +347,31 @@ docker rm aggregator
 ```
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-docker-compose down
+docker stop aggregator
+docker rm aggregator
 docker ps -a
 ```
 
 
 ## 예제 6 도커 컴포즈를 통한 로그 전송 구성
+### 1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex6
+docker-compose up -d
+docker ps
+```
+### 2. 키바나를 통해 엘라스틱 서치를 구성합니다
+* 키바나 사이트에 접속하여 색인을 생성
+  * 1. http://student{id}.lgebigdata.com:5601 사이트에 접속 (모든 컴포넌트 기동에 약 3~5분 정도 소요됨)
+  * 2. Explorer on my Own 선택 후, 좌측 "Discover" 메뉴 선택
+  * 3. Step1 of 2: Create Index with 'fluentd-\*' 까지 치면 아래에 색인이 뜨고 "Next step" 클릭
+  * 4. Step2 of 2: Configure settings 에서 @timestamp 필드를 선택하고 "Create index pattern" 클릭
+  * 5. Discover 메뉴로 이동하면 전송되는 로그를 실시간으로 확인할 수 있음
+* 웹 사이트에 접속을 시도
+  * 1. http://student{id}.lgebigdata.com 사이트에 접속하면 It works! 가 뜨면 정상
+  * 2. 다시 Kibana 에서 Refresh 버튼을 누르면 접속 로그가 전송됨을 확인
+
+### 3. Fluentd 구성 파일을 분석합니다
 * docker-compose.yml
 ```yml
 version: "3"
@@ -405,17 +434,6 @@ services:
     ports:
       - 5601:5601
 ```
-* start container
-```bash
-docker-compose up -d
-```
-* [Create index using kibana](http://localhost:5601/)
-  * Create Index with 'fluentd-\*'
-  * Access localhost:80 and Refresh
-* stop container
-```bash
-docker-compose down
-```
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
 docker-compose down
@@ -424,6 +442,12 @@ docker ps -a
 
 
 ## 예제 7 멀티 프로세스를 통한 성능 향상
+### 1. 
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex7
+docker-compose up -d
+docker ps
+```
 * fluent.conf
 ```conf
 <system>
