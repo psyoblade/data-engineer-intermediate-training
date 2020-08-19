@@ -15,6 +15,17 @@
 
 
 ## 예제 1 웹 서버를 통해서 전송 받은 데이터를 표준 출력으로 전달
+### 1. 도커 컨테이너 기동
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex1
+docker-compose up -d
+```
+### 2. HTTP 로 Fluentd 서버 동작 유무 확인
+```bash
+docker ps --filter name=fluentd
+curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
+```
+### 3. Fluentd 구성 파일을 분석합니다
 * fluent.conf
 ```conf
 <source>
@@ -41,14 +52,26 @@ services:
     volumes:
       - ./fluent.conf:/fluentd/etc/fluent.conf
 ```
-* start container & post data
+### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-docker-compose up -d
-curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
+docker-compose down
+docker ps -a
 ```
 
 
 ## 예제 2 더미 에이전트를 통해 생성된 이벤트를 로컬 저장소에 저장
+### 1. 도커 컨테이너 기동
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex2
+docker-compose up -d
+```
+### 2. 로컬 경로에 파일이 저장되는 지 확인
+* target 경로에 로그가 1분 단위로 플러시 됩니다
+```bash
+ls -al target
+tree target
+```
+### 3. Fluentd 구성 파일을 분석합니다
 * fluent.conf
 ```conf
 <source>
@@ -101,15 +124,63 @@ services:
       - ./source:/fluentd/source
       - ./target:/fluentd/target
 ```
-* create source/target directory & start container
+### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-mkdir source
-mkdir target
-docker-compose up -d
+docker-compose down
+docker ps -a
 ```
 
 
 ## 예제 3 시스템 로그를 테일링 하면서 표준 출력으로 전달
+### 1. 도커 컨테이너 기동
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex3
+docker-compose up -d
+```
+### 2. 시스템 로그를 임의로 생성
+* 로그 생성기를 통해 accesslog 파일을 계속 source 경로에 append 하고, target 경로에서는 수집되는지 확인합니다
+```bash
+python flush_logs.py
+tree source
+tree target
+```
+* 임의 로그 생성기 (flush\_logs.py) 코드를 분석합니다
+```python
+#!/usr/bin/env python
+import sys, time, os, shutil
+
+# 1. read apache_logs flush every 100 lines until 1000 lines
+# 2.   every 1000 lines file close & rename file with seq
+# 3. create new accesslogs and goto 1.
+
+def readlines(fp, num_of_lines):
+    lines = ""
+    for line in fp:
+        lines += line
+        num_of_lines = num_of_lines - 1
+        if num_of_lines == 0:
+            break
+    return lines
+
+
+fr = open("apache_logs", "r")
+for x in range(0, 10):
+    fw = open("source/accesslogs", "w+")
+    for y in range(0, 10):
+        lines = readlines(fr, 100)
+        fw.write(lines)
+        fw.flush()
+        time.sleep(0.1)
+        sys.stdout.write(".")
+        sys.stdout.flush()
+    fw.close()
+    print("file flushed ... sleep 10 secs")
+    time.sleep(10)
+    shutil.move("source/accesslogs", "source/accesslogs.%d" % x)
+    print("renamed accesslogs.%d" % x)
+fr.close()
+```
+### 3. Fluentd 구성 파일을 분석합니다
 * fluent.conf
 ```conf
 <source>
@@ -164,50 +235,15 @@ services:
       - ./source:/fluentd/source
       - ./target:/fluentd/target
 ```
-* flush\_logs.py
-```python
-#!/usr/bin/env python
-import sys, time, os, shutil
-
-# 1. read apache_logs flush every 100 lines until 1000 lines
-# 2.   every 1000 lines file close & rename file with seq
-# 3. create new accesslogs and goto 1.
-
-def readlines(fp, num_of_lines):
-    lines = ""
-    for line in fp:
-        lines += line
-        num_of_lines = num_of_lines - 1
-        if num_of_lines == 0:
-            break
-    return lines
-
-
-fr = open("apache_logs", "r")
-for x in range(0, 10):
-    fw = open("source/accesslogs", "w+")
-    for y in range(0, 10):
-        lines = readlines(fr, 100)
-        fw.write(lines)
-        fw.flush()
-        time.sleep(0.1)
-        sys.stdout.write(".")
-        sys.stdout.flush()
-    fw.close()
-    print("file flushed ... sleep 10 secs")
-    time.sleep(10)
-    shutil.move("source/accesslogs", "source/accesslogs.%d" % x)
-    print("renamed accesslogs.%d" % x)
-fr.close()
-```
-* start container & generate logs
+### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-docker-compose up -d
-python flush_logs.py
+docker-compose down
+docker ps -a
 ```
 
 
 ## 예제 4 ~~싱글 노드에서 성능 향상 방안~~
+> 싱글노드에서 성능향상은 멀티프로세스 혹은 설정변경 수준이상으로 성능 개선의 여지가 없어 제외합니다
 
 
 ## 예제 5 컨테이너 환경에서의 로그 전송

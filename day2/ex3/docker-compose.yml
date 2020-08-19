@@ -3,7 +3,7 @@ services:
   fluentd:
     container_name: fluentd
     image: psyoblade/data-engineer-intermediate-day2-fluentd
-    user: fluent
+    user: root
     tty: true
     volumes:
       - ./fluent.conf:/fluentd/etc/fluent.conf
