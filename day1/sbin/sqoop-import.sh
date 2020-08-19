@@ -14,5 +14,5 @@ if [ x"$args" == x"" ]; then
 else
     echo "다음 명령을 수행합니다"
     echo "> docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass $@"
-    docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username userx --password pass $@
+    docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass $@
 fi
