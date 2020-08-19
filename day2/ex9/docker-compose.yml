@@ -4,7 +4,7 @@ services:
     container_name: namenode
     image: bde2020/hadoop-namenode:1.1.0-hadoop2.8-java8
     volumes:
-      - ./hadoop/namenode:/hadoop/dfs/name
+      - namenode:/hadoop/dfs/name
     environment:
       - CLUSTER_NAME=test
     env_file:
@@ -17,7 +17,7 @@ services:
     depends_on: 
       - namenode
     volumes:
-      - ./hadoop/datanode:/hadoop/dfs/data
+      - datanode:/hadoop/dfs/data
     env_file:
       - ./hadoop/hadoop.env
     ports:

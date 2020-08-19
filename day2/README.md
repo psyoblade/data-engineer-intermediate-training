@@ -442,9 +442,10 @@ docker ps -a
 
 
 ## 예제 7 멀티 프로세스를 통한 성능 향상
-### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다
+### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex7
+mkdir source
 ./startup.sh
 ```
 ### 2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
@@ -512,6 +513,17 @@ docker ps -a
 
 
 ## 예제 8 멀티 프로세스를 통해 하나의 위치에 저장
+### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex8
+mkdir source
+./startup.sh
+```
+### 2. 별도의 터미널에서 아래의 명령으로 멀티 프로세스를 통해 하나의 위치에 저장되는 것을 확인합니다
+```bash
+tree target
+```
+### 3. Fluentd 구성 파일을 분석합니다
 * fuent.conf
 ```conf
 <system>
@@ -566,8 +578,8 @@ docker ps -a
 #!/bin/bash
 export PROJECT_HOME=`pwd`
 name="multi-process-ex"
-echo "docker run --name $name -u fluent -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/   target -it psyoblade/fluentd-debian"
-docker run --name $name -u fluent -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/    fluentd/target -it psyoblade/fluentd-debian
+echo "docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd"
+docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd
 ```
 * progress.sh
 ```bash
