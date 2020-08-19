@@ -606,12 +606,31 @@ docker rm -f $container_name
 ```
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
+Ctrl+C
 docker-compose down
 docker ps -a
 ```
 
 
 ## 예제 9 전송되는 데이터를 분산 저장소에 저장
+### 1. 서비스를 기동합니다
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex9
+./startup.sh
+```
+### 2. 별도의 터미널에서 모든 서비스(fluentd, namenode, datanode)가 떠 있는지 확인합니다
+```bash
+docker ps
+```
+### 3. HTTP 로 전송하고 해당 데이터가 하둡에 저장되는지 확인합니다
+  * http://student#.lgebigdata.com:50070/explorer.html 에 접속하여 확인합니다
+  * 혹은 namenode 에 설치된 hadoop client 로 확인 합니다
+  * WARN: 현재 노드수가 1개밖에 없어서 Replication 오류가 나고 있습니다. 
+```
+./progress.sh
+docker exec -it namenode hadoop fs -ls /user/fluent/webhdfs/
+```
+### 4. Fluentd 구성 파일을 분석합니다
 * fluent.conf
 ```conf
 version: '2'
@@ -670,12 +689,9 @@ for number in $(seq 0 $max); do
     dot="$dot."
 done
 ```
-* [Browse HDFS Directory](http://localhost:50070/explorer.html)
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
+Ctrl+C
 docker-compose down
 docker ps -a
 ```
-
-
-
