@@ -28,7 +28,7 @@ services:
     depends_on: 
       - namenode
       - datanode
-    user: fluent
+    user: root
     ports:
       - 9880:9880
     tty: true
