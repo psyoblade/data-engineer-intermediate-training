@@ -27,6 +27,7 @@ docker ps --filter name=sqoop
 ```
 * 기동되지 않았다면 Network, MySQL, Sqoop 순서대로 생성합니다
 ```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day1/sbin
 ./docker-create-network.sh
 ./docker-run-mysql.sh
 ./docker-run-sqoop.sh
