@@ -189,3 +189,11 @@ bash>
 ./sqoop-eval.sh "truncate testdb.seoul_popular_exp"
 ./sqoop-export.sh -m 4 --table seoul_popular_exp --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table --export-dir /user/sqoop/target/seoul_popular_exp
 ```
+
+### 컨테이너 정리
+* 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
+```bash
+docker stop `docker ps -q`
+docker rm `docker ps -aq`
+docker rm -f `docker ps -aq` # 위의 두 가지 작업을 한 번에 수행
+```
