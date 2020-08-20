@@ -13256,17 +13256,16 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[(&#39;spark.app.name&#39;, &#39;Data Engineer Intermediate Day4&#39;),
- (&#39;spark.app.id&#39;, &#39;local-1597060805026&#39;),
+<pre>[(&#39;spark.driver.port&#39;, &#39;43895&#39;),
+ (&#39;spark.app.name&#39;, &#39;Data Engineer Intermediate Day4&#39;),
  (&#39;spark.rdd.compress&#39;, &#39;True&#39;),
  (&#39;spark.serializer.objectStreamReset&#39;, &#39;100&#39;),
  (&#39;spark.master&#39;, &#39;local[*]&#39;),
- (&#39;spark.driver.port&#39;, &#39;37023&#39;),
- (&#39;spark.submit.pyFiles&#39;, &#39;&#39;),
  (&#39;spark.executor.id&#39;, &#39;driver&#39;),
+ (&#39;spark.app.id&#39;, &#39;local-1597941627079&#39;),
  (&#39;spark.submit.deployMode&#39;, &#39;client&#39;),
- (&#39;spark.dataengineer.intermediate.day4&#39;, &#39;third&#39;),
- (&#39;spark.driver.host&#39;, &#39;c62546b6de88&#39;),
+ (&#39;spark.dataengineer.intermediate.day4&#39;, &#39;tutorial-3&#39;),
+ (&#39;spark.driver.host&#39;, &#39;0951343db520&#39;),
  (&#39;spark.ui.showConsoleProgress&#39;, &#39;true&#39;)]</pre>
 </div>
 
@@ -13278,7 +13277,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; DataFrame 생성 &quot;&quot;&quot;</span>
@@ -14550,9 +14549,9 @@ only showing top 3 rows
 +---+----------+-----------------------+
 |id |today     |now                    |
 +---+----------+-----------------------+
-|0  |2019-07-27|2019-07-27 08:35:51.695|
-|1  |2019-07-27|2019-07-27 08:35:51.695|
-|2  |2019-07-27|2019-07-27 08:35:51.695|
+|0  |2020-08-20|2020-08-20 16:40:55.512|
+|1  |2020-08-20|2020-08-20 16:40:55.512|
+|2  |2020-08-20|2020-08-20 16:40:55.512|
 +---+----------+-----------------------+
 only showing top 3 rows
 
@@ -14595,7 +14594,7 @@ only showing top 3 rows
 <pre>+------------------+------------------+
 |date_sub(today, 5)|date_add(today, 5)|
 +------------------+------------------+
-|        2019-07-22|        2019-08-01|
+|        2020-08-15|        2020-08-25|
 +------------------+------------------+
 only showing top 1 row
 

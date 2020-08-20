@@ -13618,8 +13618,8 @@ only showing top 3 rows
 +------------+------------------+
 only showing top 10 rows
 
-CPU times: user 13.5 ms, sys: 0 ns, total: 13.5 ms
-Wall time: 41.2 s
+CPU times: user 13.2 ms, sys: 2.77 ms, total: 16 ms
+Wall time: 38.5 s
 </pre>
 </div>
 </div>
@@ -13695,8 +13695,8 @@ Wall time: 41.2 s
 +------------+------------------+
 only showing top 10 rows
 
-CPU times: user 16.4 ms, sys: 3.2 ms, total: 19.6 ms
-Wall time: 1min 22s
+CPU times: user 22.5 ms, sys: 4.4 ms, total: 26.9 ms
+Wall time: 1min 27s
 </pre>
 </div>
 </div>
@@ -13831,8 +13831,8 @@ Wall time: 1min 22s
 +------------+------------------+
 only showing top 10 rows
 
-CPU times: user 14.4 ms, sys: 2.02 ms, total: 16.4 ms
-Wall time: 36.6 s
+CPU times: user 17.7 ms, sys: 6.65 ms, total: 24.4 ms
+Wall time: 38 s
 </pre>
 </div>
 </div>
@@ -13843,7 +13843,7 @@ Wall time: 36.6 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -13876,36 +13876,18 @@ Wall time: 36.6 s
 +- Exchange hashpartitioning(registration#6, 200)
    +- *(5) HashAggregate(keys=[registration#6], functions=[partial_avg(sale_price#17)])
       +- *(5) Project [registration#6, sale_price#17]
-         +- *(5) SortMergeJoin [make#7, model#8, cast(skew_key#732 as bigint)], [make#14, model#15, skew_key#738L], Inner, (cast(CheckOverflow((promote_precision(cast(engine_size#16 as decimal(38,17))) - promote_precision(cast(engine_size#9 as decimal(38,17)))), DecimalType(38,17)) as double) &lt;= 0.1)
-            :- *(2) Sort [make#7 ASC NULLS FIRST, model#8 ASC NULLS FIRST, cast(skew_key#732 as bigint) ASC NULLS FIRST], false, 0
-            :  +- Exchange hashpartitioning(make#7, model#8, cast(skew_key#732 as bigint), 200)
-            :     +- Generate explode([0,1,2,3]), [registration#6, make#7, model#8, engine_size#9], false, [skew_key#732]
+         +- *(5) SortMergeJoin [make#7, model#8, cast(skew_key#324 as bigint)], [make#14, model#15, skew_key#330L], Inner, (cast(CheckOverflow((promote_precision(cast(engine_size#16 as decimal(38,17))) - promote_precision(cast(engine_size#9 as decimal(38,17)))), DecimalType(38,17)) as double) &lt;= 0.1)
+            :- *(2) Sort [make#7 ASC NULLS FIRST, model#8 ASC NULLS FIRST, cast(skew_key#324 as bigint) ASC NULLS FIRST], false, 0
+            :  +- Exchange hashpartitioning(make#7, model#8, cast(skew_key#324 as bigint), 200)
+            :     +- Generate explode([0,1,2,3]), [registration#6, make#7, model#8, engine_size#9], false, [skew_key#324]
             :        +- *(1) Project [registration#6, make#7, model#8, engine_size#9]
             :           +- *(1) Filter (isnotnull(make#7) &amp;&amp; isnotnull(model#8))
             :              +- *(1) FileScan parquet [registration#6,make#7,model#8,engine_size#9] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-            +- *(4) Sort [make#14 ASC NULLS FIRST, model#15 ASC NULLS FIRST, skew_key#738L ASC NULLS FIRST], false, 0
-               +- Exchange hashpartitioning(make#14, model#15, skew_key#738L, 200)
-                  +- *(3) Filter ((isnotnull(model#15) &amp;&amp; isnotnull(make#14)) &amp;&amp; isnotnull(skew_key#738L))
-                     +- *(3) Project [make#14, model#15, engine_size#16, sale_price#17, (monotonically_increasing_id() % 4) AS skew_key#738L]
+            +- *(4) Sort [make#14 ASC NULLS FIRST, model#15 ASC NULLS FIRST, skew_key#330L ASC NULLS FIRST], false, 0
+               +- Exchange hashpartitioning(make#14, model#15, skew_key#330L, 200)
+                  +- *(3) Filter ((isnotnull(model#15) &amp;&amp; isnotnull(make#14)) &amp;&amp; isnotnull(skew_key#330L))
+                     +- *(3) Project [make#14, model#15, engine_size#16, sale_price#17, (monotonically_increasing_id() % 4) AS skew_key#330L]
                         +- *(3) FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
-+------------+------------------+
-|registration|   avg(sale_price)|
-+------------+------------------+
-|     0AB64Pl|3037.4286995515695|
-|     GXRKoPB| 2987.987181738367|
-|     ALcFxhR| 3022.568145376804|
-|     JxDGxYo| 2980.301324503311|
-|     Q8GO2EU| 2977.881762228701|
-|     6yn3Vke|2993.3496869602764|
-|     FWPfoGh|2993.3496869602764|
-|     bUhDTXQ|2998.1522468868434|
-|     AXlbNWj|2995.7316161100016|
-|     VYvy491|2991.8207713688653|
-+------------+------------------+
-only showing top 10 rows
-
-CPU times: user 14.2 ms, sys: 4.8 ms, total: 19 ms
-Wall time: 47.8 s
 </pre>
 </div>
 </div>

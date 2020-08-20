@@ -13195,7 +13195,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[100]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
@@ -13249,7 +13249,7 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>False</pre>
+<pre>True</pre>
 </div>
 
 </div>
@@ -13298,14 +13298,9 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[[Row(_1=1)],
- [Row(_1=2)],
- [Row(_1=3)],
- [Row(_1=4), Row(_1=5)],
- [Row(_1=6)],
- [Row(_1=7)],
- [Row(_1=8)],
- [Row(_1=9), Row(_1=10)]]</pre>
+<pre>[[Row(_1=1), Row(_1=2), Row(_1=3)],
+ [Row(_1=4), Row(_1=5), Row(_1=6)],
+ [Row(_1=7), Row(_1=8), Row(_1=9), Row(_1=10)]]</pre>
 </div>
 
 </div>
@@ -13561,8 +13556,8 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[[Row(id=4), Row(id=5), Row(id=6), Row(id=9)],
- [Row(id=1), Row(id=2), Row(id=3), Row(id=7), Row(id=8)]]</pre>
+<pre>[[Row(id=1), Row(id=4), Row(id=8)],
+ [Row(id=3), Row(id=5), Row(id=9), Row(id=2), Row(id=6), Row(id=7)]]</pre>
 </div>
 
 </div>
@@ -13595,9 +13590,9 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[[Row(id=4), Row(id=5), Row(id=6), Row(id=9)],
- [Row(id=1), Row(id=2)],
- [Row(id=3), Row(id=7), Row(id=8)]]</pre>
+<pre>[[Row(id=1), Row(id=4), Row(id=8)],
+ [Row(id=3), Row(id=5), Row(id=9)],
+ [Row(id=2), Row(id=6), Row(id=7)]]</pre>
 </div>
 
 </div>
@@ -13637,7 +13632,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df1</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30000000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># 1:1 조인이 되지 않도록 3의 배수</span>
@@ -13662,7 +13657,7 @@ div#notebook {
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>8 8 200
+<pre>3 3 200
 root
  |-- id: long (nullable = false)
 
@@ -13685,7 +13680,7 @@ root
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">rand</span>
@@ -13707,7 +13702,7 @@ root
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">getNumPartitions</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
@@ -13722,7 +13717,7 @@ root
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">getNumPartitions</span><span class="p">([</span><span class="n">df1</span><span class="o">.</span><span class="n">rdd</span><span class="p">,</span> <span class="n">df2</span><span class="o">.</span><span class="n">rdd</span><span class="p">,</span> <span class="n">df12</span><span class="o">.</span><span class="n">rdd</span><span class="p">,</span> <span class="n">df3</span><span class="o">.</span><span class="n">rdd</span><span class="p">,</span> <span class="n">df4</span><span class="o">.</span><span class="n">rdd</span><span class="p">])</span>
@@ -13742,8 +13737,8 @@ root
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>8
-8
+<pre>3
+3
 200
 1
 1
@@ -13766,7 +13761,7 @@ root
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">rdd1</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="s2">&quot;target/troubleshoot1/df1&quot;</span><span class="p">)</span>
@@ -13792,8 +13787,8 @@ root
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>8
-8
+<pre>3
+3
 200
 2
 2
@@ -13816,7 +13811,7 @@ root
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[87]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">defaultShufflePartitions</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">))</span>
@@ -13852,7 +13847,7 @@ root
 <pre>
 defaultShufflePartitions: 200
 defaultMinPartitions: 2
-defaultParallelism: 8
+defaultParallelism: 3
 maxPartitionBytes: 128mb
 openCostInBytes: 4mb
 
@@ -13866,7 +13861,7 @@ openCostInBytes: 4mb
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[75]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">getConf</span><span class="p">()</span><span class="o">.</span><span class="n">getAll</span><span class="p">()</span>
@@ -13882,14 +13877,13 @@ openCostInBytes: 4mb
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[75]:</div>
+    <div class="prompt output_prompt">Out[17]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[(&#39;spark.driver.host&#39;, &#39;fdd6fb42eae1&#39;),
- (&#39;spark.driver.port&#39;, &#39;45021&#39;),
+<pre>[(&#39;spark.app.id&#39;, &#39;local-1597941808426&#39;),
  (&#39;spark.app.name&#39;, &#39;Data Engineer Intermediate Day4&#39;),
  (&#39;spark.rdd.compress&#39;, &#39;True&#39;),
  (&#39;spark.dataengineer.intermediate.day4&#39;, &#39;troubleshoot-1&#39;),
@@ -13897,8 +13891,9 @@ openCostInBytes: 4mb
  (&#39;spark.master&#39;, &#39;local[*]&#39;),
  (&#39;spark.executor.id&#39;, &#39;driver&#39;),
  (&#39;spark.submit.deployMode&#39;, &#39;client&#39;),
+ (&#39;spark.driver.host&#39;, &#39;0951343db520&#39;),
  (&#39;spark.ui.showConsoleProgress&#39;, &#39;true&#39;),
- (&#39;spark.app.id&#39;, &#39;local-1597130596411&#39;)]</pre>
+ (&#39;spark.driver.port&#39;, &#39;39445&#39;)]</pre>
 </div>
 
 </div>
@@ -13920,7 +13915,7 @@ openCostInBytes: 4mb
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[95]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -13942,36 +13937,36 @@ openCostInBytes: 4mb
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>== Parsed Logical Plan ==
 Repartition 1, true
-+- Project [id#29L]
-   +- Join Inner, (id#29L = id#31L)
-      :- Range (1, 30000000, step=3, splits=Some(8))
-      +- Range (1, 20000000, step=2, splits=Some(8))
++- Project [id#11L]
+   +- Join Inner, (id#11L = id#13L)
+      :- Range (1, 30000000, step=3, splits=Some(3))
+      +- Range (1, 20000000, step=2, splits=Some(3))
 
 == Analyzed Logical Plan ==
 id: bigint
 Repartition 1, true
-+- Project [id#29L]
-   +- Join Inner, (id#29L = id#31L)
-      :- Range (1, 30000000, step=3, splits=Some(8))
-      +- Range (1, 20000000, step=2, splits=Some(8))
++- Project [id#11L]
+   +- Join Inner, (id#11L = id#13L)
+      :- Range (1, 30000000, step=3, splits=Some(3))
+      +- Range (1, 20000000, step=2, splits=Some(3))
 
 == Optimized Logical Plan ==
 Repartition 1, true
-+- Project [id#29L]
-   +- Join Inner, (id#29L = id#31L)
-      :- Range (1, 30000000, step=3, splits=Some(8))
-      +- Range (1, 20000000, step=2, splits=Some(8))
++- Project [id#11L]
+   +- Join Inner, (id#11L = id#13L)
+      :- Range (1, 30000000, step=3, splits=Some(3))
+      +- Range (1, 20000000, step=2, splits=Some(3))
 
 == Physical Plan ==
 Exchange RoundRobinPartitioning(1)
-+- *(5) Project [id#29L]
-   +- *(5) SortMergeJoin [id#29L], [id#31L], Inner
-      :- *(2) Sort [id#29L ASC NULLS FIRST], false, 0
-      :  +- Exchange hashpartitioning(id#29L, 200)
-      :     +- *(1) Range (1, 30000000, step=3, splits=8)
-      +- *(4) Sort [id#31L ASC NULLS FIRST], false, 0
-         +- Exchange hashpartitioning(id#31L, 200)
-            +- *(3) Range (1, 20000000, step=2, splits=8)
++- *(5) Project [id#11L]
+   +- *(5) SortMergeJoin [id#11L], [id#13L], Inner
+      :- *(2) Sort [id#11L ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(id#11L, 200)
+      :     +- *(1) Range (1, 30000000, step=3, splits=3)
+      +- *(4) Sort [id#13L ASC NULLS FIRST], false, 0
+         +- Exchange hashpartitioning(id#13L, 200)
+            +- *(3) Range (1, 20000000, step=2, splits=3)
 </pre>
 </div>
 </div>
@@ -13992,7 +13987,7 @@ Exchange RoundRobinPartitioning(1)
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[96]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">coalesce</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -14014,36 +14009,36 @@ Exchange RoundRobinPartitioning(1)
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>== Parsed Logical Plan ==
 Repartition 1, false
-+- Project [id#29L]
-   +- Join Inner, (id#29L = id#31L)
-      :- Range (1, 30000000, step=3, splits=Some(8))
-      +- Range (1, 20000000, step=2, splits=Some(8))
++- Project [id#11L]
+   +- Join Inner, (id#11L = id#13L)
+      :- Range (1, 30000000, step=3, splits=Some(3))
+      +- Range (1, 20000000, step=2, splits=Some(3))
 
 == Analyzed Logical Plan ==
 id: bigint
 Repartition 1, false
-+- Project [id#29L]
-   +- Join Inner, (id#29L = id#31L)
-      :- Range (1, 30000000, step=3, splits=Some(8))
-      +- Range (1, 20000000, step=2, splits=Some(8))
++- Project [id#11L]
+   +- Join Inner, (id#11L = id#13L)
+      :- Range (1, 30000000, step=3, splits=Some(3))
+      +- Range (1, 20000000, step=2, splits=Some(3))
 
 == Optimized Logical Plan ==
 Repartition 1, false
-+- Project [id#29L]
-   +- Join Inner, (id#29L = id#31L)
-      :- Range (1, 30000000, step=3, splits=Some(8))
-      +- Range (1, 20000000, step=2, splits=Some(8))
++- Project [id#11L]
+   +- Join Inner, (id#11L = id#13L)
+      :- Range (1, 30000000, step=3, splits=Some(3))
+      +- Range (1, 20000000, step=2, splits=Some(3))
 
 == Physical Plan ==
 Coalesce 1
-+- *(5) Project [id#29L]
-   +- *(5) SortMergeJoin [id#29L], [id#31L], Inner
-      :- *(2) Sort [id#29L ASC NULLS FIRST], false, 0
-      :  +- Exchange hashpartitioning(id#29L, 200)
-      :     +- *(1) Range (1, 30000000, step=3, splits=8)
-      +- *(4) Sort [id#31L ASC NULLS FIRST], false, 0
-         +- Exchange hashpartitioning(id#31L, 200)
-            +- *(3) Range (1, 20000000, step=2, splits=8)
++- *(5) Project [id#11L]
+   +- *(5) SortMergeJoin [id#11L], [id#13L], Inner
+      :- *(2) Sort [id#11L ASC NULLS FIRST], false, 0
+      :  +- Exchange hashpartitioning(id#11L, 200)
+      :     +- *(1) Range (1, 30000000, step=3, splits=3)
+      +- *(4) Sort [id#13L ASC NULLS FIRST], false, 0
+         +- Exchange hashpartitioning(id#13L, 200)
+            +- *(3) Range (1, 20000000, step=2, splits=3)
 </pre>
 </div>
 </div>
@@ -14063,7 +14058,7 @@ Coalesce 1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[98]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -14084,8 +14079,8 @@ Coalesce 1
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 1.7 ms, sys: 1.51 ms, total: 3.21 ms
-Wall time: 3.21 s
+<pre>CPU times: user 2.76 ms, sys: 438 µs, total: 3.2 ms
+Wall time: 8.37 s
 </pre>
 </div>
 </div>
@@ -14096,7 +14091,7 @@ Wall time: 3.21 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[99]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -14117,8 +14112,8 @@ Wall time: 3.21 s
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 1.88 ms, sys: 1.58 ms, total: 3.46 ms
-Wall time: 5.88 s
+<pre>CPU times: user 3.98 ms, sys: 214 µs, total: 4.2 ms
+Wall time: 10.4 s
 </pre>
 </div>
 </div>

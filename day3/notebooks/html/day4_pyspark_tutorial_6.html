@@ -13240,7 +13240,7 @@ docker run --name mysql --network<span class="o">=</span>day3_default -e <span c
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.context</span> <span class="kn">import</span> <span class="n">SQLContext</span>
@@ -13262,7 +13262,7 @@ docker run --name mysql --network<span class="o">=</span>day3_default -e <span c
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">seoul_popular_trip</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
@@ -13313,7 +13313,7 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
@@ -13330,7 +13330,7 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">top10</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -13340,53 +13340,10 @@ only showing top 5 rows
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>+-------------------------------+-----+
-|                           name|count|
-+-------------------------------+-----+
-|                  CJ 올리브마켓|   36|
-|       더 스트리트 (THE STREET)|   32|
-|                       통인시장|   30|
-|          신세계면세점 (명동점)|   28|
-|              신세계백화점 본점|   27|
-|                     장진우식당|   26|
-|젠틀몬스터 신사 플래그쉽 스토어|   26|
-|                     401 (홍대)|   26|
-|                 설빙 신림2호점|   24|
-|         리아네이처 (Lyanature)|   22|
-|      너드온어스 (Nerd on ea...|   22|
-|                아티지 (ARTAGE)|   22|
-|                     두레한식당|   22|
-|               스튜디오콘크리트|   22|
-|               샤오짠(Xiaozhan)|   22|
-|                롯데면세점 본점|   21|
-|      펭귄스카페 (S&amp;Penguins...|   20|
-|             신라아이파크면세점|   20|
-|               종각지하쇼핑센터|   19|
-|               명동지하쇼핑센터|   19|
-+-------------------------------+-----+
-only showing top 20 rows
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">top10</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;jdbc&quot;</span><span class="p">)</span> \

@@ -13245,7 +13245,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">s1</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="s2">&quot;source/t1&quot;</span><span class="p">)</span>
@@ -13287,7 +13287,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[59]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">c1</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
@@ -13320,7 +13320,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">c12</span><span class="o">.</span><span class="n">explain</span><span class="p">()</span>
@@ -13343,18 +13343,18 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>== Physical Plan ==
-*(5) Project [make#1260, model#1261, engine_size#1262, registration#1259, sale_price#1270]
-+- *(5) SortMergeJoin [make#1260], [make#1267], Inner
-   :- *(2) Sort [make#1260 ASC NULLS FIRST], false, 0
-   :  +- Exchange hashpartitioning(make#1260, 200)
-   :     +- *(1) Project [registration#1259, make#1260, model#1261, engine_size#1262]
-   :        +- *(1) Filter isnotnull(make#1260)
-   :           +- *(1) FileScan parquet [registration#1259,make#1260,model#1261,engine_size#1262] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/t1], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-   +- *(4) Sort [make#1267 ASC NULLS FIRST], false, 0
-      +- Exchange hashpartitioning(make#1267, 200)
-         +- *(3) Project [make#1267, sale_price#1270]
-            +- *(3) Filter isnotnull(make#1267)
-               +- *(3) FileScan parquet [make#1267,sale_price#1270] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/t2], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;make:string,sale_price:double&gt;
+*(5) Project [make#153, model#154, engine_size#155, registration#152, sale_price#163]
++- *(5) SortMergeJoin [make#153], [make#160], Inner
+   :- *(2) Sort [make#153 ASC NULLS FIRST], false, 0
+   :  +- Exchange hashpartitioning(make#153, 200)
+   :     +- *(1) Project [registration#152, make#153, model#154, engine_size#155]
+   :        +- *(1) Filter isnotnull(make#153)
+   :           +- *(1) FileScan parquet [registration#152,make#153,model#154,engine_size#155] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/t1], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+   +- *(4) Sort [make#160 ASC NULLS FIRST], false, 0
+      +- Exchange hashpartitioning(make#160, 200)
+         +- *(3) Project [make#160, sale_price#163]
+            +- *(3) Filter isnotnull(make#160)
+               +- *(3) FileScan parquet [make#160,sale_price#163] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/t2], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;make:string,sale_price:double&gt;
 +-------+-----+--------------------+------------+----------+
 |   make|model|         engine_size|registration|sale_price|
 +-------+-----+--------------------+------------+----------+
@@ -13389,7 +13389,7 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[61]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">s1</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="s2">&quot;overwrite&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">partitionBy</span><span class="p">(</span><span class="s2">&quot;make&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="s2">&quot;target/troubleshoot5/model&quot;</span><span class="p">)</span>
@@ -13403,7 +13403,7 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[62]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="s2">&quot;target/troubleshoot5/model&quot;</span><span class="p">)</span>
@@ -13418,7 +13418,7 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[63]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model_price</span><span class="o">.</span><span class="n">explain</span><span class="p">()</span>
@@ -13441,14 +13441,14 @@ only showing top 10 rows
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>== Physical Plan ==
-*(5) Project [make#1349, model#1347, engine_size#1348, registration#1346, sale_price#1356]
-+- *(5) SortMergeJoin [make#1349], [make#1357], Inner
-   :- *(2) Sort [make#1349 ASC NULLS FIRST], false, 0
-   :  +- Exchange hashpartitioning(make#1349, 200)
-   :     +- *(1) FileScan parquet [registration#1346,model#1347,engine_size#1348,make#1349] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/target/troubleshoot5/model], PartitionCount: 9, PartitionFilters: [isnotnull(make#1349)], PushedFilters: [], ReadSchema: struct&lt;registration:string,model:string,engine_size:decimal(38,18)&gt;
-   +- *(4) Sort [make#1357 ASC NULLS FIRST], false, 0
-      +- Exchange hashpartitioning(make#1357, 200)
-         +- *(3) FileScan parquet [sale_price#1356,make#1357] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/target/troubleshoot5/price], PartitionCount: 9, PartitionFilters: [isnotnull(make#1357)], PushedFilters: [], ReadSchema: struct&lt;sale_price:double&gt;
+*(5) Project [make#242, model#240, engine_size#241, registration#239, sale_price#249]
++- *(5) SortMergeJoin [make#242], [make#250], Inner
+   :- *(2) Sort [make#242 ASC NULLS FIRST], false, 0
+   :  +- Exchange hashpartitioning(make#242, 200)
+   :     +- *(1) FileScan parquet [registration#239,model#240,engine_size#241,make#242] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/target/troubleshoot5/model], PartitionCount: 9, PartitionFilters: [isnotnull(make#242)], PushedFilters: [], ReadSchema: struct&lt;registration:string,model:string,engine_size:decimal(38,18)&gt;
+   +- *(4) Sort [make#250 ASC NULLS FIRST], false, 0
+      +- Exchange hashpartitioning(make#250, 200)
+         +- *(3) FileScan parquet [sale_price#249,make#250] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/target/troubleshoot5/price], PartitionCount: 9, PartitionFilters: [isnotnull(make#250)], PushedFilters: [], ReadSchema: struct&lt;sale_price:double&gt;
 +-------+-----+--------------------+------------+----------+
 |   make|model|         engine_size|registration|sale_price|
 +-------+-----+--------------------+------------+----------+
@@ -13483,7 +13483,7 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[64]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">numBuckets</span> <span class="o">=</span> <span class="mi">10</span>
@@ -13498,7 +13498,7 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[65]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">t1</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;select * from model&quot;</span><span class="p">)</span>
@@ -13513,7 +13513,7 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[66]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">t12</span><span class="o">.</span><span class="n">explain</span><span class="p">()</span>
@@ -13536,29 +13536,29 @@ only showing top 10 rows
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>== Physical Plan ==
-*(3) Project [make#1424, model#1425, engine_size#1426, registration#1423, sale_price#1434]
-+- *(3) SortMergeJoin [make#1424], [make#1431], Inner
-   :- *(1) Sort [make#1424 ASC NULLS FIRST], false, 0
-   :  +- *(1) Project [registration#1423, make#1424, model#1425, engine_size#1426]
-   :     +- *(1) Filter isnotnull(make#1424)
-   :        +- *(1) FileScan parquet default.model[registration#1423,make#1424,model#1425,engine_size#1426] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/spark-warehouse/model], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;, SelectedBucketsCount: 10 out of 10
-   +- *(2) Sort [make#1431 ASC NULLS FIRST], false, 0
-      +- *(2) Project [make#1431, sale_price#1434]
-         +- *(2) Filter isnotnull(make#1431)
-            +- *(2) FileScan parquet default.price[make#1431,sale_price#1434] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/spark-warehouse/price], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;make:string,sale_price:double&gt;, SelectedBucketsCount: 10 out of 10
+*(3) Project [make#309, model#310, engine_size#311, registration#308, sale_price#319]
++- *(3) SortMergeJoin [make#309], [make#316], Inner
+   :- *(1) Sort [make#309 ASC NULLS FIRST], false, 0
+   :  +- *(1) Project [registration#308, make#309, model#310, engine_size#311]
+   :     +- *(1) Filter isnotnull(make#309)
+   :        +- *(1) FileScan parquet default.model[registration#308,make#309,model#310,engine_size#311] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/spark-warehouse/model], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;, SelectedBucketsCount: 10 out of 10
+   +- *(2) Sort [make#316 ASC NULLS FIRST], false, 0
+      +- *(2) Project [make#316, sale_price#319]
+         +- *(2) Filter isnotnull(make#316)
+            +- *(2) FileScan parquet default.price[make#316,sale_price#319] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/spark-warehouse/price], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;make:string,sale_price:double&gt;, SelectedBucketsCount: 10 out of 10
 +------+-------+--------------------+------------+----------+
 |  make|  model|         engine_size|registration|sale_price|
 +------+-------+--------------------+------------+----------+
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    2742.0|
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    4363.0|
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    4468.0|
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    3327.0|
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    3375.0|
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    5364.0|
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    4880.0|
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    2449.0|
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    4977.0|
-|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    3560.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    2912.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    3011.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    5454.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    2754.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    5424.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    3174.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    3186.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    3766.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    3036.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    2300.0|
 +------+-------+--------------------+------------+----------+
 only showing top 10 rows
 
