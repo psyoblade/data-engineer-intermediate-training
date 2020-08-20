@@ -9,8 +9,10 @@ services:
     restart: always
     depends_on:
       - mysql
+      - mongo
     links:
       - mysql
+      - mongo
     volumes:
       - ./notebooks:/home/jovyan/work
     environment:
@@ -35,3 +37,9 @@ services:
       retries: 3
     volumes:
       - ./mysql/custom:/etc/mysql/conf.d
+  mongo:
+    image: mongo:4.4.0
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
