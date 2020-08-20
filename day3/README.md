@@ -1,5 +1,23 @@
 # 3일차. 데이터 엔지니어링 변환 도구 - Spark
 > 아파치 스파크를 통해 다양한 변환 예제를 실습합니다
+> 이번 장에서 사용하는 외부 오픈 포트는 4040, 4041, 8888 입니다
+
+## 스파크 실습을 위한 도커 컨테이너를 기동합니다
+* 최신 소스를 내려 받습니다
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training
+git pull
+```
+* 스파크 워크스페이스로 이동하여 도커를 기동합니다
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3
+docker-compose up -d
+docker-compose logs -f notebook
+```
+* 출력되는 로그 가운데 마지막에 URL 이 출력되는데 해당 URL에서 127.0.0.1 값을 student#.lgebigdata.com 으로 변경하여 접속합니다
+  * http://student#.lgebigdata.com:8888/?token=d508d3a860cbc00c1095b078f9f7bd755a3b3f95f715692e
+  * 접속하면 jupyter notebook lab 이 열리고 work 폴더가 보이면 정상 기동 된 것입니다
+  * 이제 마우스로 work 폴더를 클릭하고 해당 경로 안에서 노트북 페이지를 생성합니다
 
 * 목차
   * 스파크 기본 명령어 이해
@@ -16,6 +34,7 @@
     * [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_3.html)
     * [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_4.html)
     * [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_5.html)
+
 
 
 ## 스파크 성능 개선 방향
