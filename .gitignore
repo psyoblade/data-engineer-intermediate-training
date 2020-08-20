@@ -6,7 +6,6 @@ datanode/
 namenode/
 nodes/
 logs/
-source/
 target/
 
 # Created by https://www.toptal.com/developers/gitignore/api/git
