@@ -16,6 +16,11 @@
 ## 아파치 스쿱을 통한 테이블 수집
 
 ### 1. 스쿱 도커 기동 확인
+* 최신 버전 코드를 내려 받습니다
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training
+git pull
+```
 * 아래의 명령을 확인합니다
 ```bash
 docker ps --filter name=sqoop
