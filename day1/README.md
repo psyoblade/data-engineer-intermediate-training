@@ -43,6 +43,7 @@ bash>
 ```bash
 docker exec -it mysql mysql -uuser -p
 mysql>
+use testdb;
 drop table inc_table;
 drop table users;
 drop table seoul_popular_stg;
@@ -50,6 +51,7 @@ drop table seoul_popular_exp;
 ```
 * 로컬 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
 ```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day1/sbin
 docker exec -it sqoop sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
 docker exec -it sqoop ls /tmp/sqoop/seoul_popular_trip
 docker exec -it sqoop cat /tmp/sqoop/seoul_popular_trip/part-m-00000
@@ -170,7 +172,7 @@ bash>
 
 
 ### 테이블 익스포트 시에 스테이징을 통한 적재
-* 이미 적재되어 있거나 일부 실패한 데이터가 들어가 있는 경우에 truncate 후에 다시 적재해야만 하는데 이 때에 사용하는 옵션이 staging 입니다
+* 적재 시에 도중에 실패하는 경우 대상 테이블에 일부 데이터만 적재되는 경우가 있는데 이러한 경우를 회피하기 위해 스테이징 테이블을 사용할 수 있습니다.
 * 스테이징 테이블은 원본 테이블을 그대로 두고 별도의 스테이징 테이블에 적재 후 완전 export 가 성공하면 원본 테이블을 clear 후 적재합니다
 * 아래와 같이 임시 스테이징 테이블을 동일한 스키마로 생성하고 익스포트를 수행합니다
   * userid: user, password: pass
@@ -180,8 +182,10 @@ docker exec -it mysql mysql -uuser -p
 
 mysql>
 create table testdb.seoul_popular_stg (category int not null, id int not null, name varchar(100), address varchar(100), naddress varchar(100), tel varchar(20), tag varchar(500)) character set utf8 collate utf8_general_ci;
-
+```
+* 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 truncate 는 수작업으로 수행되어야만 합니다
+```
 bash>
+./sqoop-eval.sh "truncate testdb.seoul_popular_exp"
 ./sqoop-export.sh -m 4 --table seoul_popular_exp --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table --export-dir /user/sqoop/target/seoul_popular_exp
 ```
-
