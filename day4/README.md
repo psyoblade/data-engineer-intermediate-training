@@ -2,46 +2,360 @@
 > 아파치 하이브를 통해 다양한 데이터 웨어하우스 예제를 실습합니다
 
 * 목차
-  * [하이브 서비스 기동](#하이브_서비스_기동)
-  * [하이브 트러블슈팅 가이드](#하이브_트러블슈팅_가이드)
-    * [1. 파티셔닝을 통한 성능 개선](#1_파티셔닝을_통한_성능_개선)
-    * [2. 파일포맷 변경을 통한 성능 개선](#2_파일포맷_변경을_통한_성능_개선)
-    * [3. 비정규화를 통한 성능 개선](#3_비정규화를_통한_성능_개선)
-    * [4. 글로벌 정렬 회피를 통한 성능 개선](#4_글로벌_정렬_회피를_통한_성능_개선)
-    * [5. 버킷팅을 통한 성능 개선](#5_버킷팅을_통한_성능_개선)
+  * [하이브 서비스 기동](#1-하이브-서비스-기동)
+  * [하이브 기본명령어 가이드](#2-하이브-기본-명령어-가이드)
+    * [1. 하이브 DDL 가이드](#2-1-하이브-DDL-가이드)
+    * [2. 하이브 DML 가이드](#2-2-하이브-DML-가이드)
+  * [하이브 트러블슈팅 가이드](#3-하이브-트러블슈팅-가이드)
+    * [1. 파티셔닝을 통한 성능 개선](#3-1-파티셔닝을-통한-성능-개선)
+    * [2. 파일포맷 변경을 통한 성능 개선](#3-2-파일포맷-변경을-통한-성능-개선)
+    * [3. 비정규화를 통한 성능 개선](#3-3-비정규화를-통한-성능-개선)
+    * [4. 글로벌 정렬 회피를 통한 성능 개선](#3-4-글로벌-정렬-회피를-통한-성능-개선)
+    * [5. 버킷팅을 통한 성능 개선](#3-5-버킷팅을-통한-성능-개선)
+
+* 참고 자료
+  * [Hive Language Manual DDL](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
+  * [Hive Language Manual DML](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML)
+  * [Top 7 Hive DDL Commands](https://data-flair.training/blogs/hive-ddl-commands/)
+  * [Top 7 Hive DML Commands](https://data-flair.training/blogs/hive-dml-commands/)
+  * [IMDB data from 2006 to 2016](https://www.kaggle.com/PromptCloudHQ/imdb-data)
+  * [Hive update, delete ERROR](https://community.cloudera.com/t5/Support-Questions/Hive-update-delete-and-insert-ERROR-in-cdh-5-4-2/td-p/29485)
 
 
-## 하이브 서비스 기동
-* 하이브 서버를 띄운 후, 테이블 생성에 필요한 파일을 서버로 복사합니다
+## 1 하이브 서비스 기동
+> 스파크 실습을 위한 도커 컨테이너를 기동합니다
+* 최신 소스를 내려 받습니다
 ```bash
 bash>
+cd /home/ubuntu/work/data-engineer-intermediate-training
+git pull
+```
+* 모든 컨테이너를 종료하고, 더 이상 사용하지 않는 도커 이미지 및 볼륨을 제거합니다
+```bash
+bash>
+docker rm -f `docker ps -aq`
+docker image prune
+docker volume prune
+```
+* 스파크 워크스페이스로 이동하여 도커를 기동합니다
+```bash
+bash>
+cd /home/ubuntu/work/data-engineer-intermediate-training/day4
+
 docker-compose up -d
+docker-compose ps
+```
+* 실습에 필요한 IMDB 데이터를 컨테이너로 복사합니다
+```bash
+bash>
 docker cp data/imdb.tsv day4_hive-server_1:/opt/hive/examples/imdb.tsv
+docker-compose logs -f hive-server 
+```
+
+## 2 하이브 기본 명령어 가이드 
+
+### 2-1 하이브 데이터베이스 DDL 가이드
+#### 1. CREATE
+> 데이터베이스를 생성합니다
+```sql
+beeline> CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
+[COMMENT database_comment]
+[LOCATION hdfs_path]
+[WITH DBPROPERTIES (property_name=property_value, ...)];
+
+create database if not exists testdb comment 'test database' location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
+```
+
+#### 2. SHOW
+> 데이터베이스 목록을 출력합니다
+```sql
+beeline> SHOW (DATABASES|SCHEMAS);
+show databases;
+```
+
+#### 3. DESCRIBE
+> 데이터베이스 정보를 출력합니다
+```sql
+beeline> DESCRIBE DATABASE/SCHEMA [EXTENDED] db_name;
+describe database testdb;
+```
+
+#### 4. USE
+> 해당 데이터베이스를 사용합니다
+```sql
+beeline> USE database_name;
+use testdb;
+```
+
+#### 5. DROP
+> 데이터베이스를 삭제합니다 (default:RESTRICT) 테이블이 존재하는 경우 오류가 발생하며, CACADE 옵션을 주는 경우 모든 테이블까지 삭제됩니다
+```sql
+beeline> DROP (DATABASE|SCHEMA) [IF EXISTS] database_name [RESTRICT|CASCADE];
+drop database testdb;
+show databases;
+```
+
+#### 6. ALTER
+> 데이터베이스의 정보를 변경합니다
+* DBPROPERTIES
+```sql
+beeline> ALTER (DATABASE|SCHEMA) database_name SET DBPROPERTIES (property_name=property_value, ...);
+create database if not exists testdb comment 'test database' location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
+alter database testdb set dbproperties ('createdfor'='park.suhyuk');
+describe database extended testdb;
+```
+* OWNER
+```sql
+beeline> ALTER (DATABASE|SCHEMA) database_name SET OWNER [USER|ROLE] user_or_role;
+alter database testdb set owner role admin;
+describe database extended testdb;
 ```
 
 
-## 하이브 트러블슈팅 가이드
+### 2-2 하이브 테이블 DDL 가이드
+#### 1. CREATE
+> 테이블을 생성합니다
+```sql
+beeline> CREATE TABLE [IF NOT EXISTS] [db_name.] table_name [(col_name data_type [COMMENT col_comment], ... [COMMENT col_comment])]
+[COMMENT table_comment]
+[ROW FORMAT row_format]
+[STORED AS file_format]
+[LOCATION hdfs_path];
+
+create table if not exists employee (emp_id string comment 'employee id',
+emp_name string comment 'employee name', 
+emp_salary bigint comment 'employee salary')
+comment 'test employee table' 
+row format delimited 
+fields terminated by ','
+stored as textfile;
+```
+
+#### 2. SHOW
+> 테이블 목록을 조회합니다
+```sql
+beeline> SHOW TABLES [IN database_name];
+show tables;
+```
+
+#### 3. DESCRIBE
+> 테이블 정보를 조회합니다
+```sql
+beeline> DESCRIBE [EXTENDED|FORMATTED] [db_name.] table_name[.col_name ( [.field_name])];
+describe employee;
+```
+
+#### 4. DROP
+> 테이블을 삭제합니다. 일반 DROP 의 경우 .Trash/current directory 경로로 이동하지만 PURGE 옵션을 주는 경우 즉시 삭제됩니다
+```sql
+beeline> DROP TABLE [IF EXISTS] table_name [PURGE];
+drop table if exists employee purge;
+show tables;
+```
+
+#### 5. ALTER
+> 테이블을 변경합니다
+* RENAME
+```sql
+beeline> ALTER TABLE table_name RENAME TO new_table_name;
+create table if not exists employee (emp_id string comment 'employee id',
+emp_name string comment 'employee name', 
+emp_salary bigint comment 'employee salary')
+comment 'test employee table' 
+row format delimited 
+fields terminated by ','
+stored as textfile;
+
+alter table employee rename to renamed_emp;
+show tables;
+```
+* ADD COLUMNS
+```sql
+beeline> ALTER TABLE table_name ADD COLUMNS (column1, column2) ;
+create table if not exists employee (emp_id string comment 'employee id')
+comment 'test employee table' 
+row format delimited 
+fields terminated by ','
+stored as textfile;
+
+alter table employee add columns (emp_name string comment 'employee name', 
+emp_salary bigint comment 'employee salary');
+
+desc employee;
+desc renamed_emp;
+```
+
+#### 6. TRUNCATE
+> 테이블의 데이터만 제거합니다
+```sql
+beeline> TRUNCATE TABLE table_name;
+
+use default;
+select count(1) from imdb_title_imported;
++-------+
+|  _c0  |
++-------+
+| 1003  |
++-------+
+
+truncate table imdb_title_imported;
+select count(1) from imdb_title_imported;
++------+
+| _c0  |
++------+
+| 0    |
++------+
+```
+
+
+### 2-2 하이브 DML 가이드
+
+#### 1. LOAD
+> 로컬(LOCAL) 혹은 클러스터 저장된 데이터를 하둡 클러스터에 업로드(Managed) 혹은 링크(External) 합니다
+```sql
+beeline> LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)];
+load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
+```
+
+#### 2. SELECT
+> 테이블에 저장된 레코드를 SQL 구문을 통해서 조회합니다
+```sql
+beeline> SELECT col1,col2 FROM tablename;
+select rank, title, genre from imdb_movies limit 5;
+```
+
+#### 3. INSERT
+> 테이블에 읽어온 레코드 혹은 생성된 레코드를 저장합니다 
+* INSERT INTO
+```sql
+beeline> INSERT INTO TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...)] select_statement1 FROM from_statement;
+create table if not exists imdb_title (title string);
+insert into table imdb_title select title from imdb_movies;
+select title from imdb_title limit 5;
+```
+* INSERT OVERWRTIE
+```sql
+beeline> INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, ..) [IF NOT EXISTS]] select_statement FROM from_statement;
+create table if not exists imdb_title (title string);
+insert overwrite table imdb_title select description from imdb_movies;
+select title from imdb_title limit 5;
+```
+* INSERT VALUES
+```sql
+beeline> INSERT INTO TABLE tablename [PARTITION (partcol1[=val1], partcol2[=val2] ...)] VALUES values_row [, values_row ...];
+insert into imdb_title values ('1 my first hive table record'), ('2 my second records'), ('3 third records');
+select title from imdb_title where title like '%record%';
+```
+
+#### 4. DELETE
+> 테이블에 저장된 데이터를 삭제합니다
+* 현재 ACID-based transaction 을 지원하는 것은 Bucketed ORC 파일만 지원합니다
+  * [Hive Transactions](https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions) 
+```sql
+beeline> DELETE FROM tablename [WHERE expression]
+
+create table imdb_orc (rank int, title string) clustered by (rank) into 4 buckets stored as orc tblproperties ('transactional'='true');
+insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk');
+delete from imdb_orc where rank = 1;
+
+select * from imdb_orc;
+
+```
+> ORC 포맷의 경우에도 아래의 조건 확인이 필요합니다
+```sql
+beeline> delete from imdb_orc where rank = 1;
+Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
+
+// 위와 같은 오류가 나는 경우 아래의 정보를 재설정 후 다시 시도합니다
+set hive.support.concurrency=true;
+set hive.enforce.bucketing=true;
+set hive.exec.dynamic.partition.mode=nonstrict;
+set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
+set hive.compactor.initiator.on=true;
+set hive.compactor.worker.threads=1;
+```
+
+#### 5. UPDATE
+> 대상 테이블의 컬럼을 업데이트 합니다. 단, 파티셔닝 혹은 버킷팅 컬럼은 업데이트 할 수 없습니다
+```sql
+beeline> UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
+update imdb_orc set title = 'psyoblade title'
+select * from imdb_orc;
+```
+
+#### 6. EXPORT
+> 테이블 메타데이터(\_metadata)와 데이터(data) 정보를 HDFS 경로에 백업 합니다
+```sql
+beeline> EXPORT TABLE tablename [PARTITION (part_column="value"[, ...])] TO 'export_target_path' [ FOR replication('eventid') ];
+export table imdb_orc to '/my/hdfs/backup/directory;
+```
+* 익스포트 된 결과를 확인합니다
+```bash
+bash>
+hadoop fs -ls /my/hdfs/backup/directory
+-rwxr-xr-x   3 root supergroup       1244 2020-08-23 14:17 /opt/hive/examples/export/imdb_title/_metadata
+drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /opt/hive/examples/export/imdb_title/data
+```
+
+#### 7. IMPORT
+> 백업된 데이터로 새로운 테이블을 생성합니다
+```sql
+beeline> IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
+import table imdb_title_imported from '/opt/hive/examples/export/imdb_title';
+select * from imdb_title_imported where title like '%record%';
++-------------------------------+
+|   imdb_title_imported.title   |
++-------------------------------+
+| 1 my first hive table record  |
+| 2 my second records           |
+| 3 third records               |
++-------------------------------+
+```
+
+
+## 3 하이브 트러블슈팅 가이드
 > IMDB 영화 예제를 통해 테이블을 생성하고, 다양한 성능 개선 방법을 시도해보면서 왜 그리고 얼마나 성능에 영향을 미치는 지 파악합니다
 
 
-### 1 파티셔닝을 통한 성능 개선
+### 3-1 파티셔닝을 통한 성능 개선
+
+#### 1.1. 하이브 서버로 접속합니다
 * 하이브 터미널을 통해 JDBC Client 로 하이브 서버에 접속합니다
 ```bash
+bash>
 docker-compose exec hive-server bash
 
-beeline 
-beeline> !connect jdbc:hive2://localhost:10000 scott tiger
-beeline> use default;
+beeline> 
+!connect jdbc:hive2://localhost:10000 scott tiger
+use default;
 ```
+
+#### 1.2. 데이터집합의 스키마를 확인하고 하이브 테이블을 생성합니다
+* 데이터집합은 10년(2006 ~ 2016)의 가장 인기있는 1,000개의 영화에 대한 데이터셋입니다
+| 필드명 | 설명 |
+| - | - |
+| Title | 제목 |
+| Genre | 장르 |
+| Description | 설명 |
+| Director | 감독 |
+| Actors | 배우 |
+| Year | 년도 |
+| Runtime | 상영시간 |
+| Rating | 등급 |
+| Votes | 투표 |
+| Revenue | 매출 |
+| Metascrore | 메타스코어 |
+
 * 테이블 생성 및 조회를 합니다 
+  - Q1. 년도 별 개봉된 영화의 수를 년도 오름차순으로 출력하시오
+  - Q2. 2015년도 개봉된 영화 중에서 최고 매출 Top 3 영화 제목과 매출금액을 출력하시오
 ```bash
 drop table if exists imdb_movies;
 
 create table imdb_movies (rank int, title string, genre string, description string, director string, actors string, year string, runtime int, rating string, votes int, revenue string, metascore int) row format delimited fields terminated by '\t';
 
 load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
-
-select year, count(1) as cnt from imdb_movies group by year;
+select * from imdb_movies limit 10;
 ```
 * 기존 테이블을 이용하여 파티션 구성된 테이블을 생성합니다
 ```bash
