@@ -20,3 +20,28 @@ docker-compose logs -f notebook
 * 프로젝트 실습을 위한 샌드박스 환경의 노트북을 엽니다
   * work/day6\_visualization.ipynb
 
+
+## 대용량 데이터 다운로드
+* 아래의 파일을 주피터 노트북 data 경로에 다운로드 합니다
+```bash
+cd /Users/psyoblade/git/psyoblade/data-engineer-intermediate-training/day7
+./download-lgebigdata.sh
+```
+
+
+## 참고자료
+* 시각화 예제
+  - [포스트 코로나 소비와 흥미의 변화는?](https://dacon.io/competitions/official/235618/codeshare/1419)
+  - [산업별 타격 탄력성 분석](https://dacon.io/competitions/official/235618/codeshare/1457)
+  - [새벽에서 황혼까지 데이터 분석을 해보자!](https://dacon.io/competitions/official/235618/codeshare/1430)
+  - [코로나 이후 서울사람들의 소비변화](https://dacon.io/competitions/official/235618/codeshare/1437)
+  - [코로나 너머 산업별 전망 엿보기](https://dacon.io/competitions/official/235618/codeshare/1399)
+  - [내 동년배들, 들어와!](https://dacon.io/competitions/official/235618/codeshare/1440)
+  - [지도 시각화 방법](https://dacon.io/competitions/official/235618/codeshare/1343)
+* 데이터 관련
+  - [COVID-19 를 위한 데이터과학](https://github.com/jihoo-kim/Data-Science-for-COVID-19)
+  - [COVID-19 Dataset](https://github.com/pomber/covid19)
+  - [COVID-19 Data in United States](https://github.com/nytimes/covid-19-data)
+* 데이터 경진대회
+  - [코로나 데이터 시각화 AI 경진대회](https://dacon.io/competitions/official/235590/overview/)
+  - [포스트 코로나 데이터 시각화 경진대회](https://dacon.io/competitions/official/235618/overview/)

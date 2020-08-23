@@ -1,0 +1,175 @@
+﻿ case_id,province,city,group,infection_case,confirmed,latitude,longitude
+1000001,서울,용산구,True,Itaewon Clubs,139,37.538621,126.992652
+1000002,서울,관악구,True,Richway,119,37.48208,126.901384
+1000003,서울,구로구,True,Guro-gu Call Center,95,37.508163,126.884387
+1000004,서울,양천구,True,Yangcheon Table Tennis Club,43,37.546061,126.874209
+1000005,서울,도봉구,True,Day Care Center,43,37.679422,127.044374
+1000006,서울,구로구,True,Manmin Central Church,41,37.481059,126.894343
+1000007,서울,타도시,True,SMR Newly Planted Churches Group,36,-,-
+1000008,서울,동대문구,True,Dongan Church,17,37.592888,127.056766
+1000009,서울,타도시,True,Coupang Logistics Center,25,-,-
+1000010,서울,관악구,True,Wangsung Church,30,37.481735,126.930121
+1000011,서울,은평구,True,Eunpyeong St. Mary's Hospital,14,37.63369,126.9165
+1000012,서울,성동구,True,Seongdong-gu APT,13,37.55713,127.0403
+1000013,서울,종로구,True,Jongno Community Center,10,37.57681,127.006
+1000014,서울,강남구,True,Samsung Medical Center,7,37.48825,127.08559
+1000015,서울,중구,True,Jung-gu Fashion Company,7,37.562405,126.984377
+1000016,서울,서대문구,True,Yeonana News Class,5,37.558147,126.943799
+1000017,서울,종로구,True,Korea Campus Crusade of Christ,7,37.594782,126.968022
+1000018,서울,강남구,True,Gangnam Yeoksam-dong gathering,6,-,-
+1000019,서울,타도시,True,Daejeon door-to-door sales,1,-,-
+1000020,서울,금천구,True,Geumcheon-gu rice milling machine manufacture,6,-,-
+1000021,서울,타도시,True,Shincheonji Church,8,-,-
+1000022,서울,타도시,True,Guri Collective Infection,5,-,-
+1000023,서울,중구,True,KB Life Insurance,13,37.560899,126.966998
+1000024,서울,영등포구,True,Yeongdeungpo Learning Institute,3,37.520846,126.931278
+1000025,서울,강남구,True,Gangnam Dongin Church,1,37.522331,127.057388
+1000026,서울,양천구,True,Biblical Language study meeting,3,37.524623,126.843118
+1000027,서울,서초구,True,Seocho Family,5,-,-
+1000028,서울,타도시,True,Anyang Gunpo Pastors Group,1,-,-
+1000029,서울,강남구,True,Samsung Fire & Marine Insurance,4,37.498279,127.030139
+1000030,서울,강서구,True,SJ Investment Call Center,0,37.559649,126.835102
+1000031,서울,타도시,True,Yongin Brothers,4,-,-
+1000032,서울,중구,True,Seoul City Hall Station safety worker,3,37.565699,126.977079
+1000033,서울,타도시,True,Uiwang Logistics Center,2,-,-
+1000034,서울,-,True,Orange Life,1,-,-
+1000035,서울,구로구,True,Daezayeon Korea,3,37.486837,126.893163
+1000036,서울,-,False,overseas inflow,298,-,-
+1000037,서울,-,False,contact with patient,162,-,-
+1000038,서울,-,False,etc,100,-,-
+1100001,부산,동래구,True,Onchun Church,39,35.21628,129.0771
+1100002,부산,타도시,True,Shincheonji Church,12,-,-
+1100003,부산,수영구,True,Suyeong-gu Kindergarten,5,35.16708,129.1124
+1100004,부산,해운대구,True,Haeundae-gu Catholic Church,6,35.20599,129.1256
+1100005,부산,진구,True,Jin-gu Academy,4,35.17371,129.0633
+1100006,부산,타도시,True,Itaewon Clubs,4,-,-
+1100007,부산,타도시,True,Cheongdo Daenam Hospital,1,-,-
+1100008,부산,-,False,overseas inflow,36,-,-
+1100009,부산,-,False,contact with patient,19,-,-
+1100010,부산,-,False,etc,30,-,-
+1200001,대구,남구,True,Shincheonji Church,4511,35.84008,128.5667
+1200002,대구,달성,True,Second Mi-Ju Hospital,196,35.857375,128.466651
+1200003,대구,서구,True,Hansarang Convalescent Hospital,124,35.885592,128.556649
+1200004,대구,달성,True,Daesil Convalescent Hospital,101,35.857393,128.466653
+1200005,대구,동구,True,Fatima Hospital,39,35.88395,128.624059
+1200006,대구,타도시,True,Itaewon Clubs,2,-,-
+1200007,대구,타도시,True,Cheongdo Daenam Hospital,2,-,-
+1200008,대구,-,False,overseas inflow,41,-,-
+1200009,대구,-,False,contact with patient,917,-,-
+1200010,대구,-,False,etc,747,-,-
+1300001,광주,동구,True,Gwangneuksa Temple,5,35.136035,126.956405
+1300002,광주,타도시,True,Shincheonji Church,9,-,-
+1300003,광주,-,False,overseas inflow,23,-,-
+1300004,광주,-,False,contact with patient,5,-,-
+1300005,광주,-,False,etc,1,-,-
+1400001,인천,타도시,True,Itaewon Clubs,53,-,-
+1400002,인천,타도시,True,Coupang Logistics Center,42,-,-
+1400003,인천,타도시,True,Guro-gu Call Center,20,-,-
+1400004,인천,타도시,True,Shincheonji Church,2,-,-
+1400005,인천,-,False,overseas inflow,68,-,-
+1400006,인천,-,False,contact with patient,6,-,-
+1400007,인천,-,False,etc,11,-,-
+1500001,대전,-,True,Door-to-door sales in Daejeon,55,-,-
+1500002,대전,서구,True,Dunsan Electronics Town,13,36.3400973,127.3927099
+1500003,대전,서구,True,Orange Town,7,36.3398739,127.3819744
+1500004,대전,서구,True,Dreaming Church,4,36.346869,127.368594
+1500005,대전,서구,True,Korea Forest Engineer Institute,3,36.358123,127.388856
+1500006,대전,타도시,True,Shincheonji Church,2,-,-
+1500007,대전,타도시,True,Seosan-si Laboratory,2,-,-
+1500008,대전,-,False,overseas inflow,15,-,-
+1500009,대전,-,False,contact with patient,15,-,-
+1500010,대전,-,False,etc,15,-,-
+1600001,울산,타도시,True,Shincheonji Church,16,-,-
+1600002,울산,-,False,overseas inflow,25,-,-
+1600003,울산,-,False,contact with patient,3,-,-
+1600004,울산,-,False,etc,7,-,-
+1700001,세종,세종,True,Ministry of Oceans and Fisheries,31,36.504713,127.265172
+1700002,세종,세종,True,gym facility in Sejong,8,36.48025,127.289
+1700003,세종,타도시,True,Shincheonji Church,1,-,-
+1700004,세종,-,False,overseas inflow,5,-,-
+1700005,세종,-,False,contact with patient,3,-,-
+1700006,세종,-,False,etc,1,-,-
+2000001,경기도,성남시,True,River of Grace Community Church,67,37.455687,127.161627
+2000002,경기도,부천시,True,Coupang Logistics Center,67,37.530579,126.775254
+2000003,경기도,타도시,True,Itaewon Clubs,59,-,-
+2000004,경기도,타도시,True,Richway,58,-,-
+2000005,경기도,의정부시,True,Uijeongbu St. Mary’s Hospital,50,37.758635,127.077716
+2000006,경기도,타도시,True,Guro-gu Call Center,50,-,-
+2000007,경기도,타도시,True,Shincheonji Church,29,-,-
+2000008,경기도,타도시,True,Yangcheon Table Tennis Club,28,-,-
+2000009,경기도,-,True,SMR Newly Planted Churches Group,25,-,-
+2000010,경기도,성남시,True,Bundang Jesaeng Hospital,22,37.38833,127.1218
+2000011,경기도,안양시,True,Anyang Gunpo Pastors Group,22,37.381784,126.93615
+2000012,경기도,수원시,True,Lotte Confectionery logistics center,15,37.287356,127.013827
+2000013,경기도,안양시,True,Lord Glory Church,17,37.403722,126.954939
+2000014,경기도,수원시,True,Suwon Saeng Myeong Saem Church,10,37.2376,127.0517
+2000015,경기도,타도시,True,Korea Campus Crusade of Christ,7,-,-
+2000016,경기도,타도시,True,Geumcheon-gu rice milling machine manufacture,6,-,-
+2000017,경기도,타도시,True,Wangsung Church,6,-,-
+2000018,경기도,타도시,True,Seoul City Hall Station safety worker,5,-,-
+2000019,경기도,성남시,True,Seongnam neighbors gathering,5,-,-
+2000020,경기도,-,False,overseas inflow,305,-,-
+2000021,경기도,-,False,contact with patient,63,-,-
+2000022,경기도,-,False,etc,84,-,-
+3000001,강원도,타도시,True,Shincheonji Church,17,-,-
+3000002,강원도,타도시,True,Uijeongbu St. Mary’s Hospital,10,-,-
+3000003,강원도,원주시,True,Wonju-si Apartments,4,37.342762,127.983815
+3000004,강원도,타도시,True,Richway,4,-,-
+3000005,강원도,타도시,True,Geumcheon-gu rice milling machine manufacture,4,-,-
+3000006,강원도,-,False,overseas inflow,16,-,-
+3000007,강원도,-,False,contact with patient,0,-,-
+3000008,강원도,-,False,etc,7,-,-
+4000001,충청북도,괴산,True,Goesan-gun Jangyeon-myeon,11,36.82422,127.9552
+4000002,충청북도,타도시,True,Itaewon Clubs,9,-,-
+4000003,충청북도,타도시,True,Guro-gu Call Center,2,-,-
+4000004,충청북도,타도시,True,Shincheonji Church,6,-,-
+4000005,충청북도,-,False,overseas inflow,13,-,-
+4000006,충청북도,-,False,contact with patient,8,-,-
+4000007,충청북도,-,False,etc,11,-,-
+4100001,충청남도,천안시,True,gym facility in Cheonan,103,36.81503,127.1139
+4100002,충청남도,타도시,True,Door-to-door sales in Daejeon,10,-,-
+4100003,충청남도,서산시,True,Seosan-si Laboratory,9,37.000354,126.354443
+4100004,충청남도,타도시,True,Richway,3,-,-
+4100005,충청남도,타도시,True,Eunpyeong-Boksagol culture center,3,-,-
+4100006,충청남도,-,False,overseas inflow,16,-,-
+4100007,충청남도,-,False,contact with patient,2,-,-
+4100008,충청남도,-,False,etc,12,-,-
+5000001,전라북도,타도시,True,Itaewon Clubs,2,-,-
+5000002,전라북도,타도시,True,Door-to-door sales in Daejeon,3,-,-
+5000003,전라북도,타도시,True,Shincheonji Church,1,-,-
+5000004,전라북도,-,False,overseas inflow,12,-,-
+5000005,전라북도,-,False,etc,5,-,-
+5100001,전라남도,무안,True,Manmin Central Church,2,35.078825,126.316746
+5100002,전라남도,타도시,True,Shincheonji Church,1,-,-
+5100003,전라남도,-,False,overseas inflow,14,-,-
+5100004,전라남도,-,False,contact with patient,4,-,-
+5100005,전라남도,-,False,etc,4,-,-
+6000001,경상북도,타도시,True,Shincheonji Church,566,-,-
+6000002,경상북도,청도,True,Cheongdo Daenam Hospital,119,35.64887,128.7368
+6000003,경상북도,봉화,True,Bonghwa Pureun Nursing Home,68,36.92757,128.9099
+6000004,경상북도,경산시,True,Gyeongsan Seorin Nursing Home,66,35.782149,128.801498
+6000005,경상북도,타도시,True,Pilgrimage to Israel,41,-,-
+6000006,경상북도,예천,True,Yechun-gun,40,36.646845,128.437416
+6000007,경상북도,칠곡,True,Milal Shelter,36,36.0581,128.4941
+6000008,경상북도,경산시,True,Gyeongsan Jeil Silver Town,17,35.84819,128.7621
+6000009,경상북도,경산시,True,Gyeongsan Cham Joeun Community Center,16,35.82558,128.7373
+6000010,경상북도,구미시,True,Gumi Elim Church,10,-,-
+6000011,경상북도,-,False,overseas inflow,22,-,-
+6000012,경상북도,-,False,contact with patient,190,-,-
+6000013,경상북도,-,False,etc,133,-,-
+6100001,경상남도,타도시,True,Shincheonji Church,32,-,-
+6100002,경상남도,거창,True,Geochang Church,10,35.68556,127.9127
+6100003,경상남도,진주시,True,Wings Tower,9,35.164845,128.126969
+6100004,경상남도,거창,True,Geochang-gun Woongyang-myeon,8,35.805681,127.917805
+6100005,경상남도,창원시,True,Hanmaeum Changwon Hospital,7,35.22115,128.6866
+6100006,경상남도,창녕,True,Changnyeong Coin Karaoke,7,35.54127,128.5008
+6100007,경상남도,양산,True,Soso Seowon,3,35.338811,129.017508
+6100008,경상남도,타도시,True,Itaewon Clubs,2,-,-
+6100009,경상남도,타도시,True,Onchun Church,2,-,-
+6100010,경상남도,-,False,overseas inflow,26,-,-
+6100011,경상남도,-,False,contact with patient,6,-,-
+6100012,경상남도,-,False,etc,20,-,-
+7000001,제주도,-,False,overseas inflow,14,-,-
+7000002,제주도,-,False,contact with patient,0,-,-
+7000003,제주도,-,False,etc,4,-,-
+7000004,제주도,타도시,True,Itaewon Clubs,1,-,-

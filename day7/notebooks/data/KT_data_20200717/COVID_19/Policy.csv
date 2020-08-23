@@ -1,0 +1,62 @@
+policy_id,country,type,gov_policy,detail,start_date,end_date
+1,Korea,Alert,Infectious Disease Alert Level,Level 1 (Blue),2020-01-03,2020-01-19
+2,Korea,Alert,Infectious Disease Alert Level,Level 2 (Yellow),2020-01-20,2020-01-27
+3,Korea,Alert,Infectious Disease Alert Level,Level 3 (Orange),2020-01-28,2020-02-22
+4,Korea,Alert,Infectious Disease Alert Level,Level 4 (Red),2020-02-23,
+5,Korea,Immigration,Special Immigration Procedure,from China,2020-02-04,
+6,Korea,Immigration,Special Immigration Procedure,from Hong Kong,2020-02-12,
+7,Korea,Immigration,Special Immigration Procedure,from Macau,2020-02-12,
+8,Korea,Immigration,Special Immigration Procedure,from Japan,2020-03-09,
+9,Korea,Immigration,Special Immigration Procedure,from Italy,2020-03-12,
+10,Korea,Immigration,Special Immigration Procedure,from Iran,2020-03-12,
+11,Korea,Immigration,Special Immigration Procedure,from France,2020-03-15,
+12,Korea,Immigration,Special Immigration Procedure,from Germany,2020-03-15,
+13,Korea,Immigration,Special Immigration Procedure,from Spain,2020-03-15,
+14,Korea,Immigration,Special Immigration Procedure,from U.K.,2020-03-15,
+15,Korea,Immigration,Special Immigration Procedure,from Netherlands,2020-03-15,
+16,Korea,Immigration,Special Immigration Procedure,from Europe,2020-03-16,
+17,Korea,Immigration,Special Immigration Procedure,from all the countries,2020-03-19,
+18,Korea,Immigration,Mandatory 14-day Self-Quarantine,from all the countries,2020-04-01,
+19,Korea,Immigration,Mandatory Self-Quarantine & Diagonostic Tests,from U.S.,2020-04-13,
+20,Korea,Health,Emergency Use Authorization of Diagnostic Kit,1st EUA,2020-02-04,
+21,Korea,Health,Emergency Use Authorization of Diagnostic Kit,2nd EUA,2020-02-12,
+22,Korea,Health,Emergency Use Authorization of Diagnostic Kit,3rd EUA,2020-02-27,
+23,Korea,Health,Emergency Use Authorization of Diagnostic Kit,4th EUA,2020-02-27,
+24,Korea,Health,Emergency Use Authorization of Diagnostic Kit,5th EUA,2020-03-13,
+25,Korea,Health,Drive-Through Screening Center,by Local Government,2020-02-26,
+26,Korea,Health,Drive-Through Screening Center,Standard Operating Procedures,2020-03-04,
+27,Korea,Health,Mask Distribution,Public-Sale,2020-02-27,
+28,Korea,Health,Mask Distribution,5-day Rotation System,2020-03-09,
+29,Korea,Social,Social Distancing Campaign,Strong,2020-02-29,2020-03-21
+30,Korea,Social,Social Distancing Campaign,Strong,2020-03-22,2020-04-19
+31,Korea,Social,Social Distancing Campaign,Weak,2020-04-20,2020-05-05
+32,Korea,Social,Social Distancing Campaign,Weak(1st),2020-05-06,
+33,Korea,Social,Thanks to Challenge korea,Relay Cheer Campaign in SNS,2020-04-16,
+34,Korea,Education,School Closure,Daycare Center for Children,2020-03-02,
+35,Korea,Education,School Opening Delay,Kindergarten,2020-03-02,2020-04-06
+36,Korea,Education,School Opening Delay,High School,2020-03-02,2020-04-06
+37,Korea,Education,School Opening Delay,Middle School,2020-03-02,2020-04-06
+38,Korea,Education,School Opening Delay,Elementary School,2020-03-02,2020-04-06
+39,Korea,Education,School Opening with Online Class,High School (3rd grade),2020-04-09,2020-05-20
+40,Korea,Education,School Opening with Online Class,High School (2nd grade),2020-04-16,2020-05-27
+41,Korea,Education,School Opening with Online Class,High School (1st grade),2020-04-16,2020-06-03
+42,Korea,Education,School Opening with Online Class,Middle School (3rd grade),2020-04-09,2020-05-27
+43,Korea,Education,School Opening with Online Class,Middle School (2nd grade),2020-04-16,2020-06-03
+44,Korea,Education,School Opening with Online Class,Middle School (1st grade),2020-04-16,2020-06-08
+45,Korea,Education,School Opening with Online Class,Elementary School (5th ~ 6th grade),2020-04-16,2020-06-08
+46,Korea,Education,School Opening with Online Class,Elementary School (4th grade),2020-04-16,2020-06-03
+47,Korea,Education,School Opening with Online Class,Elementary School (3rd grade),2020-04-20,2020-06-03
+48,Korea,Education,School Opening with Online Class,Elementary School (1st ~ 2nd grade),2020-04-20,2020-05-27
+49,Korea,Technology,Open Data ,Patients Information,2020-01-20,
+50,Korea,Technology,Open API,Public Mask Sales Information,2020-03-08,
+51,Korea,Technology,Self-Diagnosis App,,2020-02-12,
+52,Korea,Technology,Self-Quarantine Safety Protection App,,2020-03-07,
+53,Korea,Technology,Electronic Wristbands,on people who violate self-quarantine measures,2020-04-27,
+54,Korea,Administrative,Close bars and clubs,administrative order to close bars and clubs,2020-05-08,2020-06-07
+55,Korea,Administrative,local government Administrative orders,"Gathering limited administrative orders for nursing homes, nursing homes, elderly day care centers and mental hospitals used by vulnerable groups",2020-05-16,
+56,Korea,Administrative,Close karaoke,Ban on gathering for 2 weeks for all karaoke and coin karaoke,2020-05-21,2020-06-03
+57,Korea,Transformation,Logistics center,On-site inspection of major logistics facilities such as courier terminals and warehouses,2020-05-29,2020-06-11
+58,Korea,Transformation,Wearing of masks,"Mandatory wearing of passenger mask domestic, international teminal in the airport",2020-05-27,
+59,Korea,Transformation,Wearing of masks,Drivers such as buses and taxis can refuse to ride passengers without masks,2020-05-26,
+60,Korea,Technology,KI-Pass: Korea Internet - Pass,"new quick response (QR) code system this week to log visitors at high-risk entertainment facilities, restaurants and churches in a bid to track coronavirus cases and prevent further spread of the disease",2020-06-10,
+61,Korea,Health,Extends Tightened Quarantine Measures ,Gov't Extends Tightened Quarantine Measures in Seoul Metro Area,2020-05-28,2020-06-14

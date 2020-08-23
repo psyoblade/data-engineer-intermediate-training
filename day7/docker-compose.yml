@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  notebook:
+    container_name: notebook
+    user: root
+    privileged: true
+    image: psyoblade/data-engineer-intermediate-day7-notebook
+    restart: always
+    depends_on:
+      - mysql
+      - mongo
+    links:
+      - mysql
+      - mongo
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    environment:
+      - GRANT_SUDO=yes
+    ports:
+      - "4040:4040"
+      - "4041:4041"
+      - "8888:8888"
+  mysql:
+    image: psyoblade/data-engineer-intermediate-day1-mysql
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 1s
+      retries: 3
+    volumes:
+      - ./mysql/custom:/etc/mysql/conf.d
+  mongo:
+    image: mongo:4.4.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
