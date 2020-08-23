@@ -13209,10 +13209,10 @@ div#notebook {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 구매 이력 데이터 &quot;&quot;&quot;</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">)</span>\
-    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>\
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span> \
     <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;inferSchema&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>\
-    <span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;data/retail-data/all/*.csv&quot;</span><span class="p">)</span>\
+    <span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;data/retail-data/all/*.csv&quot;</span><span class="p">)</span> \
     <span class="o">.</span><span class="n">coalesce</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
 <span class="n">df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;dfTable&quot;</span><span class="p">)</span>
@@ -13228,7 +13228,7 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13249,11 +13249,48 @@ div#notebook {
 |InvoiceNo|StockCode|         Description|Quantity|   InvoiceDate|UnitPrice|CustomerID|       Country|
 +---------+---------+--------------------+--------+--------------+---------+----------+--------------+
 |   536365|   85123A|WHITE HANGING HEA...|       6|12/1/2010 8:26|     2.55|     17850|United Kingdom|
+|   536365|    71053| WHITE METAL LANTERN|       6|12/1/2010 8:26|     3.39|     17850|United Kingdom|
+|   536365|   84406B|CREAM CUPID HEART...|       8|12/1/2010 8:26|     2.75|     17850|United Kingdom|
+|   536365|   84029G|KNITTED UNION FLA...|       6|12/1/2010 8:26|     3.39|     17850|United Kingdom|
+|   536365|   84029E|RED WOOLLY HOTTIE...|       6|12/1/2010 8:26|     3.39|     17850|United Kingdom|
 +---------+---------+--------------------+--------+--------------+---------+----------+--------------+
-only showing top 1 row
+only showing top 5 rows
 
 </pre>
 </div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="n">getNumPartitions</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[5]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>3</pre>
+</div>
+
 </div>
 
 </div>
@@ -13312,12 +13349,12 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">col</span><span class="p">,</span> <span class="n">count</span>
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;StockCode&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># null 로우는 제외</span>
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>         <span class="c1"># null 로우를 포함</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;StockCode&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># 명시적으로 컬럼을 지정한 경우 해당 컬럼이 널 인 경우 해당 로우는 제외</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>         <span class="c1"># 명시적인 컬럼 지정이 아니므로 전체 로우를 반환</span>
 </pre></div>
 
     </div>
@@ -13354,6 +13391,55 @@ only showing top 1 row
 </div>
 
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;Description is null&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">())</span> <span class="c1"># 1,454</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># 540,455 + 1,454 = 541,909</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>root
+ |-- InvoiceNo: string (nullable = true)
+ |-- StockCode: string (nullable = true)
+ |-- Description: string (nullable = true)
+ |-- Quantity: integer (nullable = true)
+ |-- InvoiceDate: string (nullable = true)
+ |-- UnitPrice: double (nullable = true)
+ |-- CustomerID: integer (nullable = true)
+ |-- Country: string (nullable = true)
+
+1454
++------------------+
+|count(Description)|
++------------------+
+|            540455|
++------------------+
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13366,7 +13452,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">countDistinct</span>
@@ -13413,7 +13499,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">approx_count_distinct</span>
@@ -13464,7 +13550,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">first</span><span class="p">,</span> <span class="n">last</span>
@@ -13511,7 +13597,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="nb">min</span><span class="p">,</span> <span class="nb">max</span>
@@ -13562,7 +13648,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="nb">sum</span>
@@ -13606,7 +13692,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">sumDistinct</span>
@@ -13653,7 +13739,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">avg</span><span class="p">,</span> <span class="n">expr</span>
@@ -13710,7 +13796,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">variance</span><span class="p">,</span> <span class="n">stddev</span>
@@ -13752,7 +13838,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">variance</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">),</span> <span class="n">stddev</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">),</span>      
@@ -13800,7 +13886,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">skewness</span><span class="p">,</span> <span class="n">kurtosis</span>
@@ -13870,7 +13956,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">corr</span><span class="p">,</span> <span class="n">covar_pop</span><span class="p">,</span> <span class="n">covar_samp</span>
@@ -13936,7 +14022,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">collect_list</span><span class="p">,</span> <span class="n">collect_set</span><span class="p">,</span> <span class="n">size</span>
@@ -13974,7 +14060,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">collect_list</span><span class="p">(</span><span class="s2">&quot;Country&quot;</span><span class="p">)),</span> <span class="n">size</span><span class="p">(</span><span class="n">collect_set</span><span class="p">(</span><span class="s2">&quot;Country&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># 각 컬럼의 복합데이터 사이즈</span>
@@ -14010,7 +14096,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">countDistinct</span><span class="p">(</span><span class="s2">&quot;Country&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># 중복없이 카운트</span>
@@ -14074,10 +14160,10 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">,</span> <span class="s2">&quot;CustomerId&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">,</span> <span class="s2">&quot;CustomerId&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14102,23 +14188,8 @@ only showing top 1 row
 |   537883|     14437|    5|
 |   538068|     17978|   12|
 |   538279|     14952|    7|
-|   538800|     16458|   10|
-|   538942|     17346|   12|
-|  C539947|     13854|    1|
-|   540096|     13253|   16|
-|   540530|     14755|   27|
-|   541225|     14099|   19|
-|   541978|     13551|    4|
-|   542093|     17677|   16|
-|   543188|     12567|   63|
-|   543590|     17377|   19|
-|  C543757|     13115|    1|
-|  C544318|     12989|    1|
-|   544578|     12365|    1|
-|   545165|     16339|   20|
-|   545289|     14732|   30|
 +---------+----------+-----+
-only showing top 20 rows
+only showing top 5 rows
 
 </pre>
 </div>
@@ -14137,15 +14208,18 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">count</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">,</span> <span class="s2">&quot;CustomerId&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
-    <span class="n">count</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;guan&quot;</span><span class="p">),</span>
-    <span class="n">expr</span><span class="p">(</span><span class="s2">&quot;count(Quantity)&quot;</span><span class="p">)</span>
-<span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">df</span> \
+    <span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">,</span> <span class="s2">&quot;CustomerId&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">count</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;guan&quot;</span><span class="p">),</span>
+        <span class="n">expr</span><span class="p">(</span><span class="s2">&quot;count(Quantity)&quot;</span><span class="p">)</span>
+    <span class="p">)</span> \
+    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14170,23 +14244,8 @@ only showing top 20 rows
 |   537883|     14437|   5|              5|
 |   538068|     17978|  12|             12|
 |   538279|     14952|   7|              7|
-|   538800|     16458|  10|             10|
-|   538942|     17346|  12|             12|
-|  C539947|     13854|   1|              1|
-|   540096|     13253|  16|             16|
-|   540530|     14755|  27|             27|
-|   541225|     14099|  19|             19|
-|   541978|     13551|   4|              4|
-|   542093|     17677|  16|             16|
-|   543188|     12567|  63|             63|
-|   543590|     17377|  19|             19|
-|  C543757|     13115|   1|              1|
-|  C544318|     12989|   1|              1|
-|   544578|     12365|   1|              1|
-|   545165|     16339|  20|             20|
-|   545289|     14732|  30|             30|
 +---------+----------+----+---------------+
-only showing top 20 rows
+only showing top 5 rows
 
 </pre>
 </div>
@@ -14225,10 +14284,15 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s2">&quot;Quantity&quot;</span><span class="p">:</span><span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="s2">&quot;Quantity&quot;</span><span class="p">:</span><span class="s2">&quot;stddev_pop&quot;</span><span class="p">})</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># 키 값이 충돌됨</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 런타임 시에 맵으로 전달된 함수를 표현식으로 사용할 수 있습니다.</span>
+<span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="p">{</span><span class="s2">&quot;Quantity&quot;</span><span class="p">:</span><span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="s2">&quot;Quantity&quot;</span><span class="p">:</span><span class="s2">&quot;stddev_pop&quot;</span><span class="p">}</span>
+    <span class="p">)</span> \
+    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14253,23 +14317,8 @@ only showing top 20 rows
 |   537252|                 0.0|
 |   537691|   5.597097462078001|
 |   538041|                 0.0|
-|   538184|   8.142590198943392|
-|   538517|  2.3946659604837897|
-|   538879|  11.811070444356483|
-|   539275|  12.806248474865697|
-|   539630|  10.225241100118645|
-|   540499|  2.6653642652865788|
-|   540540|  1.0572457590557278|
-|  C540850|                 0.0|
-|   540976|   6.496760677872902|
-|   541432|  10.825317547305483|
-|   541518|  20.550782784878713|
-|   541783|   8.467657556242811|
-|   542026|   4.853406592853679|
-|   542375|  3.4641016151377544|
-|  C542604|  15.173990905493518|
 +---------+--------------------+
-only showing top 20 rows
+only showing top 5 rows
 
 </pre>
 </div>

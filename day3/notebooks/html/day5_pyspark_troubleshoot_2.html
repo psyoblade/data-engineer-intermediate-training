@@ -13618,8 +13618,8 @@ only showing top 3 rows
 +------------+------------------+
 only showing top 10 rows
 
-CPU times: user 13.2 ms, sys: 2.77 ms, total: 16 ms
-Wall time: 38.5 s
+CPU times: user 8.41 ms, sys: 8.82 ms, total: 17.2 ms
+Wall time: 40.9 s
 </pre>
 </div>
 </div>
@@ -13695,8 +13695,8 @@ Wall time: 38.5 s
 +------------+------------------+
 only showing top 10 rows
 
-CPU times: user 22.5 ms, sys: 4.4 ms, total: 26.9 ms
-Wall time: 1min 27s
+CPU times: user 16.8 ms, sys: 7.54 ms, total: 24.3 ms
+Wall time: 1min 39s
 </pre>
 </div>
 </div>
@@ -13831,8 +13831,8 @@ Wall time: 1min 27s
 +------------+------------------+
 only showing top 10 rows
 
-CPU times: user 17.7 ms, sys: 6.65 ms, total: 24.4 ms
-Wall time: 38 s
+CPU times: user 11.1 ms, sys: 6.64 ms, total: 17.8 ms
+Wall time: 36.2 s
 </pre>
 </div>
 </div>
@@ -13843,7 +13843,7 @@ Wall time: 38 s
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -13888,23 +13888,28 @@ Wall time: 38 s
                   +- *(3) Filter ((isnotnull(model#15) &amp;&amp; isnotnull(make#14)) &amp;&amp; isnotnull(skew_key#330L))
                      +- *(3) Project [make#14, model#15, engine_size#16, sale_price#17, (monotonically_increasing_id() % 4) AS skew_key#330L]
                         +- *(3) FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
++------------+------------------+
+|registration|   avg(sale_price)|
++------------+------------------+
+|     0AB64Pl|3037.4286995515695|
+|     GXRKoPB| 2987.987181738367|
+|     ALcFxhR| 3022.568145376804|
+|     JxDGxYo| 2980.301324503311|
+|     Q8GO2EU| 2977.881762228701|
+|     6yn3Vke|2993.3496869602764|
+|     FWPfoGh|2993.3496869602764|
+|     bUhDTXQ|2998.1522468868434|
+|     AXlbNWj|2995.7316161100016|
+|     VYvy491|2991.8207713688653|
++------------+------------------+
+only showing top 10 rows
+
+CPU times: user 13.5 ms, sys: 5.7 ms, total: 19.3 ms
+Wall time: 46.6 s
 </pre>
 </div>
 </div>
 
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
 </div>
 </div>
 

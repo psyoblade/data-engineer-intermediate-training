@@ -13181,7 +13181,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
@@ -13218,7 +13218,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
@@ -13237,7 +13237,7 @@ div#notebook {
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[4]:</div>
+    <div class="prompt output_prompt">Out[2]:</div>
 
 
 
@@ -13317,7 +13317,7 @@ Project [id#32L, id#32L AS newId#34L]
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">s1</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="s2">&quot;source/s1&quot;</span><span class="p">)</span>
@@ -13331,7 +13331,7 @@ Project [id#32L, id#32L AS newId#34L]
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">s1</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
@@ -13418,7 +13418,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">StorageLevel</span>
@@ -13442,17 +13442,14 @@ only showing top 1 row
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>== Physical Plan ==
-*(1) Filter (isnotnull(sale_price#31) &amp;&amp; (sale_price#31 &gt; 2000.0))
-+- InMemoryTableScan [registration#20, make#21, model#22, engine_size#23, make#28, model#29, engine_size#30, sale_price#31], [isnotnull(sale_price#31), (sale_price#31 &gt; 2000.0)]
-      +- InMemoryRelation [registration#20, make#21, model#22, engine_size#23, make#28, model#29, engine_size#30, sale_price#31], StorageLevel(disk, memory, deserialized, 1 replicas)
-            +- *(2) BroadcastHashJoin [make#21, model#22], [make#28, model#29], Inner, BuildLeft
-               :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true], input[2, string, true]))
-               :  +- *(1) Project [registration#20, make#21, model#22, engine_size#23]
-               :     +- *(1) Filter (isnotnull(make#21) &amp;&amp; isnotnull(model#22))
-               :        +- *(1) FileScan parquet [registration#20,make#21,model#22,engine_size#23] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-               +- *(2) Project [make#28, model#29, engine_size#30, sale_price#31]
-                  +- *(2) Filter (isnotnull(make#28) &amp;&amp; isnotnull(model#29))
-                     +- *(2) FileScan parquet [make#28,model#29,engine_size#30,sale_price#31] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+*(2) BroadcastHashJoin [make#21, model#22], [make#28, model#29], Inner, BuildLeft
+:- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true], input[2, string, true]))
+:  +- *(1) Project [registration#20, make#21, model#22, engine_size#23]
+:     +- *(1) Filter (isnotnull(model#22) &amp;&amp; isnotnull(make#21))
+:        +- *(1) FileScan parquet [registration#20,make#21,model#22,engine_size#23] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(model), IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
++- *(2) Project [make#28, model#29, engine_size#30, sale_price#31]
+   +- *(2) Filter (((isnotnull(sale_price#31) &amp;&amp; (sale_price#31 &gt; 2000.0)) &amp;&amp; isnotnull(make#28)) &amp;&amp; isnotnull(model#29))
+      +- *(2) FileScan parquet [make#28,model#29,engine_size#30,sale_price#31] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(sale_price), GreaterThan(sale_price,2000.0), IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 </pre>
 </div>
 </div>
@@ -13463,7 +13460,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cachedDiskMemory</span> <span class="o">=</span> <span class="n">c12</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
@@ -13505,7 +13502,7 @@ InMemoryTableScan [registration#20, make#21, model#22, engine_size#23, make#28, 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">cachedMemoryOnly</span> <span class="o">=</span> <span class="n">c12</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;sale_price&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">2100.0</span><span class="p">)</span><span class="o">.</span><span class="n">persist</span><span class="p">(</span><span class="n">StorageLevel</span><span class="o">.</span><span class="n">MEMORY_ONLY</span><span class="p">)</span>
@@ -13529,14 +13526,17 @@ InMemoryTableScan [registration#20, make#21, model#22, engine_size#23, make#28, 
 <pre>== Physical Plan ==
 InMemoryTableScan [registration#20, make#21, model#22, engine_size#23, make#28, model#29, engine_size#30, sale_price#31]
    +- InMemoryRelation [registration#20, make#21, model#22, engine_size#23, make#28, model#29, engine_size#30, sale_price#31], StorageLevel(memory, 1 replicas)
-         +- *(2) BroadcastHashJoin [make#21, model#22], [make#28, model#29], Inner, BuildLeft
-            :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true], input[2, string, true]))
-            :  +- *(1) Project [registration#20, make#21, model#22, engine_size#23]
-            :     +- *(1) Filter (isnotnull(model#22) &amp;&amp; isnotnull(make#21))
-            :        +- *(1) FileScan parquet [registration#20,make#21,model#22,engine_size#23] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(model), IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-            +- *(2) Project [make#28, model#29, engine_size#30, sale_price#31]
-               +- *(2) Filter (((isnotnull(sale_price#31) &amp;&amp; (sale_price#31 &gt; 2100.0)) &amp;&amp; isnotnull(make#28)) &amp;&amp; isnotnull(model#29))
-                  +- *(2) FileScan parquet [make#28,model#29,engine_size#30,sale_price#31] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(sale_price), GreaterThan(sale_price,2100.0), IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+         +- *(1) Filter (isnotnull(sale_price#31) &amp;&amp; (sale_price#31 &gt; 2100.0))
+            +- InMemoryTableScan [registration#20, make#21, model#22, engine_size#23, make#28, model#29, engine_size#30, sale_price#31], [isnotnull(sale_price#31), (sale_price#31 &gt; 2100.0)]
+                  +- InMemoryRelation [registration#20, make#21, model#22, engine_size#23, make#28, model#29, engine_size#30, sale_price#31], StorageLevel(disk, memory, deserialized, 1 replicas)
+                        +- *(2) BroadcastHashJoin [make#21, model#22], [make#28, model#29], Inner, BuildLeft
+                           :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true], input[2, string, true]))
+                           :  +- *(1) Project [registration#20, make#21, model#22, engine_size#23]
+                           :     +- *(1) Filter (isnotnull(make#21) &amp;&amp; isnotnull(model#22))
+                           :        +- *(1) FileScan parquet [registration#20,make#21,model#22,engine_size#23] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+                           +- *(2) Project [make#28, model#29, engine_size#30, sale_price#31]
+                              +- *(2) Filter (isnotnull(make#28) &amp;&amp; isnotnull(model#29))
+                                 +- *(2) FileScan parquet [make#28,model#29,engine_size#30,sale_price#31] Batched: true, Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 </pre>
 </div>
 </div>
@@ -13579,19 +13579,6 @@ DISK_ONLY            Low         High      N          Y        Y         N
 
 </div>
 </div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
 </div>
     </div>
   </div>

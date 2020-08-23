@@ -13194,48 +13194,204 @@ div#notebook {
 <li>전체 데이터 흐름 최적화</li>
 </ul>
 <hr>
-<h4 id="1-2.-DataFrame">1-2. DataFrame<a class="anchor-link" href="#1-2.-DataFrame">&#182;</a></h4><ul>
-<li>df.printSchema() # 스키마</li>
-<li>df.schema # StructType</li>
-<li>df.columns # 컬럼명</li>
-<li>df.show(n) # show dataframe</li>
-<li>df.first() # show first of row</li>
-<li>df.head(n) # show head of row</li>
-<li>df.createOrReplaceTempView # view</li>
-<li>df.sample(withReplacement, fraction, seed) # random sampling</li>
-<li>df.randomSplit() # random split</li>
-<li>df.union(newdf) # df와 newdf 로우 concat</li>
-<li>df.limit(n) # 추출할 로우수 제한 (Transformation)</li>
-<li>df.repartition(n) #, 파티션 재분배, 셔플발생</li>
-<li>df.coalesce() # 셔플하지 않고 파티션을 병합</li>
-<li>df.collect() # 모든 데이터 수집, 반환 (Action)</li>
-<li>df.take(n) # 상위 n개 로우 반환 (Action)</li>
-<li>df.toLocalIterator() # iterator로 모든 파티션의 데이터를 드라이버에 전달, 파티션을 차례대로 반복처리 </li>
-</ul>
+<h4 id="1-2.-DataFrame">1-2. DataFrame<a class="anchor-link" href="#1-2.-DataFrame">&#182;</a></h4><table>
+<thead><tr>
+<th>함수</th>
+<th>설명</th>
+<th>기타</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>df.printSchema()</td>
+<td>스키마 정보를 출력합니다.</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.schema</td>
+<td>StructType 스키마를 반환합니다</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.columns</td>
+<td>컬럼명 정보를 반환합니다</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.show(n)</td>
+<td>데이터 n 개를 출력합니다</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.first()</td>
+<td>데이터 프레임의 첫 번째 Row 를 반환합니다</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.head(n)</td>
+<td>데이터 프레임의 처음부터 n 개의 Row 를 반환합니다</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.createOrReplaceTempView</td>
+<td>임시 뷰 테이블을 생성합니다</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.sample(withReplacement, fraction, seed)</td>
+<td>랜덤 샘플링을 수행합니다 (복원여부, 비율, 시드)</td>
+<td>시드 지정을 통해 일정한 샘플링 결과를 얻을 수 있습니다</td>
+</tr>
+<tr>
+<td>df.randomSplit()</td>
+<td>랜덤 스플릿을 수행합니다</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.union(newdf)</td>
+<td>데이터프레임 간의 유니온 연산을 수행합니다</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.limit(n)</td>
+<td>추출할 로우수 제한</td>
+<td>T</td>
+</tr>
+<tr>
+<td>df.repartition(n)</td>
+<td>파티션 재분배, 셔플발생</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.coalesce()</td>
+<td>셔플하지 않고 파티션을 병합</td>
+<td>마지막 스테이지의 reduce 수가 줄어드는 효과로 성능저하에 유의해야 합니다</td>
+</tr>
+<tr>
+<td>df.collect()</td>
+<td>모든 데이터 수집, 반환</td>
+<td>A</td>
+</tr>
+<tr>
+<td>df.take(n)</td>
+<td>상위 n개 로우 반환</td>
+<td>A</td>
+</tr>
+<tr>
+<td>df.toLocalIterator()</td>
+<td>iterator로 모든 파티션의 데이터를 드라이버에 전달, 파티션을 차례대로 반복처리</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
 <hr>
-<h4 id="1-3.-DataFrame-&#52972;&#47100;&#44288;&#47144;-&#47700;&#49436;&#46300;">1-3. DataFrame &#52972;&#47100;&#44288;&#47144; &#47700;&#49436;&#46300;<a class="anchor-link" href="#1-3.-DataFrame-&#52972;&#47100;&#44288;&#47144;-&#47700;&#49436;&#46300;">&#182;</a></h4><ul>
-<li>df.select # 컬럼이나 표현식 사용 </li>
-<li>df.selectExpr # 문자열 표현식 사용 = df.select(expr())</li>
-<li>df.withColumn(컬럼명, 표현식) # 컬럼 추가, 비교, 컬럼명 변경</li>
-<li>df.withColumnRenamed(old_name, new_name) # 컬럼명 변경</li>
-<li>df.drop() # 컬럼 삭제</li>
-<li>df.where # 로우 필터링</li>
-<li>df.filter # 로우 필터링</li>
-<li>df.sort, df.orderBy # 정렬</li>
-<li>df.sortWithinPartitions # 파티션별 정렬</li>
-</ul>
+<h4 id="1-3.-DataFrame-&#52972;&#47100;&#44288;&#47144;-&#47700;&#49436;&#46300;">1-3. DataFrame &#52972;&#47100;&#44288;&#47144; &#47700;&#49436;&#46300;<a class="anchor-link" href="#1-3.-DataFrame-&#52972;&#47100;&#44288;&#47144;-&#47700;&#49436;&#46300;">&#182;</a></h4><table>
+<thead><tr>
+<th>함수</th>
+<th>설명</th>
+<th>기타</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>df.select</td>
+<td>컬럼이나 표현식 사용</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.selectExpr</td>
+<td>문자열 표현식 사용 = df.select(expr())</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.withColumn(컬럼명, 표현식)</td>
+<td>컬럼 추가, 비교, 컬럼명 변경</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.withColumnRenamed(old_name, new_name)</td>
+<td>컬럼명 변경</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.drop()</td>
+<td>컬럼 삭제</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.where</td>
+<td>로우 필터링</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.filter</td>
+<td>로우 필터링</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.sort, df.orderBy</td>
+<td>정렬</td>
+<td>-</td>
+</tr>
+<tr>
+<td>df.sortWithinPartitions</td>
+<td>파티션별 정렬</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
 <hr>
-<h4 id="1-4.-&#52972;&#47100;&#44288;&#47144;-&#54632;&#49688;">1-4. &#52972;&#47100;&#44288;&#47144; &#54632;&#49688;<a class="anchor-link" href="#1-4.-&#52972;&#47100;&#44288;&#47144;-&#54632;&#49688;">&#182;</a></h4><ul>
-<li>expr("someCol - 5") # 표현식</li>
-<li>lit() # 리터럴</li>
-<li>cast() # 컬럼 데이터 타입 변경</li>
-<li>distinct() # unique row</li>
-<li>desc(), asc() # 정렬 순서</li>
-</ul>
+<h4 id="1-4.-&#52972;&#47100;&#44288;&#47144;-&#54632;&#49688;">1-4. &#52972;&#47100;&#44288;&#47144; &#54632;&#49688;<a class="anchor-link" href="#1-4.-&#52972;&#47100;&#44288;&#47144;-&#54632;&#49688;">&#182;</a></h4><table>
+<thead><tr>
+<th>함수</th>
+<th>설명</th>
+<th>기타</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>expr("someCol - 5")</td>
+<td>표현식</td>
+<td>-</td>
+</tr>
+<tr>
+<td>lit()</td>
+<td>리터럴</td>
+<td>-</td>
+</tr>
+<tr>
+<td>cast()</td>
+<td>컬럼 데이터 타입 변경</td>
+<td>-</td>
+</tr>
+<tr>
+<td>distinct()</td>
+<td>unique row</td>
+<td>-</td>
+</tr>
+<tr>
+<td>desc(), asc()</td>
+<td>정렬 순서</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
 <hr>
-<h4 id="1-5.-&#47196;&#50864;">1-5. &#47196;&#50864;<a class="anchor-link" href="#1-5.-&#47196;&#50864;">&#182;</a></h4><ul>
-<li>Row() # 로우 생성</li>
-</ul>
+<h4 id="1-5.-&#47196;&#50864;">1-5. &#47196;&#50864;<a class="anchor-link" href="#1-5.-&#47196;&#50864;">&#182;</a></h4><table>
+<thead><tr>
+<th>함수</th>
+<th>설명</th>
+<th>기타</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Row()</td>
+<td>로우 생성</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 </div>
@@ -13259,7 +13415,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SparkSession</span>
@@ -13278,7 +13434,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 스키마 확인하기 &quot;&quot;&quot;</span>
@@ -13315,7 +13471,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./data/flight-data/json/2015-summary.json&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">)</span>
@@ -13351,7 +13507,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df3</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">json</span><span class="p">(</span><span class="s2">&quot;./data/flight-data/json/2015-summary.json&quot;</span><span class="p">)</span>
@@ -13413,7 +13569,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 스키마를 직접 만들어 적용 &quot;&quot;&quot;</span>
@@ -13437,10 +13593,10 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13465,13 +13621,8 @@ div#notebook {
 |    United States|            Ireland|  344|
 |            Egypt|      United States|   15|
 |    United States|              India|   62|
-|    United States|          Singapore|    1|
-|    United States|            Grenada|   62|
-|       Costa Rica|      United States|  588|
-|          Senegal|      United States|   40|
-|          Moldova|      United States|    1|
 +-----------------+-------------------+-----+
-only showing top 10 rows
+only showing top 5 rows
 
 </pre>
 </div>
@@ -13483,11 +13634,11 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df2</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;data/flight-data/json/2015-summary.json&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;json&quot;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="n">myManualSchema</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13512,13 +13663,8 @@ only showing top 10 rows
 |    United States|            Ireland|  344|
 |            Egypt|      United States|   15|
 |    United States|              India|   62|
-|    United States|          Singapore|    1|
-|    United States|            Grenada|   62|
-|       Costa Rica|      United States|  588|
-|          Senegal|      United States|   40|
-|          Moldova|      United States|    1|
 +-----------------+-------------------+-----+
-only showing top 10 rows
+only showing top 5 rows
 
 </pre>
 </div>
@@ -13559,7 +13705,7 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 컬럼 생성 &quot;&quot;&quot;</span>
@@ -13578,7 +13724,7 @@ only showing top 10 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[8]:</div>
+    <div class="prompt output_prompt">Out[25]:</div>
 
 
 
@@ -13609,7 +13755,7 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">expr</span>
@@ -13618,7 +13764,7 @@ only showing top 10 rows
 <span class="nb">print</span><span class="p">(</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;someCol&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;someCol&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">5</span><span class="p">)</span>
 
-<span class="c1"># 동일한 트랜스포메이션 과정: 스파크는 연산 순서를 지정하는 논리적 트리로 컴파일이기 때문</span>
+<span class="c1"># 동일한 트랜스포메이션 과정: 스파크는 연산 순서를 지정하는 논리적 트리로 컴파일합니다</span>
 <span class="p">(((</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;somecol&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">5</span><span class="p">)</span> <span class="o">*</span> <span class="mi">200</span><span class="p">)</span> <span class="o">-</span> <span class="mi">6</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;othercol&quot;</span><span class="p">)</span>
 </pre></div>
 
@@ -13645,7 +13791,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[9]:</div>
+    <div class="prompt output_prompt">Out[26]:</div>
 
 
 
@@ -13662,7 +13808,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 논리적 트리로 컴파일되는 표현식 &quot;&quot;&quot;</span>
@@ -13680,7 +13826,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[10]:</div>
+    <div class="prompt output_prompt">Out[27]:</div>
 
 
 
@@ -13705,7 +13851,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; columns 속성을 사용 &quot;&quot;&quot;</span>
@@ -13722,7 +13868,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[11]:</div>
+    <div class="prompt output_prompt">Out[28]:</div>
 
 
 
@@ -13757,7 +13903,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; Row를 확인하는 예문 &quot;&quot;&quot;</span>
@@ -13774,7 +13920,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[12]:</div>
+    <div class="prompt output_prompt">Out[29]:</div>
 
 
 
@@ -13791,7 +13937,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
@@ -13807,7 +13953,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[13]:</div>
+    <div class="prompt output_prompt">Out[30]:</div>
 
 
 
@@ -13825,12 +13971,11 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 로우 생성하기 &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">Row</span>
-
 <span class="n">myRow</span> <span class="o">=</span> <span class="n">Row</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 
 <span class="sd">&quot;&quot;&quot; 로우 접근하기 &quot;&quot;&quot;</span>
@@ -13861,7 +14006,7 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[14]:</div>
+    <div class="prompt output_prompt">Out[43]:</div>
 
 
 
@@ -13896,19 +14041,14 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 원시 데이터소스 활용 &quot;&quot;&quot;</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span>\
-    <span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./data/flight-data/json/2015-summary.json&quot;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;data/flight-data/json/2015-summary.json&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;2015_summary&quot;</span><span class="p">)</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;dfTable&quot;</span><span class="p">)</span>
-
-<span class="n">sql_result</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    SELECT *</span>
-<span class="s2">    FROM dfTable</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">sql_result</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM 2015_summary&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13925,31 +14065,16 @@ Column&lt;b&#39;(someCol - 5)&#39;&gt;
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+--------------------+-------------------+-----+
-|   DEST_COUNTRY_NAME|ORIGIN_COUNTRY_NAME|count|
-+--------------------+-------------------+-----+
-|       United States|            Romania|   15|
-|       United States|            Croatia|    1|
-|       United States|            Ireland|  344|
-|               Egypt|      United States|   15|
-|       United States|              India|   62|
-|       United States|          Singapore|    1|
-|       United States|            Grenada|   62|
-|          Costa Rica|      United States|  588|
-|             Senegal|      United States|   40|
-|             Moldova|      United States|    1|
-|       United States|       Sint Maarten|  325|
-|       United States|   Marshall Islands|   39|
-|              Guyana|      United States|   64|
-|               Malta|      United States|    1|
-|            Anguilla|      United States|   41|
-|             Bolivia|      United States|   30|
-|       United States|           Paraguay|    6|
-|             Algeria|      United States|    4|
-|Turks and Caicos ...|      United States|  230|
-|       United States|          Gibraltar|    1|
-+--------------------+-------------------+-----+
-only showing top 20 rows
+<pre>+-----------------+-------------------+-----+
+|DEST_COUNTRY_NAME|ORIGIN_COUNTRY_NAME|count|
++-----------------+-------------------+-----+
+|    United States|            Romania|   15|
+|    United States|            Croatia|    1|
+|    United States|            Ireland|  344|
+|            Egypt|      United States|   15|
+|    United States|              India|   62|
++-----------------+-------------------+-----+
+only showing top 5 rows
 
 </pre>
 </div>
@@ -13961,7 +14086,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; Row 객체 활용 &quot;&quot;&quot;</span>
@@ -13976,7 +14101,7 @@ only showing top 20 rows
 
 <span class="n">myRow</span> <span class="o">=</span> <span class="n">Row</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">myDf</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">([</span><span class="n">myRow</span><span class="p">],</span> <span class="n">myManualSchema</span><span class="p">)</span>
-<span class="n">myDf</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">myDf</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14016,7 +14141,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 단일 혹은 다중 컬럼 설정 &quot;&quot;&quot;</span>
@@ -14108,49 +14233,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 책에서는 오류가 난다고 했는데? &quot;&quot;&quot;</span>
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
-    <span class="n">col</span><span class="p">(</span><span class="s2">&quot;DEST_COUNTRY_NAME&quot;</span><span class="p">),</span>
-    <span class="s2">&quot;DEST_COUNTRY_NAME&quot;</span><span class="p">,</span>
-<span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>+-----------------+-----------------+
-|DEST_COUNTRY_NAME|DEST_COUNTRY_NAME|
-+-----------------+-----------------+
-|    United States|    United States|
-|    United States|    United States|
-+-----------------+-----------------+
-only showing top 2 rows
-
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; expr를 이용한 컬럼 참조 &quot;&quot;&quot;</span>
@@ -14209,7 +14292,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; selectExpr 활용 예문 &quot;&quot;&quot;</span>
@@ -14257,11 +14340,11 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 집계함수 지정하기 &quot;&quot;&quot;</span>
-<span class="n">df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;avg(count)&quot;</span><span class="p">,</span> <span class="s2">&quot;count(distinct(DEST_COUNTRY_NAME))&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;avg(count) as averageCount&quot;</span><span class="p">,</span> <span class="s2">&quot;count(distinct(DEST_COUNTRY_NAME)) as distinctCount&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -14278,11 +14361,11 @@ only showing top 2 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+-----------+---------------------------------+
-| avg(count)|count(DISTINCT DEST_COUNTRY_NAME)|
-+-----------+---------------------------------+
-|1770.765625|                              132|
-+-----------+---------------------------------+
+<pre>+------------+-------------+
+|averageCount|distinctCount|
++------------+-------------+
+| 1770.765625|          132|
++------------+-------------+
 
 </pre>
 </div>
@@ -14301,13 +14384,12 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; </span>
 <span class="sd">리터럴(literal)을 사용한 컬럼 추가</span>
 <span class="sd">리터럴: 어떤 상수나 프로그래밍으로 생성된 변수값이 특정 컬럼의 값보다 큰지 확인할 때 사용</span>
-<span class="sd">익명함수?</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">lit</span>
 
@@ -14353,7 +14435,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; </span>
@@ -14395,7 +14477,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 컬럼 비교 &quot;&quot;&quot;</span>
@@ -14434,11 +14516,16 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[57]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 컬럼명 바꾸기 &quot;&quot;&quot;</span>
-<span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;Destination&quot;</span><span class="p">,</span> <span class="n">expr</span><span class="p">(</span><span class="s2">&quot;DEST_COUNTRY_NAME&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">columns</span>
+<span class="n">before</span> <span class="o">=</span> <span class="n">df</span>
+<span class="n">before</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+
+<span class="n">after</span> <span class="o">=</span> <span class="n">before</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;Destination&quot;</span><span class="p">,</span> <span class="n">expr</span><span class="p">(</span><span class="s2">&quot;DEST_COUNTRY_NAME&quot;</span><span class="p">))</span>
+<span class="n">after</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+<span class="n">after</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Destination&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 
     </div>
@@ -14451,13 +14538,34 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[26]:</div>
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>root
+ |-- DEST_COUNTRY_NAME: string (nullable = true)
+ |-- ORIGIN_COUNTRY_NAME: string (nullable = true)
+ |-- count: long (nullable = true)
+
+root
+ |-- DEST_COUNTRY_NAME: string (nullable = true)
+ |-- ORIGIN_COUNTRY_NAME: string (nullable = true)
+ |-- count: long (nullable = true)
+ |-- Destination: string (nullable = true)
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[57]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[&#39;DEST_COUNTRY_NAME&#39;, &#39;ORIGIN_COUNTRY_NAME&#39;, &#39;count&#39;, &#39;Destination&#39;]</pre>
+<pre>[&#39;DEST_COUNTRY_NAME&#39;, &#39;ORIGIN_COUNTRY_NAME&#39;, &#39;count&#39;]</pre>
 </div>
 
 </div>
@@ -14475,7 +14583,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[58]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; withColumnRenamed &quot;&quot;&quot;</span>
@@ -14492,7 +14600,7 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[27]:</div>
+    <div class="prompt output_prompt">Out[58]:</div>
 
 
 
@@ -14519,7 +14627,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[59]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; withColumn, selectExpr, select 차이점 &quot;&quot;&quot;</span>
@@ -14527,7 +14635,6 @@ only showing top 2 rows
 <span class="n">dfWithLongColName</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="n">dfWithLongColName</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;`This Long Column-Name`&quot;</span><span class="p">,</span> <span class="s2">&quot;`This Long Column-Name` as `new col`&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># 사용함</span>
-
 <span class="n">dfWithLongColName</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;`This Long Column-Name`&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
@@ -14633,7 +14740,59 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;spark.sql.caseSensitive&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">caseSensitive</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;dest_country_name&quot;</span><span class="p">)</span>
+<span class="n">caseSensitive</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;spark.sql.caseSensitive&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">caseInsensitive</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;dest_country_name&quot;</span><span class="p">)</span>
+<span class="n">caseInsensitive</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>root
+ |-- DEST_COUNTRY_NAME: string (nullable = true)
+ |-- ORIGIN_COUNTRY_NAME: string (nullable = true)
+ |-- count: long (nullable = true)
+
+root
+ |-- DEST_COUNTRY_NAME: string (nullable = true)
+ |-- ORIGIN_COUNTRY_NAME: string (nullable = true)
+ |-- count: long (nullable = true)
+
+root
+ |-- ORIGIN_COUNTRY_NAME: string (nullable = true)
+ |-- count: long (nullable = true)
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; drop 함수 &quot;&quot;&quot;</span>
@@ -14651,7 +14810,7 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[30]:</div>
+    <div class="prompt output_prompt">Out[63]:</div>
 
 
 
@@ -14675,45 +14834,19 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[72]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; cast 함수 &quot;&quot;&quot;</span>
-<span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;count2&quot;</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;string&quot;</span><span class="p">))</span>
-<span class="c1"># cast null값, 문자-&gt;숫자 에러</span>
-</pre></div>
+<span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
 
-    </div>
-</div>
-</div>
+<span class="n">int2str</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;str_count&quot;</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;string&quot;</span><span class="p">))</span>
+<span class="n">int2str</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">int2str</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
 
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[31]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>DataFrame[DEST_COUNTRY_NAME: string, ORIGIN_COUNTRY_NAME: string, count: bigint, count2: string]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">str2int</span> <span class="o">=</span> <span class="n">int2str</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;int_count&quot;</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;str_count&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;int&quot;</span><span class="p">))</span>
+<span class="n">str2int</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">str2int</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -14730,16 +14863,45 @@ only showing top 2 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+-----------------+-------------------+-----+
-|DEST_COUNTRY_NAME|ORIGIN_COUNTRY_NAME|count|
-+-----------------+-------------------+-----+
-|    United States|            Romania|   15|
-|    United States|            Croatia|    1|
-|    United States|            Ireland|  344|
-|            Egypt|      United States|   15|
-|    United States|              India|   62|
-+-----------------+-------------------+-----+
+<pre>root
+ |-- DEST_COUNTRY_NAME: string (nullable = true)
+ |-- ORIGIN_COUNTRY_NAME: string (nullable = true)
+ |-- count: long (nullable = true)
+
++-----------------+-------------------+-----+---------+
+|DEST_COUNTRY_NAME|ORIGIN_COUNTRY_NAME|count|str_count|
++-----------------+-------------------+-----+---------+
+|    United States|            Romania|   15|       15|
+|    United States|            Croatia|    1|        1|
+|    United States|            Ireland|  344|      344|
+|            Egypt|      United States|   15|       15|
+|    United States|              India|   62|       62|
++-----------------+-------------------+-----+---------+
 only showing top 5 rows
+
+root
+ |-- DEST_COUNTRY_NAME: string (nullable = true)
+ |-- ORIGIN_COUNTRY_NAME: string (nullable = true)
+ |-- count: long (nullable = true)
+ |-- str_count: string (nullable = true)
+
++-----------------+-------------------+-----+---------+---------+
+|DEST_COUNTRY_NAME|ORIGIN_COUNTRY_NAME|count|str_count|int_count|
++-----------------+-------------------+-----+---------+---------+
+|    United States|            Romania|   15|       15|       15|
+|    United States|            Croatia|    1|        1|        1|
+|    United States|            Ireland|  344|      344|      344|
+|            Egypt|      United States|   15|       15|       15|
+|    United States|              India|   62|       62|       62|
++-----------------+-------------------+-----+---------+---------+
+only showing top 5 rows
+
+root
+ |-- DEST_COUNTRY_NAME: string (nullable = true)
+ |-- ORIGIN_COUNTRY_NAME: string (nullable = true)
+ |-- count: long (nullable = true)
+ |-- str_count: string (nullable = true)
+ |-- int_count: integer (nullable = true)
 
 </pre>
 </div>
@@ -14758,7 +14920,7 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[74]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; filter, where 함수 &quot;&quot;&quot;</span>
@@ -14825,7 +14987,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In&nbsp;[75]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 같은 표현식에 여러 필터를 적용 &quot;&quot;&quot;</span>
@@ -14871,7 +15033,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[76]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; distinct 함수 &quot;&quot;&quot;</span>
@@ -14913,7 +15075,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[79]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; sample 함수 &quot;&quot;&quot;</span>
@@ -14933,7 +15095,7 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[36]:</div>
+    <div class="prompt output_prompt">Out[79]:</div>
 
 
 
@@ -14957,7 +15119,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[81]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; randomSplit 함수 &quot;&quot;&quot;</span>
@@ -15003,7 +15165,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[82]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; union 함수 &quot;&quot;&quot;</span>
@@ -15056,13 +15218,13 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[84]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">newDF</span><span class="p">)</span>\
     <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;count = 1&quot;</span><span class="p">)</span>\
     <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;ORIGIN_COUNTRY_NAME&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="s2">&quot;United States&quot;</span><span class="p">)</span>\
-    <span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -15087,15 +15249,8 @@ only showing top 2 rows
 |    United States|          Gibraltar|    1|
 |    United States|             Cyprus|    1|
 |    United States|            Estonia|    1|
-|    United States|          Lithuania|    1|
-|    United States|           Bulgaria|    1|
-|    United States|            Georgia|    1|
-|    United States|            Bahrain|    1|
-|    United States|   Papua New Guinea|    1|
-|    United States|         Montenegro|    1|
-|    United States|            Namibia|    1|
-|    New Country 2|    Other Country 3|    1|
 +-----------------+-------------------+-----+
+only showing top 5 rows
 
 </pre>
 </div>
@@ -15119,7 +15274,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[85]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; sort, orderBy 함수 &quot;&quot;&quot;</span>
@@ -15185,7 +15340,7 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[86]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 정렬순서 지정하기 &quot;&quot;&quot;</span>
@@ -15241,12 +15396,30 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[97]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 파티션별 정렬 &quot;&quot;&quot;</span> 
-<span class="c1"># 최적화는 3부에서 자세히 소개할 예정</span>
-<span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;./data/flight-data/json/*-summary.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sortWithinPartitions</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> 
+<span class="c1"># 최적화는 내일 세션에서 소개할 예정</span>
+<span class="n">sortedWithPartitions</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;data/flight-data/json/*-summary.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sortWithinPartitions</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
+<span class="n">normalDataframe</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;data/flight-data/json/*-summary.json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[98]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sortedWithPartitions</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># print(sortedWithPartitions.rdd.getNumPartitions())</span>
+
+<span class="n">normalDataframe</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># print(normalDataframe.rdd.getNumPartitions())</span>
 </pre></div>
 
     </div>
@@ -15263,32 +15436,39 @@ only showing top 5 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+--------------------+-------------------+-----+
-|   DEST_COUNTRY_NAME|ORIGIN_COUNTRY_NAME|count|
-+--------------------+-------------------+-----+
-|       United States|            Croatia|    1|
-|       United States|          Singapore|    1|
-|             Moldova|      United States|    1|
-|               Malta|      United States|    1|
-|       United States|          Gibraltar|    1|
-|Saint Vincent and...|      United States|    1|
-|            Suriname|      United States|    1|
-|       United States|             Cyprus|    1|
-|        Burkina Faso|      United States|    1|
-|            Djibouti|      United States|    1|
-|       United States|            Estonia|    1|
-|              Zambia|      United States|    1|
-|              Cyprus|      United States|    1|
-|       United States|          Lithuania|    1|
-|       United States|           Bulgaria|    1|
-|       United States|            Georgia|    1|
-|       United States|            Bahrain|    1|
-|       Cote d&#39;Ivoire|      United States|    1|
-|       United States|   Papua New Guinea|    1|
-|              Kosovo|      United States|    1|
-+--------------------+-------------------+-----+
-only showing top 20 rows
+<pre>== Parsed Logical Plan ==
+&#39;Sort [&#39;count ASC NULLS FIRST], false
++- Relation[DEST_COUNTRY_NAME#1100,ORIGIN_COUNTRY_NAME#1101,count#1102L] json
 
+== Analyzed Logical Plan ==
+DEST_COUNTRY_NAME: string, ORIGIN_COUNTRY_NAME: string, count: bigint
+Sort [count#1102L ASC NULLS FIRST], false
++- Relation[DEST_COUNTRY_NAME#1100,ORIGIN_COUNTRY_NAME#1101,count#1102L] json
+
+== Optimized Logical Plan ==
+Sort [count#1102L ASC NULLS FIRST], false
++- Relation[DEST_COUNTRY_NAME#1100,ORIGIN_COUNTRY_NAME#1101,count#1102L] json
+
+== Physical Plan ==
+*(1) Sort [count#1102L ASC NULLS FIRST], false, 0
++- *(1) FileScan json [DEST_COUNTRY_NAME#1100,ORIGIN_COUNTRY_NAME#1101,count#1102L] Batched: false, Format: JSON, Location: InMemoryFileIndex[file:/home/jovyan/work/data/flight-data/json/2011-summary.json, file:/home/jovy..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;DEST_COUNTRY_NAME:string,ORIGIN_COUNTRY_NAME:string,count:bigint&gt;
+== Parsed Logical Plan ==
+&#39;Sort [&#39;count ASC NULLS FIRST], true
++- Relation[DEST_COUNTRY_NAME#1112,ORIGIN_COUNTRY_NAME#1113,count#1114L] json
+
+== Analyzed Logical Plan ==
+DEST_COUNTRY_NAME: string, ORIGIN_COUNTRY_NAME: string, count: bigint
+Sort [count#1114L ASC NULLS FIRST], true
++- Relation[DEST_COUNTRY_NAME#1112,ORIGIN_COUNTRY_NAME#1113,count#1114L] json
+
+== Optimized Logical Plan ==
+Sort [count#1114L ASC NULLS FIRST], true
++- Relation[DEST_COUNTRY_NAME#1112,ORIGIN_COUNTRY_NAME#1113,count#1114L] json
+
+== Physical Plan ==
+*(2) Sort [count#1114L ASC NULLS FIRST], true, 0
++- Exchange rangepartitioning(count#1114L ASC NULLS FIRST, 200)
+   +- *(1) FileScan json [DEST_COUNTRY_NAME#1112,ORIGIN_COUNTRY_NAME#1113,count#1114L] Batched: false, Format: JSON, Location: InMemoryFileIndex[file:/home/jovyan/work/data/flight-data/json/2011-summary.json, file:/home/jovy..., PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;DEST_COUNTRY_NAME:string,ORIGIN_COUNTRY_NAME:string,count:bigint&gt;
 </pre>
 </div>
 </div>
@@ -15306,7 +15486,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="prompt input_prompt">In&nbsp;[99]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -15370,15 +15550,19 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[44]:</div>
+<div class="prompt input_prompt">In&nbsp;[104]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 파티션 나누기 &quot;&quot;&quot;</span>
 <span class="n">df</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="n">getNumPartitions</span><span class="p">()</span>
-<span class="n">df</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;DEST_COUNTRY_NAME&quot;</span><span class="p">))</span>
-<span class="n">df</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;DEST_COUNTRY_NAME&quot;</span><span class="p">))</span>
+<span class="n">repart_1</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">repart_2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;DEST_COUNTRY_NAME&quot;</span><span class="p">))</span>
+<span class="n">repart_3</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;DEST_COUNTRY_NAME&quot;</span><span class="p">))</span>
+
 <span class="c1"># repartition 숫자 변경 등 실험내용 공유</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">repart_1</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="n">getNumPartitions</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">repart_2</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="n">getNumPartitions</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">repart_3</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="n">getNumPartitions</span><span class="p">())</span>
 </pre></div>
 
     </div>
@@ -15391,15 +15575,15 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[44]:</div>
+    <div class="prompt"></div>
 
 
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>DataFrame[DEST_COUNTRY_NAME: string, ORIGIN_COUNTRY_NAME: string, count: bigint]</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>5
+200
+5
+</pre>
 </div>
-
 </div>
 
 </div>
@@ -15418,7 +15602,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[105]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 파티션 합치기 &quot;&quot;&quot;</span>
@@ -15435,7 +15619,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[45]:</div>
+    <div class="prompt output_prompt">Out[105]:</div>
 
 
 
@@ -15462,7 +15646,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[106]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">collectDF</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -15479,7 +15663,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[46]:</div>
+    <div class="prompt output_prompt">Out[106]:</div>
 
 
 
@@ -15500,7 +15684,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[107]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">collectDF</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  <span class="c1"># 결과를 정돈된 형태로 출력</span>
@@ -15540,7 +15724,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[108]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">collectDF</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
@@ -15580,7 +15764,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[109]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">collectDF</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span> <span class="c1"># 전체 모든 테이터를 수집, 반환</span>
@@ -15596,7 +15780,7 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[49]:</div>
+    <div class="prompt output_prompt">Out[109]:</div>
 
 
 
@@ -15617,7 +15801,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[110]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">collectDF</span><span class="o">.</span><span class="n">toLocalIterator</span><span class="p">()</span>
@@ -15633,13 +15817,13 @@ only showing top 20 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[50]:</div>
+    <div class="prompt output_prompt">Out[110]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>&lt;itertools.chain at 0x7f2e507185d0&gt;</pre>
+<pre>&lt;itertools.chain at 0x7f360598fbd0&gt;</pre>
 </div>
 
 </div>
@@ -15667,7 +15851,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[111]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; Row 객체 활용 &quot;&quot;&quot;</span>
@@ -15717,7 +15901,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[112]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">myDf</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;num2&quot;</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;integer&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -15754,7 +15938,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="prompt input_prompt">In&nbsp;[113]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">myDf</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;count2&quot;</span><span class="p">,</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;integer&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -15798,7 +15982,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="prompt input_prompt">In&nbsp;[114]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;count(distinct(ORIGIN_COUNTRY_NAME))&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -15834,7 +16018,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="prompt input_prompt">In&nbsp;[115]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;ORIGIN_COUNTRY_NAME&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
@@ -15865,7 +16049,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="prompt input_prompt">In&nbsp;[116]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">countDistinct</span><span class="p">,</span> <span class="n">approxCountDistinct</span>
@@ -15911,7 +16095,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="prompt input_prompt">In&nbsp;[117]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">approxCountDistinct</span><span class="p">(</span><span class="s2">&quot;ORIGIN_COUNTRY_NAME&quot;</span><span class="p">,</span> <span class="n">rsd</span><span class="o">=</span><span class="mf">0.05</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -15948,7 +16132,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="prompt input_prompt">In&nbsp;[118]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">approxCountDistinct</span><span class="p">(</span><span class="s2">&quot;ORIGIN_COUNTRY_NAME&quot;</span><span class="p">,</span> <span class="n">rsd</span><span class="o">=</span><span class="mf">0.1</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>

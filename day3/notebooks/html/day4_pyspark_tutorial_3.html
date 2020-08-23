@@ -13256,16 +13256,16 @@ div#notebook {
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[(&#39;spark.driver.port&#39;, &#39;43895&#39;),
+<pre>[(&#39;spark.app.id&#39;, &#39;local-1598173575671&#39;),
+ (&#39;spark.driver.host&#39;, &#39;7123e3456028&#39;),
+ (&#39;spark.driver.port&#39;, &#39;43995&#39;),
  (&#39;spark.app.name&#39;, &#39;Data Engineer Intermediate Day4&#39;),
  (&#39;spark.rdd.compress&#39;, &#39;True&#39;),
  (&#39;spark.serializer.objectStreamReset&#39;, &#39;100&#39;),
  (&#39;spark.master&#39;, &#39;local[*]&#39;),
  (&#39;spark.executor.id&#39;, &#39;driver&#39;),
- (&#39;spark.app.id&#39;, &#39;local-1597941627079&#39;),
  (&#39;spark.submit.deployMode&#39;, &#39;client&#39;),
  (&#39;spark.dataengineer.intermediate.day4&#39;, &#39;tutorial-3&#39;),
- (&#39;spark.driver.host&#39;, &#39;0951343db520&#39;),
  (&#39;spark.ui.showConsoleProgress&#39;, &#39;true&#39;)]</pre>
 </div>
 
@@ -13277,7 +13277,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; DataFrame 생성 &quot;&quot;&quot;</span>
@@ -13286,7 +13286,7 @@ div#notebook {
     <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;inferSchema&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span> \
     <span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;data/retail-data/by-day/2010-12-01.csv&quot;</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
-<span class="n">df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;dfTable&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;retail&quot;</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
@@ -13337,7 +13337,7 @@ only showing top 5 rows
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h3 id="2.-&#49828;&#54028;&#53356;-&#45936;&#51060;&#53552;-&#53440;&#51077;&#51004;&#47196;-&#48320;&#54872;&#54616;&#44592;">2. &#49828;&#54028;&#53356; &#45936;&#51060;&#53552; &#53440;&#51077;&#51004;&#47196; &#48320;&#54872;&#54616;&#44592;<a class="anchor-link" href="#2.-&#49828;&#54028;&#53356;-&#45936;&#51060;&#53552;-&#53440;&#51077;&#51004;&#47196;-&#48320;&#54872;&#54616;&#44592;">&#182;</a></h3><ul>
-<li>lit 함수 : 다른 언어의 데이터 타입을 스파크 데이터 타입에 맞게 변환</li>
+<li>lit 함수 : 상수 값을 리터럴 데이터 타입으로 변환합니다</li>
 <li>spark SQL에서는 스파크 데이터 타입으로 변경할 수 없음</li>
 </ul>
 
@@ -13346,7 +13346,7 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 스파크 데이터 타입으로 변환 &quot;&quot;&quot;</span>
@@ -13365,7 +13365,7 @@ only showing top 5 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[3]:</div>
+    <div class="prompt output_prompt">Out[4]:</div>
 
 
 
@@ -13389,21 +13389,21 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 조건절 입력 &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">col</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;InvoiceNO&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">536365</span><span class="p">)</span> \
-    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;InvoiceNO&quot;</span><span class="p">,</span> <span class="s2">&quot;Description&quot;</span><span class="p">)</span> \
-    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;InvoiceNO&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">536365</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;InvoiceNO&quot;</span><span class="p">,</span> <span class="s2">&quot;Description&quot;</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;InvoiceNO &lt;&gt; 536365&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;InvoiceNO&quot;</span><span class="p">,</span> <span class="s2">&quot;Description&quot;</span><span class="p">)</span>
+<span class="n">x3</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;InvoiceNO = 536365&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;InvoiceNO&quot;</span><span class="p">,</span> <span class="s2">&quot;Description&quot;</span><span class="p">)</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;InvoiceNO = 536365&quot;</span><span class="p">)</span> \
-    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-
-<span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;InvoiceNO &lt;&gt; 536365&quot;</span><span class="p">)</span> \
-    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="c1"># 아래는 집합 연산을 통해 subtract 연산을 할 수 있습니다</span>
+<span class="k">assert</span><span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="n">x1</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+<span class="k">assert</span><span class="p">(</span><span class="mi">0</span> <span class="o">==</span> <span class="n">x2</span><span class="o">.</span><span class="n">subtract</span><span class="p">(</span><span class="n">x1</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
+<span class="n">x1</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">x2</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13420,37 +13420,26 @@ only showing top 5 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+---------+-----------------------------+
-|InvoiceNO|Description                  |
-+---------+-----------------------------+
-|536366   |HAND WARMER UNION JACK       |
-|536366   |HAND WARMER RED POLKA DOT    |
-|536367   |ASSORTED COLOUR BIRD ORNAMENT|
-|536367   |POPPY&#39;S PLAYHOUSE BEDROOM    |
-|536367   |POPPY&#39;S PLAYHOUSE KITCHEN    |
-+---------+-----------------------------+
+<pre>+---------+--------------------+
+|InvoiceNO|         Description|
++---------+--------------------+
+|   536366|HAND WARMER UNION...|
+|   536366|HAND WARMER RED P...|
+|   536367|ASSORTED COLOUR B...|
+|   536367|POPPY&#39;S PLAYHOUSE...|
+|   536367|POPPY&#39;S PLAYHOUSE...|
++---------+--------------------+
 only showing top 5 rows
 
-+---------+---------+-----------------------------------+--------+-------------------+---------+----------+--------------+
-|InvoiceNo|StockCode|Description                        |Quantity|InvoiceDate        |UnitPrice|CustomerID|Country       |
-+---------+---------+-----------------------------------+--------+-------------------+---------+----------+--------------+
-|536365   |85123A   |WHITE HANGING HEART T-LIGHT HOLDER |6       |2010-12-01 08:26:00|2.55     |17850.0   |United Kingdom|
-|536365   |71053    |WHITE METAL LANTERN                |6       |2010-12-01 08:26:00|3.39     |17850.0   |United Kingdom|
-|536365   |84406B   |CREAM CUPID HEARTS COAT HANGER     |8       |2010-12-01 08:26:00|2.75     |17850.0   |United Kingdom|
-|536365   |84029G   |KNITTED UNION FLAG HOT WATER BOTTLE|6       |2010-12-01 08:26:00|3.39     |17850.0   |United Kingdom|
-|536365   |84029E   |RED WOOLLY HOTTIE WHITE HEART.     |6       |2010-12-01 08:26:00|3.39     |17850.0   |United Kingdom|
-+---------+---------+-----------------------------------+--------+-------------------+---------+----------+--------------+
-only showing top 5 rows
-
-+---------+---------+-----------------------------+--------+-------------------+---------+----------+--------------+
-|InvoiceNo|StockCode|Description                  |Quantity|InvoiceDate        |UnitPrice|CustomerID|Country       |
-+---------+---------+-----------------------------+--------+-------------------+---------+----------+--------------+
-|536366   |22633    |HAND WARMER UNION JACK       |6       |2010-12-01 08:28:00|1.85     |17850.0   |United Kingdom|
-|536366   |22632    |HAND WARMER RED POLKA DOT    |6       |2010-12-01 08:28:00|1.85     |17850.0   |United Kingdom|
-|536367   |84879    |ASSORTED COLOUR BIRD ORNAMENT|32      |2010-12-01 08:34:00|1.69     |13047.0   |United Kingdom|
-|536367   |22745    |POPPY&#39;S PLAYHOUSE BEDROOM    |6       |2010-12-01 08:34:00|2.1      |13047.0   |United Kingdom|
-|536367   |22748    |POPPY&#39;S PLAYHOUSE KITCHEN    |6       |2010-12-01 08:34:00|2.1      |13047.0   |United Kingdom|
-+---------+---------+-----------------------------+--------+-------------------+---------+----------+--------------+
++---------+--------------------+
+|InvoiceNO|         Description|
++---------+--------------------+
+|   536366|HAND WARMER UNION...|
+|   536366|HAND WARMER RED P...|
+|   536367|ASSORTED COLOUR B...|
+|   536367|POPPY&#39;S PLAYHOUSE...|
+|   536367|POPPY&#39;S PLAYHOUSE...|
++---------+--------------------+
 only showing top 5 rows
 
 </pre>
@@ -13507,11 +13496,63 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; instr 함수 &quot;&quot;&quot;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># SparkSQL 을 이용한 is in 구문 사용</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">desc</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;StockCode&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;StockCode in (&#39;DOT&#39;, &#39;POST&#39;, &#39;C2&#39;)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;StockCode&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="s1">&#39;StockCode&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
 
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>+---------+
+|StockCode|
++---------+
+|      DOT|
+|     POST|
+|       C2|
++---------+
+
++---------+
+|StockCode|
++---------+
+|     POST|
+|        M|
+|      DOT|
+|        D|
+|       C2|
++---------+
+only showing top 5 rows
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="sd">&quot;&quot;&quot; instr 함수 &quot;&quot;&quot;</span>
 <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;added&quot;</span><span class="p">,</span> <span class="n">instr</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Description</span><span class="p">,</span> <span class="s2">&quot;POSTAGE&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;added &gt; 1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># 8번째 글자에 &#39;POSTAGE&#39;가 시작됨</span>
 </pre></div>
 
@@ -13546,7 +13587,7 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 불리언 컬럼 &quot;&quot;&quot;</span>
@@ -13591,7 +13632,7 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; SQL문 실행 &quot;&quot;&quot;</span>
@@ -13641,12 +13682,13 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 지수만큼 제곱하는 pow 함수 &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">expr</span><span class="p">,</span> <span class="nb">pow</span>
 
+<span class="c1"># 아래의 연산이 필요한 경우에는 반드시 column 으로 지정되어야 연산자 계산이 됩니다. (문자열 * 연산자는 없습니다)</span>
 <span class="n">fabricateQuantity</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;UnitPrice&quot;</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">5</span>
 <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;CustomerID&quot;</span><span class="p">),</span> <span class="n">fabricateQuantity</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;realQuantity&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
@@ -13686,14 +13728,12 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; SQL문으로 위와 동일한 결과 실행 &quot;&quot;&quot;</span>
-<span class="n">df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span>
-    <span class="s2">&quot;CustomerId&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;(POWER(Quantity * UnitPrice, 2.0) + 5) as realQuantity&quot;</span>
-<span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 구조화 API 가 어렵다면 Expression 을 이용하여 표현해도 결과는 동일합니다.</span>
+<span class="n">fabricateQuantity</span> <span class="o">=</span> <span class="n">expr</span><span class="p">(</span><span class="s2">&quot;pow(Quantity * UnitPrice, 2) + 5&quot;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;CustomerID&quot;</span><span class="p">),</span> <span class="n">fabricateQuantity</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;realQuantity&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13711,12 +13751,15 @@ only showing top 5 rows
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>+----------+------------------+
-|CustomerId|      realQuantity|
+|CustomerID|      realQuantity|
 +----------+------------------+
 |   17850.0|239.08999999999997|
 |   17850.0|          418.7156|
+|   17850.0|             489.0|
+|   17850.0|          418.7156|
+|   17850.0|          418.7156|
 +----------+------------------+
-only showing top 2 rows
+only showing top 5 rows
 
 </pre>
 </div>
@@ -13728,7 +13771,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 반올림하는 round 함수 &quot;&quot;&quot;</span>
@@ -13769,7 +13812,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 피어슨 상관계수를 계산 &quot;&quot;&quot;</span>
@@ -13788,7 +13831,7 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[12]:</div>
+    <div class="prompt output_prompt">Out[41]:</div>
 
 
 
@@ -13805,7 +13848,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 요약 통계를 계산 &quot;&quot;&quot;</span>
@@ -13867,7 +13910,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 백분위수를 구하는 approxQuantile &quot;&quot;&quot;</span>
@@ -13892,7 +13935,7 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[14]:</div>
+    <div class="prompt output_prompt">Out[43]:</div>
 
 
 
@@ -13909,13 +13952,13 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 교차표를 생성하는 crosstab &quot;&quot;&quot;</span>
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;StockCode&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># rows name</span>
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>  <span class="c1"># columns name</span>
-<span class="n">df</span><span class="o">.</span><span class="n">stat</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="s2">&quot;StockCode&quot;</span><span class="p">,</span> <span class="s2">&quot;Quantity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># pivot</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;StockCode&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># rows name</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>  <span class="c1"># columns name</span>
+<span class="n">df</span><span class="o">.</span><span class="n">stat</span><span class="o">.</span><span class="n">crosstab</span><span class="p">(</span><span class="s2">&quot;StockCode&quot;</span><span class="p">,</span> <span class="s2">&quot;Quantity&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># pivot</span>
 </pre></div>
 
     </div>
@@ -13940,23 +13983,8 @@ only showing top 2 rows
 |   90210B|
 |    21259|
 |    21894|
-|    21452|
-|    22121|
-|    90022|
-|    21249|
-|    21711|
-|    22130|
-|    22314|
-|    21671|
-|    22629|
-|    82486|
-|    22438|
-|    22529|
-|    10133|
-|    21967|
-|    85064|
 +---------+
-only showing top 20 rows
+only showing top 5 rows
 
 +--------+
 |Quantity|
@@ -13966,23 +13994,8 @@ only showing top 20 rows
 |      28|
 |      27|
 |     384|
-|     -10|
-|     192|
-|      12|
-|     128|
-|      22|
-|      47|
-|       1|
-|      13|
-|       6|
-|      16|
-|       3|
-|      20|
-|      40|
-|      -7|
-|     432|
 +--------+
-only showing top 20 rows
+only showing top 5 rows
 
 +------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
 |StockCode_Quantity| -1|-10|-12| -2|-24| -3| -4| -5| -6| -7|  1| 10|100| 11| 12|120|128| 13| 14|144| 15| 16| 17| 18| 19|192|  2| 20|200| 21|216| 22| 23| 24| 25|252| 27| 28|288|  3| 30| 32| 33| 34| 36|384|  4| 40|432| 47| 48|480|  5| 50| 56|  6| 60|600| 64|  7| 70| 72|  8| 80|  9| 96|
@@ -13992,23 +14005,8 @@ only showing top 20 rows
 |             22064|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
 |             21080|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|
 |             22219|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  3|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             21908|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             22818|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|           15056BL|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             72817|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             22545|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             22988|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|
-|             22274|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             20750|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  2|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|            82616C|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             21703|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             22899|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  2|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|
-|             22379|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  2|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             22422|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  2|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             22769|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
-|             22585|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|  1|  0|  0|  1|  0|  0|  0|  0|  0|  0|  0|  0|  0|  0|
 +------------------+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
-only showing top 20 rows
+only showing top 5 rows
 
 </pre>
 </div>
@@ -14020,13 +14018,13 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 고유 아이디를 생성하는 monotonically_increasing_id &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">monotonically_increasing_id</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">monotonically_increasing_id</span><span class="p">())</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">monotonically_increasing_id</span><span class="p">())</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14051,13 +14049,8 @@ only showing top 20 rows
 |                            2|
 |                            3|
 |                            4|
-|                            5|
-|                            6|
-|                            7|
-|                            8|
-|                            9|
 +-----------------------------+
-only showing top 10 rows
+only showing top 5 rows
 
 </pre>
 </div>
@@ -14076,7 +14069,7 @@ only showing top 10 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 공백으로 나뉘는 모든 단어의 첫 글자를 대문자로 변경, initcap &quot;&quot;&quot;</span> 
@@ -14117,7 +14110,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 소문자/대문자 변경, lower/upper &quot;&quot;&quot;</span>
@@ -14158,7 +14151,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 문자열 주변의 공백을 제거, lpad/ltrim/rpad/rtrim/trim &quot;&quot;&quot;</span>
@@ -14216,7 +14209,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 단어 치환, regexp_extract &quot;&quot;&quot;</span>
@@ -14260,14 +14253,15 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[59]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 문자 치환, translate &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">translate</span>
-
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">translate</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="s2">&quot;LEET&quot;</span><span class="p">,</span> <span class="s2">&quot;12&quot;</span><span class="p">),</span> <span class="c1"># 매칭되지 않아도 실행되니 주의</span>
-          <span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
+    <span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span>
+    <span class="n">translate</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="s2">&quot;LEET&quot;</span><span class="p">,</span> <span class="s2">&quot;12&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;Translated&quot;</span><span class="p">)</span> <span class="c1"># 정확히 매칭되지 않아도 부분만 적용됩니다 L:1, E:2</span>
+<span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14284,13 +14278,16 @@ only showing top 2 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+--------------------------------+--------------------+
-|translate(Description, LEET, 12)|         Description|
-+--------------------------------+--------------------+
-|            WHI2 HANGING H2AR...|WHITE HANGING HEA...|
-|                WHI2 M2A1 1AN2RN| WHITE METAL LANTERN|
-+--------------------------------+--------------------+
-only showing top 2 rows
+<pre>+--------------------+--------------------+
+|         Description|          Translated|
++--------------------+--------------------+
+|WHITE HANGING HEA...|WHI2 HANGING H2AR...|
+| WHITE METAL LANTERN|    WHI2 M2A1 1AN2RN|
+|CREAM CUPID HEART...|CR2AM CUPID H2ARS...|
+|KNITTED UNION FLA...|KNI2D UNION F1AG ...|
+|RED WOOLLY HOTTIE...|R2D WOO11Y HOI2 W...|
++--------------------+--------------------+
+only showing top 5 rows
 
 </pre>
 </div>
@@ -14302,7 +14299,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 단어 추출, regexp_extract &quot;&quot;&quot;</span>
@@ -14310,8 +14307,9 @@ only showing top 2 rows
 
 <span class="n">extract_str</span> <span class="o">=</span> <span class="s2">&quot;(BLACK|WHITE|RED|GRENN|BLUE)&quot;</span>
 <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
-    <span class="n">regexp_extract</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="n">extract_str</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;color_clean&quot;</span><span class="p">),</span>
-    <span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span>
+    <span class="n">regexp_extract</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="n">extract_str</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;Extracted&quot;</span><span class="p">)</span>
+<span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14328,12 +14326,12 @@ only showing top 2 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+-----------+--------------------+
-|color_clean|         Description|
-+-----------+--------------------+
-|      WHITE|WHITE HANGING HEA...|
-|      WHITE| WHITE METAL LANTERN|
-+-----------+--------------------+
+<pre>+--------------------+---------+
+|         Description|Extracted|
++--------------------+---------+
+|WHITE HANGING HEA...|    WHITE|
+| WHITE METAL LANTERN|    WHITE|
++--------------------+---------+
 only showing top 2 rows
 
 </pre>
@@ -14346,7 +14344,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[61]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 단어 존재유무, contain &quot;&quot;&quot;</span> <span class="c1"># 파이썬과 SQL은 instr 함수를 사용</span>
@@ -14356,7 +14354,8 @@ only showing top 2 rows
 <span class="n">containWhite</span> <span class="o">=</span> <span class="n">instr</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="s2">&quot;WHITE&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
 <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;hasSimpleColor&quot;</span><span class="p">,</span> <span class="n">containBlack</span> <span class="o">|</span> <span class="n">containWhite</span><span class="p">)</span> \
     <span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;hasSimpleColor&quot;</span><span class="p">)</span> \
-    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> 
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14392,22 +14391,25 @@ only showing top 3 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 인수의 개수가 동적으로 변하는 상황과 문자열의 위치를 찾는 locate 함수 &quot;&quot;&quot;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 필드에 색깔 문자열이 포함되어 있는지 여부를 locate 함수를 이용하여 컬럼으로 생성하는 에제 &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">expr</span><span class="p">,</span> <span class="n">locate</span> 
 
 <span class="n">simple_colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">]</span>
-<span class="k">def</span> <span class="nf">color_locator</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">color_string</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">locate</span><span class="p">(</span><span class="n">color_string</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">column</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;boolean&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;is_&quot;</span> <span class="o">+</span> <span class="n">color_string</span><span class="p">)</span> <span class="c1"># color_strings 단어가 시작되는 문자기준(단어기준 X) 위치</span>
+
+<span class="k">def</span> <span class="nf">color_locator</span><span class="p">(</span><span class="n">column</span><span class="p">,</span> <span class="n">color_string</span><span class="p">):</span>   <span class="c1"># color_strings 단어가 시작되는 문자기준(단어기준 X) 위치</span>
+    <span class="k">return</span> <span class="n">locate</span><span class="p">(</span><span class="n">color_string</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">column</span><span class="p">)</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s2">&quot;boolean&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;is_&quot;</span> <span class="o">+</span> <span class="n">color_string</span><span class="p">)</span>
+
 <span class="n">selected_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">color_locator</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Description</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">simple_colors</span><span class="p">]</span> <span class="c1"># locate 함수를 하나씩 list에 저장</span>
 <span class="n">selected_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span> <span class="c1"># column 타입이여야 함 </span>
 
 <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">selected_cols</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">selected_cols</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;is_white OR is_red&quot;</span><span class="p">))</span> \
-    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">))</span> \
+    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14452,7 +14454,7 @@ only showing top 3 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">selected_cols</span>
@@ -14468,7 +14470,7 @@ only showing top 3 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[25]:</div>
+    <div class="prompt output_prompt">Out[63]:</div>
 
 
 
@@ -14512,15 +14514,16 @@ only showing top 3 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[68]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 오늘 날짜 구하기 &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">current_date</span><span class="p">,</span> <span class="n">current_timestamp</span>
 
 <span class="n">dateDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> \
-    <span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;today&quot;</span><span class="p">,</span> <span class="n">current_date</span><span class="p">())</span>\
+    <span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;today&quot;</span><span class="p">,</span> <span class="n">current_date</span><span class="p">())</span> \
     <span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;now&quot;</span><span class="p">,</span> <span class="n">current_timestamp</span><span class="p">())</span>
+
 <span class="n">dateDF</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;dataTable&quot;</span><span class="p">)</span>
 <span class="n">dateDF</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
 
@@ -14549,9 +14552,9 @@ only showing top 3 rows
 +---+----------+-----------------------+
 |id |today     |now                    |
 +---+----------+-----------------------+
-|0  |2020-08-20|2020-08-20 16:40:55.512|
-|1  |2020-08-20|2020-08-20 16:40:55.512|
-|2  |2020-08-20|2020-08-20 16:40:55.512|
+|0  |2020-08-23|2020-08-23 09:44:23.097|
+|1  |2020-08-23|2020-08-23 09:44:23.097|
+|2  |2020-08-23|2020-08-23 09:44:23.097|
 +---+----------+-----------------------+
 only showing top 3 rows
 
@@ -14565,7 +14568,7 @@ only showing top 3 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[69]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 날짜를 더하거나 빼기 &quot;&quot;&quot;</span>
@@ -14594,7 +14597,7 @@ only showing top 3 rows
 <pre>+------------------+------------------+
 |date_sub(today, 5)|date_add(today, 5)|
 +------------------+------------------+
-|        2020-08-15|        2020-08-25|
+|        2020-08-18|        2020-08-28|
 +------------------+------------------+
 only showing top 1 row
 
@@ -14608,17 +14611,18 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[70]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 두 날짜 사이의 일/개월 수를 파악 &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">datediff</span><span class="p">,</span> <span class="n">months_between</span><span class="p">,</span> <span class="n">to_date</span>
 
-<span class="n">dateDF</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;week_ago&quot;</span><span class="p">,</span> <span class="n">date_sub</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;today&quot;</span><span class="p">),</span> <span class="mi">7</span><span class="p">))</span>\
-    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">datediff</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;week_ago&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;today&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 현재 날짜에서 7일 제외 후 datediff 결과 확인</span>
-<span class="n">dateDF</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
-    <span class="n">to_date</span><span class="p">(</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;2016-01-01&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">),</span> 
-    <span class="n">to_date</span><span class="p">(</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;2017-05-22&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">))</span>\
+<span class="n">dateDF</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;week_ago&quot;</span><span class="p">,</span> <span class="n">date_sub</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;today&quot;</span><span class="p">),</span> <span class="mi">7</span><span class="p">))</span> \
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">datediff</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;week_ago&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;today&quot;</span><span class="p">)))</span> \
+    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 현재 날짜에서 7일 제외 후 datediff 결과 확인</span>
+
+<span class="n">dateDF</span> \
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">to_date</span><span class="p">(</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;2016-01-01&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">),</span> <span class="n">to_date</span><span class="p">(</span><span class="n">lit</span><span class="p">(</span><span class="s2">&quot;2017-05-22&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">))</span> \
     <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">months_between</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;end&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 개월 수 차이 파악</span>
 </pre></div>
 
@@ -14660,14 +14664,16 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[71]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 문자열을 날짜로 변환 &quot;&quot;&quot;</span> <span class="c1"># 자바의 simpleDateFormat 클래스가 지원하는 포맷 사용 필요</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">to_date</span><span class="p">,</span> <span class="n">lit</span>
 
-<span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">lit</span><span class="p">(</span><span class="s2">&quot;2017-01-01&quot;</span><span class="p">))</span>\
-    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">to_date</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">,</span> <span class="n">lit</span><span class="p">(</span><span class="s2">&quot;2017-01-01&quot;</span><span class="p">))</span> \
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">to_date</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;date&quot;</span><span class="p">)))</span> \
+    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -14701,7 +14707,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[72]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 파싱오류로 날짜가 null로 반환되는 사례 &quot;&quot;&quot;</span>
@@ -14739,7 +14745,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[73]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; SimpleDateFormat 표준을 활용하여 날짜 포멧을 지정 &quot;&quot;&quot;</span>
@@ -14766,7 +14772,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[74]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;SELECT * from dateTable2&quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -14802,7 +14808,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[75]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 항상 날짜 포맷을 지정해야 하는 to_timestamp 함수 &quot;&quot;&quot;</span>
@@ -14841,7 +14847,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In&nbsp;[76]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 날짜 비교 &quot;&quot;&quot;</span>
@@ -14902,10 +14908,11 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[77]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">coalesce</span> <span class="c1"># 인수로 지정한 여러 컬럼 중 null이 아닌 첫번 째 값 반환</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># coalesce : 인수로 지정한 여러 컬럼 중 null이 아닌 첫번 째 값 반환 하는 함수</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">coalesce</span> 
 
 <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">coalesce</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;CustomerId&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -14976,7 +14983,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[79]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
@@ -15028,7 +15035,7 @@ only showing top 20 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[80]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">drop</span><span class="p">()</span>
@@ -15074,10 +15081,11 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[81]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;StockCode&quot;</span><span class="p">,</span> <span class="s2">&quot;InvoiceNo&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># 배열 형태의 컬럼을 인수로 전달 가능</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 배열 형태의 컬럼을 인수로 전달하여 지정한 컬럼만 제거합니다</span>
+<span class="n">df</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;StockCode&quot;</span><span class="p">,</span> <span class="s2">&quot;InvoiceNo&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -15121,7 +15129,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[82]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; null을 포함한 DataFrame 행성 &quot;&quot;&quot;</span>
@@ -15184,7 +15192,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[83]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">myDf</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="s2">&quot;All null valus become this string&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -15229,7 +15237,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[84]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 딕셔너리 타입을 사용해서 다수의 컬럼에 fill 메서드를 적용 &quot;&quot;&quot;</span>
@@ -15275,7 +15283,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[85]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 조건에 따라 다른 값으로 대체 &quot;&quot;&quot;</span>
@@ -15345,7 +15353,7 @@ only showing top 1 row
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
+<div class="prompt input_prompt">In&nbsp;[87]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">struct</span>
@@ -15353,6 +15361,7 @@ only showing top 1 row
 <span class="n">complexDF</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">struct</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">,</span> <span class="s2">&quot;InvoiceNo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;complex&quot;</span><span class="p">))</span>
 <span class="n">complexDF</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;complexDF&quot;</span><span class="p">)</span>
 <span class="n">complexDF</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">complexDF</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -15379,6 +15388,11 @@ only showing top 1 row
 |[RED WOOLLY HOTTIE WHITE HEART., 536365]     |
 +---------------------------------------------+
 only showing top 5 rows
+
+root
+ |-- complex: struct (nullable = false)
+ |    |-- Description: string (nullable = true)
+ |    |-- InvoiceNo: string (nullable = true)
 
 </pre>
 </div>
@@ -15452,7 +15466,7 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[88]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 컬럼을 배열로 변환 &quot;&quot;&quot;</span>
@@ -15493,7 +15507,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[89]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 배열값의 조회 &quot;&quot;&quot;</span>
@@ -15540,7 +15554,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[90]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; size 함수 &quot;&quot;&quot;</span>
@@ -15591,7 +15605,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[91]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">array_contains</span>
@@ -15641,16 +15655,18 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[96]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">split</span><span class="p">,</span> <span class="n">explode</span>
-<span class="n">explodedDf</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;splitted&quot;</span><span class="p">,</span> <span class="n">split</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>\
-                <span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;exploded&quot;</span><span class="p">,</span> <span class="n">explode</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;splitted&quot;</span><span class="p">)))</span>\
-                <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">,</span> <span class="s2">&quot;InvoiceNo&quot;</span><span class="p">,</span> <span class="s2">&quot;exploded&quot;</span><span class="p">)</span> <span class="c1"># 모든 단어가 하나의 로우로 전환됨</span>
+<span class="n">exploded</span> <span class="o">=</span> <span class="n">df</span> \
+    <span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;splitted&quot;</span><span class="p">,</span> <span class="n">split</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="s2">&quot; &quot;</span><span class="p">))</span> \
+    <span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;exploded&quot;</span><span class="p">,</span> <span class="n">explode</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;splitted&quot;</span><span class="p">)))</span>
+<span class="n">exploded</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
 
+<span class="n">ef</span> <span class="o">=</span> <span class="n">exploded</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">,</span> <span class="s2">&quot;InvoiceNo&quot;</span><span class="p">,</span> <span class="s2">&quot;exploded&quot;</span><span class="p">)</span> <span class="c1"># 모든 단어가 하나의 로우로 전환됨</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">explodedDf</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;exploded&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">())</span> <span class="c1"># 로우 수가 다름</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">ef</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;exploded&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">())</span> <span class="c1"># 로우 수가 다름</span>
 </pre></div>
 
     </div>
@@ -15667,7 +15683,20 @@ only showing top 2 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>3108
+<pre>root
+ |-- InvoiceNo: string (nullable = true)
+ |-- StockCode: string (nullable = true)
+ |-- Description: string (nullable = true)
+ |-- Quantity: integer (nullable = true)
+ |-- InvoiceDate: timestamp (nullable = true)
+ |-- UnitPrice: double (nullable = true)
+ |-- CustomerID: double (nullable = true)
+ |-- Country: string (nullable = true)
+ |-- splitted: array (nullable = true)
+ |    |-- element: string (containsNull = true)
+ |-- exploded: string (nullable = true)
+
+3108
 14414
 </pre>
 </div>
@@ -15679,7 +15708,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[97]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">explodedDf</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">,</span> <span class="s2">&quot;exploded&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="c1"># 큰 쪽으로 카운드</span>
@@ -15695,7 +15724,7 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[50]:</div>
+    <div class="prompt output_prompt">Out[97]:</div>
 
 
 
@@ -15712,7 +15741,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[98]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">explodedDf</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">,</span> <span class="s2">&quot;exploded&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># Description 컬럼이 Group이 되어 중복됨</span>
@@ -15728,7 +15757,7 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[51]:</div>
+    <div class="prompt output_prompt">Out[98]:</div>
 
 
 
@@ -15765,48 +15794,12 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[112]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 맵 생성 &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">create_map</span>
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">create_map</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;complex_map&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[52]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[Row(complex_map={&#39;WHITE HANGING HEART T-LIGHT HOLDER&#39;: &#39;536365&#39;}),
- Row(complex_map={&#39;WHITE METAL LANTERN&#39;: &#39;536365&#39;})]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 맵의 데이터 조회 &quot;&quot;&quot;</span>
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">create_map</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;complex_map&quot;</span><span class="p">))</span>\
-    <span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;complex_map[&#39;WHITE METAL LANTERN&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">create_map</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;complex_map&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -15823,16 +15816,31 @@ only showing top 2 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+--------------------------------+
-|complex_map[WHITE METAL LANTERN]|
-+--------------------------------+
-|                            null|
-|                          536365|
-|                            null|
-|                            null|
-|                            null|
-+--------------------------------+
-only showing top 5 rows
+<pre>+-----------------------------------------------+
+|complex_map                                    |
++-----------------------------------------------+
+|[WHITE HANGING HEART T-LIGHT HOLDER -&gt; 536365] |
+|[WHITE METAL LANTERN -&gt; 536365]                |
+|[CREAM CUPID HEARTS COAT HANGER -&gt; 536365]     |
+|[KNITTED UNION FLAG HOT WATER BOTTLE -&gt; 536365]|
+|[RED WOOLLY HOTTIE WHITE HEART. -&gt; 536365]     |
+|[SET 7 BABUSHKA NESTING BOXES -&gt; 536365]       |
+|[GLASS STAR FROSTED T-LIGHT HOLDER -&gt; 536365]  |
+|[HAND WARMER UNION JACK -&gt; 536366]             |
+|[HAND WARMER RED POLKA DOT -&gt; 536366]          |
+|[ASSORTED COLOUR BIRD ORNAMENT -&gt; 536367]      |
+|[POPPY&#39;S PLAYHOUSE BEDROOM  -&gt; 536367]         |
+|[POPPY&#39;S PLAYHOUSE KITCHEN -&gt; 536367]          |
+|[FELTCRAFT PRINCESS CHARLOTTE DOLL -&gt; 536367]  |
+|[IVORY KNITTED MUG COSY  -&gt; 536367]            |
+|[BOX OF 6 ASSORTED COLOUR TEASPOONS -&gt; 536367] |
+|[BOX OF VINTAGE JIGSAW BLOCKS  -&gt; 536367]      |
+|[BOX OF VINTAGE ALPHABET BLOCKS -&gt; 536367]     |
+|[HOME BUILDING BLOCK WORD -&gt; 536367]           |
+|[LOVE BUILDING BLOCK WORD -&gt; 536367]           |
+|[RECIPE BOX WITH METAL HEART -&gt; 536367]        |
++-----------------------------------------------+
+only showing top 20 rows
 
 </pre>
 </div>
@@ -15844,12 +15852,14 @@ only showing top 5 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="prompt input_prompt">In&nbsp;[108]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 맵의 분해 &quot;&quot;&quot;</span>
-<span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">create_map</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;complex_map&quot;</span><span class="p">))</span>\
-    <span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;explode(complex_map)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 맵의 데이터 조회 &quot;&quot;&quot;</span>
+<span class="n">mapped</span> <span class="o">=</span> <span class="n">df</span> \
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">create_map</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;complex_map&quot;</span><span class="p">))</span>
+<span class="n">mapped</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+<span class="n">mapped</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;complex_map[&#39;WHITE METAL LANTERN&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;complex_map[&#39;WHITE METAL LANTERN&#39;] is not null&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -15866,13 +15876,71 @@ only showing top 5 rows
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>+--------------------+------+
+<pre>root
+ |-- complex_map: map (nullable = false)
+ |    |-- key: string
+ |    |-- value: string (valueContainsNull = true)
+
++--------------------------------+
+|complex_map[WHITE METAL LANTERN]|
++--------------------------------+
+|                          536365|
+|                          536373|
+|                          536375|
+|                          536396|
+|                          536406|
+|                          536544|
++--------------------------------+
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[114]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 맵의 분해 &quot;&quot;&quot;</span>
+<span class="n">exploded</span> <span class="o">=</span> <span class="n">df</span> \
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">create_map</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;complex_map&quot;</span><span class="p">))</span> \
+    <span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;explode(complex_map)&quot;</span><span class="p">)</span>
+<span class="n">exploded</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
+<span class="n">exploded</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>root
+ |-- key: string (nullable = false)
+ |-- value: string (nullable = true)
+
++--------------------+------+
 |                 key| value|
 +--------------------+------+
 |WHITE HANGING HEA...|536365|
 | WHITE METAL LANTERN|536365|
+|CREAM CUPID HEART...|536365|
+|KNITTED UNION FLA...|536365|
+|RED WOOLLY HOTTIE...|536365|
 +--------------------+------+
-only showing top 2 rows
+only showing top 5 rows
 
 </pre>
 </div>
@@ -15891,13 +15959,15 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="prompt input_prompt">In&nbsp;[115]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; Json 컬럼 생성 &quot;&quot;&quot;</span>
-<span class="n">jsonDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    &#39;{&quot;myJSONKey&quot; : {&quot;myJSONValue&quot; : [1, 2, 3]}}&#39; as jsonString</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="n">jsonDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    &#39;{&quot;myJSONKey&quot; : {&quot;myJSONValue&quot; : [1, 2, 3]}}&#39; as jsonString</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<span class="p">)</span>
 </pre></div>
 
     </div>
@@ -15907,7 +15977,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="prompt input_prompt">In&nbsp;[116]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 인라인 쿼리로 JSON 조회하기 &quot;&quot;&quot;</span>
@@ -15949,13 +16019,14 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="prompt input_prompt">In&nbsp;[119]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; StructType을 Json 문자열로 변경 &quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">to_json</span>
-<span class="n">df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;(InvoiceNo, Description) as myStruct&quot;</span><span class="p">)</span>\
-    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">to_json</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;myStruct&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;(InvoiceNo, Description) as myStruct&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">to_json</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;myStruct&quot;</span><span class="p">)))</span> \
+    <span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -15968,7 +16039,7 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[57]:</div>
+    <div class="prompt output_prompt">Out[119]:</div>
 
 
 
@@ -15987,7 +16058,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="prompt input_prompt">In&nbsp;[120]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; Json 문자열을 객체로 변환 &quot;&quot;&quot;</span>
@@ -15999,9 +16070,10 @@ only showing top 2 rows
     <span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">(),</span> <span class="kc">True</span><span class="p">)</span>
 <span class="p">])</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;(InvoiceNo, Description) as myStruct&quot;</span><span class="p">)</span>\
-    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">to_json</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;myStruct&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;newJSON&quot;</span><span class="p">))</span>\
-    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">from_json</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;newJSON&quot;</span><span class="p">),</span> <span class="n">parseSchema</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;newJSON&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># 키를 컬럼명으로 값을 로우로 변경</span>
+<span class="n">df</span><span class="o">.</span><span class="n">selectExpr</span><span class="p">(</span><span class="s2">&quot;(InvoiceNo, Description) as myStruct&quot;</span><span class="p">)</span> \
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">to_json</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;myStruct&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;newJSON&quot;</span><span class="p">))</span> \
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">from_json</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;newJSON&quot;</span><span class="p">),</span> <span class="n">parseSchema</span><span class="p">),</span> <span class="n">col</span><span class="p">(</span><span class="s2">&quot;newJSON&quot;</span><span class="p">))</span> \
+    <span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># 키를 컬럼명으로 값을 로우로 변경</span>
 </pre></div>
 
     </div>
@@ -16048,7 +16120,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[59]:</div>
+<div class="prompt input_prompt">In&nbsp;[121]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; UDF 사용하기 &quot;&quot;&quot;</span>
@@ -16068,7 +16140,7 @@ only showing top 2 rows
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[59]:</div>
+    <div class="prompt output_prompt">Out[121]:</div>
 
 
 
@@ -16085,7 +16157,7 @@ only showing top 2 rows
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="prompt input_prompt">In&nbsp;[122]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; UDF 등록 및 사용 &quot;&quot;&quot;</span>

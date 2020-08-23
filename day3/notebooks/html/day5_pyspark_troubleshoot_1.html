@@ -13635,8 +13635,8 @@ div#notebook {
 <div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df1</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">30000000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># 1:1 조인이 되지 않도록 3의 배수</span>
-<span class="n">df2</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20000000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 2의 배수로 숫자를 생성합니다</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">df1</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3000000</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1"># 1:1 조인이 되지 않도록 3의 배수</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2000000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 2의 배수로 숫자를 생성합니다</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="n">getNumPartitions</span><span class="p">(),</span> <span class="n">df2</span><span class="o">.</span><span class="n">rdd</span><span class="o">.</span><span class="n">getNumPartitions</span><span class="p">(),</span> <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">))</span>
 <span class="n">df1</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="s2">&quot;overwrite&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;target/troubleshoot1/df1&quot;</span><span class="p">)</span>
 <span class="n">df2</span><span class="o">.</span><span class="n">write</span><span class="o">.</span><span class="n">mode</span><span class="p">(</span><span class="s2">&quot;overwrite&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;target/troubleshoot1/df2&quot;</span><span class="p">)</span>
@@ -13739,7 +13739,7 @@ root
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>3
 3
-200
+3
 1
 1
 </pre>
@@ -13789,7 +13789,7 @@ root
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>3
 3
-200
+3
 2
 2
 </pre>
@@ -13883,17 +13883,17 @@ openCostInBytes: 4mb
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>[(&#39;spark.app.id&#39;, &#39;local-1597941808426&#39;),
+<pre>[(&#39;spark.driver.host&#39;, &#39;7123e3456028&#39;),
+ (&#39;spark.app.id&#39;, &#39;local-1598179272083&#39;),
  (&#39;spark.app.name&#39;, &#39;Data Engineer Intermediate Day4&#39;),
  (&#39;spark.rdd.compress&#39;, &#39;True&#39;),
  (&#39;spark.dataengineer.intermediate.day4&#39;, &#39;troubleshoot-1&#39;),
+ (&#39;spark.driver.port&#39;, &#39;44739&#39;),
  (&#39;spark.serializer.objectStreamReset&#39;, &#39;100&#39;),
  (&#39;spark.master&#39;, &#39;local[*]&#39;),
  (&#39;spark.executor.id&#39;, &#39;driver&#39;),
  (&#39;spark.submit.deployMode&#39;, &#39;client&#39;),
- (&#39;spark.driver.host&#39;, &#39;0951343db520&#39;),
- (&#39;spark.ui.showConsoleProgress&#39;, &#39;true&#39;),
- (&#39;spark.driver.port&#39;, &#39;39445&#39;)]</pre>
+ (&#39;spark.ui.showConsoleProgress&#39;, &#39;true&#39;)]</pre>
 </div>
 
 </div>
@@ -13939,34 +13939,31 @@ openCostInBytes: 4mb
 Repartition 1, true
 +- Project [id#11L]
    +- Join Inner, (id#11L = id#13L)
-      :- Range (1, 30000000, step=3, splits=Some(3))
-      +- Range (1, 20000000, step=2, splits=Some(3))
+      :- Range (1, 3000000, step=3, splits=Some(3))
+      +- Range (1, 2000000, step=2, splits=Some(3))
 
 == Analyzed Logical Plan ==
 id: bigint
 Repartition 1, true
 +- Project [id#11L]
    +- Join Inner, (id#11L = id#13L)
-      :- Range (1, 30000000, step=3, splits=Some(3))
-      +- Range (1, 20000000, step=2, splits=Some(3))
+      :- Range (1, 3000000, step=3, splits=Some(3))
+      +- Range (1, 2000000, step=2, splits=Some(3))
 
 == Optimized Logical Plan ==
 Repartition 1, true
 +- Project [id#11L]
    +- Join Inner, (id#11L = id#13L)
-      :- Range (1, 30000000, step=3, splits=Some(3))
-      +- Range (1, 20000000, step=2, splits=Some(3))
+      :- Range (1, 3000000, step=3, splits=Some(3))
+      +- Range (1, 2000000, step=2, splits=Some(3))
 
 == Physical Plan ==
 Exchange RoundRobinPartitioning(1)
-+- *(5) Project [id#11L]
-   +- *(5) SortMergeJoin [id#11L], [id#13L], Inner
-      :- *(2) Sort [id#11L ASC NULLS FIRST], false, 0
-      :  +- Exchange hashpartitioning(id#11L, 200)
-      :     +- *(1) Range (1, 30000000, step=3, splits=3)
-      +- *(4) Sort [id#13L ASC NULLS FIRST], false, 0
-         +- Exchange hashpartitioning(id#13L, 200)
-            +- *(3) Range (1, 20000000, step=2, splits=3)
++- *(2) Project [id#11L]
+   +- *(2) BroadcastHashJoin [id#11L], [id#13L], Inner, BuildRight
+      :- *(2) Range (1, 3000000, step=3, splits=3)
+      +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]))
+         +- *(1) Range (1, 2000000, step=2, splits=3)
 </pre>
 </div>
 </div>
@@ -14011,34 +14008,31 @@ Exchange RoundRobinPartitioning(1)
 Repartition 1, false
 +- Project [id#11L]
    +- Join Inner, (id#11L = id#13L)
-      :- Range (1, 30000000, step=3, splits=Some(3))
-      +- Range (1, 20000000, step=2, splits=Some(3))
+      :- Range (1, 3000000, step=3, splits=Some(3))
+      +- Range (1, 2000000, step=2, splits=Some(3))
 
 == Analyzed Logical Plan ==
 id: bigint
 Repartition 1, false
 +- Project [id#11L]
    +- Join Inner, (id#11L = id#13L)
-      :- Range (1, 30000000, step=3, splits=Some(3))
-      +- Range (1, 20000000, step=2, splits=Some(3))
+      :- Range (1, 3000000, step=3, splits=Some(3))
+      +- Range (1, 2000000, step=2, splits=Some(3))
 
 == Optimized Logical Plan ==
 Repartition 1, false
 +- Project [id#11L]
    +- Join Inner, (id#11L = id#13L)
-      :- Range (1, 30000000, step=3, splits=Some(3))
-      +- Range (1, 20000000, step=2, splits=Some(3))
+      :- Range (1, 3000000, step=3, splits=Some(3))
+      +- Range (1, 2000000, step=2, splits=Some(3))
 
 == Physical Plan ==
 Coalesce 1
-+- *(5) Project [id#11L]
-   +- *(5) SortMergeJoin [id#11L], [id#13L], Inner
-      :- *(2) Sort [id#11L ASC NULLS FIRST], false, 0
-      :  +- Exchange hashpartitioning(id#11L, 200)
-      :     +- *(1) Range (1, 30000000, step=3, splits=3)
-      +- *(4) Sort [id#13L ASC NULLS FIRST], false, 0
-         +- Exchange hashpartitioning(id#13L, 200)
-            +- *(3) Range (1, 20000000, step=2, splits=3)
++- *(2) Project [id#11L]
+   +- *(2) BroadcastHashJoin [id#11L], [id#13L], Inner, BuildRight
+      :- *(2) Range (1, 3000000, step=3, splits=3)
+      +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]))
+         +- *(1) Range (1, 2000000, step=2, splits=3)
 </pre>
 </div>
 </div>
@@ -14079,8 +14073,8 @@ Coalesce 1
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 2.76 ms, sys: 438 µs, total: 3.2 ms
-Wall time: 8.37 s
+<pre>CPU times: user 2.03 ms, sys: 0 ns, total: 2.03 ms
+Wall time: 755 ms
 </pre>
 </div>
 </div>
@@ -14112,8 +14106,8 @@ Wall time: 8.37 s
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 3.98 ms, sys: 214 µs, total: 4.2 ms
-Wall time: 10.4 s
+<pre>CPU times: user 441 µs, sys: 1.21 ms, total: 1.65 ms
+Wall time: 581 ms
 </pre>
 </div>
 </div>

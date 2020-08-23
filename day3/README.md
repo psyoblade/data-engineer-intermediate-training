@@ -34,6 +34,14 @@ docker-compose logs -f notebook
     * [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_3.html)
     * [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_4.html)
     * [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_5.html)
+  * 파이썬 첫걸음 (외부 문서링크) - Python 3.x 기준
+    * [1. 파이썬 기초문법 1부](https://blog.myungseokang.dev/posts/python-basic-grammar1/)
+    * [2. 파이썬 기초문법 2부](https://blog.myungseokang.dev/posts/python-basic-grammar2/)
+    * [3. 코딩을 몰라도 쉽게 만드는 데이터수집기 만들기](https://book.coalastudy.com/data_crawling/)
+  * 파이썬 분석 첫걸음 (외부 문서링킁)
+    * [1. Pandas 기초](https://doorbw.tistory.com/172)
+    * [2. Numpy 기초](https://doorbw.tistory.com/171)
+    * [3. Plotly 기초](https://dailyheumsi.tistory.com/118)
 
 
 
