@@ -357,15 +357,13 @@ drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /user/ubuntu/archive/
 IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
 
 beeline> 
-import table imdb_title_imported from '/opt/hive/examples/export/imdb_title';
-select * from imdb_title_imported where title like '%record%';
-+-------------------------------+
-|   imdb_title_imported.title   |
-+-------------------------------+
-| 1 my first hive table record  |
-| 2 my second records           |
-| 3 third records               |
-+-------------------------------+
+import table imdb_orc_imported from '/user/ubuntu/archive/imdb_orc';
+select * from imdb_orc_imported;
++---------------------------+----------------------------+
+| imdb_title_imported.rank  | imdb_title_imported.title  |
++---------------------------+----------------------------+
+| 2                         | psyoblade title            |
++---------------------------+----------------------------+
 ```
 
 
