@@ -304,24 +304,24 @@ DELETE FROM tablename [WHERE expression]
 
 beeline> 
 create table imdb_orc (rank int, title string) clustered by (rank) into 4 buckets stored as orc tblproperties ('transactional'='true');
-insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk');
-delete from imdb_orc where rank = 1;
 
-select * from imdb_orc;
-
-```
-> ORC 포맷의 경우에도 아래의 조건 확인이 필요합니다
-```sql
-delete from imdb_orc where rank = 1;
-Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
-
-// 위와 같은 오류가 나는 경우 아래의 정보를 재설정 후 다시 시도합니다
+// 아래와 같이 동시성 및 버킷팅 설정이 제대로 되어 있어서 ACID 트랜젝션 수행이 가능합니다
 set hive.support.concurrency=true;
 set hive.enforce.bucketing=true;
 set hive.exec.dynamic.partition.mode=nonstrict;
 set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
 set hive.compactor.initiator.on=true;
 set hive.compactor.worker.threads=1;
+
+insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk');
+delete from imdb_orc where rank = 1;
+
+select * from imdb_orc;
+```
+* 제대로 설정되지 않은 경우 아래와 같은 오류를 발생시킵니다
+```sql
+delete from imdb_orc where rank = 1;
+Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
 ```
 
 #### 5. UPDATE
@@ -330,7 +330,7 @@ set hive.compactor.worker.threads=1;
 UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
 
 beeline> 
-update imdb_orc set title = 'psyoblade title'
+update imdb_orc set title = 'psyoblade title';
 select * from imdb_orc;
 ```
 
