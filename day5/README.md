@@ -3,11 +3,11 @@
 
 
 - 목차
-  * [1. 몽고디비 서버 기동 및 접속](#1_몽고디비_서버_기동_및_접속)
-  * [2. 기본 명령어 예제 실습](#2_기본_명령어_예제_실습)
-  * [3. 데이터 모델링 기본 실습](#3_데이터_모델링_기본_실습)
-  * [4. 데이터 모델링 고급 실습](#4_데이터_모델링_고급_실습)
-  * [5. 모니터링 및 트러블슈팅](#5_모니터링_및_트러블슈팅)
+  * [1. 데이터 모델링 기본 ](#1-데이터-모델링-기본)
+  * [2. 데이터 모델링 고급 ](#2-데이터-모델링-고급)
+  * [3. 몽고디비 서버 기동 및 접속](#3-몽고디비-서버-기동-및-접속)
+  * [4. 기본 명령어 예제 실습](#4-기본-명령어-예제-실습)
+  * [5. 모니터링 및 트러블슈팅](#5-모니터링-및-트러블슈팅)
   * References
     * https://medium.com/@igorkhomenko/troubleshooting-mongodb-100-cpu-load-and-slow-queries-da622c6e1339
     * https://docs.mongodb.com/manual/tutorial/manage-the-database-profiler/
@@ -43,90 +43,8 @@ docker-compose --version
 
 ## 몽고디비 실습
 
-### 1 몽고디비 서버 기동 및 접속
-* 최신 소스를 내려 받습니다
-```bash
-bash>
-cd /home/ubuntu/work/data-engineer-intermediate-training
-git pull
-```
-* 모든 컨테이너를 종료하고, 더 이상 사용하지 않는 도커 이미지 및 볼륨을 제거합니다
-```bash
-bash>
-docker rm -f `docker ps -aq`
-docker image prune
-docker volume prune
-```
-* 몽고디비 및 몽고 익스프레스 인스턴스 기동 (http://localhost:8081)
-  * [도커 컴포즈 옵션](https://docs.docker.com/compose/reference/up/)
-  * --build : Build images before starting containers.
-  * --force-recreate : Recreate containers even if their configuration and image haven't changed.
-  * --renew-anon-volumes : Recreate anonymous volumes instead of retrieving data from the previous containers.
-* 아래의 명령어가 실행됩니다
-  * ```bash docker-compose up --build --force-recreate --renew-anon-volumes -d```
-```bash
-bash>
-./docker-compose-up.sh
-```
-* [Mongo Express](http://localhost:8081) 에 접속하여 테스트 데이터를 직접 입력합니다
-
-
-### 2 기본 명령어 예제 실습
-* 
-```javascript
-// Log on MongoDB
-bash>
-docker-compose exec mongo mongo -u root -p
-password: pass
-
-mongodb>
-// Authenticate - root 로그인 시에는 필요 없습니다
-db.auth("user", "pass");
-
-// Show All Databases
-show dbs
-
-// Change Database
-use testdb;
-
-// Show All Collections, Users, Roles
-show tables;
-db.getCollectionNames();
-
-show users;
-db.getUsers();
-
-show roles;
-
-// Create Collection
-db.createCollection("collectionName");
-
-// Insert Document(s)
-db.foo.insert( { field1: "string_value", field2: int_value } );
-db.foo.insertMany( [ { field1: "string_value" }, { field1: "string_value" } ] );
-
-// Update Whole Docuemnt - 문서 전체를 변경합니다
-db.foo.save( {"_id": new ObjectId("my-object-id"), field1: "value", field2: "value"} );
-db.foo.update( { <filter> }, {"_id": new ObjectId("my-object-id"), field1: "value", field2: "value"} );
-
-// Update Column of Document(s) - https://docs.mongodb.com/manual/reference/method/db.collection.update/
-db.foo.update( <query>, <update>, <option> );
-db.foo.update({}, {$set: {tag:"foo"}}, {multi:true}); // 모든 문서에 tag:"foo" 를 추가
-
-// Display Document(s)
-db.foo.find( <query>, <projection> );
-
-db.foo.find().limit(10);
-db.foo.find({_id:ObjectId("my-object-id")});
-db.foo.find({_id:ObjectId("my-object-id")}, {field1: 1});
-
-// Remove Document(s)
-db.foo.remove( <query>, <option> )
-db.foo.remove( {}, {multi:true})
-```
-
-### 3 데이터 모델링 기본 실습
-#### 3.1. one-to-few
+### 1 데이터 모델링 기본
+#### 1-1 one-to-few
 * 대부분의 경우 내장 문서로 저장하고 가져오는 방식이 간결하고 편하다 (단, 16mb 제약)
 ```javascript
 // testdb database 를 생성합니다
@@ -153,7 +71,7 @@ db.foo.remove( {}, {multi:true})
 ```javascript
 db.person.findOne();
 ```
-#### 3.2. one-to-many
+#### 1-2 one-to-many
 * 실제 객체의 ObjectID 값을 리스트로 가지고 다시 조회하는 방식 2번 이상 호출이 필요함 (\_id 도 은근히 큰 데이터 16mb)
 ```javascript
 // parts collection 을 생성합니다
@@ -187,7 +105,7 @@ db.person.findOne();
 product = db.products.findOne({catalog_number: 1234});
 product_parts = db.parts.find({_id: { $in : product.parts } } ).toArray();
 ```
-#### 3.3. one-to-many
+#### 1-3 one-to-many
 * 실제 객체의 ObjectID 값을 리스트로 가지고 다시 조회하는 방식 2번 이상 호출이 필요함 (\_id 도 은근히 큰 데이터 16mb)
   * [ObjectId (12bytes)](https://mongodb.github.io/node-mongodb-native/2.0/tutorials/objectid/)
 ```javascript
@@ -213,8 +131,8 @@ host = db.hosts.findOne({ipaddr : '127.66.66.66'});
 last_5k_msg = db.logmsg.find({host: host._id}).sort({time : -1}).limit(5000).toArray()
 ```
 
-### 4 데이터 모델링 고급 실습
-#### 4.1. 양방향 참조 방식
+### 2 데이터 모델링 고급
+#### 2-1 양방향 참조 방식
 * 삭제 시에 2개의 문서를 다시 삭제해야 하는 문제점이 있으므로 Atomic Delete 가 필요한 경우는 사용할 수 없습니다
 ```javascript
 // person
@@ -234,7 +152,7 @@ last_5k_msg = db.logmsg.find({host: host._id}).sort({time : -1}).limit(5000).toA
   owner: ObjectID("AAAA")
 }
 ```
-#### 4.2. 비정규화를 통한 Many → One 참조 방식
+#### 2-2 비정규화를 통한 Many → One 참조 방식
 * 자주 조회되지만, 자주 업데이트 되지 않는 라벨 혹은 이름의 경우 비정규화를 통해 조회 횟수를 줄일 수 있다
 ```javascript
 // products - before
@@ -261,7 +179,7 @@ last_5k_msg = db.logmsg.find({host: host._id}).sort({time : -1}).limit(5000).toA
   ]
 }
 ```
-#### 4.3. 비정규화를 통한 One → Many
+#### 2-3 비정규화를 통한 One → Many
 * 대부분의 값들을 비정규화 하여 아주 유용하지만 해당 콜렉션을 유지하는 비용도 고려해야만 한다
 ```javascript
 // parts - before
@@ -287,8 +205,89 @@ last_5k_msg = db.logmsg.find({host: host._id}).sort({time : -1}).limit(5000).toA
 }
 ```
 
+### 3 몽고디비 서버 기동 및 접속
+* 최신 소스를 내려 받습니다
+```bash
+bash>
+cd /home/ubuntu/work/data-engineer-intermediate-training
+git pull
+```
+* 모든 컨테이너를 종료하고, 더 이상 사용하지 않는 도커 이미지 및 볼륨을 제거합니다
+```bash
+bash>
+docker rm -f `docker ps -aq`
+docker image prune
+docker volume prune
+```
+* 몽고디비 및 몽고 익스프레스 인스턴스 기동 (http://localhost:8081)
+  * [도커 컴포즈 옵션](https://docs.docker.com/compose/reference/up/)
+  * --build : Build images before starting containers.
+  * --force-recreate : Recreate containers even if their configuration and image haven't changed.
+  * --renew-anon-volumes : Recreate anonymous volumes instead of retrieving data from the previous containers.
+* 아래의 명령어가 실행됩니다
+  * ```bash docker-compose up --build --force-recreate --renew-anon-volumes -d```
+```bash
+bash>
+./docker-compose-up.sh
+```
+* [Mongo Express](http://localhost:8081) 에 접속하여 테스트 데이터를 직접 입력합니다
+
+
+### 4 기본 명령어 예제 실습
+* 기본 명령어 실습 
+```javascript
+// Log on MongoDB
+bash>
+docker-compose exec mongo mongo -u root -p
+password: pass
+
+mongodb>
+// Authenticate - root 로그인 시에는 필요 없습니다
+db.auth("user", "pass");
+
+// Show All Databases
+show dbs
+
+// Change Database
+use testdb;
+
+// Show All Collections, Users, Roles
+show tables;
+db.getCollectionNames();
+
+show users;
+db.getUsers();
+
+show roles;
+
+// Create Collection - 별도로 생성할 필요 없이 db 명과 같이 문서를 생성하면 자동으로 생성됩니다
+db.createCollection("foo");
+
+// Insert Document(s)
+db.foo.insert( { field1: "string_value", field2: 1984 } );
+db.foo.insertMany( [ { field1: "string_value" }, { field1: "string_value" } ] );
+
+// Update Whole Docuemnt - 문서 전체를 변경합니다
+db.foo.save( {"_id": new ObjectId(), field1: "value", field2: "value"} );
+db.foo.update( {field2: 1984}, {field1: "modified", field2: "also modified"} );
+
+// Update Column of Document(s) - https://docs.mongodb.com/manual/reference/method/db.collection.update/
+// db.foo.update( <query>, <update>, <option> );
+db.foo.update({}, {$set: {tag:"foo"}}, {multi:true}); // 모든 문서에 tag:"foo" 를 추가
+
+// Display Document(s)
+// db.foo.find( <query>, <projection> );
+db.foo.find().limit(10);
+db.foo.find({field1:"string_value"}, {tag:1});
+
+// Remove Document(s)
+// db.foo.remove( <query>, <option> )
+db.foo.remove( {}, {multi:true})
+```
+
+
 ### 5 모니터링 및 트러블슈팅
-#### 5.1. CLI 를 통해 모니터링하는 방법
+#### 5-1 CLI 를 통해 모니터링하는 방법
 * 해당 정보를 조회하기 위해서는 root 권한을 가져야 하므로 별도의 계정을 생성해 두는 것이 편합니다 
 ```bash
 bash>
@@ -336,7 +335,7 @@ insert query update delete getmore command dirty used flushes vsize  res qrw arw
   - conn : 현재 열려 있는 연결 수
   - time : 측정된 시간
 
-#### 5.2. 환경설정
+#### 5-2 환경설정
 * 적절한 메모리 크기를 확인 - storage.wiredTiger.engineConfig.cacheSizeGB : 몽고디비 캐시 크기 결정
   * 몽고서버 실행 시에 아래와 같이 conf 파일을 지정합니다 ( mongod --config /etc/mongod.conf)
   * [몽고디비 Configuration](https://docs.mongodb.com/manual/reference/configuration-options/)
