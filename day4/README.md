@@ -251,6 +251,9 @@ select count(1) from renamed_emp;
 LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)];
 
 beeline> 
+drop table if exists imdb_movies;
+create table imdb_movies (rank int, title string, genre string, description string, director string, actors string, year string, runtime int, rating string, votes int, revenue string, metascore int) row format delimited fields terminated by '\t';
+
 load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 ```
 
