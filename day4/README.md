@@ -225,15 +225,16 @@ TRUNCATE TABLE table_name;
 
 beeline> 
 use default;
-select count(1) from imdb_title_imported;
+insert into renamed_emp values (1, 'suhyuk', 1000);
+select count(1) from renamed_emp;
 +-------+
 |  _c0  |
 +-------+
-| 1003  |
+| 1     |
 +-------+
 
-truncate table imdb_title_imported;
-select count(1) from imdb_title_imported;
+truncate table renamed_emp;
+select count(1) from renamed_emp;
 +------+
 | _c0  |
 +------+
