@@ -13,13 +13,60 @@
     * https://docs.mongodb.com/manual/tutorial/manage-the-database-profiler/
 
 
+## 실습 이전에 docker-compose 최신 버전으로 업데이트 합니다
+> 이전에 설치된 버전에서는 볼륨을 강제로 재시작 하는 기능이 없어 mongo-express 가 제대로 기동되지 않는 문제가 있습니다.
+* [How to install Docker Compose on Ubuntu](https://phoenixnap.com/kb/install-docker-compose-ubuntu)
+  * 현재 버전이 1.24 이상이면 괜찮습니다 1.17 버전이라면 업데이트가 필요합니다
+```bash
+bash>
+docker-compose --version
+docker-compose version 1.24.0, build 0aa59064
+```
+* Uninstall docker-compose
+```bash
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt install curl
+
+sudo rm /usr/local/bin/docker-compose
+sudo apt-get remove docker-compose
+sudo apt-get autoremove
+```
+* Install docker-compose
+```bash
+bash>
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+```
+
+
 ## 몽고디비 실습
 
 ### 1 몽고디비 서버 기동 및 접속
-* 몽고디비 및 몽고 익스프레스 인스턴스 기동 (http://localhost:8081)
+* 최신 소스를 내려 받습니다
 ```bash
 bash>
-docker-compose up --build --force-recreate --renew-anon-volumes -d
+cd /home/ubuntu/work/data-engineer-intermediate-training
+git pull
+```
+* 모든 컨테이너를 종료하고, 더 이상 사용하지 않는 도커 이미지 및 볼륨을 제거합니다
+```bash
+bash>
+docker rm -f `docker ps -aq`
+docker image prune
+docker volume prune
+```
+* 몽고디비 및 몽고 익스프레스 인스턴스 기동 (http://localhost:8081)
+  * [도커 컴포즈 옵션](https://docs.docker.com/compose/reference/up/)
+  * --build : Build images before starting containers.
+  * --force-recreate : Recreate containers even if their configuration and image haven't changed.
+  * --renew-anon-volumes : Recreate anonymous volumes instead of retrieving data from the previous containers.
+* 아래의 명령어가 실행됩니다
+  * ```bash docker-compose up --build --force-recreate --renew-anon-volumes -d```
+```bash
+bash>
+./docker-compose-up.sh
 ```
 * [Mongo Express](http://localhost:8081) 에 접속하여 테스트 데이터를 직접 입력합니다
 
