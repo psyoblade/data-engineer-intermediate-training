@@ -58,40 +58,57 @@ docker-compose logs -f hive-server
 ### 2-1 하이브 데이터베이스 DDL 가이드
 #### 1. CREATE
 > 데이터베이스를 생성합니다
+```bash
+bash>
+docker-compose exec hive-server bash
+beeline
+
+beeline>
+!connect jdbc:hive2://localhost:10000 scott tiger
+```
 ```sql
-beeline> CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
+CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
 [COMMENT database_comment]
 [LOCATION hdfs_path]
 [WITH DBPROPERTIES (property_name=property_value, ...)];
 
+beeline> 
 create database if not exists testdb comment 'test database' location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
 ```
 
 #### 2. SHOW
 > 데이터베이스 목록을 출력합니다
 ```sql
-beeline> SHOW (DATABASES|SCHEMAS);
+SHOW (DATABASES|SCHEMAS);
+
+beeline> 
 show databases;
 ```
 
 #### 3. DESCRIBE
 > 데이터베이스 정보를 출력합니다
 ```sql
-beeline> DESCRIBE DATABASE/SCHEMA [EXTENDED] db_name;
+DESCRIBE DATABASE/SCHEMA [EXTENDED] db_name;
+
+beeline> 
 describe database testdb;
 ```
 
 #### 4. USE
 > 해당 데이터베이스를 사용합니다
 ```sql
-beeline> USE database_name;
+USE database_name;
+
+beeline> 
 use testdb;
 ```
 
 #### 5. DROP
 > 데이터베이스를 삭제합니다 (default:RESTRICT) 테이블이 존재하는 경우 오류가 발생하며, CACADE 옵션을 주는 경우 모든 테이블까지 삭제됩니다
 ```sql
-beeline> DROP (DATABASE|SCHEMA) [IF EXISTS] database_name [RESTRICT|CASCADE];
+DROP (DATABASE|SCHEMA) [IF EXISTS] database_name [RESTRICT|CASCADE];
+
+beeline> 
 drop database testdb;
 show databases;
 ```
@@ -100,14 +117,18 @@ show databases;
 > 데이터베이스의 정보를 변경합니다
 * DBPROPERTIES
 ```sql
-beeline> ALTER (DATABASE|SCHEMA) database_name SET DBPROPERTIES (property_name=property_value, ...);
+ALTER (DATABASE|SCHEMA) database_name SET DBPROPERTIES (property_name=property_value, ...);
+
+beeline> 
 create database if not exists testdb comment 'test database' location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
 alter database testdb set dbproperties ('createdfor'='park.suhyuk');
 describe database extended testdb;
 ```
 * OWNER
 ```sql
-beeline> ALTER (DATABASE|SCHEMA) database_name SET OWNER [USER|ROLE] user_or_role;
+ALTER (DATABASE|SCHEMA) database_name SET OWNER [USER|ROLE] user_or_role;
+
+beeline> 
 alter database testdb set owner role admin;
 describe database extended testdb;
 ```
@@ -117,12 +138,13 @@ describe database extended testdb;
 #### 1. CREATE
 > 테이블을 생성합니다
 ```sql
-beeline> CREATE TABLE [IF NOT EXISTS] [db_name.] table_name [(col_name data_type [COMMENT col_comment], ... [COMMENT col_comment])]
+CREATE TABLE [IF NOT EXISTS] [db_name.] table_name [(col_name data_type [COMMENT col_comment], ... [COMMENT col_comment])]
 [COMMENT table_comment]
 [ROW FORMAT row_format]
 [STORED AS file_format]
 [LOCATION hdfs_path];
 
+beeline> 
 create table if not exists employee (emp_id string comment 'employee id',
 emp_name string comment 'employee name', 
 emp_salary bigint comment 'employee salary')
@@ -135,21 +157,27 @@ stored as textfile;
 #### 2. SHOW
 > 테이블 목록을 조회합니다
 ```sql
-beeline> SHOW TABLES [IN database_name];
+SHOW TABLES [IN database_name];
+
+beeline> 
 show tables;
 ```
 
 #### 3. DESCRIBE
 > 테이블 정보를 조회합니다
 ```sql
-beeline> DESCRIBE [EXTENDED|FORMATTED] [db_name.] table_name[.col_name ( [.field_name])];
+DESCRIBE [EXTENDED|FORMATTED] [db_name.] table_name[.col_name ( [.field_name])];
+
+beeline> 
 describe employee;
 ```
 
 #### 4. DROP
 > 테이블을 삭제합니다. 일반 DROP 의 경우 .Trash/current directory 경로로 이동하지만 PURGE 옵션을 주는 경우 즉시 삭제됩니다
 ```sql
-beeline> DROP TABLE [IF EXISTS] table_name [PURGE];
+DROP TABLE [IF EXISTS] table_name [PURGE];
+
+beeline> 
 drop table if exists employee purge;
 show tables;
 ```
@@ -158,7 +186,9 @@ show tables;
 > 테이블을 변경합니다
 * RENAME
 ```sql
-beeline> ALTER TABLE table_name RENAME TO new_table_name;
+ALTER TABLE table_name RENAME TO new_table_name;
+
+beeline> 
 create table if not exists employee (emp_id string comment 'employee id',
 emp_name string comment 'employee name', 
 emp_salary bigint comment 'employee salary')
@@ -172,7 +202,9 @@ show tables;
 ```
 * ADD COLUMNS
 ```sql
-beeline> ALTER TABLE table_name ADD COLUMNS (column1, column2) ;
+ALTER TABLE table_name ADD COLUMNS (column1, column2) ;
+
+beeline> 
 create table if not exists employee (emp_id string comment 'employee id')
 comment 'test employee table' 
 row format delimited 
@@ -189,8 +221,9 @@ desc renamed_emp;
 #### 6. TRUNCATE
 > 테이블의 데이터만 제거합니다
 ```sql
-beeline> TRUNCATE TABLE table_name;
+TRUNCATE TABLE table_name;
 
+beeline> 
 use default;
 select count(1) from imdb_title_imported;
 +-------+
@@ -214,14 +247,18 @@ select count(1) from imdb_title_imported;
 #### 1. LOAD
 > 로컬(LOCAL) 혹은 클러스터 저장된 데이터를 하둡 클러스터에 업로드(Managed) 혹은 링크(External) 합니다
 ```sql
-beeline> LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)];
+LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)];
+
+beeline> 
 load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 ```
 
 #### 2. SELECT
 > 테이블에 저장된 레코드를 SQL 구문을 통해서 조회합니다
 ```sql
-beeline> SELECT col1,col2 FROM tablename;
+SELECT col1,col2 FROM tablename;
+
+beeline> 
 select rank, title, genre from imdb_movies limit 5;
 ```
 
@@ -229,21 +266,27 @@ select rank, title, genre from imdb_movies limit 5;
 > 테이블에 읽어온 레코드 혹은 생성된 레코드를 저장합니다 
 * INSERT INTO
 ```sql
-beeline> INSERT INTO TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...)] select_statement1 FROM from_statement;
+INSERT INTO TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...)] select_statement1 FROM from_statement;
+
+beeline> 
 create table if not exists imdb_title (title string);
 insert into table imdb_title select title from imdb_movies;
 select title from imdb_title limit 5;
 ```
 * INSERT OVERWRTIE
 ```sql
-beeline> INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, ..) [IF NOT EXISTS]] select_statement FROM from_statement;
+INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, ..) [IF NOT EXISTS]] select_statement FROM from_statement;
+
+beeline> 
 create table if not exists imdb_title (title string);
 insert overwrite table imdb_title select description from imdb_movies;
 select title from imdb_title limit 5;
 ```
 * INSERT VALUES
 ```sql
-beeline> INSERT INTO TABLE tablename [PARTITION (partcol1[=val1], partcol2[=val2] ...)] VALUES values_row [, values_row ...];
+INSERT INTO TABLE tablename [PARTITION (partcol1[=val1], partcol2[=val2] ...)] VALUES values_row [, values_row ...];
+
+beeline> 
 insert into imdb_title values ('1 my first hive table record'), ('2 my second records'), ('3 third records');
 select title from imdb_title where title like '%record%';
 ```
@@ -253,8 +296,9 @@ select title from imdb_title where title like '%record%';
 * 현재 ACID-based transaction 을 지원하는 것은 Bucketed ORC 파일만 지원합니다
   * [Hive Transactions](https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions) 
 ```sql
-beeline> DELETE FROM tablename [WHERE expression]
+DELETE FROM tablename [WHERE expression]
 
+beeline> 
 create table imdb_orc (rank int, title string) clustered by (rank) into 4 buckets stored as orc tblproperties ('transactional'='true');
 insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk');
 delete from imdb_orc where rank = 1;
@@ -264,7 +308,7 @@ select * from imdb_orc;
 ```
 > ORC 포맷의 경우에도 아래의 조건 확인이 필요합니다
 ```sql
-beeline> delete from imdb_orc where rank = 1;
+delete from imdb_orc where rank = 1;
 Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
 
 // 위와 같은 오류가 나는 경우 아래의 정보를 재설정 후 다시 시도합니다
@@ -279,7 +323,9 @@ set hive.compactor.worker.threads=1;
 #### 5. UPDATE
 > 대상 테이블의 컬럼을 업데이트 합니다. 단, 파티셔닝 혹은 버킷팅 컬럼은 업데이트 할 수 없습니다
 ```sql
-beeline> UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
+UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
+
+beeline> 
 update imdb_orc set title = 'psyoblade title'
 select * from imdb_orc;
 ```
@@ -287,7 +333,9 @@ select * from imdb_orc;
 #### 6. EXPORT
 > 테이블 메타데이터(\_metadata)와 데이터(data) 정보를 HDFS 경로에 백업 합니다
 ```sql
-beeline> EXPORT TABLE tablename [PARTITION (part_column="value"[, ...])] TO 'export_target_path' [ FOR replication('eventid') ];
+EXPORT TABLE tablename [PARTITION (part_column="value"[, ...])] TO 'export_target_path' [ FOR replication('eventid') ];
+
+beeline> 
 export table imdb_orc to '/my/hdfs/backup/directory;
 ```
 * 익스포트 된 결과를 확인합니다
@@ -301,7 +349,9 @@ drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /opt/hive/examples/ex
 #### 7. IMPORT
 > 백업된 데이터로 새로운 테이블을 생성합니다
 ```sql
-beeline> IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
+IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
+
+beeline> 
 import table imdb_title_imported from '/opt/hive/examples/export/imdb_title';
 select * from imdb_title_imported where title like '%record%';
 +-------------------------------+
@@ -350,7 +400,8 @@ use default;
 * 테이블 생성 및 조회를 합니다 
   - Q1. 년도 별 개봉된 영화의 수를 년도 오름차순으로 출력하시오
   - Q2. 2015년도 개봉된 영화 중에서 최고 매출 Top 3 영화 제목과 매출금액을 출력하시오
-```bash
+```sql
+beeline> 
 drop table if exists imdb_movies;
 
 create table imdb_movies (rank int, title string, genre string, description string, director string, actors string, year string, runtime int, rating string, votes int, revenue string, metascore int) row format delimited fields terminated by '\t';
@@ -359,7 +410,8 @@ load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 select * from imdb_movies limit 10;
 ```
 * 기존 테이블을 이용하여 파티션 구성된 테이블을 생성합니다
-```bash
+```sql
+beeline> 
 drop table if exists imdb_partitioned;
 
 create table imdb_partitioned (rank int, title string, genre string, description string, director string, actors string, runtime int, rating string, votes int, revenue string, metascore int) partitioned by (year string) row format delimited fields terminated by '\t';
@@ -372,7 +424,8 @@ insert overwrite table imdb_partitioned partition (year) select rank, title, gen
 select year, count(1) as cnt from imdb_partitioned group by year;
 ```
 * 2가지 테이블 조회 시의 차이점을 비교합니다
-```bash
+```sql
+beeline> 
 explain select year, count(1) as cnt from imdb_movies group by year;
 explain select year, count(1) as cnt from imdb_partitioned group by year;
 ```
@@ -384,14 +437,14 @@ explain select year, count(1) as cnt from imdb_partitioned group by year;
 > 파일포맷을 텍스트 대신 파케이 포맷으로 변경하는 방법을 익히고, 예상한 대로 결과가 나오는지 확인합니다 
 
 * 파케이 포맷 기반의 테이블을 CTAS (Create Table As Select) 통해 생성합니다 (단, CTAS 는 SELECT 절을 명시하지 않습니다)
-```bash
+```sql
 beeline>
 drop table if exists imdb_parquet;
 create table imdb_parquet row format delimited stored as parquet as select * from imdb_movies;
 select year, count(1) as cnt from imdb_parquet group by year;
 ```
 * 텍스트, 파티션 및 파케이 테이블의 조회시에 어떤 차이점이 있는지 확인해 봅니다.
-```bash
+```sql
 beeline>
 explain select year, count(1) as cnt from imdb_movies group by year;
 # Statistics: Num rows: 3096 Data size: 309656 Basic stats: COMPLETE Column stats: NONE
@@ -405,11 +458,9 @@ explain select year, count(1) as cnt from imdb_parquet group by year;
 create table imdb_parquet_sorted stored as parquet as select title, rank, metascore, year from imdb_movies sort by metascore;
 ```
 * 파케이 파일 테이블의 경우에도 필요한 컬럼만 유지하는 것이 효과가 있는지 확인해봅니다
-```bash
+```sql
 beeline>
 create table imdb_parquet_small stored as parquet as select title, rank, metascore, year from imdb_movies sort by metascore;
-```bash
-beeline>
 explain select rank, title, metascore from imdb_parquet order by metascore desc limit 10;
 # Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE
 
@@ -430,7 +481,7 @@ explain select rank, title, metascore from imdb_parquet_small order by metascore
   * Hint) cat, sort and redirection
 ```bash
 bash>
-docker exec -it hive_hive-server_1 bash
+docker-compose exec hive-server bash
 cd /opt/hive/examples
 cat emp.txt
 ```
@@ -533,7 +584,7 @@ insert overwrite table imdb_parquet_bucketed partition(year='2006') select rank,
 insert overwrite table imdb_parquet_bucketed partition(year='2016') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2016';
 ```
 * 생성된 파케이 테이블이 정상적으로 버킷이 생성되었는지 확인합니다
-```bash
+```sql
 beeline>
 desc formatted imdb_parquet_bucketed;
 ...
@@ -544,7 +595,8 @@ desc formatted imdb_parquet_bucketed;
 ```
 * 일반 파케이 테이블과 버킷이 생성된 테이블의 스캔 성능을 비교해봅니다
 > TableScan 텍스트 대비 레코드 수에서는 2% (44/1488 Rows)만 읽어오며, 데이터 크기 수준에서는 약 0.1% (484/309,656 Bytes)만 읽어오는 것으로 성능 향상이 있습니다
-```bash
+```sql
+beeline>
 select rank, metascore, title from imdb_parquet where year = '2006' and rank < 101 order by metascore desc;
 # Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE
 
@@ -554,5 +606,4 @@ select rank, metascore, title from imdb_parquet_bucketed where year = '2006' and
 select rank, metascore, title from imdb_movies where year = '2006' and rank < 101 order by metascore desc;
 # Statistics: Num rows: 1488 Data size: 309656 Basic stats: COMPLETE Column stats: NONE
 ```
-
 
