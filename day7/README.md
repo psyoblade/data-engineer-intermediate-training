@@ -59,5 +59,5 @@ cd /Users/psyoblade/git/psyoblade/data-engineer-intermediate-training/day7
     * 서버 재시작 후에 도커가 윈도우 트레이에 정상적으로 기동되면 준비는 완료 되었습니다.
   - [도커 관련문서](https://docs.docker.com/)
  
-![윈도우즈 도커설치](windows4docker.png)
+![윈도우즈 도커설치](images/windows4docker.png)
 
