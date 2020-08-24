@@ -47,11 +47,12 @@ cd /Users/psyoblade/git/psyoblade/data-engineer-intermediate-training/day7
   - [포스트 코로나 데이터 시각화 경진대회](https://dacon.io/competitions/official/235618/overview/)
 
 
+
 ### 윈도우즈에서 도커 설치 및 환경구성
 > 윈도우 10인 경우만 동작하는 것을 확인했으며, 다른 윈도우 버전은 미확인 상태입니다.
 * 도커 및 관련 도구 설치 
   - [MINGW64 설치](http://mingw-w64.org/doku.php/download)
-    * MingW 64 비트 버전을 설치하시고, SSH 터미널 역할로 상요하시면 됩니다.
+    * MingW 64 비트 버전을 설치하시고, SSH 터미널 역할로 사용하시면 됩니다.
   - [도커 윈도우 버전 설치](https://docs.docker.com/docker-for-windows/install/)
     * 윈도우 버전 설치 후 기본 설정 및 도커 계정 로그인(옵션) 하시고 윈도우 재시작합니다 
   - [윈도우 Hyper-V 설정](https://comterman.tistory.com/1997)
