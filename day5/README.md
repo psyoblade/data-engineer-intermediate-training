@@ -77,10 +77,10 @@ bash>
 // Log on MongoDB
 bash>
 docker-compose exec mongo mongo -u root -p
-password: example
+password: pass
 
 mongodb>
-// Authenticate
+// Authenticate - root 로그인 시에는 필요 없습니다
 db.auth("user", "pass");
 
 // Show All Databases
@@ -102,27 +102,27 @@ show roles;
 db.createCollection("collectionName");
 
 // Insert Document(s)
-db.<collectionName>.insert( { field1: "string_value", field2: int_value } );
-db.<collectionName>.insertMany( [ { field1: "string_value" }, { field1: "string_value" } ] );
+db.foo.insert( { field1: "string_value", field2: int_value } );
+db.foo.insertMany( [ { field1: "string_value" }, { field1: "string_value" } ] );
 
 // Update Whole Docuemnt - 문서 전체를 변경합니다
-db.<collectionName>.save( {"_id": new ObjectId("my-object-id"), field1: "value", field2: "value"} );
-db.<collectionName>.update( { <filter> }, {"_id": new ObjectId("my-object-id"), field1: "value", field2: "value"} );
+db.foo.save( {"_id": new ObjectId("my-object-id"), field1: "value", field2: "value"} );
+db.foo.update( { <filter> }, {"_id": new ObjectId("my-object-id"), field1: "value", field2: "value"} );
 
 // Update Column of Document(s) - https://docs.mongodb.com/manual/reference/method/db.collection.update/
-db.<collectionName>.update( <query>, <update>, <option> );
-db.<collectionName>.update({}, {$set: {tag:"foo"}}, {multi:true}); // 모든 문서에 tag:"foo" 를 추가
+db.foo.update( <query>, <update>, <option> );
+db.foo.update({}, {$set: {tag:"foo"}}, {multi:true}); // 모든 문서에 tag:"foo" 를 추가
 
 // Display Document(s)
-db.<collectionName>.find( <query>, <projection> );
+db.foo.find( <query>, <projection> );
 
-db.<collectionName>.find().limit(10);
-db.<collectionName>.find({_id:ObjectId("my-object-id")});
-db.<collectionName>.find({_id:ObjectId("my-object-id")}, {field1: 1});
+db.foo.find().limit(10);
+db.foo.find({_id:ObjectId("my-object-id")});
+db.foo.find({_id:ObjectId("my-object-id")}, {field1: 1});
 
 // Remove Document(s)
-db.<collectionName>.remove( <query>, <option> )
-db.<collectionName>.remove( {}, {multi:true})
+db.foo.remove( <query>, <option> )
+db.foo.remove( {}, {multi:true})
 ```
 
 ### 3 데이터 모델링 기본 실습
