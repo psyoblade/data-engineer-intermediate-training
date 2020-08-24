@@ -340,14 +340,15 @@ select * from imdb_orc;
 EXPORT TABLE tablename [PARTITION (part_column="value"[, ...])] TO 'export_target_path' [ FOR replication('eventid') ];
 
 beeline> 
-export table imdb_orc to '/my/hdfs/backup/directory;
+export table imdb_orc to '/user/ubuntu/archive/imdb_orc';
 ```
 * 익스포트 된 결과를 확인합니다
 ```bash
 bash>
-hadoop fs -ls /my/hdfs/backup/directory
--rwxr-xr-x   3 root supergroup       1244 2020-08-23 14:17 /opt/hive/examples/export/imdb_title/_metadata
-drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /opt/hive/examples/export/imdb_title/data
+docker-compose exec hive-server bash
+hadoop fs -ls /user/ubuntu/archive/imdb_orc
+-rwxr-xr-x   3 root supergroup       1244 2020-08-23 14:17 /user/ubuntu/archive/imdb_orc/_metadata
+drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /user/ubuntu/archive/imdb_orc/data
 ```
 
 #### 7. IMPORT
