@@ -288,19 +288,11 @@ db.foo.remove( {}, {multi:true})
 
 ### 5 모니터링 및 트러블슈팅
 #### 5-1 CLI 를 통해 모니터링하는 방법
-* 해당 정보를 조회하기 위해서는 root 권한을 가져야 하므로 별도의 계정을 생성해 두는 것이 편합니다 
-```bash
-bash>
-mongo localhost:27017/admin
-
-mongo>
-db.createUser( { user: "user", pwd: "pass", roles: ["root"] } )
-db.auth("user", "pass")
-```
 * mongotop → mongod 데몬이 어느 콜렉션에 얼마나 read / write 에 시간을 많이 사용하는 지 한 눈에 볼 수 있습니다
 ```bash
 bash>
-mongotop --host localhost --port 27017 -u user -p pass --authenticationDatabase admin
+docker-compose exec mongo bash
+mongotop --host localhost --port 27017 -u root -p pass --authenticationDatabase admin
 
 2019-04-29T15:35:27.785-0400 connected to: 127.0.0.1
                     ns    total    read    write    2019-04-29T15:35:57-04:00
@@ -314,7 +306,7 @@ config.system.sessions      0ms     0ms      0ms
 * mongostat → 현재 기동 중인 mongod, mongos 등의 프로세스의 상태를 한 눈에 볼 수 있습니다
 ```bash
 bash>
-$> mongostat --host localhost --port 27017 -u user -p pass --authenticationDatabase admin
+$> mongostat --host localhost --port 27017 -u root -p pass --authenticationDatabase admin
 
 insert query update delete getmore command dirty used flushes vsize  res qrw arw net_in net_out conn                time
    991    *0     *0     *0       0     2|0  3.4% 4.5%       0 2.90G 297M 0|0 0|0  12.9m   84.2k    2 Oct  6 09:45:37.478
@@ -378,10 +370,10 @@ storage:
 * 트러블 슈팅의 첫 걸음 로그 조회
 ```bash
 bash>
-sudo grep mongod /var/log/messages
-sudo grep score /var/log/messages
+sudo grep mongod /var/log/mongodb/mongod.log
+sudo grep score /var/log/mongodb/mongod.log
 ```
-* 자주 발생하는 오류
+* [자주 발생하는 오류](https://docs.mongodb.com/manual/reference/log-messages/#parsing-structured-log-messages)
   * Lack of memories - cache 크기가 너무 작게 잡혀있거나, 너무 많은 데이터를 조회 하는 경우
   * 100% CPU load and slow queries - index 가 잡혀있지 않아 쿼리가 계속 늘어나는 상황
   * Mongo opens too many connections - 진짜 유저가 많거나, slow query 가 몰리는 상황
@@ -394,6 +386,6 @@ db.system.profile.find().limit(10).sort( { ts : -1 } ).pretty()
 ```
   * 예를 들어 3초 이상 시간이 소요되고 있는 오퍼레이션 찾기 // full collection scan
 ```javascript
-db.currentOp({“secs_running”: {$gte: 3}})
+db.currentOp({"secs_running": {$gte: 3}})
 ```
 
