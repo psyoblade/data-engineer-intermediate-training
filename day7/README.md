@@ -10,7 +10,7 @@ git pull
 ```
 * 스파크 워크스페이스로 이동하여 도커를 기동합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3
+cd /home/ubuntu/work/data-engineer-intermediate-training/day7
 docker-compose up -d
 docker-compose logs -f notebook
 ```
@@ -24,7 +24,7 @@ docker-compose logs -f notebook
 ## 대용량 데이터 다운로드
 * 아래의 파일을 주피터 노트북 data 경로에 다운로드 합니다
 ```bash
-cd /Users/psyoblade/git/psyoblade/data-engineer-intermediate-training/day7
+cd /home/ubuntu/work/data-engineer-intermediate-training/day7
 ./download-lgebigdata.sh
 ```
 
