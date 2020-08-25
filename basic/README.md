@@ -32,19 +32,16 @@ docker-compose --version
 
 # 기타 도구를 설치합니다
 sudo apt-get install tree
-mkdir work
-cd work
-git clone https://github.com/psyoblade/data-engineer-intermediate-training.git
 
 ```
 
 ### 코드 클론 및 환경설정
 > 알파인 및 우분투 이미지를 통해 도커 컨테이너가 어떻게 동작하는지 이해하고, 기본 명령어를 통해 컨테이너 생성 및 삭제를 수행합니다
 ```bash
-git clone https://github.com/psyoblade/data-engineer-intermediate-training.git
-cd data-engineer-intermediate-training/basic
 mkdir work
 cd work
+git clone https://github.com/psyoblade/data-engineer-intermediate-training.git
+cd data-engineer-intermediate-training/basic
 ```
 
 ### 도커 이미지 크기 비교
