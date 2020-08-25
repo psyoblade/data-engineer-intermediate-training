@@ -1,5 +1,5 @@
 #!/bin/bash
-TARGET="/Users/psyoblade/git/psyoblade/data-engineer-intermediate-training/day7/notebooks/data/KT_data_20200717"
+TARGET="/home/ubuntu/work/data-engineer-intermediate-training/day7/notebooks/data/KT_data_20200717"
 
 echo "10초 후 다음 경로로 이동 및 다운로드 합니다 $TARGET"
 echo "cd $TARGET"
