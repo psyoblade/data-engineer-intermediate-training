@@ -18,12 +18,16 @@ curl -fsSL https://get.docker.com/ | sudo sh    # 설치 스크립트 다운로�
 sudo usermod -a -G docker $USER    # sudo 없이 명령어를 실행하기 위해 현재 접속 중인 사용자 ($USER)에게 권한 주기
 sudo usermod -a -G docker psyoblade   # 혹은 임의의 사용자 (psyoblade) 에게 권한 주기 - 다시 로그인 해야 적용됩니다
 
-docker info    # sudo 없이 docker 명령이 실행이 가능한 지 테스트 합니다
+# sudo 없이 docker 명령이 실행이 가능한 지 테스트 합니다
+docker info
 
-sudo chmod 666 /var/run/docker.sock    # docker info 실행이 되지 않는다면 docker.sock 파일의 권한 때문일 수 있습니다
+# docker info 실행이 되지 않는다면 docker.sock 파일의 권한 때문일 수 있습니다
+sudo chmod 666 /var/run/docker.sock
 docker --version
 
-sudo apt install docker-compose
+# 반드시 별도로 경로를 지정하고 다운로드 받아야 1.20 이상 버전이 설치됩니다
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 ```
 
