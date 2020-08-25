@@ -45,3 +45,5 @@ bash>
 ./airflow.sh initdb
 ```
 
+## 2. 에어플로우 아키텍처
+![에어플로우](images/airflow.png)
