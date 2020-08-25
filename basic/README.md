@@ -29,6 +29,13 @@ docker --version
 sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
+
+# 기타 도구를 설치합니다
+sudo apt-get install tree
+mkdir work
+cd work
+git clone https://github.com/psyoblade/data-engineer-intermediate-training.git
+
 ```
 
 ### 코드 클론 및 환경설정
