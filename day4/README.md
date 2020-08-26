@@ -224,7 +224,7 @@ desc renamed_emp;
 TRUNCATE TABLE table_name;
 
 beeline> 
-use default;
+use testdb;
 insert into renamed_emp values (1, 'suhyuk', 1000);
 select count(1) from renamed_emp;
 +-------+
