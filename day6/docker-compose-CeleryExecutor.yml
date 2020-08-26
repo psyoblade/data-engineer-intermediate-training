@@ -16,7 +16,8 @@ services:
         #     - ./pgdata:/var/lib/postgresql/data/pgdata
 
     webserver:
-        image: psyoblade/data-engineer-intermediate-day6-airflow:1.10.9
+        image: psyoblade/docker-airflow:1.10.9
+        # image: puckel/docker-airflow:1.10.9
         restart: always
         depends_on:
             - postgres
@@ -25,14 +26,14 @@ services:
             - LOAD_EX=n
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
             - EXECUTOR=Celery
-            - POSTGRES_USER=airflow
-            - POSTGRES_PASSWORD=airflow
-            - POSTGRES_DB=airflow
-            - REDIS_PASSWORD=redispass
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
         volumes:
             - ./dags:/usr/local/airflow/dags
             # Uncomment to include custom plugins
-            - ./plugins:/usr/local/airflow/plugins
+            # - ./plugins:/usr/local/airflow/plugins
         ports:
             - "8080:8080"
         command: webserver
@@ -43,50 +44,50 @@ services:
             retries: 3
 
     flower:
-        image: psyoblade/data-engineer-intermediate-day6-airflow:1.10.9
+        image: puckel/docker-airflow:1.10.9
         restart: always
         depends_on:
             - redis
         environment:
             - EXECUTOR=Celery
-            - REDIS_PASSWORD=redispass
+            # - REDIS_PASSWORD=redispass
         ports:
             - "5555:5555"
         command: flower
 
     scheduler:
-        image: psyoblade/data-engineer-intermediate-day6-airflow:1.10.9
+        image: puckel/docker-airflow:1.10.9
         restart: always
         depends_on:
             - webserver
         volumes:
             - ./dags:/usr/local/airflow/dags
             # Uncomment to include custom plugins
-            - ./plugins:/usr/local/airflow/plugins
+            # - ./plugins:/usr/local/airflow/plugins
         environment:
             - LOAD_EX=n
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
             - EXECUTOR=Celery
-            - POSTGRES_USER=airflow
-            - POSTGRES_PASSWORD=airflow
-            - POSTGRES_DB=airflow
-            - REDIS_PASSWORD=redispass
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
         command: scheduler
 
     worker:
-        image: psyoblade/data-engineer-intermediate-day6-airflow:1.10.9
+        image: puckel/docker-airflow:1.10.9
         restart: always
         depends_on:
             - scheduler
         volumes:
             - ./dags:/usr/local/airflow/dags
             # Uncomment to include custom plugins
-            - ./plugins:/usr/local/airflow/plugins
+            # - ./plugins:/usr/local/airflow/plugins
         environment:
             - FERNET_KEY=46BKJoQYlPPOexq0OhDZnIlNepKFf87WFwLbfzqDDho=
             - EXECUTOR=Celery
-            - POSTGRES_USER=airflow
-            - POSTGRES_PASSWORD=airflow
-            - POSTGRES_DB=airflow
-            - REDIS_PASSWORD=redispass
+            # - POSTGRES_USER=airflow
+            # - POSTGRES_PASSWORD=airflow
+            # - POSTGRES_DB=airflow
+            # - REDIS_PASSWORD=redispass
         command: worker
