@@ -530,13 +530,13 @@ create table department (id int, name string) row format delimited fields termin
 load data local inpath '/opt/hive/examples/files/dept.txt' into table department;
 ```
 * Q2) 테이블의 정보를 조회하고 어떻게 조인해야 employee + department 정보를 가진 테이블을 조회할 수 있을까요?
-  * Hint) SELECT a.kly, b.key FROM tableA a JOIN tableB b ON A.key = B.key
+  * Hint) SELECT a.key, b.key FROM tableA a JOIN tableB b ON a.key = b.key
 ```bash
 beeline>
 desc employee;
 desc department;
 
-select * from employee; // 정답
+select * from users; // 정답
 +------------+--------+-------+--------------+
 |   e.name   | e.seq  | d.id  |    d.name    |
 +------------+--------+-------+--------------+
