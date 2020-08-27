@@ -62,3 +62,10 @@ cd /home/ubuntu/work/data-engineer-intermediate-training/day7
  
 ![윈도우즈 도커설치](images/windows4docker.png)
 
+### 맥에서 도커 설치 및 환경구성
+> 맥의 경우는 특별한 설정이 필요 없으며 Docker for Mac 설치 후 iterm2 정도만 설치하시면 됩니다.
+  - [도커 설치](https://docs.docker.com/docker-for-mac/install/)
+    * [Get Stable](https://hub.docker.com/editions/community/docker-ce-desktop-mac/) 선택
+    * 초기 설정에서 Docker > Preferences > Resources > ADVANED 의 설정만 적당히 해주시면 됩니다
+  - [iTerm2 + zsh 설정](https://tutorialpost.apptilus.com/code/posts/tools/mac-cli-with-iterm2-zsh/)
+    * 필수는 아니지만 기본 패키지도 같이 설치되므로 따라하시면 이쁜 터미널을 쓰실 수 있습니다
