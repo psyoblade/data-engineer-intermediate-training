@@ -224,7 +224,7 @@ desc renamed_emp;
 TRUNCATE TABLE table_name;
 
 beeline> 
-use default;
+use testdb;
 insert into renamed_emp values (1, 'suhyuk', 1000);
 select count(1) from renamed_emp;
 +-------+
@@ -386,8 +386,9 @@ use testdb;
 
 #### 1.2. 데이터집합의 스키마를 확인하고 하이브 테이블을 생성합니다
 * 데이터집합은 10년(2006 ~ 2016)의 가장 인기있는 1,000개의 영화에 대한 데이터셋입니다
+
 | 필드명 | 설명 |
-| - | - |
+| --- | --- |
 | Title | 제목 |
 | Genre | 장르 |
 | Description | 설명 |
@@ -529,13 +530,13 @@ create table department (id int, name string) row format delimited fields termin
 load data local inpath '/opt/hive/examples/files/dept.txt' into table department;
 ```
 * Q2) 테이블의 정보를 조회하고 어떻게 조인해야 employee + department 정보를 가진 테이블을 조회할 수 있을까요?
-  * Hint) SELECT a.kly, b.key FROM tableA a JOIN tableB b ON A.key = B.key
+  * Hint) SELECT a.key, b.key FROM tableA a JOIN tableB b ON a.key = b.key
 ```bash
 beeline>
 desc employee;
 desc department;
 
-select * from employee; // 정답
+select * from users; // 정답
 +------------+--------+-------+--------------+
 |   e.name   | e.seq  | d.id  |    d.name    |
 +------------+--------+-------+--------------+
