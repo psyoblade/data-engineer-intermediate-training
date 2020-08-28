@@ -1,0 +1,32 @@
+version: "3"
+services:
+  mysql:
+    image: psyoblade/data-engineer-intermediate-day1-mysql
+    container_name: mysql
+    restart: always
+    environment:
+      # MYSQL_ROOT_PASSWORD: pass
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 1s
+      retries: 3
+    volumes:
+      - ./mysql/custom:/etc/mysql/conf.d
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-intermediate-day2-fluentd:local
+    user: root
+    restart: always
+    depends_on:
+      - mysql
+    tty: true
+    ports:
+      - 9880:9880
+    volumes:
+      - ./fluent.conf:/fluentd/etc/fluent.conf
+      - ./target:/fluentd/target
