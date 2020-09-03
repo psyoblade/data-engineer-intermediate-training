@@ -10,7 +10,7 @@ fi
 args=$@
 
 if [ x"$args" == x"" ]; then
-    echo "./sqoop.sh import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table users --target-dir /tmp/sqoop/users"
+    echo "./sqoop.sh import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /user/sqoop/seoul_popular_trip"
 else
     echo "다음 명령을 수행합니다 - '$@'"
     docker exec -it sqoop sqoop $@
