@@ -155,7 +155,7 @@ tree target
 import sys, time, os, shutil
 
 # 1. read apache_logs flush every 100 lines until 1000 lines
-# 2.   every 1000 lines file close & rename file with seq
+# 2. every 1000 lines file close & rename file with seq
 # 3. create new accesslogs and goto 1.
 
 def readlines(fp, num_of_lines):
