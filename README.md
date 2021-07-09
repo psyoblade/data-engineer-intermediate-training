@@ -1,5 +1,5 @@
 # 데이터 엔지니어링 중급 실습
-> 데이터 엔지니어링 중급 과정 실습을 위한 페이지 입니다. 도커 및 도커 컴포즈가 실행될 수 있는 환경을 가정하고 있습니다
+> 데이터 엔지니어링 중급 과정 실습을 위한 페이지 입니다. 일자별 실습을 수정하여 lgde/2021 브랜치를 생성하였습니다
 
 ## PDF 변환
 ```bash
@@ -7,7 +7,6 @@ bash>
 npm i -g md-to-pdf
 md-to-pdf ./**/README.md
 ```
-
 
 ## [1일차. 데이터 엔지니어링 - 도커](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/basic/README.md)
 
