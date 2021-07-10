@@ -12,6 +12,7 @@
 
 <br>
 
+
 * [1. 코드 최신버전 업데이트 및 컨테이너 정리](#1-코드-최신버전-업데이트-및-컨테이너-정리)
 * [2. 테이블 수집 실습](#2-테이블-수집-실습)
 
@@ -355,6 +356,7 @@ spark
 > 스파크 엔진의 버전 `v3.0.1`이 출력되면 성공입니다
 <br> 
 
+
 #### 5-1-2. 수집된 테이블을 데이터프레임으로 읽고, 스키마 및 데이터 출력하기
 
 > 파케이 포맷의 경우는 명시적인 스키마 정의가 되어 있지만, Json 포맷의 경우는 데이터의 값에 따라 달라질 수 있기 때문에 데이터를 읽어들일 때에 주의해야 합니다
@@ -432,21 +434,25 @@ spark.sql("show tables")
 
 ### 5-4. 생성된 테이블을 SQL 문을 이용하여 탐색하기
 
+> SQL 혹은 DataFrame API 어느 쪽을 이용하여도 무관하며, 결과만 동일하게 나오면 정답입니다
+
 #### 5-4-1. 한 쪽의 성별('남' 혹은 '여')을 가진 목록을 출력하세요
 ```python
-spark.sql("select * from user where ...")
+whereCondition = ""
+spark.sql("select * from user").where(whereCondition)
 ```
 
 #### 5-4-2. 상품금액이 200만원을 초과하는 매출 목록을 출력하세요
 ```python
-spark.sql("select * from purchase where ...")
+selectClause = ""
+spark.sql(selectClause)
 ```
 
 #### 5-4-3. GroupBy 구문을 이용하여 로그인, 로그아웃 횟수를 출력하세요
 ```python
-spark.sql("select a_id, count(1) from access ...") 
+groupByClause=""
+spark.sql(groupByClause)
 ```
-
 <br> 위에서부터 각각 "남:3, 여:2", "3개", "login:7, logout:5" 이 나오면 정답입니다
 
 
@@ -471,6 +477,7 @@ display(dau)
 > "DAU : 5"가 나오면 정답입니다 
 <br>
 
+
 ### 6-2. DPU (Daily Paying User) 지표를 생성하세요
 
 * 아래의 조건이 만족하는 코드를 작성하세요
@@ -487,6 +494,7 @@ display(pu)
 ```
 > "PU : 4"가 나오면 정답입니다
 <br>
+
 
 ### 6-3. DR (Daily Revenue) 지표를 생성하세요
 
@@ -505,6 +513,7 @@ display(dr)
 > "DR : 12200000" 이 나오면 정답입니다
 <br> 
 
+
 ### 6-4. ARPU (Average Revenue Per User) 지표를 생성하세요
 
 * 아래의 조건이 만족하는 코드를 작성하세요
@@ -518,10 +527,11 @@ v_dau = dau.collect()[0]["DAU"]
 v_pu = pu.collect()[0]["PU"]
 v_dr = dr.collect()[0]["DR"]
 
-print("ARPU : {}".format(...))
+print("ARPU : {}".format("..."))
 ```
 > "ARPU : 2440000.0" 가 나오면 정답입니다
 <br>
+
 
 ### 6-5. ARPPU (Average Revenue Per Paying User) 지표를 생성하세요
 
@@ -532,7 +542,7 @@ print("ARPU : {}".format(...))
   - 출력형태 : number
 
 ```python
-print("ARPPU : {}".format(...))
+print("ARPPU : {}".format("..."))
 ```
 > "ARPPU : 3050000.0" 가 나오면 정답입니다
 <br>
@@ -540,6 +550,215 @@ print("ARPPU : {}".format(...))
 
 ## 7. 고급 지표 생성
 
+### 7-1. 디멘젼 테이블을 설계 합니다
+
+* 아래의 조건이 만족해야 합니다
+  - 지표정의 : 이용자 누적 상태 정보
+  - 지표산식 : 오늘까지 접속한 모든 유저의 정보를 저장하는 테이블
+  - 입력형태 : user, purchase, access
+  - 출력형태 : 아래와 같이 설계합니다
+
+* 디멘젼 테이블의 스키마는 아래와 같습니다
+| 컬럼명 | 컬럼타입 | 설명 |
+| - | - | - |
+| `d_uid` | integer | 아이디 |
+| `d_name` | string | 이름 |
+| `d_pamount` | integer | 누적 구매 금액 |
+| `d_pcount` | integer | 누적 구매 횟수 |
+| `d_acount` | integer | 누적 접속 횟수 |
+| `d_first_purchase` | string | 최초 구매 일시 |
+| `dt` | string | 유저아이디 |
+
+> 디멘젼 테이블을 통해서 어떻게 생성할 것인지 생각해 보시기 바랍니다
+<br>
 
 
+### 7-2. 오픈 첫 날 접속한 모든 고객 및 접속 횟수를 가진 데이터프레임을 생성합니다
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 오늘 접속한 이용자 <kbd>select `a_uid`, count(`a_uid`) ... group by `a_uid`</kbd>
+  - 지표산식 : 접속 여부는 'login' 로그가 존재하면 접속한 유저로 가정
+  - 입력형태 : user
+  - 출력형태 : `a_uid`, `a_count`
+  - 정렬형태 : `a_count` desc
+
+* access 테이블로부터 `a_uid` 가 'login' 인 `a_uid` 값의 빈도수를 group by `a_uid` 집계를 통해 구하시오
+```python
+access.printSchema()
+countOfAccess = ""
+accs = spark.sql(countOfAccess)
+display(accs)
+```
+> 접속 빈도가 가장 높은 이용자는 `a_id` 가 "2, 4"번으로 2명이 나오면 정답입니다
+<br>
+
+
+### 7-3. 일 별 이용자 별 총 매출 금액과, 구매 횟수를 가지는 데이터프레임을 생성합니다
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 이용자 별 매출 횟수와, 합 <kbd>select `p_uid`, count(`p_uid`), sum(`p_amount`) ... group by `p_uid`</kbd>
+  - 지표산식 : 매출 금액을 이용자 별 집계를 합니다
+  - 입력형태 : purchase
+  - 출력형태 : `p_uid`, `p_count`, `p_amount`
+  - 정렬형태 : `p_count` desc`, p_amount` desc
+
+* purchase 테이블로 부터 `p_uid` 별 매출 횟수(count)와, 매출 금액의 합(sum)을 구하는 집계 쿼리를 생성 하시오
+```python
+purchase.printSchema()
+sumOfCountAndAmount = ""
+amts = spark.sql(sumOfCountAndAmount)
+display(amts)
+```
+> 매출 금액이 600만원에 2회 발생한 5번 유저가 1위이면 정답입니다
+<br>
+
+
+### 7-4. 이용자 정보와 구매 정보와 조인합니다
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 이용자 데이터와 매출 정보의 결합 <kbd>leftSide.join(rightSide, joinCondition, joinHow)</kbd>
+  - 지표산식 : 이용자는 반드시 존재해야하며, 매출은 없어도 됩니다 (`left_outer`)
+  - 입력형태 : accs, amts
+  - 출력형태 : `a_uid`, `a_count`, `p_uid`, `p_count`, `p_amount`
+  - 정렬형태 : `a_uid` asc
+
+* 7-1 에서 생성한 accs 와 7-2 에서 생성한 amts 데이터를 uid 값을 기준으로 left outer 조인을 수행합니다
+```python
+accs.printSchema()
+purchase.printSchema()
+joinCondition = ""
+joinHow = ""
+dim1 = accs.join(amts, joinCondition, joinHow)
+dim1.printSchema()
+display(dim1.orderBy(asc("a_uid")))
+```
+> uid 가 4번인 이용자만 매출 정보가 null 이면 정답입니다
+<br>
+
+
+### 7-5. 고객 정보를 추가합니다
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 고객의 이름과 성별을 추가합니다 
+  - 지표산식 : dim1 테이블과 고객정보를 결합합니다
+  - 입력형태 : dim1, user
+  - 출력형태 : `a_uid`, `a_count`, `p_uid`, `p_count`, `p_amount`, `u_id`, `u_name`, `u_gender`
+  - 정렬형태 : `a_uid` asc
+
+* 7-4 에서 생성한 dim1 데이터와 user 데이터를 결합합니다
+```python
+dim1.printSchema()
+user.printSchema()
+joinCondition = ""
+joinHow = ""
+dim2 = dim1.join(user, joinCondition, joinHow)
+dim2.printSchema()
+display(dim2.orderBy(asc("a_uid")))
+```
+> uid 가 4번인 이용자만 매출 정보가 null 이면 정답입니다
+<br>
+
+
+### 7-6. 중복되는 ID 컬럼은 제거하고, 숫자 필드에 널값은 0으로 기본값을 넣어줍니다
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 중복되는 uid 컬럼을 제거하고, 매출정보가 없는 계정은 0으로 기본값을 넣어줍니다
+  - 지표산식 : <kbd>fillDefaultValue = {"`p_amount`":0, "`p_count`":0}</kbd>
+  - 입력형태 : dim2
+  - 출력형태 : `a_uid`, `a_count`, `p_amount`, `p_count`, `u_name`, `u_gender`
+  - 정렬형태 : `a_uid` asc
+
+* 7-4 에서 생성한 dim1 데이터와 user 데이터를 결합하되, 중복 컬럼은 제거하고, 기본값을 0으로 채우는 `fillDefaultValue`를 작성하세요
+```python
+dim2.printSchema()
+dim3 = dim2.drop("p_uid", "u_id")
+fillDefaultValue = {}
+dim4 = dim3.na.fill(fillDefaultValue)
+dim4.printSchema()
+display(dim4.orderBy(asc("a_uid")))
+```
+> uid 가 4번인 이용자만 매출 정보가 0 이면 정답입니다
+<br>
+
+
+### 7-7. 생성된 유저 테이블을 재사용 가능하도록 컬럼 명을 변경합니다
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 컬럼명이 `d_`로 시작하도록 일괄 변경합니다
+  - 지표산식 : <kbd>withColumnRenamed("`a_uid`", "`d_uid`" )</kbd>
+  - 입력형태 : dim4
+  - 출력형태 : `d_uid`, `d_count`, `d_amount`, `d_count`, `d_name`, `d_gender`
+  - 정렬형태 : `d_uid` asc
+
+* 7-6 에서 생성한 dim4 의 모든 컬럼이 `d_`로 시작하도록 Rename 하여 정리합니다
+```python
+dim4.printSchema()
+dim5 = (
+    dim4
+    .withColumnRenamed("a_uid", "d_uid")
+    ...
+    .drop("a_uid", "a_count", "p_amount", "p_count", "u_name", "u_gender")
+    .select("d_uid", "d_name", "d_gender", "d_acount", "d_pamount", "d_pcount")
+)
+display(dim5.orderBy(asc("d_uid")))
+```
+> 모든 컬럼이 `d_`로 시작하고 6개의 컬럼으로 구성되어 있다면 정답입니다
+<br>
+
+
+### 7-8. 최초 구매 유저 정보를 추가합니다
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 최초 구매 정보를 추가합니다 <kbd>expr("case when `d_first_purchase` is null then `p_time` else `d_first_purchase` end")</kbd>
+  - 지표산식 : 해당 일자의 가장 처음 구매한 구매일시를 이용하여 최초구매일을 구합니다 <kbd>dim5.withColumn("`d_first_purchase`, lit(None))</kbd>
+  - 입력형태 : dim5
+  - 출력형태 : `d_uid`, `d_count`, `d_amount`, `d_count`, `d_name`, `d_gender`, `d_first_purchase`
+  - 정렬형태 : `d_uid` asc
+
+* selectFirstPurchaseTime 는 하루에 여러번 구매가 있을 수 있으므로 가장 먼저 구매한 일시를 min 함수를 `p_time` 의 최소값을 구합니다
+```python
+selectFirstPurchaseTime = "select p_uid, <최소값함수> as p_time from purchase <집계구문>"
+
+first_purchase = spark.sql(selectFirstPurchaseTime)
+dim6 = dim5.withColumn("d_first_purchase", lit(None))
+
+exprFirstPurchase = expr("case when d_first_purchase is null then p_time else d_first_purchase end")
+
+dim7 = dim6.join(first_purchase, dim5.d_uid == first_purchase.p_uid, "left_outer") \
+.withColumn("first_purchase", exprFirstPurchase) \
+.drop("d_first_purchase", "p_uid", "p_time") \
+.withColumnRenamed("first_purchase", "d_first_purchase")
+
+dimension = dim7.orderBy(asc("d_uid"))
+dimension.printSchema()
+display(dimension)
+```
+> 4번 고객의 제외한 모든 첫 번째 구매 일시가 출력되면 정답입니다
+<br>
+
+
+### 7-9. 생성된 디멘젼을 저장소에 저장합니다
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 저장위치 : "dimension/dt=20201025" <kbd>dataFrame.write</kbd>
+  - 저장옵션 : 대상 경로가 존재하더라도 덮어씁니다 <kbd>.mode("overwrite")</kbd>
+  - 저장포맷 : 파케이  <kbd>.parquet("dimension/dt=20201025")</kbd>
+
+```python
+dimension.<디멘젼을 저장합니다>
+```
+> 저장 시에 오류가 없고 대상 경로(dimension/dt=20201025)가 생성되었다면 성공입니다
+
+
+### 7-10. 생성된 디멘젼을 다시 읽어서 출력합니다
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 저장위치 : "dimension/dt=20201025" <kbd>spark.read</kbd>
+  - 저장포맷 : 파케이  <kbd>.parquet("dimension/dt=20201025")</kbd>
+
+```python
+newDimension = <디멘젼을 읽어옵니다>
+newDimension.printSchema()
+display(newDimension)
+```
 
