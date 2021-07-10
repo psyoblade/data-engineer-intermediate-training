@@ -331,6 +331,21 @@ docker compose logs notebook | grep 8888
 
 ### 5-1. 스파크 세션 생성
 
+#### 5-1-1. 스파크 객체를 생성하는 코드를 작성하고, <kbd><kbd>Shift</kbd>+<kbd>Enter</kbd></kbd> 로 스파크 버전을 확인합니다
+```python
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+
+spark = (
+    SparkSession
+    .builder
+    .appName("Data Engineer Training Course")
+    .config("spark.sql.session.timeZone", "Asia/Seoul")
+    .getOrCreate()
+)
+spark
+```
+
 ### 5-2. 수집된 고객, 매출 및 접속 데이터 읽기
 
 ### 5-3. SparkSQL을 이용하여 테이블로 생성하기
@@ -345,19 +360,6 @@ docker compose logs notebook | grep 8888
 > 생성된 테이블을 통하여 기본 지표(DAU, DPU, DR, ARPU, ARPPU) 를 생성합니다
 
 ### 6-1. DAU (Daily Activer User) 지표를 생성하세요
-
-```python
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import *
-
-spark = (
-    SparkSession
-    .builder
-    .appName("Data Engineer Training Course")
-    .config("spark.sql.session.timeZone", "Asia/Seoul")
-    .getOrCreate()
-)
-```
 
 ### 6-2. DPU (Daily Paying User) 지표를 생성하세요
 
