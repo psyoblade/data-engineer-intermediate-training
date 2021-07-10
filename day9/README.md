@@ -398,7 +398,7 @@ access25 = ...
 user25.createOrReplaceTempView("user25")
 purchase25.createOrReplaceTempView("purchase25")
 access25.createOrReplaceTempView("access25")
-spark.sql("show tables")
+spark.sql("show tables '*25'")
 ```
 > `show tables` 결과로 user25, purchase25, access25 3개 테이블이 출력되면 성공입니다
 <br>
@@ -406,25 +406,27 @@ spark.sql("show tables")
 
 ### 5-3. SparkSQL을 이용하여 테이블 별 데이터프레임 생성하기
 
-#### 5-3-1. `u_signup_condition` 조건을 채워서 올바른 코드를 작성하세요
-* 20201025 에 등록된 유저만 포함하는 조건을 작성합니다 <kbd>`u_signup` >= '20201025' and `u_signup` < '20201025'</kbd>
+#### 5-3-1. 아래에 비어있는 조건을 채워서 올바른 코드를 작성하세요
+
+* 아래의 조건이 만족되어야 합니다
+  - 2020/10/25 에 등록(`u_signup`)된 유저만 포함될 것 <kbd>`u_signup` >= '20201025' and `u_signup` < '20201026'</kbd>
+  - 2020/10/25 에 발생한 매출(`p_time`)만 포함할 것 <kbd>`p_time` >= '2020-10-25 00:00:00' and `p_time` < '2020-10-26 00:00:00'</kbd>
+
 ```python
 u_signup_condition = ""
 user = spark.sql("select u_id, u_name, u_gender from user25").where(u_signup_condition)
-```
+user.createOrReplaceTempView("user")
 
-#### 5-3-2. `p_time_condition` 조건을 통해 정확한 시간의 데이터만 포함한 데이터프레임을 생성합니다
-
-* 아래의 조건을 만족 시키는 코드를 작성하세요
-  - `p_time_condition` 조건을 채워주세요 <kbd>`p_time` >= '2020-10-25 00:00:00' and `p_time` < '2020-10-26 00:00:00'</kbd>
-
-```python
-p_time_condition = "p_time 컬럼의 범위를 지정하는 조건문을 완성합니다"
-
+p_time_condition = ""
 purchase = spark.sql("select from_unixtime(p_time) as p_time, p_uid, p_id, p_name, p_amount from purchase25").where(p_time_condition)
 purchase.createOrReplaceTempView("purchase")
 
+accesslog = spark.sql("select a_id, a_tag, a_timestamp, a_uid from access25")
+accesslog.createOrReplaceTempView("accesslog")
+
+spark.sql("show tables")
 ```
+> `show tables` 결과에 총 6개의 테이블이 출력되면 성공입니다
 <br>
 
 
