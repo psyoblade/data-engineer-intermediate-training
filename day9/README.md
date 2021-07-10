@@ -35,7 +35,11 @@ docker ps -a
 # terminal 
 docker rm -f `docker ps -aq`
 ```
+<details><summary> 정답확인</summary>
+
 > 다시 `docker ps -a` 명령으로 결과가 없다면 모든 컨테이너가 종료되었다고 보시면 됩니다
+
+</details>
 <br>
 
 
