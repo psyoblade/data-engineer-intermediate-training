@@ -5,11 +5,13 @@
 ## 1. 노트북 기동
 * [터미널] 최신 소스를 내려 받습니다
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training
 git pull
 ```
 * [터미널] 스파크 워크스페이스로 이동하여 도커를 기동합니다
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day9
 docker compose up -d
 docker compose logs notebook
@@ -23,6 +25,7 @@ docker compose logs notebook
 ### 2-1. 원격 서버에 터미널을 통해 접속 후, 스쿱 서버에 접속합니다
 * [터미널] 아래의 명령어를 통해 스쿱 컨테이너를 기동하고, 접속합니다
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day9
 docker compose up -d
 docker compose ps
@@ -34,6 +37,7 @@ docker compose exec sqoop bash
 ### 2-2. 수집 대상 데이터베이스 목록을 확인합니다
 * [컨테이너] 아래의 명령어를 참고하여, 현재 MySQL 서버에 존재하는 데이터베이스 목록을 확인합니다
 ```bash
+# docker
 hostname="mysql"
 username="sqoop"
 password="sqoop"
