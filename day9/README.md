@@ -761,4 +761,7 @@ newDimension = <디멘젼을 읽어옵니다>
 newDimension.printSchema()
 display(newDimension)
 ```
+<details><summary> 정답확인</summary>
+> 디멘젼 테이블을 정상적으로 읽어왔고, 동일한 스키마와 데이터가 출력되었다면 정답입니다
+</details>
 
