@@ -33,13 +33,12 @@ docker compose exec sqoop bash
 
 ### 2-2. 수집 대상 데이터베이스 목록을 확인합니다
 * [컨테이너] 아래의 명령어를 참고하여, 현재 MySQL 서버에 존재하는 데이터베이스 목록을 확인합니다
-  - hostname : mysql
-  - username : sqoop
-  - password : sqoop
 ```bash
-sqoop list-databases --connect jdbc:mysql://<hostname>:3306 --username <username> --password <password>
+hostname="mysql"
+username="sqoop"
+password="sqoop"
+sqoop list-databases --connect jdbc:mysql://$hostname:3306 --username $username --password $password
 ```
-<html><textarea rows=2 cols=120 /></html>
 
 ### 2-3. 수집 대상 테이블 목록을 확인합니다
 * [컨테이너] MySQL 서버의 특정 데이터베이스에 존재하는 테이블 목록을 확인합니다
