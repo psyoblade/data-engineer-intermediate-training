@@ -225,6 +225,7 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar cat file://${filename}
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 모든 파일이 모두 수집되었다면 테이블 수집에 성공한 것입니다
 
 </details>
+<br>
 
 
 #### 2-7-5. `원격 터미널` 장비에도 잘 저장 되어 있는지 확인합니다
@@ -444,7 +445,7 @@ display(user25)
 
 * 매출 정보 파일을 읽고, 스키마와 데이터 출력하기
 ```python
-purchase25 = ...
+purchase25 = <매출경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
 ```
 
 * 접속 정보 파일(json)을 읽고, 스키마와 데이터 출력하기
