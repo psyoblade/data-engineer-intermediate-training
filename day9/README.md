@@ -24,9 +24,8 @@ docker compose logs notebook | grep 8888
 
 
 ## 2. 테이블 수집 실습
-> 지표 생성에 필요한 고객 및 매출 테이블을 아파치 스쿱을 통해 수집합니다
-로컬 환경에서 모든 데이터를 저장해두어야 테스트 및 검증이 편하기 때문에 저장은 원격 터미널의 로컬 디스크에 저장합니다
-원격 터미널 서버의 로컬 디스크와 도커와는 도커 컴포즈 파일`docker-compose.yml`에서 볼륨 마운트로 구성되어 있습니다
+> 지표 생성에 필요한 고객 및 매출 테이블을 아파치 스쿱을 통해 수집합니다. <br>
+로컬 환경에서 모든 데이터를 저장해두어야 테스트 및 검증이 편하기 때문에 저장은 원격 터미널의 로컬 디스크에 저장되며, 원격 터미널 서버의 로컬 디스크와 도커와는 도커 컴포즈 파일`docker-compose.yml`에서 볼륨 마운트로 구성되어 있습니다
 
 ### 2-1. *원격 터미널에 접속* 후, *스쿱 컨테이너에 접속*합니다
 ```bash
@@ -69,11 +68,11 @@ sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --username $
 # docker
 basedate=""
 basename="user"
-table_name="${basename}_${basedate}"
-target_dir="file:///tmp/target/${basename}/${basedate}"
 if [[ -z $basedate ]]; then echo "수집 대상 기준일자(basedate)를 변경해서 수집해 주세요"; fi
 ```
 ```bash
+table_name="${basename}_${basedate}"
+target_dir="file:///tmp/target/${basename}/${basedate}"
 sqoop import --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password} \
 --table ${table_name} --target-dir ${target_dir} --as-parquetfile --delete-target-dir	
 ```
