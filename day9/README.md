@@ -21,7 +21,7 @@ docker ps -a
 ```
 
 #### 1-2-2. 기동된 컨테이너가 있다면 강제 종료합니다
-```
+```bash
 # terminal 
 docker rm -f `docker ps -aq`
 ```
@@ -60,6 +60,7 @@ while true; do
 done
 ```
 ```bash
+# docker
 ask echo hello world
 ```
 > "hello world" 가 출력되면 정상입니다
@@ -73,6 +74,7 @@ username="sqoop"
 password="sqoop"
 ```
 ```bash
+# docker
 ask sqoop list-databases --connect jdbc:mysql://${hostname}:3306 --username ${username} --password ${password}
 ```
 
@@ -82,6 +84,7 @@ ask sqoop list-databases --connect jdbc:mysql://${hostname}:3306 --username ${us
 database="testdb"
 ```
 ```bash
+# docker
 ask sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password}
 ```
 
@@ -99,6 +102,7 @@ basedate=""
 
 #### 2-5-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
 ```bash
+# docker
 ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${database} \
 --username ${username} --password ${password} --table ${basename}_${basedate} \
 --target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
@@ -118,6 +122,7 @@ basedate=""
 
 #### 2-6-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
 ```bash
+# docker
 ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$database \
 --username ${username} --password ${password} --table ${basename}_${basedate} \
 --target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
@@ -300,6 +305,7 @@ find notebooks -name '*.json'
 
 ### 4-1. 노트북 주소를 확인하고, 크롬 브라우저로 접속합니다
 ```bash
+# terminal
 docker compose logs notebook | grep 8888
 ```
 > 출력된  URL을 복사하여 `127.0.0.1` 대신 개인 hostname 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
