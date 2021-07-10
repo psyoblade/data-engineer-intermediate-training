@@ -172,7 +172,9 @@ ask rm -rf /tmp/source/access.csv /tmp/source/access.pos /tmp/target/\$\{tag\}/ 
 # docker
 ask fluentd -c /etc/fluentd/fluentd.tail
 ```
-<detail> <summary> 플루언트디 설정을 확인합니다 </summary>
+<details> <summary> **플루언트디 설정을 확인합니다** </summary>
+<p>
+
 ```bash
 <source>
     @type tail
@@ -227,7 +229,9 @@ ask fluentd -c /etc/fluentd/fluentd.tail
     @log_level debug
 </match>
 ```
-</detail>
+
+</p>
+</details>
 #### 3-1-5. 비어있는 이용자 접속로그를 생성합니다
 ```bash
 # docker
