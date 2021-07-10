@@ -351,11 +351,11 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 
 spark = (
-	  SparkSession
-	  .builder
-	  .appName("Data Engineer Training Course")
-	  .config("spark.sql.session.timeZone", "Asia/Seoul")
-	  .getOrCreate()
+    SparkSession
+    .builder
+    .appName("Data Engineer Training Course")
+    .config("spark.sql.session.timeZone", "Asia/Seoul")
+    .getOrCreate()
 )
 ```
 
