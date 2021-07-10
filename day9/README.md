@@ -38,6 +38,27 @@ sleep 5
 docker compose exec sqoop bash
 ```
 
+### 2-2. 실습명령어 검증을 위한 ask 를 리뷰하고 실습합니다
+```bash
+#!/bin/bash
+while true; do
+    echo
+    echo "$ $@"
+    echo
+    read -p "위 명령을 실행 하시겠습니까? [y/n] " yn
+    case $yn in
+        [Yy]* ) $@; break;;
+        [Nn]* ) exit;;
+        * ) echo "[y/n] 을 입력해 주세요.";;
+    esac
+done
+```
+```bash
+ask echo hello world
+```
+> "hello world" 가 출력되면 정상입니다
+
+
 ### 2-2. 수집 대상 *데이터베이스 목록*을 확인합니다
 ```bash
 # docker
@@ -46,7 +67,7 @@ username="sqoop"
 password="sqoop"
 ```
 ```bash
-sqoop list-databases --connect jdbc:mysql://${hostname}:3306 --username ${username} --password ${password}
+ask sqoop list-databases --connect jdbc:mysql://${hostname}:3306 --username ${username} --password ${password}
 ```
 
 ### 2-3. 수집 대상 *테이블 목록*을 확인합니다
@@ -55,7 +76,7 @@ sqoop list-databases --connect jdbc:mysql://${hostname}:3306 --username ${userna
 database="testdb"
 ```
 ```bash
-sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password}
+ask sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password}
 ```
 
 ### 2-4. *일별 이용자 테이블*을 수집합니다
@@ -66,15 +87,13 @@ sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --username $
 * 타겟 : <kbd>file:///tmp/target/user/20201025</kbd>, <kbd> file:///tmp/target/user/20201026</kbd>
 ```bash
 # docker
-basedate=""
 basename="user"
-if [[ -z $basedate ]]; then echo "수집 대상 기준일자(basedate)를 변경해서 수집해 주세요"; fi
+basedate=""
 ```
 ```bash
-table_name="${basename}_${basedate}"
-target_dir="file:///tmp/target/${basename}/${basedate}"
-sqoop import --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password} \
---table ${table_name} --target-dir ${target_dir} --as-parquetfile --delete-target-dir	
+ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${database} \
+--username ${username} --password ${password} --table ${basename}_${basedate} \
+--target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
 ```
 
 ### 2-5. *일별 매출 테이블*을 수집합니다
@@ -85,21 +104,20 @@ sqoop import --connect jdbc:mysql://${hostname}:3306/$database --username ${user
 * 타겟 : <kbd>file:///tmp/target/purchase/20201025</kbd>, <kbd> file:///tmp/target/purchase/20201026</kbd>
 ```bash
 # docker
-basedate=""
 basename="purchase"
-table_name="${basename}_${basedate}"
-target_dir="file:///tmp/target/purchase/$basedate"
-if [[ -z $basedate ]]; then echo "수집 대상 기준일자(basedate)를 변경해서 수집해 주세요"; fi
+basedate=""
 ```
 ```bash
-sqoop import --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password} \
---table ${table_name} --target-dir ${target_dir} --as-parquetfile --delete-target-dir	
+ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$database \
+--username ${username} --password ${password} --table ${basename}_${basedate} \
+--target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
 ```
 
 ### 2-6. 모든 데이터가 정상적으로 수집 되었는지 검증합니다
-
+> parquet-tools 는 파케이 파일의 스키마(schema), 일부내용(head) 및 전체내용(cat)을 확인할 수 있는 커맨드라인 도구입니다. 연관된 라이브러리가 존재하므로 hadoop 스크립를 통해서 수행하면 편리합니다
 ```bash
 # docker
+tree /home/sqoop/target
 hadoop jar /jdbc/parquet-tools-1.10.1.jar cat /home/sqoop/target/
 ```
 
