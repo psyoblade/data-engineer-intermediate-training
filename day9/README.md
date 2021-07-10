@@ -1,8 +1,19 @@
-# 9일차. LGDE.com 일별 지표생성 실습 (테이블/파일 수집)
-> 가상의 웹 쇼핑몰 LGDE.com 주요 지표를 생성하기 위한, 접속정보, 매출 및 고객정보 등의 데이터를 수집합니다.
+# 9일차. LGDE.com 일별 지표생성 실습
+> 가상의 웹 쇼핑몰 LGDE.com 주요 지표를 생성하기 위한, 접속정보, 매출 및 고객정보 등의 데이터를 수집하여 기본 지표를 생성합니다
+
+- 목차
+  * [1. 최신버전 업데이트](#1-최신버전-업데이트)
+  * [2. 테이블 수집 실습](#2-테이블-수집-실습)
+  * [3. 파일 수집 실습](#3-파일-수집-실습)
+  * [4. 노트북 컨테이너 기동](#4-노트북-컨테이너-기동)
+  * [5. 수집된 데이터 탐색](#5-수집된-데이터-탐색)
+  * [6. 기본 지표 생성](#6-기본-지표-생성)
+  * [7. 고급 지표 생성](#7-고급-지표-생성)
+
+<br>
 
 
-## 1. 코드 최신버전 업데이트 및 컨테이너 정리
+## 1. 최신버전 업데이트
 > 원격 터미널에 접속하여 관련 코드를 최신 버전으로 내려받고, 과거에 실행된 컨테이너가 없는지 확인하고 종료합니다
 
 ### 1-1. 최신 소스를 내려 받습니다
@@ -299,7 +310,7 @@ find notebooks -name '*.json'
 <br>
 
 
-## 4. 지표 생성을 위한 노트북 컨테이너 기동
+## 4. 노트북 컨테이너 기동
 
 > 본 장에서 수집한 데이터를 활용하여 데이터 변환 및 지표 생성작업을 위하여 주피터 노트북을 열어둡니다
 
@@ -308,5 +319,56 @@ find notebooks -name '*.json'
 # terminal
 docker compose logs notebook | grep 8888
 ```
-> 출력된  URL을 복사하여 `127.0.0.1` 대신 개인 hostname 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
+> 출력된  URL을 복사하여 `127.0.0.1:8888` 대신 개인 `<hostname>.aiffelbiz.co.kr:8888` 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
 <br>
+
+
+## 5. 수집된 데이터 탐색
+
+> 스파크 세션을 통해서 수집된 데이터의 형태를 파악하고, 스파크의 기본 명령어를 통해 수집된 데이터 집합을 탐색합니다
+
+### 5-1. 스파크 세션 생성
+
+### 5-2. 수집된 고객, 매출 및 접속 데이터 읽기
+
+### 5-3. SparkSQL을 이용하여 테이블로 생성하기
+
+### 5-4. 생성된 테이블을 SQL 문을 이용하여 탐색하기
+
+<br>
+
+
+## 6. 기본 지표 생성
+
+> 생성된 테이블을 통하여 기본 지표(DAU, DPU, DR, ARPU, ARPPU) 를 생성합니다
+
+### 6-1. DAU (Daily Activer User) 지표를 생성하세요
+
+```python
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import *
+
+spark = (
+	  SparkSession
+	  .builder
+	  .appName("Data Engineer Training Course")
+	  .config("spark.sql.session.timeZone", "Asia/Seoul")
+	  .getOrCreate()
+)
+```
+
+### 6-2. DPU (Daily Paying User) 지표를 생성하세요
+
+### 6-3. DR (Daily Revenue) 지표를 생성하세요
+
+### 6-4. ARPU (Average Revenue Per User) 지표를 생성하세요
+j
+### 6-5. ARPPU (Average Revenue Per Paying User) 지표를 생성하세요
+
+
+
+## 7. 고급 지표 생성
+
+
+
+
