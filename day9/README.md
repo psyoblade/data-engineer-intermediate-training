@@ -359,16 +359,17 @@ spark
 
 > 파케이 포맷의 경우는 명시적인 스키마 정의가 되어 있지만, Json 포맷의 경우는 데이터의 값에 따라 달라질 수 있기 때문에 데이터를 읽어들일 때에 주의해야 합니다
 
-* 데이터프레임 변수명을 아래와 같이 작성합니다
-  - 2020/10/25 일자 고객 : <kbd>user25</kbd> <- <kbd>user/20201025</kbd> 
-  - 2020/10/25 일자 매출 : <kbd>purchase25</kbd> <- <kbd>purchase/20201025</kbd> 
-  - 2020/10/25 일자 접속 : <kbd>access25</kbd> <- <kbd>access/20201025</kbd> 
+* 데이터프레임 변수명 및 경로는 아래와 같습니다
+  - 2020/10/25 일자 고객 (parquet) : <kbd>user25</kbd> <- <kbd>user/20201025</kbd> 
+  - 2020/10/25 일자 매출 (parquet) : <kbd>purchase25</kbd> <- <kbd>purchase/20201025</kbd> 
+  - 2020/10/25 일자 접속 (json) : <kbd>access25</kbd> <- <kbd>access/20201025</kbd> 
+
 * 아래의 제약조건을 만족 시켜야 합니다
   - 입력 포맷이 Json 인 경우는 json 명령어와 추정(infer) 옵션을 사용하세요 <kbd>spark.read.option("inferSchema", "true").json("access/20201024")</kbd> 
   - 모든 데이터에 대한 스키마를 출력하세요 <kbd>dataFrame.printSchema()</kbd> 
-  - 데이터 내용을 출력하여 확인하세요 <kbd>dataFrame.show(), display(dataFrame)</kbd> 
+  - 데이터 내용을 출력하여 확인하세요 <kbd>dataFrame.show() 혹은 display(dataFrame)</kbd> 
 
-* 고객 정보 *파케이(parquet)* 파일을 읽고, 스키마와 데이터 출력하기
+* 고객 정보 파일을 읽고, 스키마와 데이터 출력하기
 ```python
 user25 = spark.read.parquet("user/20201025")
 user25.printSchema()
@@ -376,12 +377,12 @@ user25.show(truncate=False)
 display(user25)
 ```
 
-* 매출 정보 *파케이(parquet)* 파일을 읽고, 스키마와 데이터 출력하기
+* 매출 정보 파일을 읽고, 스키마와 데이터 출력하기
 ```python
 purchase25 = ...
 ```
 
-* 접속 정보 *제이슨(json)* 파일을 읽고, 스키마와 데이터 출력하기
+* 접속 정보 파일(json)을 읽고, 스키마와 데이터 출력하기
 ```python
 access25 = ...
 ```
@@ -399,25 +400,32 @@ purchase25.createOrReplaceTempView("purchase25")
 access25.createOrReplaceTempView("access25")
 spark.sql("show tables")
 ```
-
 > `show tables` 결과로 user25, purchase25, access25 3개 테이블이 출력되면 성공입니다
+<br>
 
 
 ### 5-3. SparkSQL을 이용하여 테이블 별 데이터프레임 생성하기
 
-#### 5-3-1. `p_time_condition` 조건을 작성하세요
+#### 5-3-1. `u_signup_condition` 조건을 채워서 올바른 코드를 작성하세요
+* 20201025 에 등록된 유저만 포함하는 조건을 작성합니다 <kbd>`u_signup` >= '20201025' and `u_signup` < '20201025'</kbd>
+```python
+u_signup_condition = ""
+user = spark.sql("select u_id, u_name, u_gender from user25").where(u_signup_condition)
+```
 
-* `p_time_condition` 값은 `p_time` 값이 '2020-10-25 00:00:00' 보다 크거나 같고, '2020-10-26 00:00:00' 보다 작은 조건문을 완성합니다
+#### 5-3-2. `p_time_condition` 조건을 통해 정확한 시간의 데이터만 포함한 데이터프레임을 생성합니다
+
+* 아래의 조건을 만족 시키는 코드를 작성하세요
+  - `p_time_condition` 조건을 채워주세요 <kbd>`p_time` >= '2020-10-25 00:00:00' and `p_time` < '2020-10-26 00:00:00'</kbd>
 
 ```python
 p_time_condition = "p_time 컬럼의 범위를 지정하는 조건문을 완성합니다"
 
 purchase = spark.sql("select from_unixtime(p_time) as p_time, p_uid, p_id, p_name, p_amount from purchase25").where(p_time_condition)
 purchase.createOrReplaceTempView("purchase")
-purchase.printSchema()
-purchase.show(truncate=False)kkkk
-```
 
+```
+<br>
 
 
 ### 5-4. 생성된 테이블을 SQL 문을 이용하여 탐색하기
