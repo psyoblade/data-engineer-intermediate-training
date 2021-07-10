@@ -1,4 +1,6 @@
 # 9일차. LGDE.com 일별 지표생성 실습
+<details><summary> 정답확인</summary>
+
 > 가상의 웹 쇼핑몰 LGDE.com 주요 지표를 생성하기 위한, 접속정보, 매출 및 고객정보 등의 데이터를 수집하여 기본 지표를 생성합니다
 
 - 목차
@@ -77,7 +79,12 @@ done
 # docker
 ask echo hello world
 ```
+<details><summary> 정답확인</summary>
+
 > "hello world" 가 출력되면 정상입니다
+
+</details>
+<br>
 
 
 ### 2-3. 수집 대상 *데이터베이스 목록*을 확인합니다
@@ -169,7 +176,12 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar cat file://${filename}
 ```
+<details><summary> 정답확인</summary>
+
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 모든 파일이 모두 수집되었다면 테이블 수집에 성공한 것입니다
+
+</details>
+
 
 #### 2-7-5. `원격 터미널` 장비에도 잘 저장 되어 있는지 확인합니다
 ```bash
@@ -305,11 +317,15 @@ cat `find /tmp/target -name '*.json'` | wc -l
 wc -l /tmp/source/access.csv
 ```
 
+<details><summary> 정답확인</summary>
+
 > 수집된 파일의 라인 수와, 원본 로그의 라인 수가 일치한다면 정상적으로 수집되었다고 볼 수 있으며, <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 JSON 파일이 확인 되었다면 웹 로그 수집에 성공한 것입니다
 ```bash
 # terminal
 find notebooks -name '*.json'
 ```
+
+</details>
 <br>
 
 
@@ -322,7 +338,11 @@ find notebooks -name '*.json'
 # terminal
 docker compose logs notebook | grep 8888
 ```
+<details><summary> 정답확인</summary>
+
 > 출력된  URL을 복사하여 `127.0.0.1:8888` 대신 개인 `<hostname>.aiffelbiz.co.kr:8888` 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
+
+</details>
 <br>
 
 
@@ -352,8 +372,11 @@ spark = (
 )
 spark
 ```
+<details><summary> 정답확인</summary>
 
 > 스파크 엔진의 버전 `v3.0.1`이 출력되면 성공입니다
+
+</details>
 <br> 
 
 
@@ -388,8 +411,11 @@ purchase25 = ...
 ```python
 access25 = ...
 ```
+<details><summary> 정답확인</summary>
 
 > 고객, 매출 및 접속 데이터의 스키마와, 데이터가 모두 출력되면 성공입니다
+
+</details>
 <br>
 
 
@@ -402,7 +428,11 @@ purchase25.createOrReplaceTempView("purchase25")
 access25.createOrReplaceTempView("access25")
 spark.sql("show tables '*25'")
 ```
+<details><summary> 정답확인</summary>
+
 > `show tables` 결과로 user25, purchase25, access25 3개 테이블이 출력되면 성공입니다
+
+</details>
 <br>
 
 
@@ -428,12 +458,15 @@ access.createOrReplaceTempView("access")
 
 spark.sql("show tables")
 ```
+<details><summary> 정답확인</summary>
+
 > `show tables` 결과에 총 6개의 테이블이 출력되면 성공입니다
+
+</details>
 <br>
 
 
 ### 5-4. 생성된 테이블을 SQL 문을 이용하여 탐색하기
-
 > SQL 혹은 DataFrame API 어느 쪽을 이용하여도 무관하며, 결과만 동일하게 나오면 정답입니다
 
 #### 5-4-1. 한 쪽의 성별('남' 혹은 '여')을 가진 목록을 출력하세요
@@ -474,7 +507,11 @@ distinctAccessUser = "select ... as DAU from access"
 dau = spark.sql(distinctAccessUser)
 display(dau)
 ```
+<details><summary> 정답확인</summary>
+
 > "DAU : 5"가 나오면 정답입니다 
+
+</details>
 <br>
 
 
@@ -492,7 +529,11 @@ distinctPayingUser = ""
 pu = spark.sql(distinctPayingUser)
 display(pu)
 ```
+<details><summary> 정답확인</summary>
+
 > "PU : 4"가 나오면 정답입니다
+
+</details>
 <br>
 
 
@@ -510,7 +551,11 @@ sumOfDailyRevenue = ""
 dr = spark.sql(sumOfDailyRevenue)
 display(dr)
 ```
+<details><summary> 정답확인</summary>
+
 > "DR : 12200000" 이 나오면 정답입니다
+
+</details>
 <br> 
 
 
@@ -529,7 +574,11 @@ v_dr = dr.collect()[0]["DR"]
 
 print("ARPU : {}".format("..."))
 ```
+<details><summary> 정답확인</summary>
+
 > "ARPU : 2440000.0" 가 나오면 정답입니다
+
+</details>
 <br>
 
 
@@ -544,7 +593,11 @@ print("ARPU : {}".format("..."))
 ```python
 print("ARPPU : {}".format("..."))
 ```
+<details><summary> 정답확인</summary>
+
 > "ARPPU : 3050000.0" 가 나오면 정답입니다
+
+</details>
 <br>
 
 
@@ -589,7 +642,11 @@ countOfAccess = ""
 accs = spark.sql(countOfAccess)
 display(accs)
 ```
+<details><summary> 정답확인</summary>
+
 > 접속 빈도가 가장 높은 이용자는 `a_id` 가 "2, 4"번으로 2명이 나오면 정답입니다
+
+</details>
 <br>
 
 
@@ -609,7 +666,11 @@ sumOfCountAndAmount = ""
 amts = spark.sql(sumOfCountAndAmount)
 display(amts)
 ```
+<details><summary> 정답확인</summary>
+
 > 매출 금액이 600만원에 2회 발생한 5번 유저가 1위이면 정답입니다
+
+</details>
 <br>
 
 
@@ -632,7 +693,11 @@ dim1 = accs.join(amts, joinCondition, joinHow)
 dim1.printSchema()
 display(dim1.orderBy(asc("a_uid")))
 ```
+<details><summary> 정답확인</summary>
+
 > uid 가 4번인 이용자만 매출 정보가 null 이면 정답입니다
+
+</details>
 <br>
 
 
@@ -655,7 +720,11 @@ dim2 = dim1.join(user, joinCondition, joinHow)
 dim2.printSchema()
 display(dim2.orderBy(asc("a_uid")))
 ```
+<details><summary> 정답확인</summary>
+
 > uid 가 4번인 이용자만 매출 정보가 null 이면 정답입니다
+
+</details>
 <br>
 
 
@@ -677,7 +746,11 @@ dim4 = dim3.na.fill(fillDefaultValue)
 dim4.printSchema()
 display(dim4.orderBy(asc("a_uid")))
 ```
+<details><summary> 정답확인</summary>
+
 > uid 가 4번인 이용자만 매출 정보가 0 이면 정답입니다
+
+</details>
 <br>
 
 
@@ -702,7 +775,11 @@ dim5 = (
 )
 display(dim5.orderBy(asc("d_uid")))
 ```
+<details><summary> 정답확인</summary>
+
 > 모든 컬럼이 `d_`로 시작하고 6개의 컬럼으로 구성되어 있다면 정답입니다
+
+</details>
 <br>
 
 
@@ -733,7 +810,11 @@ dimension = dim7.orderBy(asc("d_uid"))
 dimension.printSchema()
 display(dimension)
 ```
+<details><summary> 정답확인</summary>
+
 > 4번 고객의 제외한 모든 첫 번째 구매 일시가 출력되면 정답입니다
+
+</details>
 <br>
 
 
@@ -747,7 +828,12 @@ display(dimension)
 ```python
 dimension.<디멘젼을 저장합니다>
 ```
+<details><summary> 정답확인</summary>
+
 > 저장 시에 오류가 없고 대상 경로(dimension/dt=20201025)가 생성되었다면 성공입니다
+
+</details>
+<br>
 
 
 ### 7-10. 생성된 디멘젼을 다시 읽어서 출력합니다
@@ -762,6 +848,8 @@ newDimension.printSchema()
 display(newDimension)
 ```
 <details><summary> 정답확인</summary>
+
 > 디멘젼 테이블을 정상적으로 읽어왔고, 동일한 스키마와 데이터가 출력되었다면 정답입니다
+
 </details>
 
