@@ -96,6 +96,15 @@ password="sqoop"
 # docker
 ask sqoop list-databases --connect jdbc:mysql://${hostname}:3306 --username ${username} --password ${password}
 ```
+<details><summary> 정답확인</summary>
+
+> 아래의 총 2개의 데이터베이스가 출력되면 정답입니다 
+`information_schema`
+`testdb`
+
+</details>
+<br>
+
 
 ### 2-4. 수집 대상 *테이블 목록*을 확인합니다
 ```bash
@@ -106,6 +115,18 @@ database="testdb"
 # docker
 ask sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password}
 ```
+<details><summary> 정답확인</summary>
+
+> 아래의 총 5개의 테이블이 출력되면 정답입니다
+`purchase_20201025`
+`purchase_20201026`
+`seoul_popular_trip`
+`user_20201025`
+`user_20201026`
+
+</details>
+<br>
+
 
 ### 2-5. *일별 이용자 테이블*을 수집합니다
 * 기간 : 2020/10/25 ~ 2020/10/26
@@ -126,6 +147,13 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${databa
 --username ${username} --password ${password} --table ${basename}_${basedate} \
 --target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
 ```
+<details><summary> 정답확인</summary>
+
+> 
+
+</details>
+<br>
+
 
 ### 2-6. *일별 매출 테이블*을 수집합니다
 * 기간 : 2020/10/25 ~ 2020/10/26
@@ -146,6 +174,13 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$databas
 --username ${username} --password ${password} --table ${basename}_${basedate} \
 --target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
 ```
+<details><summary> 정답확인</summary>
+
+> 
+
+</details>
+<br>
+
 
 ### 2-7. 모든 데이터가 정상적으로 수집 되었는지 검증합니다
 > parquet-tools 는 파케이 파일의 스키마(schema), 일부내용(head) 및 전체내용(cat)을 확인할 수 있는 커맨드라인 도구입니다. 연관된 라이브러리가 존재하므로 hadoop 스크립를 통해서 수행하면 편리합니다
@@ -168,6 +203,13 @@ filename=""
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 ```
+<details><summary> 정답확인</summary>
+
+> 
+
+</details>
+<br>
+
 
 #### 2-7-4. 파일 내용의 데이터가 정상적인지 확인합니다
 ```bash
@@ -480,7 +522,12 @@ spark.sql(selectClause)
 groupByClause=""
 spark.sql(groupByClause)
 ```
-<br> 위에서부터 각각 "남:3, 여:2", "3개", "login:7, logout:5" 이 나오면 정답입니다
+<details><summary> 정답확인</summary>
+
+> 위에서부터 각각 "남:3, 여:2", "3개", "login:7, logout:5" 이 나오면 정답입니다
+
+</details>
+<br>
 
 
 ## 6. 기본 지표 생성
