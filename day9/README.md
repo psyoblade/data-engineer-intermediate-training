@@ -59,7 +59,7 @@ ask echo hello world
 > "hello world" 가 출력되면 정상입니다
 
 
-### 2-2. 수집 대상 *데이터베이스 목록*을 확인합니다
+### 2-3. 수집 대상 *데이터베이스 목록*을 확인합니다
 ```bash
 # docker
 hostname="mysql"
@@ -70,7 +70,7 @@ password="sqoop"
 ask sqoop list-databases --connect jdbc:mysql://${hostname}:3306 --username ${username} --password ${password}
 ```
 
-### 2-3. 수집 대상 *테이블 목록*을 확인합니다
+### 2-4. 수집 대상 *테이블 목록*을 확인합니다
 ```bash
 # docker
 database="testdb"
@@ -79,7 +79,7 @@ database="testdb"
 ask sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password}
 ```
 
-### 2-4. *일별 이용자 테이블*을 수집합니다
+### 2-5. *일별 이용자 테이블*을 수집합니다
 * 기간 : 2020/10/25 ~ 2020/10/26
 * 저장 : 파케이 포맷 <kbd>--as-parquetfile</kbd>
 * 기타 : 경로가 존재하면 삭제 후 수집 <kbd>--delete-target-dir</kbd>
@@ -96,7 +96,7 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${databa
 --target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
 ```
 
-### 2-5. *일별 매출 테이블*을 수집합니다
+### 2-6. *일별 매출 테이블*을 수집합니다
 * 기간 : 2020/10/25 ~ 2020/10/26
 * 저장 : 파케이 포맷 <kbd>--as-parquetfile</kbd>
 * 기타 : 경로가 존재하면 삭제 후 수집 <kbd>--delete-target-dir</kbd>
@@ -113,7 +113,7 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$databas
 --target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
 ```
 
-### 2-6. 모든 데이터가 정상적으로 수집 되었는지 검증합니다
+### 2-7. 모든 데이터가 정상적으로 수집 되었는지 검증합니다
 > parquet-tools 는 파케이 파일의 스키마(schema), 일부내용(head) 및 전체내용(cat)을 확인할 수 있는 커맨드라인 도구입니다. 연관된 라이브러리가 존재하므로 hadoop 스크립를 통해서 수행하면 편리합니다
 
 * 고객 및 매출 테이블 수집이 잘 되었는지 확인 후, 파일목록을 확인합니다
@@ -149,7 +149,95 @@ find notebooks -name '*.parquet'
 
 ## 3. 파일 수집 실습
 
-### 3-1. 
+### 3-1. *원격 터미널에 접속* 후, *플루언트디 컨테이너에 접속*합니다
+#### 3-1-1. 서버를 기동합니다 (컨테이너가 종료된 경우)
+```bash
+# terminal
+cd /home/ubuntu/work/data-engineer-intermediate-training/day9
+docker compose up -d
+docker compose ps
+```
+#### 3-1-2. 플루언트디 컨테이너에 접속합니다
+```bash
+# docker
+docker compose exec fluentd bash
+```
+#### 3-1-3. 이전 작업내역을 모두 초기화 하고 다시 수집해야 한다면 아래와 같이 정리합니다
+```bash
+# docker
+ask rm -rf /tmp/source/access.csv /tmp/source/access.pos /tmp/target/\$\{tag\}/ /tmp/target/access/
+```
+#### 3-1-4. 수집 에이전트인 플루언트디를 기동시킵니다
+```bash
+# docker
+ask fluentd -c /etc/fluentd/fluentd.tail
+```
+<detail> <summary> 플루언트디 설정을 확인합니다 </summary>
+```bash
+<source>
+    @type tail
+    @log_level info
+    path /tmp/source/access.csv
+    pos_file /tmp/source/access.pos
+    refresh_interval 5
+    multiline_flush_interval 5
+    rotate_wait 5
+    open_on_every_update true
+    emit_unmatched_lines true
+    read_from_head false
+    tag access
+    <parse>
+        @type csv
+        keys a_time,a_uid,a_id
+        time_type unixtime
+        time_key a_time
+        keep_time_key true
+        types a_time:time:unixtime,a_uid:integer,a_id:string
+    </parse>
+</source>
+
+<match access>
+    @type file
+    @log_level info
+    add_path_suffix true
+    path_suffix .json
+    path /tmp/target/${tag}/%Y%m%d/access.%Y%m%d.%H%M
+    <format>
+        @type json
+    </format>
+    <inject>
+        time_key a_timestamp
+        time_type string
+        timezone +0900
+        time_format %Y-%m-%d %H:%M:%S.%L
+        tag_key a_tag
+    </inject>
+    <buffer time,tag>
+        timekey 1m
+        timekey_use_utc false
+        timekey_wait 10s
+        timekey_zone +0900
+        flush_mode immediate
+        flush_thread_count 8
+    </buffer>
+</match>
+
+<match debug>
+    @type stdout
+    @log_level debug
+</match>
+```
+</detail>
+#### 3-1-5. 비어있는 이용자 접속로그를 생성합니다
+```bash
+# docker
+ask touch /tmp/source/access.csv
+```
+#### 3-1-6. 실제 로그가 쌓이는 것 처럼 access.csv 파일에 임의의 로그를 redirect 하여 로그를 append 합니다
+```bash
+# docker
+ask cat /etc/fluentd/access.csv >> /tmp/source/access.csv
+```
 
 
 ## 4. 지표 변환 실습

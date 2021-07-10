@@ -50,6 +50,7 @@ services:
     volumes:
       - ./tmp:/tmp/source
       - ./notebooks:/tmp/target
+    working_dir: /home/root
   notebook:
     container_name: notebook
     user: root
