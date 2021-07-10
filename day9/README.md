@@ -432,7 +432,22 @@ spark.sql("show tables")
 
 ### 5-4. 생성된 테이블을 SQL 문을 이용하여 탐색하기
 
-<br>
+#### 5-4-1. 한 쪽의 성별('남' 혹은 '여')을 가진 목록을 출력하세요
+```python
+spark.sql("select * from user where ...")
+```
+
+#### 5-4-2. 상품금액이 200만원을 초과하는 매출 목록을 출력하세요
+```python
+spark.sql("select * from purchase where ...")
+```
+
+#### 5-4-3. GroupBy 구문을 이용하여 로그인, 로그아웃 횟수를 출력하세요
+```python
+spark.sql("")
+```
+
+<br> 위에서부터 각각 "남:3,여:2", "3개", "login:7,logout:5" 이 나오면 정답입니다
 
 
 ## 6. 기본 지표 생성
