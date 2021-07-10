@@ -35,11 +35,7 @@ docker ps -a
 # terminal 
 docker rm -f `docker ps -aq`
 ```
-<details><summary> 정답확인</summary>
-
 > 다시 `docker ps -a` 명령으로 결과가 없다면 모든 컨테이너가 종료되었다고 보시면 됩니다
-
-</details>
 <br>
 
 
@@ -149,7 +145,7 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${databa
 ```
 <details><summary> 정답확인</summary>
 
-> 
+> `21/07/10 16:27:47 INFO mapreduce.ImportJobBase: Retrieved 5 records.` 와 같은 메시지가 출력되면 성공입니다
 
 </details>
 <br>
@@ -176,7 +172,7 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$databas
 ```
 <details><summary> 정답확인</summary>
 
-> 
+> `21/07/10 16:27:47 INFO mapreduce.ImportJobBase: Retrieved 6 records.` 와 같은 메시지가 출력되면 성공입니다
 
 </details>
 <br>
@@ -205,7 +201,15 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 ```
 <details><summary> 정답확인</summary>
 
-> 
+> 아래와 같은 출력이 나오면 성공입니다
+```
+message user_20201025 {
+  optional int32 u_id;
+  optional binary u_name (UTF8);
+  optional binary u_gender (UTF8);
+  optional int32 u_signup;
+}
+```
 
 </details>
 <br>
