@@ -333,8 +333,14 @@ docker compose logs notebook | grep 8888
 
 #### 5-1-1. 스파크 객체를 생성하는 코드를 작성하고, <kbd><kbd>Shift</kbd>+<kbd>Enter</kbd></kbd> 로 스파크 버전을 확인합니다
 ```python
+# 코어 스파크 라이브러리를 임포트 합니다
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
+from pyspark.sql.types import *
+# 노트북에서 테이블 형태로 데이터 프레임 출력을 위한 설정을 합니다
+from IPython.display import display, display_pretty, clear_output, JSON
+spark.conf.set("spark.sql.repl.eagerEval.enabled", True) # display enabled
+spark.conf.set("spark.sql.repl.eagerEval.truncate", 100) # display output columns size
 
 spark = (
     SparkSession
@@ -346,7 +352,30 @@ spark = (
 spark
 ```
 
+#### 5-1-2. 수집된 테이블을 데이터프레임으로 읽고, 스키마 및 데이터 출력하기
+* 데이터프레임 변수명을 아래와 같이 작성합니다
+  - 2020/10/25 일자 고객 -> <kbd>user25</kbd> <- <kbd>user/20201025</kbd> 
+  - 2020/10/25 일자 매출 -> <kbd>purchase25</kbd> <- <kbd>purchase/20201025</kbd> 
+  - 2020/10/25 일자 접속 -> <kbd>access25</kbd> <- <kbd>access/20201025</kbd> 
+
+* 고객 정보 파케이 파일을 읽고, 스키마와 데이터 출력하기
+```python
+user = spark.read.parquet("user/20201025")
+user.printSchema()
+display(user)
+```
+* 매출 정보 ***파케이(parquet)*** 파일을 읽고, 스키마와 데이터 출력하기
+```python
+purchase = ...
+```
+* 접속 정보 ***제이슨(json)*** 파일을 읽고, 스키마와 데이터 출력하기
+```python
+access = ...
+```
+
+
 ### 5-2. 수집된 고객, 매출 및 접속 데이터 읽기
+
 
 ### 5-3. SparkSQL을 이용하여 테이블로 생성하기
 
