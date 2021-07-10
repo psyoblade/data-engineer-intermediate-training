@@ -681,12 +681,12 @@ v_dr = dr.collect()[0]["DR"]
   - 지표산식 : 접속 여부는 'login' 로그가 존재하면 접속한 유저로 가정
   - 입력형태 : user
   - 출력형태 : `a_uid`, `a_count`
-  - 정렬형태 : `a_count` desc
+  - 정렬형태 : `a_uid` asc
 
 * access 테이블로부터 `a_uid` 가 'login' 인 `a_uid` 값의 빈도수를 group by `a_uid` 집계를 통해 구하시오
 ```python
 access.printSchema()
-# countOfAccess = "select `a_uid`, <집계함수> from user <집계 구문>"
+# countOfAccess = "select a_uid, <집계함수> from user <집계 구문>"
 # accs = spark.sql(countOfAccess)
 # display(accs)
 ```
@@ -710,7 +710,7 @@ access.printSchema()
 * purchase 테이블로 부터 `p_uid` 별 매출 횟수(count)와, 매출 금액의 합(sum)을 구하는 집계 쿼리를 생성 하시오
 ```python
 purchase.printSchema()
-# sumOfCountAndAmount = "select `p_uid`, <빈도 집계함수>, <매출 집계함수> from purchase <집계조건>"
+# sumOfCountAndAmount = "select p_uid, <빈도 집계함수>, <매출 집계함수> from purchase <집계조건>"
 # amts = spark.sql(sumOfCountAndAmount)
 # display(amts)
 ```
@@ -734,7 +734,7 @@ purchase.printSchema()
 * 7-1 에서 생성한 accs 와 7-2 에서 생성한 amts 데이터를 uid 값을 기준으로 left outer 조인을 수행합니다
 ```python
 accs.printSchema()
-purchase.printSchema()
+amts.printSchema()
 # joinCondition = <고객과 매출 조인 조건>
 # joinHow = "<조인 방식>"
 # dim1 = accs.join(amts, joinCondition, joinHow)
@@ -808,7 +808,9 @@ dim3 = dim2.drop("p_uid", "u_id")
   - 지표정의 : 컬럼명이 `d_`로 시작하도록 일괄 변경합니다
   - 지표산식 : <kbd>withColumnRenamed("`a_uid`", "`d_uid`" )</kbd>
   - 입력형태 : dim4
-  - 출력형태 : `d_uid`, `d_count`, `d_amount`, `d_count`, `d_name`, `d_gender`
+    - dimension 테이블이므로 `d_`로 시작하는 컬럼 규칙을 따릅니다
+    - access, purchase 와 같이 개별 테이블의 prefix 를 이용해서 `d_a<column-name>` 혹은 `d_p<column-name>` 규칙을 따릅니다
+  - 출력형태 : `d_uid`, `d_name`, `d_gender`, `d_acount`, `d_pamount`, `d_pcount`
   - 정렬형태 : `d_uid` asc
 
 * 7-6 에서 생성한 dim4 의 모든 컬럼이 `d_`로 시작하도록 Rename 하여 정리합니다
@@ -847,14 +849,17 @@ purchase.printSchema()
 # 
 # first_purchase = spark.sql(selectFirstPurchaseTime)
 # dim6 = dim5.withColumn("d_first_purchase", lit(None))
+# dim6.printSchema()
 # 
 # exprFirstPurchase = expr("case when d_first_purchase is null then p_time else d_first_purchase end")
 # 
-# dim7 = dim6.join(first_purchase, dim5.d_uid == first_purchase.p_uid, "left_outer") \
-# .withColumn("first_purchase", exprFirstPurchase) \
-# .drop("d_first_purchase", "p_uid", "p_time") \
-# .withColumnRenamed("first_purchase", "d_first_purchase")
-#
+# dim7 = (
+#     dim6.join(first_purchase, dim5.d_uid == first_purchase.p_uid, "left_outer")
+#     .withColumn("first_purchase", exprFirstPurchase)
+#     .drop("d_first_purchase", "p_uid", "p_time")
+#     .withColumnRenamed("first_purchase", "d_first_purchase")
+# )
+#     
 # dimension = dim7.orderBy(asc("d_uid"))
 # dimension.printSchema()
 # display(dimension)
@@ -876,7 +881,8 @@ purchase.printSchema()
 
 ```python
 dimension.printSchema()
-# dimension.<디멘젼을 저장합니다>
+# target_dir="<저장경로>"
+# dimension.write.mode(<저장모드>).parquet(target_dir)
 ```
 <details><summary> 정답확인</summary>
 
