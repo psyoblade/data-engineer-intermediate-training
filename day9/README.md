@@ -445,12 +445,12 @@ display(user25)
 
 * 매출 정보 파일을 읽고, 스키마와 데이터 출력하기
 ```python
-purchase25 = <매출경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
+purchase25 = <매출 데이터 경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
 ```
 
 * 접속 정보 파일(json)을 읽고, 스키마와 데이터 출력하기
 ```python
-access25 = ...
+access25 = <접속 데이터 경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
 ```
 <details><summary> 정답확인</summary>
 
@@ -471,7 +471,7 @@ spark.sql("show tables '*25'")
 ```
 <details><summary> 정답확인</summary>
 
-> `show tables` 결과로 user25, purchase25, access25 3개 테이블이 출력되면 성공입니다
+> `show tables` 결과로 `user25`, `purchase25`, `access25` 3개 테이블이 출력되면 성공입니다
 
 </details>
 <br>
@@ -486,11 +486,11 @@ spark.sql("show tables '*25'")
   - 2020/10/25 에 발생한 매출(`p_time`)만 포함할 것 <kbd>`p_time` >= '2020-10-25 00:00:00' and `p_time` < '2020-10-26 00:00:00'</kbd>
 
 ```python
-u_signup_condition = ""
+u_signup_condition = "<10월 25일자에 등록된 유저만 포함되는 조건을 작성합니다>"
 user = spark.sql("select u_id, u_name, u_gender from user25").where(u_signup_condition)
 user.createOrReplaceTempView("user")
 
-p_time_condition = ""
+p_time_condition = "<10월 25일자에 발생한 매출만 포함되는 조건을 작성합니다>"
 purchase = spark.sql("select from_unixtime(p_time) as p_time, p_uid, p_id, p_name, p_amount from purchase25").where(p_time_condition)
 purchase.createOrReplaceTempView("purchase")
 
@@ -512,19 +512,19 @@ spark.sql("show tables")
 
 #### 5-4-1. 한 쪽의 성별('남' 혹은 '여')을 가진 목록을 출력하세요
 ```python
-whereCondition = ""
+whereCondition = "<성별을 구별하는 조건을 작성하세요>"
 spark.sql("select * from user").where(whereCondition)
 ```
 
 #### 5-4-2. 상품금액이 200만원을 초과하는 매출 목록을 출력하세요
 ```python
-selectClause = ""
+selectClause = "<금액을 필터하는 조건을 작성하세요>"
 spark.sql(selectClause)
 ```
 
 #### 5-4-3. GroupBy 구문을 이용하여 로그인, 로그아웃 횟수를 출력하세요
 ```python
-groupByClause=""
+groupByClause="<로그인/아웃 컬럼을 기준으로 집계하는 구문을 작성하세요>"
 spark.sql(groupByClause)
 ```
 <details><summary> 정답확인</summary>
@@ -549,7 +549,7 @@ spark.sql(groupByClause)
 
 ```python
 display(access)
-distinctAccessUser = "select ... as DAU from access"
+distinctAccessUser = "select <고객수 집계함수> as DAU from access"
 dau = spark.sql(distinctAccessUser)
 display(dau)
 ```
@@ -571,7 +571,7 @@ display(dau)
 
 ```python
 display(purchase)
-distinctPayingUser = ""
+distinctPayingUser = "<구매 고객수 집계함수>"
 pu = spark.sql(distinctPayingUser)
 display(pu)
 ```
@@ -593,7 +593,7 @@ display(pu)
 
 ```python
 display(purchase)
-sumOfDailyRevenue = ""
+sumOfDailyRevenue = "<일 별 구매금액 집계함수>"
 dr = spark.sql(sumOfDailyRevenue)
 display(dr)
 ```
@@ -618,7 +618,7 @@ v_dau = dau.collect()[0]["DAU"]
 v_pu = pu.collect()[0]["PU"]
 v_dr = dr.collect()[0]["DR"]
 
-print("ARPU : {}".format("..."))
+print("ARPU : {}".format(<유저당 매출 금액 계산식>))
 ```
 <details><summary> 정답확인</summary>
 
@@ -637,7 +637,7 @@ print("ARPU : {}".format("..."))
   - 출력형태 : number
 
 ```python
-print("ARPPU : {}".format("..."))
+print("ARPPU : {}".format(<구매유저 당 매출 금액 계산식>))
 ```
 <details><summary> 정답확인</summary>
 
@@ -684,7 +684,7 @@ print("ARPPU : {}".format("..."))
 * access 테이블로부터 `a_uid` 가 'login' 인 `a_uid` 값의 빈도수를 group by `a_uid` 집계를 통해 구하시오
 ```python
 access.printSchema()
-countOfAccess = ""
+countOfAccess = "select `a_uid`, <집계함수> from user <집계 구문>"
 accs = spark.sql(countOfAccess)
 display(accs)
 ```
@@ -708,7 +708,7 @@ display(accs)
 * purchase 테이블로 부터 `p_uid` 별 매출 횟수(count)와, 매출 금액의 합(sum)을 구하는 집계 쿼리를 생성 하시오
 ```python
 purchase.printSchema()
-sumOfCountAndAmount = ""
+sumOfCountAndAmount = "select `p_uid`, <빈도 집계함수>, <매출 집계함수> from purchase <집계조건>"
 amts = spark.sql(sumOfCountAndAmount)
 display(amts)
 ```
@@ -733,8 +733,8 @@ display(amts)
 ```python
 accs.printSchema()
 purchase.printSchema()
-joinCondition = ""
-joinHow = ""
+joinCondition = <고객과 매출 조인 조건>
+joinHow = "<조인 방식>"
 dim1 = accs.join(amts, joinCondition, joinHow)
 dim1.printSchema()
 display(dim1.orderBy(asc("a_uid")))
@@ -760,8 +760,8 @@ display(dim1.orderBy(asc("a_uid")))
 ```python
 dim1.printSchema()
 user.printSchema()
-joinCondition = ""
-joinHow = ""
+joinCondition = <디멘젼과 고객정보 조인 조건>
+joinHow = "<조인 방식>"
 dim2 = dim1.join(user, joinCondition, joinHow)
 dim2.printSchema()
 display(dim2.orderBy(asc("a_uid")))
@@ -787,7 +787,7 @@ display(dim2.orderBy(asc("a_uid")))
 ```python
 dim2.printSchema()
 dim3 = dim2.drop("p_uid", "u_id")
-fillDefaultValue = {}
+fillDefaultValue = {<기본값을 넣을 컬럼과 기본값 사전> }
 dim4 = dim3.na.fill(fillDefaultValue)
 dim4.printSchema()
 display(dim4.orderBy(asc("a_uid")))
@@ -815,7 +815,7 @@ dim4.printSchema()
 dim5 = (
     dim4
     .withColumnRenamed("a_uid", "d_uid")
-    ...
+    <컬럼 a_count 부터 u_gender 까지 d_ 로 시작하도록 컬럼명 변경>
     .drop("a_uid", "a_count", "p_amount", "p_count", "u_name", "u_gender")
     .select("d_uid", "d_name", "d_gender", "d_acount", "d_pamount", "d_pcount")
 )
