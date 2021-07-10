@@ -336,11 +336,7 @@ find notebooks -name '*.json'
 # terminal
 docker compose logs notebook | grep 8888
 ```
-<details><summary> 정답확인</summary>
-
 > 출력된  URL을 복사하여 `127.0.0.1:8888` 대신 개인 `<hostname>.aiffelbiz.co.kr:8888` 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
-
-</details>
 <br>
 
 
