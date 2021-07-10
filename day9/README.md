@@ -1,9 +1,9 @@
-# 9일차. LGDE.com 일별 지표생성 실습 (1일차)
-> 가상의 웹 쇼핑몰 LGDE.com 접속정보, 매출 및 고객정보를 통해 각종 지표를 생성하는 실습을 수행합니다
+# 9일차. LGDE.com 일별 지표생성 실습 (테이블/파일 수집)
+> 가상의 웹 쇼핑몰 LGDE.com 주요 지표를 생성하기 위한, 접속정보, 매출 및 고객정보 등의 데이터를 수집합니다.
 
 
-## 1. 노트북 기동
-> 원격 터미널에 접속하여 관련 코드를 최신 버전으로 내려받고, 실습을 위한 도커 컨테이너를 기동합니다
+## 1. 코드 최신버전 업데이트 및 컨테이너 정리
+> 원격 터미널에 접속하여 관련 코드를 최신 버전으로 내려받고, 과거에 실행된 컨테이너가 없는지 확인하고 종료합니다
 
 ### 1-1. 최신 소스를 내려 받습니다
 ```bash
@@ -12,14 +12,20 @@ cd /home/ubuntu/work/data-engineer-intermediate-training
 git pull
 ```
 
-### 1-2. 스파크 워크스페이스로 이동하여 도커를 기동합니다
+### 1-2. 현재 기동되어 있는 도커 컨테이너를 확인하고, 종료합니다
+
+#### 1-2-1. 현재 기동된 컨테이너를 확인합니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training/day9
-docker compose up -d
-docker compose logs notebook | grep 8888
+docker ps -a
 ```
-> 출력된  URL을 복사하여 `127.0.0.1` 대신 개인 hostname 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
+
+#### 1-2-2. 기동된 컨테이너가 있다면 강제 종료합니다
+```
+# terminal 
+docker rm -f `docker ps -aq`
+```
+> 다시 `docker ps -a` 명령으로 결과가 없다면 모든 컨테이너가 종료되었다고 보시면 됩니다
 <br>
 
 
@@ -178,7 +184,13 @@ docker compose exec fluentd bash
 ask rm -rf /tmp/source/access.csv /tmp/source/access.pos /tmp/target/\$\{tag\}/ /tmp/target/access/
 ```
 
-#### 3-1-4. 수집 에이전트인 플루언트디를 기동시킵니다
+#### 3-1-4. 비어있는 이용자 접속로그를 생성합니다
+```bash
+# docker
+ask touch /tmp/source/access.csv
+```
+
+#### 3-1-5. 수집 에이전트인 플루언트디를 기동시킵니다
 ```bash
 # docker
 ask fluentd -c /etc/fluentd/fluent.tail
@@ -244,38 +256,51 @@ ask fluentd -c /etc/fluentd/fluent.tail
 </p>
 </details>
 
-#### 3-1-5. 새로운 `원격 터미널`을 접속합니다
+
+### 3-2. 또 다른 `원격 터미널` 접속 후, 플로언트디 컨테이너에 접속합니다
+> 기존의 터미널에서는 로그를 수집하는 에이전트가 데몬으로 항상 동작하고 있기 때문에, 별도의 터미널에서 실제 애플리케이션이 동작하는 것을 시뮬레이션 하기 위해 별도의 터미널로 접속하여 테스트를 합니다
+
+#### 3-2-1. 새로운 `원격 터미널`을 접속합니다
 ```bash
 # terminal
 docker compose exec fluentd bash
 ```
 
-#### 3-1-6. 비어있는 이용자 접속로그를 생성합니다
-```bash
-# docker
-ask touch /tmp/source/access.csv
-```
-
-#### 3-1-6. 실제 로그가 쌓이는 것 처럼 access.csv 파일에 임의의 로그를 redirect 하여 로그를 append 합니다
+#### 3-2-2. 실제 로그가 쌓이는 것 처럼 access.csv 파일에 임의의 로그를 redirect 하여 로그를 append 합니다
 ```bash
 # docker
 cat /etc/fluentd/access.csv >> /tmp/source/access.csv
 ```
 
-#### 3-1-7. 수집된 로그가 정상적인 JSON 파일인지 확인합니다
+#### 3-2-3. 수집된 로그가 정상적인 JSON 파일인지 확인합니다
 ```bash
 # docker
 tree -L2 /tmp/target
 find /tmp/target -name '*.json' | head
 ```
 
-> 수집된 파일의 라인 수와, 원본 로그의 라인 수가 일치한다면 정상적으로 수집되었다고 볼 수 있습니다
+#### 3-2-4. 원본 로그와, 최종 수집된 로그의 레코드 수가 같은지 확인합니다
 ```bash
+# docker
 cat `find /tmp/target -name '*.json'` | wc -l
 wc -l /tmp/source/access.csv
 ```
 
+> 수집된 파일의 라인 수와, 원본 로그의 라인 수가 일치한다면 정상적으로 수집되었다고 볼 수 있으며, <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 JSON 파일이 확인 되었다면 웹 로그 수집에 성공한 것입니다
+```bash
+# terminal
+find notebooks -name '*.json'
+```
+<br>
 
-## 4. 지표 변환 실습
 
+## 4. 지표 생성을 위한 노트북 컨테이너 기동
 
+> 본 장에서 수집한 데이터를 활용하여 데이터 변환 및 지표 생성작업을 위하여 주피터 노트북을 열어둡니다
+
+### 4-1. 노트북 주소를 확인하고, 크롬 브라우저로 접속합니다
+```bash
+docker compose logs notebook | grep 8888
+```
+> 출력된  URL을 복사하여 `127.0.0.1` 대신 개인 hostname 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
+<br>

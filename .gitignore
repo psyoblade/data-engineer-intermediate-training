@@ -8,6 +8,11 @@ namenode/
 nodes/
 logs/
 target/
+Untitled.ipynb
+access/
+purchase/
+user/
+tmp/
 
 # Created by https://www.toptal.com/developers/gitignore/api/git
 # Edit at https://www.toptal.com/developers/gitignore?templates=git
