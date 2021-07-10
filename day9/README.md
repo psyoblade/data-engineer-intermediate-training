@@ -421,8 +421,8 @@ p_time_condition = ""
 purchase = spark.sql("select from_unixtime(p_time) as p_time, p_uid, p_id, p_name, p_amount from purchase25").where(p_time_condition)
 purchase.createOrReplaceTempView("purchase")
 
-accesslog = spark.sql("select a_id, a_tag, a_timestamp, a_uid from access25")
-accesslog.createOrReplaceTempView("accesslog")
+access = spark.sql("select a_id, a_tag, a_timestamp, a_uid from access25")
+access.createOrReplaceTempView("access")
 
 spark.sql("show tables")
 ```
@@ -444,10 +444,10 @@ spark.sql("select * from purchase where ...")
 
 #### 5-4-3. GroupBy 구문을 이용하여 로그인, 로그아웃 횟수를 출력하세요
 ```python
-spark.sql("")
+spark.sql("select a_id, count(1) from access ...") 
 ```
 
-<br> 위에서부터 각각 "남:3,여:2", "3개", "login:7,logout:5" 이 나오면 정답입니다
+<br> 위에서부터 각각 "남:3, 여:2", "3개", "login:7, logout:5" 이 나오면 정답입니다
 
 
 ## 6. 기본 지표 생성
@@ -456,14 +456,86 @@ spark.sql("")
 
 ### 6-1. DAU (Daily Activer User) 지표를 생성하세요
 
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 지정한 일자의 접속한 유저 수 <kbd>count(distinct `a_uid`)</kbd>
+  - 지표산식 : 지정한 일자의 접속 테이블에 로그(로그인 혹은 로그아웃)가 한 번 이상 발생한 이용자의 빈도수
+  - 입력형태 : access 테이블
+  - 출력형태 : number (컬럼명: DAU)
+
+```python
+display(access)
+distinctAccessUser = "select ... as DAU from access"
+dau = spark.sql(distinctAccessUser)
+display(dau)
+```
+> "DAU : 5"가 나오면 정답입니다 
+<br>
+
 ### 6-2. DPU (Daily Paying User) 지표를 생성하세요
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 지정한 일자의 구매 유저 수 <kbd>count(distinct `p_uid`)</kbd>
+  - 지표산식 : 지정한 일자의 구매 테이블에 한 번이라도 구매가 발생한 이용자의 빈도수
+  - 입력형태 : purchase 테이블
+  - 출력형태 : number (컬럼명: PU)
+
+```python
+display(purchase)
+distinctPayingUser = ""
+pu = spark.sql(distinctPayingUser)
+display(pu)
+```
+> "PU : 4"가 나오면 정답입니다
+<br>
 
 ### 6-3. DR (Daily Revenue) 지표를 생성하세요
 
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 지정한 일자에 발생한 총 매출 금액 <kbd>sum(`p_amount`)</kbd>
+  - 지표산식 : 지정한 일자의 구매 테이블에 저장된 전체 매출 금액의 합
+  - 입력형태 : access 테이블
+  - 출력형태 : number (컬럼명: DR)
+
+```python
+display(purchase)
+sumOfDailyRevenue = ""
+dr = spark.sql(sumOfDailyRevenue)
+display(dr)
+```
+> "DR : 12200000" 이 나오면 정답입니다
+<br> 
+
 ### 6-4. ARPU (Average Revenue Per User) 지표를 생성하세요
-j
+
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 유저 당 평균 발생 매출 금액
+  - 지표산식 : 총 매출 / 전체 유저 수 = DR / DAU
+  - 입력형태 : Daily Revenue, Daily Active User
+  - 출력형태 : number (문자열: ARPU )
+
+```python
+v_dau = dau.collect()[0]["DAU"]
+v_pu = pu.collect()[0]["PU"]
+v_dr = dr.collect()[0]["DR"]
+
+print("ARPU : {}".format(...))
+```
+> "ARPU : 2440000.0" 가 나오면 정답입니다
+<br>
+
 ### 6-5. ARPPU (Average Revenue Per Paying User) 지표를 생성하세요
 
+* 아래의 조건이 만족하는 코드를 작성하세요
+  - 지표정의 : 유저 당 평균 발생 매출 금액
+  - 지표산식 : 총 매출 / 전체 유저 수 = DR / PU
+  - 입력형태 : Daily Revenue, Daily Paying User
+  - 출력형태 : number
+
+```python
+print("ARPPU : {}".format(...))
+```
+> "ARPPU : 3050000.0" 가 나오면 정답입니다
+<br>
 
 
 ## 7. 고급 지표 생성
