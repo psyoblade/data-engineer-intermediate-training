@@ -42,7 +42,7 @@ services:
       - ./notebooks:/tmp/target
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-fluentd:1.1
+    image: psyoblade/data-engineer-fluentd:2.0
     user: root
     tty: true
     ports:
