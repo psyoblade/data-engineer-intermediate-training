@@ -90,6 +90,8 @@ ask sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --userna
 basename="user"
 basedate=""
 ```
+
+#### 2-5-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
 ```bash
 ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${database} \
 --username ${username} --password ${password} --table ${basename}_${basedate} \
@@ -107,6 +109,8 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${databa
 basename="purchase"
 basedate=""
 ```
+
+#### 2-6-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
 ```bash
 ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$database \
 --username ${username} --password ${password} --table ${basename}_${basedate} \
@@ -116,30 +120,33 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$databas
 ### 2-7. 모든 데이터가 정상적으로 수집 되었는지 검증합니다
 > parquet-tools 는 파케이 파일의 스키마(schema), 일부내용(head) 및 전체내용(cat)을 확인할 수 있는 커맨드라인 도구입니다. 연관된 라이브러리가 존재하므로 hadoop 스크립를 통해서 수행하면 편리합니다
 
-* 고객 및 매출 테이블 수집이 잘 되었는지 확인 후, 파일목록을 확인합니다
+#### 2-7-1. 고객 및 매출 테이블 수집이 잘 되었는지 확인 후, 파일목록을 확인합니다
 ```bash
 # docker
 tree /tmp/target/user
 tree /tmp/target/purchase
 find /tmp/target -name "*.parquet"
 ```
-* 출력된 파일 경로를 복사하여 경로르 변수명에 할당합니다
+#### 2-7-2. 출력된 파일 경로를 복사하여 경로르 변수명에 할당합니다
 ```bash
 # docker
 filename=""
 ```
-* 대상 파일경로 전체를 복사하여 아래와 같이 스키마를 확인합니다
+
+#### 2-7-3. 대상 파일경로 전체를 복사하여 아래와 같이 스키마를 확인합니다
 ```bash
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 ```
-* 파일 내용의 데이터가 정상적인지 확인합니다
+
+#### 2-7-4. 파일 내용의 데이터가 정상적인지 확인합니다
 ```bash
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar cat file://${filename}
 ```
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 모든 파일이 모두 수집되었다면 테이블 수집에 성공한 것입니다
-* `원격 터미널` 장비에도 잘 저장 되어 있는지 확인합니다
+
+#### 2-7-5. `원격 터미널` 장비에도 잘 저장 되어 있는지 확인합니다
 ```bash
 # terminal
 find notebooks -name '*.parquet'
@@ -150,6 +157,7 @@ find notebooks -name '*.parquet'
 ## 3. 파일 수집 실습
 
 ### 3-1. *원격 터미널에 접속* 후, *플루언트디 컨테이너에 접속*합니다
+
 #### 3-1-1. 서버를 기동합니다 (컨테이너가 종료된 경우)
 ```bash
 # terminal
@@ -157,22 +165,25 @@ cd /home/ubuntu/work/data-engineer-intermediate-training/day9
 docker compose up -d
 docker compose ps
 ```
+
 #### 3-1-2. 플루언트디 컨테이너에 접속합니다
 ```bash
 # docker
 docker compose exec fluentd bash
 ```
+
 #### 3-1-3. 이전 작업내역을 모두 초기화 하고 다시 수집해야 한다면 아래와 같이 정리합니다
 ```bash
 # docker
 ask rm -rf /tmp/source/access.csv /tmp/source/access.pos /tmp/target/\$\{tag\}/ /tmp/target/access/
 ```
+
 #### 3-1-4. 수집 에이전트인 플루언트디를 기동시킵니다
 ```bash
 # docker
-ask fluentd -c /etc/fluentd/fluentd.tail
+ask fluentd -c /etc/fluentd/fluent.tail
 ```
-<details> <summary> **플루언트디 설정을 확인합니다** </summary>
+<details> <summary> 플루언트디 설정을 확인합니다 </summary>
 <p>
 
 ```bash
@@ -232,15 +243,36 @@ ask fluentd -c /etc/fluentd/fluentd.tail
 
 </p>
 </details>
-#### 3-1-5. 비어있는 이용자 접속로그를 생성합니다
+
+#### 3-1-5. 새로운 `원격 터미널`을 접속합니다
+```bash
+# terminal
+docker compose exec fluentd bash
+```
+
+#### 3-1-6. 비어있는 이용자 접속로그를 생성합니다
 ```bash
 # docker
 ask touch /tmp/source/access.csv
 ```
+
 #### 3-1-6. 실제 로그가 쌓이는 것 처럼 access.csv 파일에 임의의 로그를 redirect 하여 로그를 append 합니다
 ```bash
 # docker
-ask cat /etc/fluentd/access.csv >> /tmp/source/access.csv
+cat /etc/fluentd/access.csv >> /tmp/source/access.csv
+```
+
+#### 3-1-7. 수집된 로그가 정상적인 JSON 파일인지 확인합니다
+```bash
+# docker
+tree -L2 /tmp/target
+find /tmp/target -name '*.json' | head
+```
+
+> 수집된 파일의 라인 수와, 원본 로그의 라인 수가 일치한다면 정상적으로 수집되었다고 볼 수 있습니다
+```bash
+cat `find /tmp/target -name '*.json'` | wc -l
+wc -l /tmp/source/access.csv
 ```
 
 
