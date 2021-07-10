@@ -37,24 +37,28 @@ docker compose exec sqoop bash
 hostname="mysql"
 username="sqoop"
 password="sqoop"
-sqoop list-databases --connect jdbc:mysql://$hostname:3306 --username $username --password $password
+sqoop list-databases --connect jdbc:mysql://${hostname}:3306 --username ${username} --password ${password}
 ```
 
 ### 2-3. 수집 대상 테이블 목록을 확인합니다
 * [컨테이너] MySQL 서버의 특정 데이터베이스에 존재하는 테이블 목록을 확인합니다
-  - database : testdb
 ```bash
-sqoop list-tables --connect jdbc:mysql://<hostname>:3306/<database> --username <username> --password <password>
+database="testdb"
+sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password}
 ```
 
 ### 2-4. 일자별 이용자 테이블을 수집합니다
 * [컨테이너] 이용자 테이블 10/25~10/26 이틀치를 아래의 경로에 각각 수집하되, 파케이 포맷으로 저장 해야하며, 대상경로가 존재하면 삭제 후 수집 합니다
-  - table-name : user\_20201025, user\_20201026
-  - target-dir : file:///tmp/target/user/20201025, file:///tmp/target/user/20201026
+  - table\_name : user\_20201025, user\_20201026
+  - target\_dir : file:///tmp/target/user/20201025, file:///tmp/target/user/20201026
   - --as-parquetfile : 옵션을 통해 파케이 포맷으로 저장합니다
   - --delete-target-dir	: 옵션을 통해 대상 경로가 존재하면 삭제 후 수집합니다
 ```bash
-sqoop import --connect jdbc:mysql://<hostname>:3306/<database> --username <username> --password <password> --table <table-name> --target-dir <target-dir> --as-parquetfile --delete-target-dir	
+basedate=""
+basename="user"
+table_name="${basename}_${basedate}"
+target_dir="file:///tmp/target/${basename}/${basedate}"
+sqoop import --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password} --table ${table_name} --target-dir ${target_dir} --as-parquetfile --delete-target-dir	
 ```
 
 ### 2-5. 일자별 매출 테이블을 수집합니다
@@ -64,7 +68,11 @@ sqoop import --connect jdbc:mysql://<hostname>:3306/<database> --username <usern
   - --as-parquetfile : 옵션을 통해 파케이 포맷으로 저장합니다
   - --delete-target-dir	: 옵션을 통해 대상 경로가 존재하면 삭제 후 수집합니다
 ```bash
-sqoop import --connect jdbc:mysql://<hostname>:3306/<database> --username <username> --password <password> --table <table-name> --target-dir <target-dir> --as-parquetfile --delete-target-dir	
+basedate=""
+basename="purchase"
+table_name="${basename}_${basedate}"
+target_dir="file:///tmp/target/purchase/$basedate"
+sqoop import --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password} --table ${table_name} --target-dir ${target_dir} --as-parquetfile --delete-target-dir	
 ```
 
 
