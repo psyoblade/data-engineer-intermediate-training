@@ -399,10 +399,6 @@ docker compose logs notebook | grep 8888
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-# 노트북에서 테이블 형태로 데이터 프레임 출력을 위한 설정을 합니다
-from IPython.display import display, display_pretty, clear_output, JSON
-spark.conf.set("spark.sql.repl.eagerEval.enabled", True) # display enabled
-spark.conf.set("spark.sql.repl.eagerEval.truncate", 100) # display output columns size
 
 spark = (
     SparkSession
@@ -411,6 +407,11 @@ spark = (
     .config("spark.sql.session.timeZone", "Asia/Seoul")
     .getOrCreate()
 )
+
+# 노트북에서 테이블 형태로 데이터 프레임 출력을 위한 설정을 합니다
+from IPython.display import display, display_pretty, clear_output, JSON
+spark.conf.set("spark.sql.repl.eagerEval.enabled", True) # display enabled
+spark.conf.set("spark.sql.repl.eagerEval.truncate", 100) # display output columns size
 spark
 ```
 <details><summary> 정답확인</summary>
@@ -529,7 +530,7 @@ spark.sql(groupByClause)
 ```
 <details><summary> 정답확인</summary>
 
-> 위에서부터 각각 "남:3, 여:2", "3개", "login:7, logout:5" 이 나오면 정답입니다
+> 위에서부터 각각 "남:3, 여:2", "2개", "login:7, logout:5" 이 나오면 정답입니다
 
 </details>
 <br>
@@ -549,9 +550,9 @@ spark.sql(groupByClause)
 
 ```python
 display(access)
-distinctAccessUser = "select <고객수 집계함수> as DAU from access"
-dau = spark.sql(distinctAccessUser)
-display(dau)
+# distinctAccessUser = "select <고객수 집계함수> as DAU from access"
+# dau = spark.sql(distinctAccessUser)
+# display(dau)
 ```
 <details><summary> 정답확인</summary>
 
@@ -571,9 +572,9 @@ display(dau)
 
 ```python
 display(purchase)
-distinctPayingUser = "<구매 고객수 집계함수>"
-pu = spark.sql(distinctPayingUser)
-display(pu)
+# distinctPayingUser = "<구매 고객수 집계함수>"
+# pu = spark.sql(distinctPayingUser)
+# display(pu)
 ```
 <details><summary> 정답확인</summary>
 
@@ -593,9 +594,9 @@ display(pu)
 
 ```python
 display(purchase)
-sumOfDailyRevenue = "<일 별 구매금액 집계함수>"
-dr = spark.sql(sumOfDailyRevenue)
-display(dr)
+# sumOfDailyRevenue = "<일 별 구매금액 집계함수>"
+# dr = spark.sql(sumOfDailyRevenue)
+# display(dr)
 ```
 <details><summary> 정답확인</summary>
 
@@ -618,7 +619,7 @@ v_dau = dau.collect()[0]["DAU"]
 v_pu = pu.collect()[0]["PU"]
 v_dr = dr.collect()[0]["DR"]
 
-print("ARPU : {}".format(<유저당 매출 금액 계산식>))
+# print("ARPU : {}".format(<유저당 매출 금액 계산식>))
 ```
 <details><summary> 정답확인</summary>
 
@@ -637,7 +638,7 @@ print("ARPU : {}".format(<유저당 매출 금액 계산식>))
   - 출력형태 : number
 
 ```python
-print("ARPPU : {}".format(<구매유저 당 매출 금액 계산식>))
+# print("ARPPU : {}".format(<구매유저 당 매출 금액 계산식>))
 ```
 <details><summary> 정답확인</summary>
 
@@ -685,9 +686,9 @@ print("ARPPU : {}".format(<구매유저 당 매출 금액 계산식>))
 * access 테이블로부터 `a_uid` 가 'login' 인 `a_uid` 값의 빈도수를 group by `a_uid` 집계를 통해 구하시오
 ```python
 access.printSchema()
-countOfAccess = "select `a_uid`, <집계함수> from user <집계 구문>"
-accs = spark.sql(countOfAccess)
-display(accs)
+# countOfAccess = "select `a_uid`, <집계함수> from user <집계 구문>"
+# accs = spark.sql(countOfAccess)
+# display(accs)
 ```
 <details><summary> 정답확인</summary>
 
@@ -709,9 +710,9 @@ display(accs)
 * purchase 테이블로 부터 `p_uid` 별 매출 횟수(count)와, 매출 금액의 합(sum)을 구하는 집계 쿼리를 생성 하시오
 ```python
 purchase.printSchema()
-sumOfCountAndAmount = "select `p_uid`, <빈도 집계함수>, <매출 집계함수> from purchase <집계조건>"
-amts = spark.sql(sumOfCountAndAmount)
-display(amts)
+# sumOfCountAndAmount = "select `p_uid`, <빈도 집계함수>, <매출 집계함수> from purchase <집계조건>"
+# amts = spark.sql(sumOfCountAndAmount)
+# display(amts)
 ```
 <details><summary> 정답확인</summary>
 
@@ -734,11 +735,11 @@ display(amts)
 ```python
 accs.printSchema()
 purchase.printSchema()
-joinCondition = <고객과 매출 조인 조건>
-joinHow = "<조인 방식>"
-dim1 = accs.join(amts, joinCondition, joinHow)
-dim1.printSchema()
-display(dim1.orderBy(asc("a_uid")))
+# joinCondition = <고객과 매출 조인 조건>
+# joinHow = "<조인 방식>"
+# dim1 = accs.join(amts, joinCondition, joinHow)
+# dim1.printSchema()
+# display(dim1.orderBy(asc("a_uid")))
 ```
 <details><summary> 정답확인</summary>
 
@@ -761,11 +762,11 @@ display(dim1.orderBy(asc("a_uid")))
 ```python
 dim1.printSchema()
 user.printSchema()
-joinCondition = <디멘젼과 고객정보 조인 조건>
-joinHow = "<조인 방식>"
-dim2 = dim1.join(user, joinCondition, joinHow)
-dim2.printSchema()
-display(dim2.orderBy(asc("a_uid")))
+# joinCondition = <디멘젼과 고객정보 조인 조건>
+# joinHow = "<조인 방식>"
+# dim2 = dim1.join(user, joinCondition, joinHow)
+# dim2.printSchema()
+# display(dim2.orderBy(asc("a_uid")))
 ```
 <details><summary> 정답확인</summary>
 
@@ -788,10 +789,10 @@ display(dim2.orderBy(asc("a_uid")))
 ```python
 dim2.printSchema()
 dim3 = dim2.drop("p_uid", "u_id")
-fillDefaultValue = {<기본값을 넣을 컬럼과 기본값 사전> }
-dim4 = dim3.na.fill(fillDefaultValue)
-dim4.printSchema()
-display(dim4.orderBy(asc("a_uid")))
+# fillDefaultValue = {<기본값을 넣을 컬럼과 기본값 사전> }
+# dim4 = dim3.na.fill(fillDefaultValue)
+# dim4.printSchema()
+# display(dim4.orderBy(asc("a_uid")))
 ```
 <details><summary> 정답확인</summary>
 
@@ -813,13 +814,13 @@ display(dim4.orderBy(asc("a_uid")))
 * 7-6 에서 생성한 dim4 의 모든 컬럼이 `d_`로 시작하도록 Rename 하여 정리합니다
 ```python
 dim4.printSchema()
-dim5 = (
-    dim4
-    .withColumnRenamed("a_uid", "d_uid")
-    <컬럼 a_count 부터 u_gender 까지 d_ 로 시작하도록 컬럼명 변경>
-    .drop("a_uid", "a_count", "p_amount", "p_count", "u_name", "u_gender")
-    .select("d_uid", "d_name", "d_gender", "d_acount", "d_pamount", "d_pcount")
-)
+# dim5 = (
+#     dim4
+#     .withColumnRenamed("a_uid", "d_uid")
+#     <컬럼 a_count 부터 u_gender 까지 d_ 로 시작하도록 컬럼명 변경>
+#    .drop("a_uid", "a_count", "p_amount", "p_count", "u_name", "u_gender")
+#    .select("d_uid", "d_name", "d_gender", "d_acount", "d_pamount", "d_pcount")
+# )
 display(dim5.orderBy(asc("d_uid")))
 ```
 <details><summary> 정답확인</summary>
@@ -841,21 +842,22 @@ display(dim5.orderBy(asc("d_uid")))
 
 * selectFirstPurchaseTime 는 하루에 여러번 구매가 있을 수 있으므로 가장 먼저 구매한 일시를 min 함수를 `p_time` 의 최소값을 구합니다
 ```python
-selectFirstPurchaseTime = "select p_uid, <최소값함수> as p_time from purchase <집계구문>"
-
-first_purchase = spark.sql(selectFirstPurchaseTime)
-dim6 = dim5.withColumn("d_first_purchase", lit(None))
-
-exprFirstPurchase = expr("case when d_first_purchase is null then p_time else d_first_purchase end")
-
-dim7 = dim6.join(first_purchase, dim5.d_uid == first_purchase.p_uid, "left_outer") \
-.withColumn("first_purchase", exprFirstPurchase) \
-.drop("d_first_purchase", "p_uid", "p_time") \
-.withColumnRenamed("first_purchase", "d_first_purchase")
-
-dimension = dim7.orderBy(asc("d_uid"))
-dimension.printSchema()
-display(dimension)
+purchase.printSchema()
+# selectFirstPurchaseTime = "select p_uid, <최소값함수> as p_time from purchase <집계구문>"
+# 
+# first_purchase = spark.sql(selectFirstPurchaseTime)
+# dim6 = dim5.withColumn("d_first_purchase", lit(None))
+# 
+# exprFirstPurchase = expr("case when d_first_purchase is null then p_time else d_first_purchase end")
+# 
+# dim7 = dim6.join(first_purchase, dim5.d_uid == first_purchase.p_uid, "left_outer") \
+# .withColumn("first_purchase", exprFirstPurchase) \
+# .drop("d_first_purchase", "p_uid", "p_time") \
+# .withColumnRenamed("first_purchase", "d_first_purchase")
+#
+# dimension = dim7.orderBy(asc("d_uid"))
+# dimension.printSchema()
+# display(dimension)
 ```
 <details><summary> 정답확인</summary>
 
@@ -873,7 +875,8 @@ display(dimension)
   - 저장포맷 : 파케이  <kbd>.parquet("dimension/dt=20201025")</kbd>
 
 ```python
-dimension.<디멘젼을 저장합니다>
+dimension.printSchema()
+# dimension.<디멘젼을 저장합니다>
 ```
 <details><summary> 정답확인</summary>
 
@@ -890,9 +893,9 @@ dimension.<디멘젼을 저장합니다>
   - 저장포맷 : 파케이  <kbd>.parquet("dimension/dt=20201025")</kbd>
 
 ```python
-newDimension = <디멘젼을 읽어옵니다>
-newDimension.printSchema()
-display(newDimension)
+# newDimension = <디멘젼을 읽어옵니다>
+# newDimension.printSchema()
+# display(newDimension)
 ```
 <details><summary> 정답확인</summary>
 
