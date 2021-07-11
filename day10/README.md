@@ -1,12 +1,12 @@
-# 9일차. LGDE.com 일별 지표생성 실습
-> 가상의 웹 쇼핑몰 LGDE.com 주요 지표를 생성하기 위한, 접속정보, 매출 및 고객정보 등의 데이터를 수집하여 기본 지표를 생성합니다
+# 10일차. LGDE.com 일별 지표생성 실습
+> 가상의 웹 쇼핑몰 LGDE.com 2일차에 전일자 데이터를 활용하여 누적된 데이터를 저장 관리하고, 운영 개발하는 과정을 학습합니다
 
 - 목차
   * [1. 최신버전 업데이트](#1-최신버전-업데이트)
   * [2. 테이블 수집 실습](#2-테이블-수집-실습)
   * [3. 파일 수집 실습](#3-파일-수집-실습)
   * [4. 노트북 컨테이너 기동](#4-노트북-컨테이너-기동)
-  * [5. 수집된 데이터 탐색](#5-수집된-데이터-탐색)
+  * [5. 처리된 데이터 탐색](#5-처리된-데이터-탐색)
   * [6. 기본 지표 생성](#6-기본-지표-생성)
   * [7. 고급 지표 생성](#7-고급-지표-생성)
 
@@ -54,89 +54,38 @@ sleep 5
 docker compose exec sqoop bash
 ```
 
-### 2-2. 실습명령어 검증을 위한 ask 를 리뷰하고 실습합니다
-```bash
-#!/bin/bash
-while true; do
-    echo
-    echo "$ $@"
-    echo
-    read -p "위 명령을 실행 하시겠습니까? [y/n] " yn
-    case $yn in
-        [Yy]* ) $@; break;;
-        [Nn]* ) exit;;
-        * ) echo "[y/n] 을 입력해 주세요.";;
-    esac
-done
-```
-```bash
-# docker
-ask echo hello world
-```
-<details><summary> 정답확인</summary>
-
-> "hello world" 가 출력되면 정상입니다
-
-</details>
-<br>
-
-
-### 2-3. 수집 대상 *데이터베이스 목록*을 확인합니다
+### 2-2. 수집 대상 테이블을 조회해 봅니다
 ```bash
 # docker
 hostname="mysql"
 username="sqoop"
 password="sqoop"
-```
-```bash
-# docker
-ask sqoop list-databases --connect jdbc:mysql://${hostname}:3306 --username ${username} --password ${password}
-```
-<details><summary> 정답확인</summary>
-
-> 아래의 총 2개의 데이터베이스가 출력되면 정답입니다 
-`information_schema`
-`testdb`
-
-</details>
-<br>
-
-
-### 2-4. 수집 대상 *테이블 목록*을 확인합니다
-```bash
-# docker
 database="testdb"
 ```
 ```bash
 # docker
-ask sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --username ${username} --password ${password}
+ask sqoop eval --connect jdbc:mysql://mysql:3306/${database} --username ${username} --password ${password} -e "select * from user_20201026"
 ```
 <details><summary> 정답확인</summary>
 
-> 아래의 총 5개의 테이블이 출력되면 정답입니다
-`purchase_20201025`
-`purchase_20201026`
-`seoul_popular_trip`
-`user_20201025`
-`user_20201026`
+> 아래의 총 #개의 레코드가 출력되면 성공입니다
 
 </details>
 <br>
 
-
-### 2-5. *일별 이용자 테이블*을 수집합니다
-* 기간 : 2020/10/25
+### 2-3. *일별 이용자 테이블*을 수집합니다
+* 기간 : 2020/10/26
 * 저장 : 파케이 포맷 <kbd>--as-parquetfile</kbd>
 * 기타 : 경로가 존재하면 삭제 후 수집 <kbd>--delete-target-dir</kbd>
-* 소스 : <kbd>user\_20201025</kbd>
-* 타겟 : <kbd>file:///tmp/target/user/20201025</kbd>
+* 소스 : <kbd>user\_20201026</kbd>
+* 타겟 : <kbd>file:///tmp/target/user/20201026</kbd>
 ```bash
 # docker
 basename="user"
 basedate=""
 ```
 
-#### 2-5-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
+#### 2-3-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
 ```bash
 # docker
 ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${database} \
@@ -151,19 +100,19 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${databa
 <br>
 
 
-### 2-6. *일별 매출 테이블*을 수집합니다
-* 기간 : 2020/10/25
+### 2-4. *일별 매출 테이블*을 수집합니다
+* 기간 : 2020/10/26
 * 저장 : 파케이 포맷 <kbd>--as-parquetfile</kbd>
 * 기타 : 경로가 존재하면 삭제 후 수집 <kbd>--delete-target-dir</kbd>
-* 소스 : <kbd>purchase\_20201025</kbd>
-* 타겟 : <kbd>file:///tmp/target/purchase/20201025</kbd>
+* 소스 : <kbd>purchase\_20201026</kbd>
+* 타겟 : <kbd>file:///tmp/target/purchase/20201026</kbd>
 ```bash
 # docker
 basename="purchase"
 basedate=""
 ```
 
-#### 2-6-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
+#### 2-4-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
 ```bash
 # docker
 ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$database \
@@ -178,36 +127,33 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$databas
 <br>
 
 
-### 2-7. 모든 데이터가 정상적으로 수집 되었는지 검증합니다
+### 2-5. 모든 데이터가 정상적으로 수집 되었는지 검증합니다
 > parquet-tools 는 파케이 파일의 스키마(schema), 일부내용(head) 및 전체내용(cat)을 확인할 수 있는 커맨드라인 도구입니다. 연관된 라이브러리가 존재하므로 hadoop 스크립를 통해서 수행하면 편리합니다
 
-#### 2-7-1. 고객 및 매출 테이블 수집이 잘 되었는지 확인 후, 파일목록을 확인합니다
+#### 2-5-1. 고객 및 매출 테이블 수집이 잘 되었는지 확인 후, 파일목록을 확인합니다
 ```bash
 # docker
 tree /tmp/target/user
 tree /tmp/target/purchase
 find /tmp/target -name "*.parquet"
 ```
-#### 2-7-2. 출력된 파일 경로를 복사하여 경로르 변수명에 할당합니다
+#### 2-5-2. 출력된 파일 경로를 복사하여 경로르 변수명에 할당합니다
 ```bash
 # docker
 filename=""
 ```
 
-#### 2-7-3. 대상 파일경로 전체를 복사하여 아래와 같이 스키마를 확인합니다
+#### 2-5-3. 대상 파일경로 전체를 복사하여 아래와 같이 스키마를 확인합니다
 ```bash
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 ```
 <details><summary> 정답확인</summary>
 
-> 고객(user) 테이블의 경우 아래와 같은 출력이 나오면 성공입니다
+> 매출(purchase) 테이블의 경우 아래와 같은 출력이 나오면 성공입니다
 ```
-message user_20201025 {
-  optional int32 u_id;
-  optional binary u_name (UTF8);
-  optional binary u_gender (UTF8);
-  optional int32 u_signup;
+message purcahse_20201026 {
+...
 }
 ```
 
@@ -215,7 +161,7 @@ message user_20201025 {
 <br>
 
 
-#### 2-7-4. 파일 내용의 데이터가 정상적인지 확인합니다
+#### 2-5-4. 파일 내용의 데이터가 정상적인지 확인합니다
 ```bash
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar cat file://${filename}
@@ -228,7 +174,7 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar cat file://${filename}
 <br>
 
 
-#### 2-7-5. `원격 터미널` 장비에도 잘 저장 되어 있는지 확인합니다
+#### 2-5-5. `원격 터미널` 장비에도 잘 저장 되어 있는지 확인합니다
 ```bash
 # terminal
 find notebooks -name '*.parquet'
@@ -257,7 +203,7 @@ docker compose exec fluentd bash
 #### 3-1-3. 이전 작업내역을 모두 초기화 하고 다시 수집해야 한다면 아래와 같이 정리합니다
 ```bash
 # docker
-ask rm -rf /tmp/source/access.20201025.csv /tmp/source/access.pos /tmp/target/\$\{tag\}/ /tmp/target/access/20201025
+ask rm -rf /tmp/source/access.20201026.csv /tmp/source/access.pos /tmp/target/\$\{tag\}/ /tmp/target/access/20201026
 ```
 
 #### 3-1-4. 비어있는 이용자 접속로그를 생성합니다
@@ -271,66 +217,7 @@ ask touch /tmp/source/access.csv
 # docker
 ask fluentd -c /etc/fluentd/fluent.tail
 ```
-<details> <summary> 플루언트디 설정을 확인합니다 </summary>
-<p>
-
-```bash
-<source>
-    @type tail
-    @log_level info
-    path /tmp/source/access.csv
-    pos_file /tmp/source/access.pos
-    refresh_interval 5
-    multiline_flush_interval 5
-    rotate_wait 5
-    open_on_every_update true
-    emit_unmatched_lines true
-    read_from_head false
-    tag access
-    <parse>
-        @type csv
-        keys a_time,a_uid,a_id
-        time_type unixtime
-        time_key a_time
-        keep_time_key true
-        types a_time:time:unixtime,a_uid:integer,a_id:string
-    </parse>
-</source>
-
-<match access>
-    @type file
-    @log_level info
-    add_path_suffix true
-    path_suffix .json
-    path /tmp/target/${tag}/%Y%m%d/access.%Y%m%d.%H%M
-    <format>
-        @type json
-    </format>
-    <inject>
-        time_key a_timestamp
-        time_type string
-        timezone +0900
-        time_format %Y-%m-%d %H:%M:%S.%L
-        tag_key a_tag
-    </inject>
-    <buffer time,tag>
-        timekey 1m
-        timekey_use_utc false
-        timekey_wait 10s
-        timekey_zone +0900
-        flush_mode immediate
-        flush_thread_count 8
-    </buffer>
-</match>
-
-<match debug>
-    @type stdout
-    @log_level debug
-</match>
-```
-
-</p>
-</details>
+<br>
 
 
 ### 3-2. 또 다른 `원격 터미널` 접속 후, 플로언트디 컨테이너에 접속합니다
@@ -358,8 +245,8 @@ find /tmp/target -name '*.json' | head
 #### 3-2-4. 원본 로그와, 최종 수집된 로그의 레코드 수가 같은지 확인합니다
 ```bash
 # docker
-cat `find /tmp/target/20201025 -name '*.json'` | wc -l
-wc -l /tmp/source/access.20201025.csv
+cat `find /tmp/target/20201026 -name '*.json'` | wc -l
+wc -l /tmp/source/access.20201026.csv
 ```
 
 <details><summary> 정답확인</summary>
@@ -388,7 +275,7 @@ docker compose logs notebook | grep 8888
 > 출력된  URL을 복사하여 `127.0.0.1:8888` 대신 개인 `<hostname>.aiffelbiz.co.kr:8888` 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
 
 #### 4-1-2. 기 생성된 실습용 노트북을 엽니다
-* 좌측 메뉴에서 "data-engineer-lgde-day1.ipynb" 을 더블클릭합니다
+* 좌측 메뉴에서 "data-engineer-lgde-day2.ipynb" 을 더블클릭합니다
 
 #### 4-1-3. 신규로 노트북을 만들고 싶은 경우
 * `Launcher` 탭에서 `Notebook - Python 3` 를 선택하고
@@ -437,9 +324,9 @@ spark
 > 파케이 포맷의 경우는 명시적인 스키마 정의가 되어 있지만, Json 포맷의 경우는 데이터의 값에 따라 달라질 수 있기 때문에 데이터를 읽어들일 때에 주의해야 합니다
 
 * 데이터프레임 변수명 및 경로는 아래와 같습니다
-  - 2020/10/25 일자 고객 (parquet) : <kbd>user25</kbd> <- <kbd>user/20201025</kbd> 
-  - 2020/10/25 일자 매출 (parquet) : <kbd>purchase25</kbd> <- <kbd>purchase/20201025</kbd> 
-  - 2020/10/25 일자 접속 (json) : <kbd>access25</kbd> <- <kbd>access/20201025</kbd> 
+  - 2020/10/26 일자 고객 (parquet) : <kbd>user26</kbd> <- <kbd>user/20201026</kbd> 
+  - 2020/10/26 일자 매출 (parquet) : <kbd>purchase26</kbd> <- <kbd>purchase/20201026</kbd> 
+  - 2020/10/26 일자 접속 (json) : <kbd>access26</kbd> <- <kbd>access/20201026</kbd> 
 
 * 아래의 제약조건을 만족 시켜야 합니다
   - 입력 포맷이 Json 인 경우는 json 명령어와 추정(infer) 옵션을 사용하세요 <kbd>spark.read.option("inferSchema", "true").json("access/20201024")</kbd> 
@@ -448,20 +335,20 @@ spark
 
 * 고객 정보 파일을 읽고, 스키마와 데이터 출력하기
 ```python
-user25 = spark.read.parquet("user/20201025")
-user25.printSchema()
-user25.show(truncate=False)
-display(user25)
+user26 = spark.read.parquet("user/20201026")
+user26.printSchema()
+user26.show(truncate=False)
+display(user26)
 ```
 
 * 매출 정보 파일을 읽고, 스키마와 데이터 출력하기
 ```python
-purchase25 = <매출 데이터 경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
+purchase26 = <매출 데이터 경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
 ```
 
 * 접속 정보 파일(json)을 읽고, 스키마와 데이터 출력하기
 ```python
-access25 = <접속 데이터 경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
+access26 = <접속 데이터 경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
 ```
 <details><summary> 정답확인</summary>
 
@@ -475,14 +362,14 @@ access25 = <접속 데이터 경로에서 읽어서 스키마와, 데이터를 �
 
 #### 5-2-1. 데이터프레임을 이용하여 임시테이블 생성하기
 ```python
-user25.createOrReplaceTempView("user25")
-purchase25.createOrReplaceTempView("purchase25")
-access25.createOrReplaceTempView("access25")
-spark.sql("show tables '*25'")
+user26.createOrReplaceTempView("user26")
+purchase26.createOrReplaceTempView("purchase26")
+access26.createOrReplaceTempView("access26")
+spark.sql("show tables '*26'")
 ```
 <details><summary> 정답확인</summary>
 
-> `show tables` 결과로 `user25`, `purchase25`, `access25` 3개 테이블이 출력되면 성공입니다
+> `show tables` 결과로 `user26`, `purchase26`, `access26` 3개 테이블이 출력되면 성공입니다
 
 </details>
 <br>
@@ -493,19 +380,19 @@ spark.sql("show tables '*25'")
 #### 5-3-1. 아래에 비어있는 조건을 채워서 올바른 코드를 작성하세요
 
 * 아래의 조건이 만족되어야 합니다
-  - 2020/10/25 에 등록(`u_signup`)된 유저만 포함될 것 <kbd>`u_signup` >= '20201025' and `u_signup` < '20201026'</kbd>
-  - 2020/10/25 에 발생한 매출(`p_time`)만 포함할 것 <kbd>`p_time` >= '2020-10-25 00:00:00' and `p_time` < '2020-10-26 00:00:00'</kbd>
+  - 2020/10/26 에 등록(`u_signup`)된 유저만 포함될 것 <kbd>`u_signup` >= '20201026' and `u_signup` < '20201026'</kbd>
+  - 2020/10/26 에 발생한 매출(`p_time`)만 포함할 것 <kbd>`p_time` >= '2020-10-26 00:00:00' and `p_time` < '2020-10-26 00:00:00'</kbd>
 
 ```python
-u_signup_condition = "<10월 25일자에 등록된 유저만 포함되는 조건을 작성합니다>"
-user = spark.sql("select u_id, u_name, u_gender from user25").where(u_signup_condition)
+u_signup_condition = "<10월 26일자에 등록된 유저만 포함되는 조건을 작성합니다>"
+user = spark.sql("select u_id, u_name, u_gender from user26").where(u_signup_condition)
 user.createOrReplaceTempView("user")
 
-p_time_condition = "<10월 25일자에 발생한 매출만 포함되는 조건을 작성합니다>"
-purchase = spark.sql("select from_unixtime(p_time) as p_time, p_uid, p_id, p_name, p_amount from purchase25").where(p_time_condition)
+p_time_condition = "<10월 26일자에 발생한 매출만 포함되는 조건을 작성합니다>"
+purchase = spark.sql("select from_unixtime(p_time) as p_time, p_uid, p_id, p_name, p_amount from purchase26").where(p_time_condition)
 purchase.createOrReplaceTempView("purchase")
 
-access = spark.sql("select a_id, a_tag, a_timestamp, a_uid from access25")
+access = spark.sql("select a_id, a_tag, a_timestamp, a_uid from access26")
 access.createOrReplaceTempView("access")
 
 spark.sql("show tables")
@@ -885,9 +772,9 @@ purchase.printSchema()
 ### 7-9. 생성된 디멘젼을 저장소에 저장합니다
 
 * 아래의 조건이 만족하는 코드를 작성하세요
-  - 저장위치 : "dimension/dt=20201025" <kbd>dataFrame.write</kbd>
+  - 저장위치 : "dimension/dt=20201026" <kbd>dataFrame.write</kbd>
   - 저장옵션 : 대상 경로가 존재하더라도 덮어씁니다 <kbd>.mode("overwrite")</kbd>
-  - 저장포맷 : 파케이  <kbd>.parquet("dimension/dt=20201025")</kbd>
+  - 저장포맷 : 파케이  <kbd>.parquet("dimension/dt=20201026")</kbd>
 
 ```python
 dimension.printSchema()
@@ -896,7 +783,7 @@ dimension.printSchema()
 ```
 <details><summary> 정답확인</summary>
 
-> 저장 시에 오류가 없고 대상 경로(dimension/dt=20201025)가 생성되었다면 성공입니다
+> 저장 시에 오류가 없고 대상 경로(dimension/dt=20201026)가 생성되었다면 성공입니다
 
 </details>
 <br>
@@ -905,8 +792,8 @@ dimension.printSchema()
 ### 7-10. 생성된 디멘젼을 다시 읽어서 출력합니다
 
 * 아래의 조건이 만족하는 코드를 작성하세요
-  - 저장위치 : "dimension/dt=20201025" <kbd>spark.read</kbd>
-  - 저장포맷 : 파케이  <kbd>.parquet("dimension/dt=20201025")</kbd>
+  - 저장위치 : "dimension/dt=20201026" <kbd>spark.read</kbd>
+  - 저장포맷 : 파케이  <kbd>.parquet("dimension/dt=20201026")</kbd>
 
 ```python
 # newDimension = <디멘젼을 읽어옵니다>
