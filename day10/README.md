@@ -950,11 +950,11 @@ docker compose down
 ```
 
 > 아래와 같은 메시지가 출력되고 모든 컨테이너가 종료되면 정상입니다
-
+```text
 [+] Running 2/3
 ⠿ Container fluentd   Removed        1.3s
 ⠿ Container notebook  Removed        3.7s
 ⠹ Container sqoop     Stopping       5.3s
-
+```
 <br>
 
