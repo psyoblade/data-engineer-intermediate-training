@@ -201,13 +201,21 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 ```
 <details><summary> 정답확인</summary>
 
-> 고객(user) 테이블의 경우 아래와 같은 출력이 나오면 성공입니다
+> 아래와 같은 출력이 나오면 성공입니다
 ```
 message user_20201025 {
   optional int32 u_id;
   optional binary u_name (UTF8);
   optional binary u_gender (UTF8);
   optional int32 u_signup;
+}
+
+message purchase_20201025 {
+  optional binary p_time (UTF8);
+  optional int32 p_uid;
+  optional int32 p_id;
+  optional binary p_name (UTF8);
+  optional int32 p_amount;
 }
 ```
 
@@ -222,13 +230,23 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar cat file://${filename}
 ```
 <details><summary> 정답확인</summary>
 
-> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 모든 파일이 모두 수집되었다면 테이블 수집에 성공한 것입니다
+> 아래와 같은 데이터가 출력되면 정상입니다
+
+```text
+p_time = 1603586155
+p_uid = 5
+p_id = 2004
+p_name = LG TV
+p_amount = 2500000
+```
 
 </details>
 <br>
 
 
 #### 2-7-5. `원격 터미널` 장비에도 잘 저장 되어 있는지 확인합니다
+
+*  <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 모든 파일이 모두 수집되었다면 테이블 수집에 성공한 것입니다
 ```bash
 # terminal
 find notebooks -name '*.parquet'
@@ -257,7 +275,7 @@ docker compose exec fluentd bash
 #### 3-1-3. 이전 작업내역을 모두 초기화 하고 다시 수집해야 한다면 아래와 같이 정리합니다
 ```bash
 # docker
-ask rm -rf /tmp/source/access.20201025.csv /tmp/source/access.pos /tmp/target/\$\{tag\}/ /tmp/target/access/20201025
+ask rm -rf /tmp/source/access.csv /tmp/source/access.pos /tmp/target/\$\{tag\}/ /tmp/target/access/20201025
 ```
 
 #### 3-1-4. 비어있는 이용자 접속로그를 생성합니다
@@ -358,19 +376,25 @@ find /tmp/target -name '*.json' | head
 #### 3-2-4. 원본 로그와, 최종 수집된 로그의 레코드 수가 같은지 확인합니다
 ```bash
 # docker
-cat `find /tmp/target/20201025 -name '*.json'` | wc -l
-wc -l /tmp/source/access.20201025.csv
+cat `find /tmp/target/access/20201025 -name '*.json'` | wc -l
+wc -l /tmp/source/access.csv
 ```
 
 <details><summary> 정답확인</summary>
 
-> 수집된 파일의 라인 수와, 원본 로그의 라인 수가 일치한다면 정상적으로 수집되었다고 볼 수 있으며, <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 JSON 파일이 확인 되었다면 웹 로그 수집에 성공한 것입니다
+> 수집된 파일의 라인 수와, 원본 로그의 라인 수가 12 라인으로 일치한다면 정상입니다 
+
+</details>
+
+
+#### 3-2-5. `원격 터미널 ` 로컬 스토리지에서 결과를 확인합니다
+
+* <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 JSON 파일이 확인 되었다면 웹 로그 수집에 성공한 것입니다
+  - 열려 있는 2개 터미널 모두 종료합니다
 ```bash
 # terminal
 find notebooks -name '*.json'
 ```
-
-</details>
 <br>
 
 

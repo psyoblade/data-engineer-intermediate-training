@@ -152,8 +152,19 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 
 > 매출(purchase) 테이블의 경우 아래와 같은 출력이 나오면 성공입니다
 ```
-message purcahse_20201026 {
-...
+message user_20201026 {
+  optional int32 u_id;
+  optional binary u_name (UTF8);
+  optional binary u_gender (UTF8);
+  optional int32 u_signup;
+}
+
+message purchase_20201026 {
+  optional binary p_time (UTF8);
+  optional int32 p_uid;
+  optional int32 p_id;
+  optional binary p_name (UTF8);
+  optional int32 p_amount;
 }
 ```
 
