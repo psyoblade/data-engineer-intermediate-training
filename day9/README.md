@@ -565,20 +565,23 @@ spark.sql("show tables")
 
 #### 5-4-1. 한 쪽의 성별('남' 혹은 '여')을 가진 목록을 출력하세요
 ```python
-whereCondition = "<성별을 구별하는 조건을 작성하세요>"
-spark.sql("select * from user").where(whereCondition)
+spark.sql("describe user")
+# whereCondition = "<성별을 구별하는 조건을 작성하세요>"
+# spark.sql("select * from user").where(whereCondition)
 ```
 
 #### 5-4-2. 상품금액이 200만원을 초과하는 매출 목록을 출력하세요
 ```python
-selectClause = "<금액을 필터하는 조건을 작성하세요>"
-spark.sql(selectClause)
+spark.sql("describe purchase")
+# selectClause = "<금액을 필터하는 조건을 작성하세요>"
+# spark.sql(selectClause)
 ```
 
 #### 5-4-3. GroupBy 구문을 이용하여 로그인, 로그아웃 횟수를 출력하세요
 ```python
-groupByClause="<로그인/아웃 컬럼을 기준으로 집계하는 구문을 작성하세요>"
-spark.sql(groupByClause)
+spark.sql("describe access")
+# groupByClause="<로그인/아웃 컬럼을 기준으로 집계하는 구문을 작성하세요>"
+# spark.sql(groupByClause)
 ```
 <details><summary> 정답확인</summary>
 

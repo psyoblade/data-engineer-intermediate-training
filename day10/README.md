@@ -441,8 +441,8 @@ spark.sql("show tables '*26'")
 #### 5-3-1. 아래에 비어있는 조건을 채워서 올바른 코드를 작성하세요
 
 * 아래의 조건이 만족되어야 합니다
-  - 2020/10/26 에 등록(`u_signup`)된 유저만 포함될 것 <kbd>`u_signup` >= '20201026' and `u_signup` < '20201026'</kbd>
-  - 2020/10/26 에 발생한 매출(`p_time`)만 포함할 것 <kbd>`p_time` >= '2020-10-26 00:00:00' and `p_time` < '2020-10-26 00:00:00'</kbd>
+  - 2020/10/26 에 등록(`u_signup`)된 유저만 포함될 것 <kbd>`u_signup` >= '20201026' and `u_signup` < '20201027'</kbd>
+  - 2020/10/26 에 발생한 매출(`p_time`)만 포함할 것 <kbd>`p_time` >= '2020-10-26 00:00:00' and `p_time` < '2020-10-27 00:00:00'</kbd>
 
 ```python
 u_signup_condition = "<10월 26일자에 등록된 유저만 포함되는 조건을 작성합니다>"
@@ -471,24 +471,32 @@ spark.sql("show tables")
 
 #### 5-4-1. 한 쪽의 성별('남' 혹은 '여')을 가진 목록을 출력하세요
 ```python
-whereCondition = "<성별을 구별하는 조건을 작성하세요>"
-spark.sql("select * from user").where(whereCondition)
+spark.sql("describe user")
+# groupByCount = "<성별 인원 수를 구하는 질의문을 작성하세요>"
+# spark.sql(groupByCount)
 ```
 
 #### 5-4-2. 상품금액이 200만원을 초과하는 매출 목록을 출력하세요
 ```python
-selectClause = "<금액을 필터하는 조건을 작성하세요>"
-spark.sql(selectClause)
+spark.sql("describe purchase")
+# selectClause = "<최소, 최대 금액을 출력하는 질의문을 작성하세요>"
+# spark.sql(selectClause)
 ```
 
-#### 5-4-3. GroupBy 구문을 이용하여 로그인, 로그아웃 횟수를 출력하세요
+#### 5-4-3. 가장 접속횟수가 많은 고객의 아이디를 1명을 출력하세요
+
+* 아래의 조건이 만족 되어야 합니다
+  - 접속의 기준은 **login** 로그 기준으로만 계산하시면 
+  - 동점이 발생하는 경우 어느 쪽을 선택하더라도 정답입니다
+
 ```python
-groupByClause="<로그인/아웃 컬럼을 기준으로 집계하는 구문을 작성하세요>"
-spark.sql(groupByClause)
+spark.sql("describe access")
+# countTop="<가장 접속횟수가 많은 고객의 아이디를 출력하세요>"
+# spark.sql(countTop)
 ```
 <details><summary> 정답확인</summary>
 
-> 위에서부터 각각 "남:3, 여:2", "2개", "login:7, logout:5" 이 나오면 정답입니다
+> 위에서부터 각각 "여:1, 남:3", "최소: 1000000, 최대: 4500000", "2, 4" 둘 중에 하나가 나오면 정답입니다
 
 </details>
 <br>
@@ -514,7 +522,7 @@ display(access)
 ```
 <details><summary> 정답확인</summary>
 
-> "DAU : 5"가 나오면 정답입니다 
+> "DAU : 9"가 나오면 정답입니다 
 
 </details>
 <br>
