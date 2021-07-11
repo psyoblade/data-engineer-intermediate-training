@@ -9,6 +9,7 @@
   * [5. 수집된 데이터 탐색](#5-수집된-데이터-탐색)
   * [6. 기본 지표 생성](#6-기본-지표-생성)
   * [7. 고급 지표 생성](#7-고급-지표-생성)
+  * [8. 질문 및 컨테이너 종료](#8-질문-및-컨테이너-종료)
 
 <br>
 
@@ -53,6 +54,19 @@ echo "sleep 5 seconds"
 sleep 5
 docker compose exec sqoop bash
 ```
+
+> 아래와 같은 메시지가 출력되고 모든 컨테이너가 종료되면 정상입니다
+
+```
+[+] Running 4/5
+ ⠿ Network default_network  Created   2.9s
+ ⠿ Container mysqlStarted   5.6s
+ ⠿ Container notebook       Started   9.3s
+ ⠿ Container fluentd        Started   7.0s
+ ⠿ Container sqoopStarting 10.0s
+```
+<br>
+
 
 ### 2-2. 실습명령어 검증을 위한 ask 를 리뷰하고 실습합니다
 ```bash
@@ -259,6 +273,9 @@ find notebooks -name '*.parquet'
 ### 3-1. *원격 터미널에 접속* 후, *플루언트디 컨테이너에 접속*합니다
 
 #### 3-1-1. 서버를 기동합니다 (컨테이너가 종료된 경우)
+
+> 서버가 이미 기동되어 있는 경우 Recreate 되며, 컨테이너의 상태는 별도의 볼륨에 저장되고 있으므로 문제는 없습니다만, 라이브 환경에서는 주의가 필요합니다
+
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day9
@@ -369,7 +386,7 @@ cat /etc/fluentd/access.20201025.csv >> /tmp/source/access.csv
 #### 3-2-3. 수집된 로그가 정상적인 JSON 파일인지 확인합니다
 ```bash
 # docker
-tree -L2 /tmp/target
+tree -L 2 /tmp/target
 find /tmp/target -name '*.json' | head
 ```
 
@@ -389,8 +406,9 @@ wc -l /tmp/source/access.csv
 
 #### 3-2-5. `원격 터미널 ` 로컬 스토리지에서 결과를 확인합니다
 
-* <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 JSON 파일이 확인 되었다면 웹 로그 수집에 성공한 것입니다
-  - 열려 있는 2개 터미널 모두 종료합니다
+* 기동되어 있는 fluentd 애플리케이션은 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료할 수 있습니다
+* 기동되어 있는 docker 컨테이너는 터미널 화면에서 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 JSON 파일이 확인 되었다면 웹 로그 수집에 성공한 것입니다
+* 열려 있는 2개 터미널 모두 종료합니다
 ```bash
 # terminal
 find notebooks -name '*.json'
@@ -942,4 +960,25 @@ dimension.printSchema()
 > 디멘젼 테이블을 정상적으로 읽어왔고, 동일한 스키마와 데이터가 출력되었다면 정답입니다
 
 </details>
+<br>
+
+
+## 8. 질문 및 컨테이너 종료
+
+### 8-1. 질문과 답변
+
+### 8-2. 컨테이너 종료
+
+```python
+docker compose down
+```
+
+> 아래와 같은 메시지가 출력되고 모든 컨테이너가 종료되면 정상입니다
+
+[+] Running 2/3
+⠿ Container fluentd   Removed        1.3s
+⠿ Container notebook  Removed        3.7s
+⠹ Container sqoop     Stopping       5.3s
+
+<br>
 
