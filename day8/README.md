@@ -106,7 +106,7 @@ Transaction isolation: TRANSACTION_REPEATABLE_READ
 
 #### 2-1-1. 데이터베이스 생성 - CREATE
 
-```text
+```sql
 #    CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
 #        [COMMENT database_comment]
 #        [LOCATION hdfs_path]
