@@ -107,11 +107,11 @@ Transaction isolation: TRANSACTION_REPEATABLE_READ
 #### 2-1-1. 데이터베이스 생성 - CREATE
 
 ```sql
-/** example
-CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
-    [COMMENT database_comment]
-    [LOCATION hdfs_path]
-    [WITH DBPROPERTIES (property_name=property_value, ...)]; 
+/** Usages
+    CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
+        [COMMENT database_comment]
+        [LOCATION hdfs_path]
+        [WITH DBPROPERTIES (property_name=property_value, ...)]; 
 */
 ```
 * 테스트 데이터베이스 testdb 를 생성합니다
@@ -124,7 +124,7 @@ location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyobla
 #### 2-1-2. 데이터베이스 목록 출력 - SHOW
 
 ```sql
-/** example
+/** Usages
     SHOW (DATABASES|SCHEMAS);
 */
 ```
@@ -138,7 +138,7 @@ show databases;
 #### 2-1-3. 데이터베이스 정보를 출력합니다 - DESCRIBE
 
 ```sql
-/** example
+/** Usages
     DESCRIBE DATABASE/SCHEMA [EXTENDED] db_name;
 */
 ```
@@ -151,7 +151,7 @@ describe database testdb;
 
 #### 2-1-4. 지정한 데이터베이스를 사용합니다 - USE
 ```sql
-/** example
+/** Usages
     USE database_name;
 */
 ```
@@ -163,7 +163,7 @@ use testdb;
 
 #### 2-1-5. 데이터베이스를 삭제합니다 - DROP
 ```sql
-/** example
+/** Usages
     DROP (DATABASE|SCHEMA) [IF EXISTS] database_name [RESTRICT|CASCADE];
 */
 ```
@@ -181,7 +181,7 @@ show databases;
 ##### DBPROPERTIES 속성
 * `키=값` 쌍으로 다양한 용도로 사용되는 값을 넣는 Map 같은 메타데이터 정보입니다
 ```sql
-/** example
+/** Usages
     ALTER (DATABASE|SCHEMA) database_name SET DBPROPERTIES (property_name=property_value, ...);
 */
 ```
@@ -204,7 +204,7 @@ describe database extended testdb;
 ##### OWNER 속성
 * 데이터베이스 관리를 어떤 기준(User or Role)으로 할 지를 결정합니다 
 ```sql
-/** example
+/** Usages
     ALTER (DATABASE|SCHEMA) database_name SET OWNER [USER|ROLE] user_or_role;
 */
 ```
@@ -218,36 +218,42 @@ alter database testdb set owner role admin;
 ```sql
 describe database extended testdb;
 ```
+<br>
 
 
 ### 2-2 하이브 테이블 DDL 가이드
 #### 1. CREATE
 > 테이블을 생성합니다
 ```sql
-/** example
-CREATE TABLE [IF NOT EXISTS] [db_name.] table_name [(col_name data_type [COMMENT col_comment], ... [COMMENT col_comment])]
-    [COMMENT table_comment]
-    [ROW FORMAT row_format]
-    [STORED AS file_format]
-    [LOCATION hdfs_path];
+/** Usages
+    CREATE TABLE [IF NOT EXISTS] [db_name.] table_name [(col_name data_type [COMMENT col_comment], ... [COMMENT col_comment])]
+        [COMMENT table_comment]
+        [ROW FORMAT row_format]
+        [STORED AS file_format]
+        [LOCATION hdfs_path];
 */
 ```
+* 실습을 위한 고객 테이블 (employee)을 생성합니다
 ```sql
 # beeline> 
 create table if not exists employee (emp_id string comment 'employee id',
-emp_name string comment 'employee name', 
-emp_salary bigint comment 'employee salary')
-comment 'test employee table' 
-row format delimited 
-fields terminated by ','
-stored as textfile;
+    emp_name string comment 'employee name', 
+    emp_salary bigint comment 'employee salary')
+    comment 'test employee table' 
+    row format delimited 
+    fields terminated by ','
+    stored as textfile;
 ```
 
 #### 2. SHOW
 > 테이블 목록을 조회합니다
 ```sql
+/** Usages
 SHOW TABLES [IN database_name];
-
+*/
+```
+* 명령어 설명
+```sql
 beeline> 
 show tables;
 ```
@@ -255,18 +261,26 @@ show tables;
 #### 3. DESCRIBE
 > 테이블 정보를 조회합니다
 ```sql
+/** Usages
 DESCRIBE [EXTENDED|FORMATTED] [db_name.] table_name[.col_name ( [.field_name])];
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 describe employee;
 ```
 
 #### 4. DROP
 > 테이블을 삭제합니다. 일반 DROP 의 경우 .Trash/current directory 경로로 이동하지만 PURGE 옵션을 주는 경우 즉시 삭제됩니다
 ```sql
+/** Usages
 DROP TABLE [IF EXISTS] table_name [PURGE];
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 drop table if exists employee purge;
 show tables;
 ```
@@ -275,9 +289,13 @@ show tables;
 > 테이블을 변경합니다
 * RENAME
 ```sql
+/** Usages
 ALTER TABLE table_name RENAME TO new_table_name;
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 create table if not exists employee (emp_id string comment 'employee id',
 emp_name string comment 'employee name', 
 emp_salary bigint comment 'employee salary')
@@ -291,9 +309,13 @@ show tables;
 ```
 * ADD COLUMNS
 ```sql
+/** Usages
 ALTER TABLE table_name ADD COLUMNS (column1, column2) ;
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 create table if not exists employee (emp_id string comment 'employee id')
 comment 'test employee table' 
 row format delimited 
@@ -310,9 +332,13 @@ desc renamed_emp;
 #### 6. TRUNCATE
 > 테이블의 데이터만 제거합니다
 ```sql
+/** Usages
 TRUNCATE TABLE table_name;
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 use testdb;
 insert into renamed_emp values (1, 'suhyuk', 1000);
 select count(1) from renamed_emp;
@@ -337,9 +363,13 @@ select count(1) from renamed_emp;
 #### 1. LOAD
 > 로컬(LOCAL) 혹은 클러스터 저장된 데이터를 하둡 클러스터에 업로드(Managed) 혹은 링크(External) 합니다
 ```sql
+/** Usages
 LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)];
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 drop table if exists imdb_movies;
 create table imdb_movies (rank int, title string, genre string, description string, director string, actors string, year string, runtime int, rating string, votes int, revenue string, metascore int) row format delimited fields terminated by '\t';
 
@@ -349,9 +379,13 @@ load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 #### 2. SELECT
 > 테이블에 저장된 레코드를 SQL 구문을 통해서 조회합니다
 ```sql
+/** Usages
 SELECT col1,col2 FROM tablename;
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 select rank, title, genre from imdb_movies limit 5;
 ```
 
@@ -359,27 +393,39 @@ select rank, title, genre from imdb_movies limit 5;
 > 테이블에 읽어온 레코드 혹은 생성된 레코드를 저장합니다 
 * INSERT INTO
 ```sql
+/** Usages
 INSERT INTO TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...)] select_statement1 FROM from_statement;
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 create table if not exists imdb_title (title string);
 insert into table imdb_title select title from imdb_movies;
 select title from imdb_title limit 5;
 ```
 * INSERT OVERWRTIE
 ```sql
+/** Usages
 INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, ..) [IF NOT EXISTS]] select_statement FROM from_statement;
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 create table if not exists imdb_title (title string);
 insert overwrite table imdb_title select description from imdb_movies;
 select title from imdb_title limit 5;
 ```
 * INSERT VALUES
 ```sql
+/** Usages
 INSERT INTO TABLE tablename [PARTITION (partcol1[=val1], partcol2[=val2] ...)] VALUES values_row [, values_row ...];
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 insert into imdb_title values ('1 my first hive table record'), ('2 my second records'), ('3 third records');
 select title from imdb_title where title like '%record%';
 ```
@@ -389,9 +435,13 @@ select title from imdb_title where title like '%record%';
 * 현재 ACID-based transaction 을 지원하는 것은 Bucketed ORC 파일만 지원합니다
   * [Hive Transactions](https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions) 
 ```sql
+/** Usages
 DELETE FROM tablename [WHERE expression]
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 create table imdb_orc (rank int, title string) clustered by (rank) into 4 buckets stored as orc tblproperties ('transactional'='true');
 
 // 아래와 같이 동시성 및 버킷팅 설정이 제대로 되어 있어서 ACID 트랜젝션 수행이 가능합니다
@@ -416,9 +466,13 @@ Error: Error while compiling statement: FAILED: SemanticException [Error 10294]:
 #### 5. UPDATE
 > 대상 테이블의 컬럼을 업데이트 합니다. 단, 파티셔닝 혹은 버킷팅 컬럼은 업데이트 할 수 없습니다
 ```sql
+/** Usages
 UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 update imdb_orc set title = 'psyoblade title';
 select * from imdb_orc;
 ```
@@ -426,9 +480,13 @@ select * from imdb_orc;
 #### 6. EXPORT
 > 테이블 메타데이터(\_metadata)와 데이터(data) 정보를 HDFS 경로에 백업 합니다
 ```sql
+/** Usages
 EXPORT TABLE tablename [PARTITION (part_column="value"[, ...])] TO 'export_target_path' [ FOR replication('eventid') ];
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 export table imdb_orc to '/user/ubuntu/archive/imdb_orc';
 ```
 * 익스포트 된 결과를 확인합니다
@@ -443,9 +501,13 @@ drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /user/ubuntu/archive/
 #### 7. IMPORT
 > 백업된 데이터로 새로운 테이블을 생성합니다
 ```sql
+/** Usages
 IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 import table imdb_orc_imported from '/user/ubuntu/archive/imdb_orc';
 select * from imdb_orc_imported;
 +---------------------------+----------------------------+
@@ -465,10 +527,13 @@ select * from imdb_orc_imported;
 #### 1.1. 하이브 서버로 접속합니다
 * 하이브 터미널을 통해 JDBC Client 로 하이브 서버에 접속합니다
 ```bash
-bash>
+# terminal
 docker-compose exec hive-server bash
-
-beeline> 
+*/
+```
+* 명령어 설명
+```sql
+# beeline> 
 !connect jdbc:hive2://localhost:10000 scott tiger
 use testdb;
 ```
