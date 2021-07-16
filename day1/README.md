@@ -1,199 +1,355 @@
-# 1일차. 아파치 스쿱을 통한 테이블 수집 실습 - Apache Sqoop
-> 아파치 스쿱을 통해 다양한 수집 예제를 실습합니다
-
+# 데이터 엔지니어링 기본
+> 도커 엔진의 기본적인 동작 방식을 이해하기 위한 실습을 수행합니다
 
 - 목차
-  * [1. 아파치 스쿱을 통한 테이블 수집](#아파치-스쿱을-통한-테이블-수집)
-  * [1-1. 아파치 스쿱 테이블 수집 예제 테이블](#아파치-스쿱-테이블-수집-예제-테이블)
-  * [1-3. 유형별 테이블 수집](#유형별-테이블-수집)
-  * [1-4. 파티션 테이블 수집](#파티션-테이블-수집)
-  * [1-5. 증분 테이블 수집](#증분-테이블-수집)
-  * [1-6. 모든 테이블 수집](#모든-테이블-수집)
-  * [2. 아파치 스쿱을 통한 테이블 적재](#아파치-스쿱을-통한-테이블-적재)
-  * [2-1. 새로운 테이블을 생성하고 적재](#새로운-테이블을-생성하고-적재)
+  * [도커 기본 명령어 실습](#0-도커-기본-명령어-실습)
+  * [Ex 1. 도커 컨테이너 다운로드 및 실행](#1-도커-컨테이너-다운로드-및-실행)
+  * [Ex 2. 도커 컴포즈 통한 실행](#2-도커-컴포즈를-통한-실행)
+  * [Ex 3. 외부 볼륨을 통한 환경설정](#3-외부-볼륨을-통한-환경설정)
+  * [Ex 4. 도커 이미지 빌드 및 실행](#4-도커-이미지-빌드-및-실행)
+  * [Ex 5. 도커 컴포즈 통한 여러 이미지 실행](#5-도커-컴포즈-통한-여러-이미지-실행)
 
 
-## 아파치 스쿱을 통한 테이블 수집
-
-### 1. 스쿱 도커 기동 확인
-* 최신 버전 코드를 내려 받습니다
-```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training
-git pull
-```
-* 아래의 명령을 확인합니다
-```bash
-docker ps --filter name=sqoop
-```
-* 기동되지 않았다면 Network, MySQL, Sqoop 순서대로 생성합니다
-```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day1/sbin
-./docker-create-network.sh
-./docker-run-mysql.sh
-./docker-run-sqoop.sh
-```
-
-### 아파치 스쿱 테이블 수집 예제 테이블
-* 이전에 생성된 가비지 정보들을 모두 삭제하기 위해 하둡 및 MySQL 삭제 작업을 수행합니다 (처음이라면 스킵합니다)
-  * userid: user, password: pass
+## 0 도커 기본 명령어 실습
+### 도커 설치 및 서비스 기동
 ```bash
 bash>
-./hadoop.sh fs -rm -r /user/sqoop
+curl -fsSL https://get.docker.com/ | sudo sh    # 설치 스크립트 다운로드 및 설치
+sudo usermod -a -G docker $USER    # sudo 없이 명령어를 실행하기 위해 현재 접속 중인 사용자 ($USER)에게 권한 주기
+sudo usermod -a -G docker psyoblade   # 혹은 임의의 사용자 (psyoblade) 에게 권한 주기 - 다시 로그인 해야 적용됩니다
 
-```bash
-docker exec -it mysql mysql -uuser -p
-mysql>
-use testdb;
-drop table inc_table;
-drop table users;
-drop table seoul_popular_stg;
-drop table seoul_popular_exp;
-```
-* 로컬 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
-```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day1/sbin
-docker exec -it sqoop sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
-docker exec -it sqoop ls /tmp/sqoop/seoul_popular_trip
-docker exec -it sqoop cat /tmp/sqoop/seoul_popular_trip/part-m-00000
-```
-* 클러스터 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
-```bash
-docker exec -it sqoop sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip
-docker exec -it sqoop hadoop fs -ls /user/sqoop/target/seoul_popular_trip
-docker exec -it sqoop hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
+# sudo 없이 docker 명령이 실행이 가능한 지 테스트 합니다
+docker info
+
+# docker info 실행이 되지 않는다면 docker.sock 파일의 권한 때문일 수 있습니다
+sudo chmod 666 /var/run/docker.sock
+docker --version
+
+# 반드시 별도로 경로를 지정하고 다운로드 받아야 1.20 이상 버전이 설치됩니다
+sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+
+# 기타 도구를 설치합니다
+sudo apt-get install tree
+
 ```
 
-
-### 유형별 테이블 수집 
-* 하나의 테이블을 4개의 맵작업으로 병렬 수행 (sqoop-import.sh 반복적인 "접속정보, 계정, 패스워드"를 저장해두고 편리하기 쓰기 위한 배시스크립트입니다)
+### 코드 클론 및 환경설정
+> 알파인 및 우분투 이미지를 통해 도커 컨테이너가 어떻게 동작하는지 이해하고, 기본 명령어를 통해 컨테이너 생성 및 삭제를 수행합니다
 ```bash
-./sqoop-import.sh -m 4 --split-by id --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_v1 --fields-terminated-by '\t'
-```
-* 위의 sqoop-import.sh 명령 대신 아래와 같이 직접 모두 입력해도 됩니다
-```bash
-docker exec -it sqoop sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_v2 --fields-terminated-by '\t' --delete-target-dir --verbose --username user --password pass
+mkdir work
+cd work
+git clone https://github.com/psyoblade/data-engineer-intermediate-training.git
+cd data-engineer-intermediate-training/basic
 ```
 
-
-### 파티션 테이블 수집
-* 하나의 테이블을 조건에 따라 분리해서 저장히기 위해 id 값의 범위를 확인해 봅니다 (Min(id), Max(id))
+### 도커 이미지 크기 비교
 ```bash
-./sqoop-eval.sh "select min(id), max(id) from seoul_popular_trip"
-./sqoop-eval.sh "select count(1) from seoul_popular_trip"
-```
-* 테이블을 파티션 단위로 저장하기 위해서는 루트 경로를 생성해 두어야만 합니다 (그래야 하위에 key=value 형식의 경로로 저장할 수 있습니다)
-```bash
-./hadoop.sh fs -mkdir -p /user/sqoop/target/seoul_popular_partition
-```
-* 확인한 값의 범위를 이용하여 조건을 달리하여 하나의 테이블을 3번으로 나누어 수집을 수행합니다
-```bash
-docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --delete-target-dir -m 1 --table seoul_popular_trip --where "id < 10000" --target-dir /user/sqoop/target/seoul_popular_partition/part=0
-docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 10001 and id < 20000" --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
-docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 20001" --target-dir /user/sqoop/target/seoul_popular_partition/part=20000
-```
-* 테이블 수집이 정상적으로 수행 되었는지 하둡 명령어를 통해 확인해 봅니다
-```bash
-./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_partition
+docker pull alpine
+docker pull ubuntu
+docker image ls
 ```
 
+### 간단한 명령어 실습
+```bash
+docker run alpine top
+docker run alpine uname -a
+docker run alpine cat /etc/issue
+```
 
-### 증분 테이블 수집
-* 증분 테이블 수집을 위해 MySQL 접속 후, 예제 테이블을 생성합니다 (inc\_table)
-  * userid: user, password: pass
+### bash 가 없기 때문에 /bin/sh 을 통해 --interactive --tty 를 생성해봅니다
 ```bash
-docker exec -it mysql mysql -uuser -p
-create table inc_table (id int not null auto_increment, name varchar(30), salary int, primary key (id));
-insert into inc_table (name, salary) values ('suhyuk', 10000);
+docker run -it alpine /bin/sh
 ```
-* 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
-  * 증분 테이블 수집 후 마지막에 --last-value 값이 1인 점을 확인해 둡니다 (다음 수집 시에 사용할 예정입니다)
-  * 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
+
+### vim 도 없기 때문에 패키지 도구인 apk 및 apk add/del 를 통해 vim 을 설치 및 제거합니다
 ```bash
-./sqoop-import.sh --table inc_table --incremental append --check-column id --last-value 0 --target-dir /user/sqoop/target/seoul_popular_inc
-./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_inc
-./hadoop.sh fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00000
+# apk { add, del, search, info, update, upgrade } 등의 명령어를 사용할 수 있습니다
+$ apk update # 를 통해
+$ apk add vim
+$ apk del vim
 ```
-* 초기 수집 이후에 데이터가 추가되었(증분)다는 것을 테스트하기 위해 데이터를 추가합니다
+
+### 각종 기본 도커 명령어 실습
 ```bash
-docker exec -it mysql mysql -uuser -p
-insert into inc_table (name, salary) values ('psyoblade', 20000);
+docker inspect {CONTAINER_NAME}
+docker image prune
+docker stats {CONTAINER_NAME}
 ```
-* 증분 테이블 수집을 위해 이전 --last-value 1 을 입력하고 다시 수집합니다
+
+### [메모리 설정을 변경한 상태 확인](https://docs.docker.com/config/containers/start-containers-automatically)
 ```bash
-./sqoop-import.sh --table inc_table --incremental append --check-column id --last-value 1 --target-dir /user/sqoop/target/seoul_popular_inc
+docker run -it -m 500m ubuntu
+docker run -it --restart=on-failure:3 -m 500m ubuntu
+docker run -it --restart=always -m 500m ubuntu
+docker stats {CONTAINER_NAME}
+docker container prune
 ```
-* 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
+
+### 도커 컨테이너 사용 후 삭제 여부
 ```bash
-./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_inc
-./hadoop.sh fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00001
+docker run -it ubuntu /bin/bash
+docker run --rm -it ubuntu /bin/bash
 ```
 
 
-### 모든 테이블 수집
-* 모든 테이블 수집을 위한 데이터베이스(testdb) 경로를 하나 생성합니다
+## 1 도커 컨테이너 다운로드 및 실행
+> MySQL 기본 이미지를 베이스로 나만의 이미지를 생성합니다
+
+### [MySQL 데이터베이스 기동](https://hub.docker.com/_/mysql)
 ```bash
-./hadoop.sh fs -mkdir /user/sqoop/target/testdb
+$> docker run --name mysql 
+    -e MYSQL_ROOT_PASSWORD=rootpass \
+    -e MYSQL_DATABASE=testdb \
+    -e MYSQL_USER=user \
+    -e MYSQL_PASSWORD=pass \
+    -d mysql
+$> docker exec -it mysql mysql -u user -p
+
+mysql> use testdb;
+mysql> create table foo (id int, name varchar(300));
+mysql> insert into foo values (1, 'my name');
+mysql> select * from foo;
 ```
-* 생성된 경로를 루트로 하위로 모든 테이블을 수집합니다 (반드시 --autoreset-to-one-mapper 를 지정해 주어야 primary key 가 없는 경우에도 -m 1 으로 수집이 됩니다)
+
+### 볼륨을 추가하여 저장소 관리하기 
+* 아래와 같이 호스트의 현재 경로 혹은 절대경로를 넣으면 호스트와 쉐어할 수 있습니다
 ```bash
-docker exec -it sqoop sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --autoreset-to-one-mapper --warehouse-dir /user/sqoop/target/testdb --username user --password pass
+$> docker run --name mysql 
+    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes 
+    -e MYSQL_DATABASE=testdb 
+    -e MYSQL_USER=user 
+    -e MYSQL_PASSWORD=pass 
+    -v ./data:/var/lib/mysql 
+    -d mysql
+
+$> docker exec -it mysql mysql -u user -p
+mysql> use testdb;
+mysql> create table foo (id int, name varchar(300));
+mysql> insert into foo values (1, 'my name');
+mysql> select * from foo;
+
+$> docker volume ls
+
+$> docker run --name mysql 
+    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes 
+    -e MYSQL_DATABASE=testdb 
+    -e MYSQL_USER=user 
+    -e MYSQL_PASSWORD=pass 
+    -v ./data:/var/lib/mysql 
+    -d mysql
 ```
-
-
-## 아파치 스쿱을 통한 테이블 적재
-
-### 새로운 테이블을 생성하고 적재
-* 테이블 익스포트를 위해 적재 테이블(seoul\_popular\_exp)을 생성합니다
-  * userid: user, password: pass
+* 일반적으로 볼륨은 파일이 많이 발생하므로 굳이 쉐어하지 않는 편이 좋습니다
 ```bash
-bash>
-docker exec -it mysql mysql -uuser -p
-
-mysql>
-create table testdb.seoul_popular_exp (category int not null, id int not null, name varchar(100), address varchar(100), naddress varchar(100), tel varchar(20), tag varchar(500)) character set utf8 collate utf8_general_ci;
-
-bash>
-./sqoop-eval.sh "show tables"
-./sqoop-export.sh -m 1 --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
+$> docker run --name mysql 
+    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes 
+    -e MYSQL_DATABASE=testdb 
+    -e MYSQL_USER=user 
+    -e MYSQL_PASSWORD=pass 
+    -v mysql_default:/var/lib/mysql 
+    -d mysql
 ```
-* 위의 익스포트 명령어를 수행하면 오류가 발생하는데 리소스매니저(http://student#.lgebigdata.com:8088) 사이트를 통해 디버깅을 해봅니다
-  * application\_number 링크를 클릭하고 logs 경로를 클릭하면 http://9e48393c5f39:8042/ 와 같이 docker-container 아이로 redirect 되는데 이 값을 student#.lgebigdata.com 값으로 변경해 주면 디버깅이 가능합니다
-  * 해당 로그 페이지에서 "syslog : Total file length is 49301 bytes." 링크를 클릭하고 "here" 링크를 클릭하면 전체 로그를 한 번에 확인할 수 있습니다
-  * 초기에 수집한 테이블의 경우 콤마를 기준으로 수집했는데, 필드에 콤마(,)가 들어가 있어서 export 시에 필드의 개수가 맞지 않는다는 오류를 확인합니다
-* 탭을 구분자로 테이블 임포트를 다시 수행합니다
+
+## 2 도커 컴포즈를 통한 실행
+* 도커 컴포즈를 통해서 커맨드라인 옵션을 설정을 통해 수행할 수 있습니다
 ```bash
-./sqoop-import.sh -m 1 --table seoul_popular_trip --fields-terminated-by '\t' --delete-target-dir --target-dir /user/sqoop/target/seoul_popular_exp
+$ cat docker-compose.yml
+version: "3"
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - mysql_default:/var/lib/mysql
 ```
-* 탭 구분자로 익스포트된 경로의 파일을 이용하여 다시 익스포트를 수행합니다
+
+
+## 3 외부 볼륨을 통한 환경설정
+> 외부 볼륨을 통한 환경설정 제공 및 설정을 실습합니다
+
+### 캐릭터셋 변경 적용하기
 ```bash
-./sqoop-export.sh -m 1 --table seoul_popular_exp --fields-terminated-by '\t' --export-dir /user/sqoop/target/seoul_popular_exp
-./sqoop-eval.sh "select count(1) from seoul_popular_exp"
+$> cat custom/my.cnf
+[client]
+default-character-set=utf8
+
+[mysqld]
+character-set-client-handshake=FALSE
+init_connect="SET collation_connection = utf8_general_ci"
+init_connect="SET NAMES utf8"
+character-set-server=utf8
+collation-server=utf8_general_ci
+
+[mysql]
+default-character-set=utf8
 ```
 
-
-### 테이블 익스포트 시에 스테이징을 통한 적재
-* 적재 시에 도중에 실패하는 경우 대상 테이블에 일부 데이터만 적재되는 경우가 있는데 이러한 경우를 회피하기 위해 스테이징 테이블을 사용할 수 있습니다.
-* 스테이징 테이블은 원본 테이블을 그대로 두고 별도의 스테이징 테이블에 적재 후 완전 export 가 성공하면 원본 테이블을 clear 후 적재합니다
-* 아래와 같이 임시 스테이징 테이블을 동일한 스키마로 생성하고 익스포트를 수행합니다
-  * userid: user, password: pass
+### MySQL 설정파일 사용
+> 지정한 설정파일을 사용하고, 내부 볼륨을 통한 MySQL 기동으로 변경합니다
 ```bash
-bash>
-docker exec -it mysql mysql -uuser -p
+$> cat docker-compose.yml
+version: "3"
 
-mysql>
-create table testdb.seoul_popular_stg (category int not null, id int not null, name varchar(100), address varchar(100), naddress varchar(100), tel varchar(20), tag varchar(500)) character set utf8 collate utf8_general_ci;
-```
-* 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 truncate 는 수작업으로 수행되어야만 합니다
-```
-bash>
-./sqoop-eval.sh "truncate testdb.seoul_popular_exp"
-./sqoop-export.sh -m 4 --table seoul_popular_exp --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table --export-dir /user/sqoop/target/seoul_popular_exp
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./custom:/etc/myslq/conf.d
+      - mysql_utf8:/etc/myslq/conf.d
 ```
 
-### 컨테이너 정리
-* 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
+
+## 4 도커 이미지 빌드 및 실행
+* 아래와 같이 초기화 파일을 생성합니다
 ```bash
-docker stop `docker ps -q`
-docker rm `docker ps -aq`
-docker rm -f `docker ps -aq` # 위의 두 가지 작업을 한 번에 수행
+$> cat init/testdb.sql
+DROP TABLE IF EXISTS `seoul_popular_trip`;
+CREATE TABLE `seoul_popular_trip` (
+  `category` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `naddress` varchar(100) DEFAULT NULL,
+  `tel` varchar(20) DEFAULT NULL,
+  `tag` varchar(500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+LOCK TABLES `seoul_popular_trip` WRITE;
+INSERT INTO `seoul_popular_trip` VALUES (0,25931,'통인가게 ','110-300 서울 종로구 관훈동 16 ','03148 서울 종로구 인사동길 32 (관훈동) ','02-733-4867','오래된가게,고미술,통인정신,통인가게,공예샵,현대공예');
+UNLOCK TABLES;
 ```
+* 도커파일을 생성합니다
+```bash
+$> cat Dockerfile
+ARG BASE_CONTAINER=mysql:5.7
+FROM $BASE_CONTAINER
+LABEL maintainer="student@lg.com"
+
+ADD ./init /docker-entrypoint-initdb.d
+
+EXPOSE 3306
+
+CMD ["mysqld"]
+```
+* 로컬에서 도커 이미지를 빌드합니다
+```bash
+$> docker build -t local/mysql:5.7 .
+```
+
+### 빌드된 이미지로 다시 테스트
+```bash
+$ docker image ls
+$ cat docker-compose.yml
+version: "3"
+
+services:
+  mysql:
+    container_name: mysql
+    image: local/mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
+
+$> docker exec -it mysql mysql -u user -p
+$> use testdb;
+$> select * from seoul_popular_trip;
+```
+
+
+## 5 도커 컴포즈 통한 여러 이미지 실행
+> MySQL 과 phpMyAdmin 2가지 서비스를 실행합니다
+
+### 도커 컴포즈를 통해 phpMyAdmin 추가 설치
+```bash
+$> cat docker-compose.yml
+version: "3"
+
+services:
+  mysql:
+    image: psyoblade/mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
+  php:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8183:80
+```
+* [phpMyAdmin](http://localhost:8183/index.php) 사이트에 접속하여 mysql/user/pass 로 접속합니다
+
+
+### MySQL 이 정상적으로 로딩된 이후에 접속하도록 설정합니다
+* 테스트 헬스체크를 통해 MySQL 이 정상 기동되었을 때에 다른 어플리케이션을 띄웁니다
+```bash
+$> cat docker-compose.yml
+version: "3"
+
+services:
+  mysql:
+    image: psyoblade/mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 1s
+      retries: 3
+    volumes:
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
+  php:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8183:80
+```
+

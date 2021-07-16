@@ -1,698 +1,199 @@
-# 2일차. 플루언트디를 통한 파일 데이터 수집 - Fluentd
-> 플루언트디를 통해 다양한 수집 예제를 실습합니다
-> 이번 장에서 사용하는 외부 오픈 포트는 22, 80, 5601, 8080, 9880, 50070 입니다
+# 1일차. 아파치 스쿱을 통한 테이블 수집 실습 - Apache Sqoop
+> 아파치 스쿱을 통해 다양한 수집 예제를 실습합니다
 
 
 - 목차
-  * [예제 1. 웹 서버를 통해서 전송 받은 데이터를 표준 출력으로 전달](#예제-1-웹-서버를-통해서-전송-받은-데이터를-표준-출력으로-전달)
-  * [예제 2. 더미 에이전트를 통해 생성된 이벤트를 로컬 저장소에 저장](#예제-2-더미-에이전트를-통해-생성된-이벤트를-로컬-저장소에-저장)
-  * [예제 3. 시스템 로그를 테일링 하면서 표준 출력으로 전달](#예제-3-시스템-로그를-테일링-하면서-표준-출력으로-전달)
-  * [예제 4. 트랜스포머를 통한 시간 데이터 변환](#예제-4-트랜스포머를-통한-시간-데이터-변환)
-  * [예제 5. 컨테이너 환경에서의 로그 전송](#예제-5-컨테이너-환경에서의-로그-전송)
-  * [예제 6. 도커 컴포즈를 통한 로그 전송 구성](#예제-6-도커-컴포즈를-통한-로그-전송-구성)
-  * [예제 7. 멀티 프로세스를 통한 성능 향상](#예제-7-멀티-프로세스를-통한-성능-향상)
-  * [예제 8. 멀티 프로세스를 통해 하나의 위치에 저장](#예제-8-멀티-프로세스를-통해-하나의-위치에-저장)
-  * [예제 9. 전송되는 데이터를 분산 저장소에 저장](#예제-9-전송되는-데이터를-분산-저장소에-저장)
+  * [1. 아파치 스쿱을 통한 테이블 수집](#아파치-스쿱을-통한-테이블-수집)
+  * [1-1. 아파치 스쿱 테이블 수집 예제 테이블](#아파치-스쿱-테이블-수집-예제-테이블)
+  * [1-3. 유형별 테이블 수집](#유형별-테이블-수집)
+  * [1-4. 파티션 테이블 수집](#파티션-테이블-수집)
+  * [1-5. 증분 테이블 수집](#증분-테이블-수집)
+  * [1-6. 모든 테이블 수집](#모든-테이블-수집)
+  * [2. 아파치 스쿱을 통한 테이블 적재](#아파치-스쿱을-통한-테이블-적재)
+  * [2-1. 새로운 테이블을 생성하고 적재](#새로운-테이블을-생성하고-적재)
 
 
-## 예제 1 웹 서버를 통해서 전송 받은 데이터를 표준 출력으로 전달
-### 1. 도커 컨테이너 기동
+## 아파치 스쿱을 통한 테이블 수집
+
+### 1. 스쿱 도커 기동 확인
+* 최신 버전 코드를 내려 받습니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex1
-docker-compose up -d
-docker logs -f fluentd
+cd /home/ubuntu/work/data-engineer-intermediate-training
+git pull
 ```
-### 2. HTTP 로 Fluentd 서버 동작 유무 확인
+* 아래의 명령을 확인합니다
 ```bash
-docker ps --filter name=fluentd
-curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
+docker ps --filter name=sqoop
 ```
-### 3. Fluentd 구성 파일을 분석합니다
-* fluent.conf
-```conf
-<source>
-    @type http
-    port 9880
-    bind 0.0.0.0
-</source>
-
-<match test>
-    @type stdout
-</match>
-```
-* docker-compose.yml
-```yml
-version: "3"
-services:
-  fluentd:
-    container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
-    user: root
-    tty: true
-    ports:
-      - 9880:9880
-    volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
-```
-### 4. 기동된 Fluentd 를 종료합니다
+* 기동되지 않았다면 Network, MySQL, Sqoop 순서대로 생성합니다
 ```bash
-docker-compose down
-docker ps -a
+cd /home/ubuntu/work/data-engineer-intermediate-training/day1/sbin
+./docker-create-network.sh
+./docker-run-mysql.sh
+./docker-run-sqoop.sh
 ```
 
-
-## 예제 2 더미 에이전트를 통해 생성된 이벤트를 로컬 저장소에 저장
-### 1. 도커 컨테이너 기동
+### 아파치 스쿱 테이블 수집 예제 테이블
+* 이전에 생성된 가비지 정보들을 모두 삭제하기 위해 하둡 및 MySQL 삭제 작업을 수행합니다 (처음이라면 스킵합니다)
+  * userid: user, password: pass
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex2
-docker-compose up -d
-docker logs -f fluentd
-```
-### 2. 로컬 경로에 파일이 저장되는 지 확인
-* target 경로에 로그가 1분 단위로 플러시 됩니다
+bash>
+./hadoop.sh fs -rm -r /user/sqoop
+
 ```bash
-ls -al target
-tree target
+docker exec -it mysql mysql -uuser -p
+mysql>
+use testdb;
+drop table inc_table;
+drop table users;
+drop table seoul_popular_stg;
+drop table seoul_popular_exp;
 ```
-### 3. Fluentd 구성 파일을 분석합니다
-* fluent.conf
-```conf
-<source>
-    @type dummy
-    tag dummy.info
-    size 5
-    rate 1
-    auto_increment_key seq
-    dummy {"info":"hello-world"}
-</source>
-
-<source>
-    @type dummy
-    tag dummy.debug
-    size 3
-    rate 1
-    dummy {"debug":"hello-world"}
-</source>
-
-<filter dummy.info>
-    @type record_transformer
-    <record>
-        table_name ${tag_parts[0]}
-    </record>
-</filter>
-
-<match dummy.info>
-    @type file
-    path_suffix .log
-    path /fluentd/target/${table_name}/%Y%m%d/part-%Y%m%d.%H%M
-    <buffer time,table_name>
-        timekey 1m
-        timekey_wait 10s
-        timekey_use_utc false
-        timekey_zone +0900
-    </buffer>
-</match>
-```
-* docker-compose.yml
-```yml
-version: "3"
-services:
-  fluentd:
-    container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
-    user: root
-    tty: true
-    volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
-      - ./source:/fluentd/source
-      - ./target:/fluentd/target
-```
-### 4. 기동된 Fluentd 를 종료합니다
+* 로컬 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
 ```bash
-docker-compose down
-docker ps -a
+cd /home/ubuntu/work/data-engineer-intermediate-training/day1/sbin
+docker exec -it sqoop sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
+docker exec -it sqoop ls /tmp/sqoop/seoul_popular_trip
+docker exec -it sqoop cat /tmp/sqoop/seoul_popular_trip/part-m-00000
+```
+* 클러스터 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
+```bash
+docker exec -it sqoop sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip
+docker exec -it sqoop hadoop fs -ls /user/sqoop/target/seoul_popular_trip
+docker exec -it sqoop hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
 
 
-## 예제 3 시스템 로그를 테일링 하면서 표준 출력으로 전달
-### 1. 도커 컨테이너 기동 및 수집해야 할 로그폴더(source)를 생성합니다
+### 유형별 테이블 수집 
+* 하나의 테이블을 4개의 맵작업으로 병렬 수행 (sqoop-import.sh 반복적인 "접속정보, 계정, 패스워드"를 저장해두고 편리하기 쓰기 위한 배시스크립트입니다)
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex3
-mkdir source
-docker-compose up -d
-docker logs -f fluentd
+./sqoop-import.sh -m 4 --split-by id --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_v1 --fields-terminated-by '\t'
 ```
-### 2. 시스템 로그를 임의로 생성
-* 로그 생성기를 통해 accesslog 파일을 계속 source 경로에 append 하고, target 경로에서는 수집되는지 확인합니다
+* 위의 sqoop-import.sh 명령 대신 아래와 같이 직접 모두 입력해도 됩니다
 ```bash
-python flush_logs.py
-tree source
-tree target
-```
-* 임의 로그 생성기 (flush\_logs.py) 코드를 분석합니다
-```python
-#!/usr/bin/env python
-import sys, time, os, shutil
-
-# 1. read apache_logs flush every 100 lines until 1000 lines
-# 2. every 1000 lines file close & rename file with seq
-# 3. create new accesslogs and goto 1.
-
-def readlines(fp, num_of_lines):
-    lines = ""
-    for line in fp:
-        lines += line
-        num_of_lines = num_of_lines - 1
-        if num_of_lines == 0:
-            break
-    return lines
-
-
-fr = open("apache_logs", "r")
-for x in range(0, 10):
-    fw = open("source/accesslogs", "w+")
-    for y in range(0, 10):
-        lines = readlines(fr, 100)
-        fw.write(lines)
-        fw.flush()
-        time.sleep(0.1)
-        sys.stdout.write(".")
-        sys.stdout.flush()
-    fw.close()
-    print("file flushed ... sleep 10 secs")
-    time.sleep(10)
-    shutil.move("source/accesslogs", "source/accesslogs.%d" % x)
-    print("renamed accesslogs.%d" % x)
-fr.close()
-```
-### 3. Fluentd 구성 파일을 분석합니다
-* fluent.conf
-```conf
-<source>
-    @type tail
-    @log_level info
-    path /fluentd/source/accesslogs
-    pos_file /fluentd/source/accesslogs.pos
-    refresh_interval 5
-    multiline_flush_interval 5
-    rotate_wait 5
-    open_on_every_update true
-    emit_unmatched_lines true
-    read_from_head false
-    tag weblog.info
-    <parse>
-        @type apache2
-    </parse>
-</source>
-
-<match weblog.info>
-    @type file
-    @log_level info
-    add_path_suffix true
-    path_suffix .log
-    path /fluentd/target/${tag}/%Y%m%d/accesslog.%Y%m%d.%H
-    <buffer time,tag>
-        timekey 1h
-        timekey_use_utc false
-        timekey_wait 10s
-        timekey_zone +0900
-        flush_mode immediate
-        flush_thread_count 8
-    </buffer>
-</match>
-
-<match weblog.debug>
-    @type stdout
-    @log_level debug
-</match>
-```
-* docker-compose.yml
-```yml
-version: "3"
-services:
-  fluentd:
-    container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
-    user: root
-    tty: true
-    volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
-      - ./source:/fluentd/source
-      - ./target:/fluentd/target
-```
-### 4. 기동된 Fluentd 를 종료합니다
-```bash
-docker-compose down
-docker ps -a
+docker exec -it sqoop sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_v2 --fields-terminated-by '\t' --delete-target-dir --verbose --username user --password pass
 ```
 
 
-## 예제 4 트랜스포머를 통한 시간 데이터 변환
-### 1. 도커 컨테이너 기동
+### 파티션 테이블 수집
+* 하나의 테이블을 조건에 따라 분리해서 저장히기 위해 id 값의 범위를 확인해 봅니다 (Min(id), Max(id))
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex4
-docker-compose up -d
-docker logs -f fluentd
+./sqoop-eval.sh "select min(id), max(id) from seoul_popular_trip"
+./sqoop-eval.sh "select count(1) from seoul_popular_trip"
 ```
-### 2. http://student#.lgebigdata.com:8080/test 위치로 POST 데이터를 전송합니다
-* ARC Rest Client 를 사용해도 되고 curl 을 사용해도 됩니다
-  * Epoch 시간은 https://www.epochconverter.com/ 사이트를 이용합니다
+* 테이블을 파티션 단위로 저장하기 위해서는 루트 경로를 생성해 두어야만 합니다 (그래야 하위에 key=value 형식의 경로로 저장할 수 있습니다)
 ```bash
-POST: http://student{no}.lgebigdata.com:8080/test
-BODY: { "column1":"1", "column2":"hello-world", "logtime": 1593379470 }
-
-curl -X POST -d '{ "column1":"1", "column2":"hello-world", "logtime": 1593379470 }' http://student{no}.lgebigdata.com:8080/test
+./hadoop.sh fs -mkdir -p /user/sqoop/target/seoul_popular_partition
 ```
-### 3. 수신된 데이터가 로그에 정상 출력됨을 확인합니다
-### 4. 기동된 Fluentd 를 종료합니다
+* 확인한 값의 범위를 이용하여 조건을 달리하여 하나의 테이블을 3번으로 나누어 수집을 수행합니다
 ```bash
-docker-compose down
-docker ps -a
+docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --delete-target-dir -m 1 --table seoul_popular_trip --where "id < 10000" --target-dir /user/sqoop/target/seoul_popular_partition/part=0
+docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 10001 and id < 20000" --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
+docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 20001" --target-dir /user/sqoop/target/seoul_popular_partition/part=20000
+```
+* 테이블 수집이 정상적으로 수행 되었는지 하둡 명령어를 통해 확인해 봅니다
+```bash
+./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_partition
 ```
 
 
-## 예제 5 컨테이너 환경에서의 로그 전송
-> 도커 어플리케이션에서 발생하는 로그를 플루언트디로 적재합니다
-### 1. 도커 로그 수집 컨테이너를 기동합니다
+### 증분 테이블 수집
+* 증분 테이블 수집을 위해 MySQL 접속 후, 예제 테이블을 생성합니다 (inc\_table)
+  * userid: user, password: pass
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex5
-./start_fluentd.sh
+docker exec -it mysql mysql -uuser -p
+create table inc_table (id int not null auto_increment, name varchar(30), salary int, primary key (id));
+insert into inc_table (name, salary) values ('suhyuk', 10000);
 ```
-* 위와 같이 명령을 수행하고 Ctrl+P,Q 를 누르고 컨테이너를 종료하지 않고 밖으로 빠져나옵니다
-### 2. 더미 어플리케이션을 기동하여 도커로그 수집기로 로그를 전송합니다
+* 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
+  * 증분 테이블 수집 후 마지막에 --last-value 값이 1인 점을 확인해 둡니다 (다음 수집 시에 사용할 예정입니다)
+  * 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
 ```bash
-./start_application.sh
+./sqoop-import.sh --table inc_table --incremental append --check-column id --last-value 0 --target-dir /user/sqoop/target/seoul_popular_inc
+./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_inc
+./hadoop.sh fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00000
 ```
-### 3. 다시 로그 수집기(aggregator)에 로그가 정상적으로 수신되는지 확인합니다
+* 초기 수집 이후에 데이터가 추가되었(증분)다는 것을 테스트하기 위해 데이터를 추가합니다
 ```bash
-docker logs -f aggregator
+docker exec -it mysql mysql -uuser -p
+insert into inc_table (name, salary) values ('psyoblade', 20000);
 ```
-### 3. Fluentd 구성 파일을 분석합니다
-* aggregator.conf
-```conf
-<source>
-    @type forward
-    port 24224
-    bind 0.0.0.0
-</source>
-
-<filter docker.*>
-    @type parser
-    key_name log
-    reserve_data true
-    <parse>
-        @type json
-    </parse>
-</filter>
-
-<filter docker.*>
-    @type record_transformer
-    <record>
-        table_name ${tag_parts[1]}
-    </record>
-</filter>
-
-<match docker.*>
-    @type stdout
-</match>
-```
-* start\_fluentd.sh
+* 증분 테이블 수집을 위해 이전 --last-value 1 을 입력하고 다시 수집합니다
 ```bash
-#!/bin/bash
-if [ -z $PROJECT_HOME ]; then
-    echo "\$PROJECT_HOME 이 지정되지 않았습니다"
-    exit 1
-fi
-docker run --name aggregator -it -p 24224:24224 -v $PROJECT_HOME/aggregator.conf:/fluentd/etc/fluent.conf fluent/fluentd
+./sqoop-import.sh --table inc_table --incremental append --check-column id --last-value 1 --target-dir /user/sqoop/target/seoul_popular_inc
 ```
-* start dummy docker container
+* 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
 ```bash
-./start_fluentd.sh
-```
-* execute my container and generate my message with --log-driver
-  * [By default, the logging driver connects to localhost:24224](https://docs.docker.com/config/containers/logging/fluentd/)
-```bash
-docker run --rm --log-driver=fluentd ubuntu echo '{"message":"null tag message"}'
-docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.ID}} ubuntu echo '{"message":"send message with id"}'
-docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.Name}} ubuntu echo '{"message":"send message with name"}'
-docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.FullID}} ubuntu echo '{"message":"send message with full-id"}'
-
-# in case of connect other container
-aggregator_address=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' aggregator`
-docker run --rm --log-driver=fluentd --log-opt tag=docker.helloworld --log-opt fluentd-address=$aggregator_address:24224 ubuntu echo '{"message":"exact ip send message"}'
-```
-* stop and remove container
-```bash
-docker stop aggregator
-docker rm aggregator
-```
-### 4. 기동된 Fluentd 를 종료합니다
-```bash
-docker stop aggregator
-docker rm aggregator
-docker ps -a
+./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_inc
+./hadoop.sh fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00001
 ```
 
 
-## 예제 6 도커 컴포즈를 통한 로그 전송 구성
-### 1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
+### 모든 테이블 수집
+* 모든 테이블 수집을 위한 데이터베이스(testdb) 경로를 하나 생성합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex6
-docker-compose up -d
-docker ps
+./hadoop.sh fs -mkdir /user/sqoop/target/testdb
 ```
-### 2. 키바나를 통해 엘라스틱 서치를 구성합니다
-* 키바나 사이트에 접속하여 색인을 생성
-  * 1. http://student{id}.lgebigdata.com:5601 사이트에 접속 (모든 컴포넌트 기동에 약 3~5분 정도 소요됨)
-  * 2. Explorer on my Own 선택 후, 좌측 "Discover" 메뉴 선택
-  * 3. Step1 of 2: Create Index with 'fluentd-\*' 까지 치면 아래에 색인이 뜨고 "Next step" 클릭
-  * 4. Step2 of 2: Configure settings 에서 @timestamp 필드를 선택하고 "Create index pattern" 클릭
-  * 5. Discover 메뉴로 이동하면 전송되는 로그를 실시간으로 확인할 수 있음
-* 웹 사이트에 접속을 시도
-  * 1. http://student{id}.lgebigdata.com 사이트에 접속하면 It works! 가 뜨면 정상
-  * 2. 다시 Kibana 에서 Refresh 버튼을 누르면 접속 로그가 전송됨을 확인
-
-### 3. Fluentd 구성 파일을 분석합니다
-* docker-compose.yml
-```yml
-version: "3"
-services:
-  web:
-    container_name: web
-    image: httpd
-    ports:
-      - 80:80
-    links:
-      - fluentd
-    logging:
-      driver: fluentd
-      options:
-        fluentd-address: localhost:24224
-        tag: httpd.access
-  fluentd:
-    container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
-    volumes:
-      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
-    links:
-      - elasticsearch
-    ports:
-      - 24224:24224
-      - 24224:24224/udp
-  elasticsearch:
-    container_name: elasticsearch
-    image: elasticsearch:7.8.0
-    command: elasticsearch
-    environment:
-      - cluster.name=demo-es
-      - discovery.type=single-node
-      - http.cors.enabled=true
-      - http.cors.allow-credentials=true
-      - http.cors.allow-headers=X-Requested-With,X-Auth-Token,Content-Type,Content-Length,Authorization
-      - http.cors.allow-origin=/https?:\/\/localhost(:[0-9]+)?/
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    expose:
-      - 9200
-    ports:
-      - 9200:9200
-    volumes:
-      - ./elasticsearch/data:/usr/share/elasticsearch/data
-      - ./elasticsearch/logs:/usr/share/elasticsearch/logs
-    healthcheck:
-      test: curl -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
-      interval: 30s
-      timeout: 10s
-      retries: 5
-  kibana:
-    container_name: kibana
-    image: kibana:7.8.0
-    links:
-      - elasticsearch
-    ports:
-      - 5601:5601
-```
-### 4. 기동된 Fluentd 를 종료합니다
+* 생성된 경로를 루트로 하위로 모든 테이블을 수집합니다 (반드시 --autoreset-to-one-mapper 를 지정해 주어야 primary key 가 없는 경우에도 -m 1 으로 수집이 됩니다)
 ```bash
-docker-compose down
-docker ps -a
+docker exec -it sqoop sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --autoreset-to-one-mapper --warehouse-dir /user/sqoop/target/testdb --username user --password pass
 ```
 
 
-## 예제 7 멀티 프로세스를 통한 성능 향상
-### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
+## 아파치 스쿱을 통한 테이블 적재
+
+### 새로운 테이블을 생성하고 적재
+* 테이블 익스포트를 위해 적재 테이블(seoul\_popular\_exp)을 생성합니다
+  * userid: user, password: pass
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex7
-mkdir source
-./startup.sh
+bash>
+docker exec -it mysql mysql -uuser -p
+
+mysql>
+create table testdb.seoul_popular_exp (category int not null, id int not null, name varchar(100), address varchar(100), naddress varchar(100), tel varchar(20), tag varchar(500)) character set utf8 collate utf8_general_ci;
+
+bash>
+./sqoop-eval.sh "show tables"
+./sqoop-export.sh -m 1 --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
 ```
-### 2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
-* 첫 번째 프로세스가 파일로 받은 입력을 표준 출력으로 내보내는 프로세스입니다
+* 위의 익스포트 명령어를 수행하면 오류가 발생하는데 리소스매니저(http://student#.lgebigdata.com:8088) 사이트를 통해 디버깅을 해봅니다
+  * application\_number 링크를 클릭하고 logs 경로를 클릭하면 http://9e48393c5f39:8042/ 와 같이 docker-container 아이로 redirect 되는데 이 값을 student#.lgebigdata.com 값으로 변경해 주면 디버깅이 가능합니다
+  * 해당 로그 페이지에서 "syslog : Total file length is 49301 bytes." 링크를 클릭하고 "here" 링크를 클릭하면 전체 로그를 한 번에 확인할 수 있습니다
+  * 초기에 수집한 테이블의 경우 콤마를 기준으로 수집했는데, 필드에 콤마(,)가 들어가 있어서 export 시에 필드의 개수가 맞지 않는다는 오류를 확인합니다
+* 탭을 구분자로 테이블 임포트를 다시 수행합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex7
-for x in $(seq 1 1000); do echo "{\"hello\":\"world\"}" >> source/start.log; done
+./sqoop-import.sh -m 1 --table seoul_popular_trip --fields-terminated-by '\t' --delete-target-dir --target-dir /user/sqoop/target/seoul_popular_exp
 ```
-* 두 번째 프로세스는 HTTP 로 입력 받은 내용을 표준 출력으로 내보내는 프로세스입니다
+* 탭 구분자로 익스포트된 경로의 파일을 이용하여 다시 익스포트를 수행합니다
 ```bash
-curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
-```
-### 3. Fluentd 구성 파일을 분석합니다
-* fluent.conf
-```conf
-<system>
-    workers 2
-    root_dir /fluentd/log
-</system>
-<worker 0>
-    <source>
-        @type tail
-        path /fluentd/source/*.log
-        pos_file /fluentd/source/local.pos
-        tag worker.tail
-        <parse>
-            @type json
-        </parse>
-    </source>
-    <match>
-        @type stdout
-    </match>
-</worker>
-<worker 1>
-    <source>
-        @type http
-        port 9880
-        bind 0.0.0.0
-    </source>
-    <match>
-        @type stdout
-    </match>
-</worker>
-```
-* startup.sh
-```bash
-#!/bin/bash
-export PROJECT_HOME=`pwd`
-name="multi-process"
-echo "docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd"
-docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd
-```
-* shutdown.sh
-```bash
-#!/bin/bash
-name="multi-process"
-container_name=`docker ps -a --filter name=$name | grep -v 'CONTAINER' | awk '{ print $1 }'`
-docker rm -f $container_name
-```
-### 4. 기동된 Fluentd 를 종료합니다
-```bash
-./shutdown.sh
-docker ps -a
+./sqoop-export.sh -m 1 --table seoul_popular_exp --fields-terminated-by '\t' --export-dir /user/sqoop/target/seoul_popular_exp
+./sqoop-eval.sh "select count(1) from seoul_popular_exp"
 ```
 
 
-## 예제 8 멀티 프로세스를 통해 하나의 위치에 저장
-### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
+### 테이블 익스포트 시에 스테이징을 통한 적재
+* 적재 시에 도중에 실패하는 경우 대상 테이블에 일부 데이터만 적재되는 경우가 있는데 이러한 경우를 회피하기 위해 스테이징 테이블을 사용할 수 있습니다.
+* 스테이징 테이블은 원본 테이블을 그대로 두고 별도의 스테이징 테이블에 적재 후 완전 export 가 성공하면 원본 테이블을 clear 후 적재합니다
+* 아래와 같이 임시 스테이징 테이블을 동일한 스키마로 생성하고 익스포트를 수행합니다
+  * userid: user, password: pass
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex8
-mkdir source
-./startup.sh
-```
-### 2. 별도의 터미널에서 아래의 명령으로 멀티 프로세스를 통해 하나의 위치에 저장되는 것을 확인합니다
-```bash
-tree target
-```
-### 3. Fluentd 구성 파일을 분석합니다
-* fuent.conf
-```conf
-<system>
-    workers 2
-    root_dir /fluentd/log
-</system>
+bash>
+docker exec -it mysql mysql -uuser -p
 
-<worker 0>
-    <source>
-        @type http
-        port 9880
-        bind 0.0.0.0
-    </source>
-    <match debug>
-        @type stdout
-    </match>
-    <match test>
-        @type file
-        @id out_file_0
-        path "/fluentd/target/#{worker_id}/${tag}/%Y/%m/%d/testlog.%H%M"
-        <buffer time,tag>
-            timekey 1m
-            timekey_use_utc false
-            timekey_wait 10s
-        </buffer>
-    </match>
-</worker>
-
-<worker 1>
-    <source>
-        @type http
-        port 9881
-        bind 0.0.0.0
-    </source>
-    <match debug>
-        @type stdout
-    </match>
-    <match test>
-        @type file
-        @id out_file_1
-        path "/fluentd/target/#{worker_id}/${tag}/%Y/%m/%d/testlog.%H%M"
-        <buffer time,tag>
-            timekey 1m
-            timekey_use_utc false
-            timekey_wait 10s
-        </buffer>
-    </match>
-</worker>
+mysql>
+create table testdb.seoul_popular_stg (category int not null, id int not null, name varchar(100), address varchar(100), naddress varchar(100), tel varchar(20), tag varchar(500)) character set utf8 collate utf8_general_ci;
 ```
-* startup.sh
-```bash
-#!/bin/bash
-export PROJECT_HOME=`pwd`
-name="multi-process-ex"
-echo "docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd"
-docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd
+* 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 truncate 는 수작업으로 수행되어야만 합니다
 ```
-* progress.sh
-```bash
-#!/bin/bash
-max=60
-dot="."
-for number in $(seq 0 $max); do
-    for port in $(seq 9880 9881); do
-        # echo curl -XPOST -d "json={\"hello\":\"$number\"}" http://localhost:$port/test
-        curl -XPOST -d "json={\"hello\":\"$number\"}" http://localhost:$port/test
-    done
-    echo -ne "[$number/$max] $dot\r"
-    sleep 1
-    dot="$dot."
-done
-tree
-```
-* shutdown.sh
-```bash
-#!/bin/bash
-name="multi-process-ex"
-container_name=`docker ps -a --filter name=$name | grep -v 'CONTAINER' | awk '{ print $1 }'`
-docker rm -f $container_name
-```
-### 4. 기동된 Fluentd 를 종료합니다
-```bash
-Ctrl+C
-docker-compose down
-docker ps -a
+bash>
+./sqoop-eval.sh "truncate testdb.seoul_popular_exp"
+./sqoop-export.sh -m 4 --table seoul_popular_exp --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table --export-dir /user/sqoop/target/seoul_popular_exp
 ```
 
-
-## 예제 9 전송되는 데이터를 분산 저장소에 저장
-### 1. 서비스를 기동합니다
+### 컨테이너 정리
+* 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex9
-./startup.sh
-```
-### 2. 별도의 터미널에서 모든 서비스(fluentd, namenode, datanode)가 떠 있는지 확인합니다
-```bash
-docker ps
-```
-### 3. HTTP 로 전송하고 해당 데이터가 하둡에 저장되는지 확인합니다
-  * http://student#.lgebigdata.com:50070/explorer.html 에 접속하여 확인합니다
-  * 혹은 namenode 에 설치된 hadoop client 로 확인 합니다
-  * WARN: 현재 노드수가 1개밖에 없어서 Replication 오류가 나고 있습니다. 
-```
-./progress.sh
-docker exec -it namenode hadoop fs -ls /user/fluent/webhdfs/
-```
-### 4. Fluentd 구성 파일을 분석합니다
-* fluent.conf
-```conf
-version: '2'
-services:
-  namenode:
-    container_name: namenode
-    image: bde2020/hadoop-namenode:1.1.0-hadoop2.8-java8
-    volumes:
-      - ./hadoop/namenode:/hadoop/dfs/name
-    environment:
-      - CLUSTER_NAME=test
-    env_file:
-      - ./hadoop/hadoop.env
-    ports:
-      - 50070:50070
-  datanode:
-    container_name: datanode
-    image: bde2020/hadoop-datanode:1.1.0-hadoop2.8-java8
-    depends_on:
-      - namenode
-    volumes:
-      - ./hadoop/datanode:/hadoop/dfs/data
-    env_file:
-      - ./hadoop/hadoop.env
-    ports:
-      - 50075:50075
-  fluentd:
-    container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
-    depends_on:
-      - namenode
-      - datanode
-    user: root
-    ports:
-      - 9880:9880
-    tty: true
-    volumes:
-      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
-volumes:
-  namenode:
-  datanode:
-```
-* start container
-```bash
-docker-compose up -d
-```
-* generate logs with progress.sh
-```bash
-#!/bin/bash
-max=60
-dot="."
-for number in $(seq 0 $max); do
-    curl -XPOST -d "json={\"hello\":\"$number\"}" http://localhost:9880/test.info
-    echo -ne "[$number/$max] $dot\r"
-    sleep 1
-    dot="$dot."
-done
-```
-### 4. 기동된 Fluentd 를 종료합니다
-```bash
-Ctrl+C
-docker-compose down
-docker ps -a
+docker stop `docker ps -q`
+docker rm `docker ps -aq`
+docker rm -f `docker ps -aq` # 위의 두 가지 작업을 한 번에 수행
 ```
