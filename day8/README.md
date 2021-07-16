@@ -677,16 +677,16 @@ insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk'), (3,
 * 제대로 설정되지 않은 경우 아래와 같은 오류를 발생시킵니다
 ```sql
 /**
-	delete from imdb_orc where rank = 1;
-	Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: 
-	Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
+  delete from imdb_orc where rank = 1;
+  Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: 
+  Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
 */
 ```
 
 <details><summary>[실습] WHERE 절에 랭크(rank)가 1인 레코드를 삭제 후, 조회해 보세요 </summary>
 
 ```sql
-delete from imdb_orc where rank = 1;
+delete from imdb_orc where rank = 2;
 select * from imdb_orc;
 ```
 
@@ -765,6 +765,23 @@ export table imdb_title to '/user/ubuntu/archive/imdb_title';
 import table imdb_recover from '/user/ubuntu/archive/imdb_title';
 select * from imdb_recover;
 ```
+* 아래와 유사한 결과가 나오면 정답입니다
+```text
++----------------------------------------------------+
+|                 imdb_recover.title                 |
++----------------------------------------------------+
+| "Alexander and the Terrible, Horrible, No Good, Very Bad Day" |
+| "Crazy, Stupid, Love."                             |
+| "Hail, Caesar!"                                    |
+| "Hello, My Name Is Doris"                          |
+| "I, Daniel Blake"                                  |
+| Zootopia                                           |
+| Zoolander 2                                        |
+| Zombieland                                         |
+| Zodiac                                             |
+| Zipper                                             |
++----------------------------------------------------+
+```
 
 </details>
 <br>
@@ -837,17 +854,20 @@ load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 <details><summary>[실습] 년도(year) 별 개봉된 영화의 수를 년도 오름차순(asc)으로 출력하세요 </summary>
 
 ```sql
-select year, count(title) as movie_count from imdb_movies group by year asc;
+select year, count(title) as movie_count from imdb_movies group by year order by year asc;
 ```
 
 </details>
 <br>
 
+* 문자열을 숫자로 캐스팅 하기위한 함수
+  - `imdb_movies` 의 `revenue` 컬럼은 문자열이므로 float, double 로 형변환이 필요합니다
+  - cast ( column as type ) as `new_column` 
 
 <details><summary>[실습] 2015년도 개봉된 영화 중에서 최고 매출 Top 3 영화 제목과 매출금액을 출력하세요 </summary>
 
 ```sql
-select title, revenue from imdb_movies where year = '2015' order by revenue desc limit 3;
+select title, cast(revenue as float) as rev from imdb_movies where year = '2015' order by rev desc limit 3;
 ```
 
 </details>
