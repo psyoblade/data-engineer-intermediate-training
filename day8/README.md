@@ -245,31 +245,49 @@ create table if not exists employee (emp_id string comment 'employee id',
     stored as textfile;
 ```
 
-#### 2. SHOW
-> 테이블 목록을 조회합니다
+#### 2. 테이블 목록 조회 - SHOW
 ```sql
 /** Usages
-SHOW TABLES [IN database_name];
+    SHOW TABLES [IN database_name];
 */
 ```
-* 명령어 설명
+* 테이블 목록을 조회합니다 
 ```sql
-beeline> 
+# beeline> 
 show tables;
 ```
+* 부분일치 하는 테이블 목록을 조회합니다
+  - like 연산자와 유사하게 동작합니다
+```sql
+# beeline> 
+show tables 'emp*';
+```
+<br>
 
-#### 3. DESCRIBE
-> 테이블 정보를 조회합니다
+
+#### 3. 테이블 정보 조회 - DESCRIBE
 ```sql
 /** Usages
-DESCRIBE [EXTENDED|FORMATTED] [db_name.] table_name[.col_name ( [.field_name])];
+    DESCRIBE [EXTENDED|FORMATTED] [db_name.] table_name[.col_name ( [.field_name])];
 */
 ```
-* 명령어 설명
+* 테이블 기본 정보를 조회 합니다
+  - EXTENDED : 부가정보를 출력합니다
+  - FORMATTED : 부가정보를 포맷에 맞추어 출력합니다
 ```sql
 # beeline> 
 describe employee;
 ```
+* 
+<details><summary> [실습] EXTENDED 및 FORMATTED 명령을 통해 테이블 정보를 조회합니다 </summary>
+
+```sql
+describe extended employee;
+describe formatted employee;
+```
+
+</details>
+<br>
 
 #### 4. DROP
 > 테이블을 삭제합니다. 일반 DROP 의 경우 .Trash/current directory 경로로 이동하지만 PURGE 옵션을 주는 경우 즉시 삭제됩니다
