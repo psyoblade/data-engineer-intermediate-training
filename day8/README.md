@@ -106,75 +106,102 @@ Transaction isolation: TRANSACTION_REPEATABLE_READ
 
 #### 2-1-1. 데이터베이스 생성 - CREATE
 
-* Create Database
-| Create Database |
-| --- |
-| CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
-[COMMENT database_comment]
-[LOCATION hdfs_path]
-[WITH DBPROPERTIES (property_name=property_value, ...)]; 
-|
-
+```text
+CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
+    [COMMENT database_comment]
+    [LOCATION hdfs_path]
+    [WITH DBPROPERTIES (property_name=property_value, ...)]; 
+```
+* 테스트 데이터베이스 testdb 를 생성합니다
 ```sql
 # beeline>
 create database if not exists testdb comment 'test database'
 location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
 ```
 
-#### 2. SHOW
-> 데이터베이스 목록을 출력합니다
-```sql
-SHOW (DATABASES|SCHEMAS);
+#### 2-1-2. 데이터베이스 목록 출력 - SHOW
 
-beeline> 
+```text
+SHOW (DATABASES|SCHEMAS);
+```
+
+* 데이터베이스 목록 전체를 출력합니다
+```sql
+# beeline> 
 show databases;
 ```
 
-#### 3. DESCRIBE
-> 데이터베이스 정보를 출력합니다
-```sql
-DESCRIBE DATABASE/SCHEMA [EXTENDED] db_name;
+#### 2-1-3. 데이터베이스 정보를 출력합니다 - DESCRIBE
 
-beeline> 
+```text
+DESCRIBE DATABASE/SCHEMA [EXTENDED] db_name;
+```
+* 데이터베이스 생성 정보를 출력합니다
+  - EXTENDED 키워드는 보다 상세한 정보를 출력합니다
+```sql
+# beeline> 
 describe database testdb;
 ```
 
-#### 4. USE
-> 해당 데이터베이스를 사용합니다
-```sql
+#### 2-1-4. 지정한 데이터베이스를 사용합니다 - USE
+```text
 USE database_name;
-
-beeline> 
+```
+* 위에서 생성한 testdb 를 현재 세션에서 사용하도록 선언합니다
+```sql
+# beeline> 
 use testdb;
 ```
 
-#### 5. DROP
-> 데이터베이스를 삭제합니다 (default:RESTRICT) 테이블이 존재하는 경우 오류가 발생하며, CACADE 옵션을 주는 경우 모든 테이블까지 삭제됩니다
-```sql
+#### 2-1-5. 데이터베이스를 삭제합니다 - DROP
+```text
 DROP (DATABASE|SCHEMA) [IF EXISTS] database_name [RESTRICT|CASCADE];
-
-beeline> 
+```
+* 지정한 데이터베이스를 삭제하며, 테이블이 존재하는 경우 오류가 발생합니다 (default:RESTRICT)
+  - CACADE 옵션을 주는 경우 포함하고 있는 모든 테이블까지 삭제됩니다
+```sql
+# beeline> 
 drop database testdb;
 show databases;
 ```
 
-#### 6. ALTER
-> 데이터베이스의 정보를 변경합니다
-* DBPROPERTIES
-```sql
-ALTER (DATABASE|SCHEMA) database_name SET DBPROPERTIES (property_name=property_value, ...);
+#### 2-1-6. 데이터베이스의 정보를 변경합니다 - ALTER
+> 데이터베이스에는 크게 DBPROPERTIES 와 OWNER 속성 2가지를 가지고 있습니다
 
-beeline> 
-create database if not exists testdb comment 'test database' location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
+##### DBPROPERTIES 속성
+* `키=값` 쌍으로 다양한 용도로 사용되는 값을 넣는 Map 같은 메타데이터 정보입니다
+```text
+ALTER (DATABASE|SCHEMA) database_name SET DBPROPERTIES (property_name=property_value, ...);
+```
+* 데이터베이스 생성자 혹은 필요에 따라 원하는 메타데이터 정보를 데이터베이스 생성 시에 추가할 수 있습니다
+```sql
+# beeline> 
+create database if not exists testdb comment 'test database' 
+location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
+```
+* 이미 생성된 데이터베이스는 ALTER 명령어로 수정이 가능합니다
+```sql
 alter database testdb set dbproperties ('createdfor'='park.suhyuk');
+```
+* 수정된 DBPROPERTIES 정보를 확인합니다
+```sql
 describe database extended testdb;
 ```
-* OWNER
-```sql
-ALTER (DATABASE|SCHEMA) database_name SET OWNER [USER|ROLE] user_or_role;
+<br>
 
-beeline> 
+##### OWNER 속성
+* 데이터베이스 관리를 어떤 기준(User or Role)으로 할 지를 결정합니다 
+```text
+ALTER (DATABASE|SCHEMA) database_name SET OWNER [USER|ROLE] user_or_role;
+```
+* 테스트 데이터베이스 `testdb` 에 대해 `admin` 이라는 `role` 기반으로 관리하도록 설정합니다
+  - 계정 단위로 관리하는 것은 번거롭고 관리 비용이 커질 수 있습니다
+```sql
+# beeline> 
 alter database testdb set owner role admin;
+```
+* 수정된 OWNER 정보를 확인합니다 
+```sql
 describe database extended testdb;
 ```
 
