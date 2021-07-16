@@ -676,9 +676,11 @@ insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk'), (3,
 
 * 제대로 설정되지 않은 경우 아래와 같은 오류를 발생시킵니다
 ```sql
-delete from imdb_orc where rank = 1;
-Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: 
-Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
+/**
+	delete from imdb_orc where rank = 1;
+	Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: 
+	Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
+*/
 ```
 
 <details><summary>[실습] WHERE 절에 랭크(rank)가 1인 레코드를 삭제 후, 조회해 보세요 </summary>
