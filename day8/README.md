@@ -416,6 +416,7 @@ create table if not exists employee (
 alter table employee rename to renamed_emp;
 show tables;
 ```
+> 변경된 테이블이름(`renamed_emp`)가 나오면 정답입니다
 
 </details>
 <br>
@@ -440,7 +441,7 @@ create table if not exists employee (
   stored as textfile;
 ```
 
-<details><summary>[실습] 코멘트 'employee name' 을 가진 고객 이름(emp_name string) 컬럼을 추가하세요 </summary>
+<details><summary>[실습] 코멘트 'employee name' 을 가진 고객 이름(`emp_name` string) 컬럼을 추가하세요 </summary>
 
 ```sql
 alter table employee add columns (
@@ -449,6 +450,7 @@ alter table employee add columns (
 desc employee;
 desc renamed_emp;
 ```
+> 고객 이름이 추가되었다면 정답입니다
 
 </details>
 <br>
@@ -477,9 +479,11 @@ select * from renamed_emp;
 truncate table renamed_emp;
 select count(1) from renamed_emp;
 ```
+> 결과가 0으로 나오면 정답입니다
 
 </details>
 <br>
+
 
 
 ### 2-3 하이브 DML 가이드
@@ -525,6 +529,7 @@ load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 docker compose exec hive-server bash
 hadoop fs -ls /user/hive/warehouse/testdb/
 ```
+> 적재된 테이블이 출력되면 정답입니다
 
 </details>
 <br>
@@ -554,12 +559,13 @@ describe formatted imdb_movies;
 select genre, title from imdb_movies order by title asc;
 ```
 
-<details><summary>[실습] 랭킹(rank) 오름차순(ASC)으로 장르(genre), 제목(title) 정보를 출력하세요 </summary>
+<details><summary>[실습] 랭킹(rank) 오름차순(ASC)으로 장르(genre), 제목(title) 정보를 상위 10개만 출력하세요 </summary>
 
 ```bash
 # beeline>
-select rank, genre, title from imdb_movies order by rank asc;
+select rank, genre, title from imdb_movies order by rank asc limit 10;
 ```
+> 랭킹이 1 ~ 10위가 나오면 정답입니다
 
 </details>
 <br>
@@ -592,6 +598,7 @@ select title from imdb_title;
 insert into table imdb_title select title from imdb_movies order by title desc limit 5;
 select title from imdb_title;
 ```
+> 15건의 결과가 나오면 정답입니다
 
 </details>
 <br>
@@ -632,9 +639,10 @@ select title from imdb_title where title like '%record%';
 <details><summary>[실습] `imdb_movies` 테이블로부터 OVERWRITE 옵션으로 모든 제목(title)을 `imdb_title` 테이블에 입력하세요 </summary>
 
 ```sql
-insert ovewrite table imdb_title select title from imdb_movies;
+insert overwrite table imdb_title select title from imdb_movies;
 select count(1) from imdb_title;
 ```
+> 1000개 결과가 나오면 정답입니다
 
 </details>
 <br>
