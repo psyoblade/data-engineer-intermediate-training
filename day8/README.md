@@ -235,58 +235,58 @@ describe database extended testdb;
         [STORED AS file_format]
         [LOCATION hdfs_path];
 
-		data_type
-			: primitive_type
-			| array_type
-			| map_type
-			| struct_type
-			| union_type  -- (Note: Available in Hive 0.7.0 and later)
-		 
-		primitive_type
-			: TINYINT
-			| SMALLINT
-			| INT
-			| BIGINT
-			| BOOLEAN
-			| FLOAT
-			| DOUBLE
-			| DOUBLE PRECISION -- (Note: Available in Hive 2.2.0 and later)
-			| STRING
-			| BINARY      -- (Note: Available in Hive 0.8.0 and later)
-			| TIMESTAMP   -- (Note: Available in Hive 0.8.0 and later)
-			| DECIMAL     -- (Note: Available in Hive 0.11.0 and later)
-			| DECIMAL(precision, scale)  -- (Note: Available in Hive 0.13.0 and later)
-			| DATE        -- (Note: Available in Hive 0.12.0 and later)
-			| VARCHAR     -- (Note: Available in Hive 0.12.0 and later)
-			| CHAR        -- (Note: Available in Hive 0.13.0 and later)
+    data_type
+      : primitive_type
+      | array_type
+      | map_type
+      | struct_type
+      | union_type  -- (Note: Available in Hive 0.7.0 and later)
+     
+    primitive_type
+      : TINYINT
+      | SMALLINT
+      | INT
+      | BIGINT
+      | BOOLEAN
+      | FLOAT
+      | DOUBLE
+      | DOUBLE PRECISION -- (Note: Available in Hive 2.2.0 and later)
+      | STRING
+      | BINARY      -- (Note: Available in Hive 0.8.0 and later)
+      | TIMESTAMP   -- (Note: Available in Hive 0.8.0 and later)
+      | DECIMAL     -- (Note: Available in Hive 0.11.0 and later)
+      | DECIMAL(precision, scale)  -- (Note: Available in Hive 0.13.0 and later)
+      | DATE        -- (Note: Available in Hive 0.12.0 and later)
+      | VARCHAR     -- (Note: Available in Hive 0.12.0 and later)
+      | CHAR        -- (Note: Available in Hive 0.13.0 and later)
 
-		array_type
-			: ARRAY < data_type >
-		 
-		map_type
-			: MAP < primitive_type, data_type >
-		 
-		struct_type
-			: STRUCT < col_name : data_type [COMMENT col_comment], ...>
-		 
-		union_type
-			 : UNIONTYPE < data_type, data_type, ... >  -- (Note: Available in Hive 0.7.0 and later)
+    array_type
+      : ARRAY < data_type >
+     
+    map_type
+      : MAP < primitive_type, data_type >
+     
+    struct_type
+      : STRUCT < col_name : data_type [COMMENT col_comment], ...>
+     
+    union_type
+       : UNIONTYPE < data_type, data_type, ... >  -- (Note: Available in Hive 0.7.0 and later)
 
-		row_format
-			: DELIMITED [FIELDS TERMINATED BY char [ESCAPED BY char]] [COLLECTION ITEMS TERMINATED BY char]
-						[MAP KEYS TERMINATED BY char] [LINES TERMINATED BY char]
-						[NULL DEFINED AS char]   -- (Note: Available in Hive 0.13 and later)
-			| SERDE serde_name [WITH SERDEPROPERTIES (property_name=property_value, property_name=property_value, ...)]
+    row_format
+      : DELIMITED [FIELDS TERMINATED BY char [ESCAPED BY char]] [COLLECTION ITEMS TERMINATED BY char]
+            [MAP KEYS TERMINATED BY char] [LINES TERMINATED BY char]
+            [NULL DEFINED AS char]   -- (Note: Available in Hive 0.13 and later)
+      | SERDE serde_name [WITH SERDEPROPERTIES (property_name=property_value, property_name=property_value, ...)]
 
-		file_format:
-			: SEQUENCEFILE
-			| TEXTFILE    -- (Default, depending on hive.default.fileformat configuration)
-			| RCFILE      -- (Note: Available in Hive 0.6.0 and later)
-			| ORC         -- (Note: Available in Hive 0.11.0 and later)
-			| PARQUET     -- (Note: Available in Hive 0.13.0 and later)
-			| AVRO        -- (Note: Available in Hive 0.14.0 and later)
-			| JSONFILE    -- (Note: Available in Hive 4.0.0 and later)
-			| INPUTFORMAT input_format_classname OUTPUTFORMAT output_format_classname
+    file_format:
+      : SEQUENCEFILE
+      | TEXTFILE    -- (Default, depending on hive.default.fileformat configuration)
+      | RCFILE      -- (Note: Available in Hive 0.6.0 and later)
+      | ORC         -- (Note: Available in Hive 0.11.0 and later)
+      | PARQUET     -- (Note: Available in Hive 0.13.0 and later)
+      | AVRO        -- (Note: Available in Hive 0.14.0 and later)
+      | JSONFILE    -- (Note: Available in Hive 4.0.0 and later)
+      | INPUTFORMAT input_format_classname OUTPUTFORMAT output_format_classname
 */
 ```
 
@@ -294,14 +294,14 @@ describe database extended testdb;
 ```sql
 # beeline> 
 create table if not exists employee (
-		emp_id string comment 'employee id',
-		emp_name string comment 'employee name', 
-		emp_salary bigint comment 'employee salary'
-	)
-	comment 'test employee table' 
-	row format delimited 
-	fields terminated by ','
-	stored as textfile;
+    emp_id string comment 'employee id',
+    emp_name string comment 'employee name', 
+    emp_salary bigint comment 'employee salary'
+  )
+  comment 'test employee table' 
+  row format delimited 
+  fields terminated by ','
+  stored as textfile;
 ```
 
 #### 2-2-2. 테이블 목록 조회 - SHOW
@@ -351,7 +351,7 @@ describe formatted employee;
 #### 2-2-4. 테이블 삭제 - DROP
 ```sql
 /** Usages
-		DROP TABLE [IF EXISTS] table_name ;
+    DROP TABLE [IF EXISTS] table_name ;
 */
 ```
 * 테이블을 삭제합니다
@@ -402,27 +402,27 @@ show tables;
 * 테이블 컬럼 추가 - ADD COLUMNS
 ```sql
 /** Usages
-		ALTER TABLE table_name ADD COLUMNS (column1, column2) ;
+    ALTER TABLE table_name ADD COLUMNS (column1, column2) ;
 */
 ```
 * 고객 테이블을 생성합니다
 ```sql
 # beeline> 
 create table if not exists employee (
-		emp_id string comment 'employee id',
-		emp_salary bigint comment 'employee salary'
-	)
-	comment 'test employee table' 
-	row format delimited 
-	fields terminated by ','
-	stored as textfile;
+    emp_id string comment 'employee id',
+    emp_salary bigint comment 'employee salary'
+  )
+  comment 'test employee table' 
+  row format delimited 
+  fields terminated by ','
+  stored as textfile;
 ```
 
 <details><summary>[실습] 코멘트 'employee name' 을 가진 고객 이름(`emp_name` string) 컬럼을 추가하세요 </summary>
 
 ```sql
 alter table employee add columns (
-	emp_name string comment 'employee name', 
+  emp_name string comment 'employee name', 
 );
 desc employee;
 desc renamed_emp;
@@ -436,7 +436,7 @@ desc renamed_emp;
 
 ```sql
 /** Usages
-		TRUNCATE TABLE table_name;
+    TRUNCATE TABLE table_name;
 */
 ```
 * 테이블에 임의의 데이터를 추가 후, 데이터를 조회합니다
@@ -468,7 +468,7 @@ select count(1) from renamed_emp;
 
 ```sql
 /** Usages
-		LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)];
+    LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)];
 */
 ```
 * 테이블이 존재하면 제거하고, 실습을 위한 IMDB 영화(`imdb_movies`) 테이블을 생성합니다
@@ -477,18 +477,18 @@ select count(1) from renamed_emp;
 drop table if exists imdb_movies;
 
 create table imdb_movies (
-	rank int
-	, title string
-	, genre string
-	, description string
-	, director string
-	, actors string
-	, year string
-	, runtime int
-	, rating string
-	, votes int
-	, revenue string
-	, metascore int
+  rank int
+  , title string
+  , genre string
+  , description string
+  , director string
+  , actors string
+  , year string
+  , runtime int
+  , rating string
+  , votes int
+  , revenue string
+  , metascore int
 ) row format delimited fields terminated by '\t';
 ```
 * 생성된 테이블에 로컬에 존재하는 파일을 업로드합니다
@@ -512,12 +512,12 @@ hadoop fs -ls /user/hive/warehouse/testdb/
 
 ```sql
 /** Usages
-		SELECT [ALL | DISTINCT] select_expr, select_expr, ...
-				FROM table_reference
-				[WHERE where_condition]
-				[GROUP BY col_list]
-				[ORDER BY col_list [ASC | DESC]]
-		[LIMIT [offset,] rows]
+    SELECT [ALL | DISTINCT] select_expr, select_expr, ...
+        FROM table_reference
+        [WHERE where_condition]
+        [GROUP BY col_list]
+        [ORDER BY col_list [ASC | DESC]]
+    [LIMIT [offset,] rows]
 */
 ```
 * 테이블에 저장된 레코드를 SQL 구문을 통해서 조회합니다
@@ -548,7 +548,7 @@ select rank, genre, title from imdb_movies order by rank asc;
   - INSERT INTO 는 기본 동작이 Append 로 항상 추가됩니다
 ```sql
 /** Usages
-		INSERT INTO TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...)] select_statement1 FROM from_statement;
+    INSERT INTO TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...)] select_statement1 FROM from_statement;
 */
 ```
 * 제목만 가진 `imdb_title`이라는 테이블을 생성합니다
@@ -578,7 +578,7 @@ select title from imdb_title;
   - INSERT OVERWITE 는 기본 동작이 Delete & Insert 로 삭제후 추가됩니다
 ```sql
 /** Usages
-		INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, ..) [IF NOT EXISTS]] select_statement FROM from_statement;
+    INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, ..) [IF NOT EXISTS]] select_statement FROM from_statement;
 */
 ```
 * 제목만 가진 테이블에 OVERWRITE 키워드로 입력합니다
@@ -592,8 +592,8 @@ select title from imdb_title limit 5;
 * 임의의 데이터를 직접 입력합니다 - INSERT VALUES
 ```sql
 /** Usages
-		INSERT INTO TABLE tablename [PARTITION (partcol1[=val1], partcol2[=val2] ...)] 
-				VALUES values_row [, values_row ...];
+    INSERT INTO TABLE tablename [PARTITION (partcol1[=val1], partcol2[=val2] ...)] 
+        VALUES values_row [, values_row ...];
 */
 ```
 * 여러 레코드를 괄호를 통해서 입력할 수 있습니다
@@ -622,7 +622,7 @@ select count(1) from imdb_title;
   * [Hive Transactions](https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions) 
 ```sql
 /** Usages
-		DELETE FROM tablename [WHERE expression]
+    DELETE FROM tablename [WHERE expression]
 */
 ```
 * 트랜잭션 설정을 위한 ORC `imdb_orc` 테이블을 생성합니다 
@@ -665,7 +665,7 @@ Error: Error while compiling statement: FAILED: SemanticException [Error 10294]:
 
 ```sql
 /** Usages
-		UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
+    UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
 */
 ```
 * 랭크(rank)가 1인 값의 제목을 임의의 제목으로 변경합니다
@@ -681,7 +681,7 @@ select * from imdb_orc;
 
 ```sql
 /** Usages
-		EXPORT TABLE tablename [PARTITION (part_column="value"[, ...])] TO 'export_target_path' [ FOR replication('eventid') ];
+    EXPORT TABLE tablename [PARTITION (part_column="value"[, ...])] TO 'export_target_path' [ FOR replication('eventid') ];
 */
 ```
 * 테이블을 하둡의 임의의 경로에 백업합니다
@@ -710,7 +710,7 @@ drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /user/ubuntu/archive/
 
 ```sql
 /** Usages
-		IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
+    IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
 */
 ```
 * 백업된 경로로부터 새로운 테이블을 생성합니다
