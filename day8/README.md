@@ -106,14 +106,19 @@ Transaction isolation: TRANSACTION_REPEATABLE_READ
 
 #### 2-1-1. 데이터베이스 생성 - CREATE
 
-> CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
+* Create Database
+| Create Database |
+| --- |
+| CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
 [COMMENT database_comment]
 [LOCATION hdfs_path]
-[WITH DBPROPERTIES (property_name=property_value, ...)];
+[WITH DBPROPERTIES (property_name=property_value, ...)]; 
+|
 
-```
+```sql
 # beeline>
-create database if not exists testdb comment 'test database' location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
+create database if not exists testdb comment 'test database'
+location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
 ```
 
 #### 2. SHOW
