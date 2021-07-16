@@ -107,10 +107,12 @@ Transaction isolation: TRANSACTION_REPEATABLE_READ
 #### 2-1-1. 데이터베이스 생성 - CREATE
 
 ```sql
-#    CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
-#        [COMMENT database_comment]
-#        [LOCATION hdfs_path]
-#        [WITH DBPROPERTIES (property_name=property_value, ...)]; 
+/** example
+CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
+    [COMMENT database_comment]
+    [LOCATION hdfs_path]
+    [WITH DBPROPERTIES (property_name=property_value, ...)]; 
+*/
 ```
 * 테스트 데이터베이스 testdb 를 생성합니다
 ```sql
@@ -121,8 +123,10 @@ location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyobla
 
 #### 2-1-2. 데이터베이스 목록 출력 - SHOW
 
-```text
+```sql
+/** example
     SHOW (DATABASES|SCHEMAS);
+*/
 ```
 
 * 데이터베이스 목록 전체를 출력합니다
@@ -133,8 +137,10 @@ show databases;
 
 #### 2-1-3. 데이터베이스 정보를 출력합니다 - DESCRIBE
 
-```text
+```sql
+/** example
     DESCRIBE DATABASE/SCHEMA [EXTENDED] db_name;
+*/
 ```
 * 데이터베이스 생성 정보를 출력합니다
   - EXTENDED 키워드는 보다 상세한 정보를 출력합니다
@@ -144,8 +150,10 @@ describe database testdb;
 ```
 
 #### 2-1-4. 지정한 데이터베이스를 사용합니다 - USE
-```text
+```sql
+/** example
     USE database_name;
+*/
 ```
 * 위에서 생성한 testdb 를 현재 세션에서 사용하도록 선언합니다
 ```sql
@@ -154,8 +162,10 @@ use testdb;
 ```
 
 #### 2-1-5. 데이터베이스를 삭제합니다 - DROP
-```text
+```sql
+/** example
     DROP (DATABASE|SCHEMA) [IF EXISTS] database_name [RESTRICT|CASCADE];
+*/
 ```
 * 지정한 데이터베이스를 삭제하며, 테이블이 존재하는 경우 오류가 발생합니다 (default:RESTRICT)
   - CACADE 옵션을 주는 경우 포함하고 있는 모든 테이블까지 삭제됩니다
@@ -170,8 +180,10 @@ show databases;
 
 ##### DBPROPERTIES 속성
 * `키=값` 쌍으로 다양한 용도로 사용되는 값을 넣는 Map 같은 메타데이터 정보입니다
-```text
+```sql
+/** example
     ALTER (DATABASE|SCHEMA) database_name SET DBPROPERTIES (property_name=property_value, ...);
+*/
 ```
 * 데이터베이스 생성자 혹은 필요에 따라 원하는 메타데이터 정보를 데이터베이스 생성 시에 추가할 수 있습니다
 ```sql
@@ -191,8 +203,10 @@ describe database extended testdb;
 
 ##### OWNER 속성
 * 데이터베이스 관리를 어떤 기준(User or Role)으로 할 지를 결정합니다 
-```text
+```sql
+/** example
     ALTER (DATABASE|SCHEMA) database_name SET OWNER [USER|ROLE] user_or_role;
+*/
 ```
 * 테스트 데이터베이스 `testdb` 에 대해 `admin` 이라는 `role` 기반으로 관리하도록 설정합니다
   - 계정 단위로 관리하는 것은 번거롭고 관리 비용이 커질 수 있습니다
@@ -210,13 +224,16 @@ describe database extended testdb;
 #### 1. CREATE
 > 테이블을 생성합니다
 ```sql
+/** example
 CREATE TABLE [IF NOT EXISTS] [db_name.] table_name [(col_name data_type [COMMENT col_comment], ... [COMMENT col_comment])]
-[COMMENT table_comment]
-[ROW FORMAT row_format]
-[STORED AS file_format]
-[LOCATION hdfs_path];
-
-beeline> 
+    [COMMENT table_comment]
+    [ROW FORMAT row_format]
+    [STORED AS file_format]
+    [LOCATION hdfs_path];
+*/
+```
+```sql
+# beeline> 
 create table if not exists employee (emp_id string comment 'employee id',
 emp_name string comment 'employee name', 
 emp_salary bigint comment 'employee salary')
