@@ -1,18 +1,18 @@
-# 4일차. 데이터 적재 서비스 실습 - Hive 
+# 8일차. 데이터 적재 서비스 실습 - Hive 
 > 아파치 하이브를 통해 다양한 데이터 웨어하우스 예제를 실습합니다
 
-* 목차
-  * [하이브 서비스 기동](#1-하이브-서비스-기동)
-  * [하이브 기본명령어 가이드](#2-하이브-기본-명령어-가이드)
-    * [1. 하이브 데이터베이스 DDL 가이드](#2-1-하이브-데이터베이스-DDL-가이드)
-    * [2. 하이브 테이블 DDL 가이드](#2-2-하이브-테이블-DDL-가이드)
-    * [3. 하이브 DML 가이드](#2-3-하이브-DML-가이드)
-  * [하이브 트러블슈팅 가이드](#3-하이브-트러블슈팅-가이드)
-    * [1. 파티셔닝을 통한 성능 개선](#3-1-파티셔닝을-통한-성능-개선)
-    * [2. 파일포맷 변경을 통한 성능 개선](#3-2-파일포맷-변경을-통한-성능-개선)
-    * [3. 비정규화를 통한 성능 개선](#3-3-비정규화를-통한-성능-개선)
-    * [4. 글로벌 정렬 회피를 통한 성능 개선](#3-4-글로벌-정렬-회피를-통한-성능-개선)
-    * [5. 버킷팅을 통한 성능 개선](#3-5-버킷팅을-통한-성능-개선)
+- 목차
+  * [1. 최신버전 업데이트](#1-최신버전-업데이트)
+  * [2. 하이브 기본명령어 가이드](#2-하이브-기본-명령어-가이드)
+    * [2-1. 하이브 데이터베이스 DDL 가이드](#2-1-하이브-데이터베이스-DDL-가이드)
+    * [2-2. 하이브 테이블 DDL 가이드](#2-2-하이브-테이블-DDL-가이드)
+    * [2-3. 하이브 DML 가이드](#2-3-하이브-DML-가이드)
+  * [3. 하이브 트러블슈팅 가이드](#3-하이브-트러블슈팅-가이드)
+    * [3-1. 파티셔닝을 통한 성능 개선](#3-1-파티셔닝을-통한-성능-개선)
+    * [3-2. 파일포맷 변경을 통한 성능 개선](#3-2-파일포맷-변경을-통한-성능-개선)
+    * [3-3. 비정규화를 통한 성능 개선](#3-3-비정규화를-통한-성능-개선)
+    * [3-4. 글로벌 정렬 회피를 통한 성능 개선](#3-4-글로벌-정렬-회피를-통한-성능-개선)
+    * [3-5. 버킷팅을 통한 성능 개선](#3-5-버킷팅을-통한-성능-개선)
 
 * 참고 자료
   * [Hive Language Manual DDL](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
@@ -22,57 +22,97 @@
   * [IMDB data from 2006 to 2016](https://www.kaggle.com/PromptCloudHQ/imdb-data)
   * [Hive update, delete ERROR](https://community.cloudera.com/t5/Support-Questions/Hive-update-delete-and-insert-ERROR-in-cdh-5-4-2/td-p/29485)
 
+<br>
 
-## 1 하이브 서비스 기동
-> 스파크 실습을 위한 도커 컨테이너를 기동합니다
-* 최신 소스를 내려 받습니다
+## 1. 최신버전 업데이트
+> 원격 터미널에 접속하여 관련 코드를 최신 버전으로 내려받고, 과거에 실행된 컨테이너가 없는지 확인하고 종료합니다
+
+### 1-1. 최신 소스를 내려 받습니다
 ```bash
-bash>
+# terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training
 git pull
 ```
-* 모든 컨테이너를 종료하고, 더 이상 사용하지 않는 도커 이미지 및 볼륨을 제거합니다
-```bash
-bash>
-docker rm -f `docker ps -aq`
-docker image prune
-docker volume prune
-```
-* 스파크 워크스페이스로 이동하여 도커를 기동합니다
-```bash
-bash>
-cd /home/ubuntu/work/data-engineer-intermediate-training/day4
 
-docker-compose up -d
-docker-compose ps
-```
-* 실습에 필요한 IMDB 데이터를 컨테이너로 복사합니다
+### 1-2. 현재 기동되어 있는 도커 컨테이너를 확인하고, 종료합니다
+
+#### 1-2-1. 현재 기동된 컨테이너를 확인합니다
 ```bash
-bash>
-docker cp data/imdb.tsv day4_hive-server_1:/opt/hive/examples/imdb.tsv
-docker-compose logs -f hive-server 
+# terminal
+docker ps -a
 ```
+
+#### 1-2-2. 기동된 컨테이너가 있다면 강제 종료합니다
+```bash
+# terminal 
+docker rm -f `docker ps -aq`
+```
+> 다시 `docker ps -a` 명령으로 결과가 없다면 모든 컨테이너가 종료되었다고 보시면 됩니다
+
+
+#### 1-2-3. 하이브 실습을 위한 컨테이너를 기동합니다
+```bash
+# terminal
+cd /home/ubuntu/work/data-engineer-intermediate-training/day8
+docker compose pull
+docker compose up -d
+docker compose ps
+```
+
+#### 1-2-4. 실습에 필요한 IMDB 데이터를 컨테이너로 복사합니다
+```bash
+# terminal
+docker compose cp data/imdb.tsv hive:/opt/hive/examples/imdb.tsv
+docker compose exec hive ls /opt/hive/examples
+```
+
+> 마지막 ls /opt/hive/examples 명령어 결과로 imdb.tsv 파일이 확인되면 정상입니다
+
+#### 1-2-5. 하이브 컨테이너로 접속합니다
+```bash
+# terminal
+docker compose exec hive bash
+```
+
+#### 1-2-6. beeline 프로그램을 통해 hive 서버로 접속합니다
+
+> 여기서 `beeline` 은 Hive (벌집)에 접속하여 SQL 명령을 수행하기 위한 커맨드라인 프로그램이며, Oracle 의 SQL\*Plus 와 같은 도구라고 보시면 됩니다
+
+* 도커 컨테이너에서 beeline 명령을 수행하면 프롬프트가 `beeline>` 으로 변경되고, SQL 명령의 수행이 가능합니다
+```bash
+# docker
+beeline
+```
+
+* beeline 프롬프트가 뜨면 Hive Server 에 접속하기 위해 대상 서버로 connect 명령을 수행합니다
+```bash
+# beeline
+!connect jdbc:hive2://localhost:10000 scott tiger
+```
+> 아래와 같은 메시지가 뜨면 성공입니다
+
+```bash
+Connecting to jdbc:hive2://localhost:10000
+Connected to: Apache Hive (version 2.3.2)
+Driver: Hive JDBC (version 2.3.2)
+Transaction isolation: TRANSACTION_REPEATABLE_READ
+```
+<br>
+
 
 ## 2 하이브 기본 명령어 가이드 
 
 ### 2-1 하이브 데이터베이스 DDL 가이드
-#### 1. CREATE
-> 데이터베이스를 생성합니다
-```bash
-bash>
-docker-compose exec hive-server bash
-beeline
 
-beeline>
-!connect jdbc:hive2://localhost:10000 scott tiger
-```
-```sql
-CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
+#### 2-1-1. 데이터베이스 생성 - CREATE
+
+> CREATE (DATABASE|SCHEMA) [IF NOT EXISTS] database_name
 [COMMENT database_comment]
 [LOCATION hdfs_path]
 [WITH DBPROPERTIES (property_name=property_value, ...)];
 
-beeline> 
+```
+# beeline>
 create database if not exists testdb comment 'test database' location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
 ```
 
@@ -435,7 +475,7 @@ explain select year, count(1) as cnt from imdb_partitioned group by year;
 ```
 * **일반 테이블과, 파티셔닝 테이블의 성능을 비교합니다**
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day4/ex1
+cd /home/ubuntu/work/data-engineer-intermediate-training/day8/ex1
 vimdiff agg.imdb_movies.out agg.imdb_partitioned.out
 ```
 * 관련 링크
@@ -454,7 +494,7 @@ select year, count(1) as cnt from imdb_parquet group by year;
 ```
 * **파티셔닝 테이블과 파케이 포맷 테이블의 성능을 비교합니다**
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day4/ex1
+cd /home/ubuntu/work/data-engineer-intermediate-training/day8/ex1
 vimdiff agg.imdb_partitioned.out agg.imdb_parquet.out
 ```
 
@@ -484,7 +524,7 @@ explain select rank, title, metascore from imdb_parquet_small order by metascore
 ```
 * **필요한 컬럼만 유지하는 경우에도 성능개선의 효과가 있는지 비교합니다**
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day4/ex2
+cd /home/ubuntu/work/data-engineer-intermediate-training/day8/ex2
 vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 ```
 
