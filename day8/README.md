@@ -856,6 +856,24 @@ load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 ```sql
 select year, count(title) as movie_count from imdb_movies group by year order by year asc;
 ```
+* 아래와 유사하게 나오면 정답입니다
+```text
++-------+--------------+
+| year  | movie_count  |
++-------+--------------+
+| 2006  | 44           |
+| 2007  | 53           |
+| 2008  | 52           |
+| 2009  | 51           |
+| 2010  | 60           |
+| 2011  | 63           |
+| 2012  | 64           |
+| 2013  | 91           |
+| 2014  | 98           |
+| 2015  | 127          |
+| 2016  | 297          |
++-------+--------------+
+```
 
 </details>
 <br>
@@ -868,6 +886,16 @@ select year, count(title) as movie_count from imdb_movies group by year order by
 
 ```sql
 select title, cast(revenue as float) as rev from imdb_movies where year = '2015' order by rev desc limit 3;
+```
+* 아래와 유사하게 나오면 정답입니다
+```text
++---------------------------------------------+---------+
+|                    title                    |   rev   |
++---------------------------------------------+---------+
+| Star Wars: Episode VII - The Force Awakens  | 936.63  |
+| Jurassic World                              | 652.18  |
+| Avengers: Age of Ultron                     | 458.99  |
++---------------------------------------------+---------+
 ```
 
 </details>
@@ -924,6 +952,7 @@ explain select year, count(1) as cnt from imdb_partitioned group by year;
 ```
 * **일반 테이블과, 파티셔닝 테이블의 성능을 비교합니다**
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day8/ex1
 vimdiff agg.imdb_movies.out agg.imdb_partitioned.out
 ```
@@ -972,15 +1001,11 @@ explain select year, count(1) as cnt from imdb_parquet group by year;
 #  Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE
 ```
 
-* 파케이 포맷의 정렬된 테이블을 생성합니다
-```
-create table imdb_parquet_sorted stored as parquet 
-  as select title, rank, metascore, year from imdb_movies sort by metascore;
-```
 <br>
 
 
 #### 3-2-3. 필요한 컬럼만 유지하는 것도 성능에 도움이 되는지 비교
+* 파케이 포맷의 정렬된 테이블을 생성합니다
 ```sql
 # beeline>
 create table imdb_parquet_small stored as parquet 
@@ -989,6 +1014,9 @@ create table imdb_parquet_small stored as parquet
 
 explain select rank, title, metascore from imdb_parquet order by metascore desc limit 10;
 # Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE
+
+explain select rank, title, metascore from imdb_parquet_sorted order by metascore desc limit 10;
+# Statistics: Num rows: 1000 Data size: 4000 Basic stats: COMPLETE Column stats: NONE
 
 explain select rank, title, metascore from imdb_parquet_small order by metascore desc limit 10;
 # Statistics: Num rows: 1000 Data size: 4000 Basic stats: COMPLETE Column stats: NONE
@@ -1104,20 +1132,20 @@ select * from department;
 
 ```sql
 # beeline
-select e.id, e.name, e.seq, d.id, d.name from emp e join department d on e.id = d.id;
+select e.dept_id, e.name, e.seq, d.id, d.name from employee e join department d on e.dept_id = d.id;
 ```
-> 아래와 같이 나오면 정답입니다
+> 아래와 유사하게 나오면 정답입니다
 ```bash
-+------------+--------+-------+--------------+
-|   e.name   | e.seq  | d.id  |    d.name    |
-+------------+--------+-------+--------------+
-| John       | 6      | 31    | sales        |
-| Jones      | 2      | 33    | engineering  |
-| Rafferty   | 1      | 31    | sales        |
-| Robinson   | 4      | 34    | clerical     |
-| Smith      | 5      | 34    | clerical     |
-| Steinberg  | 3      | 33    | engineering  |
-+------------+--------+-------+--------------+
++------------+------------+--------+-------+--------------+
+| e.dept_id  |   e.name   | e.seq  | d.id  |    d.name    |
++------------+------------+--------+-------+--------------+
+| 31         | John       | 6      | 31    | sales        |
+| 33         | Jones      | 2      | 33    | engineering  |
+| 31         | Rafferty   | 1      | 31    | sales        |
+| 34         | Robinson   | 4      | 34    | clerical     |
+| 34         | Smith      | 5      | 34    | clerical     |
+| 33         | Steinberg  | 3      | 33    | engineering  |
++------------+------------+--------+-------+--------------+
 ```
 
 </details>
@@ -1131,8 +1159,8 @@ select e.id, e.name, e.seq, d.id, d.name from emp e join department d on e.id = 
 <details><summary>[실습] CTAS 구문을 이용하여 아이디(id), 순번(seq), 이름(name), 부서(dept) 를 가진 테이블을 생성하세요 </summary>
 
 ```sql
-create table emp_dept as select e.id as id, e.seq as seq, e.name as name, d.name as dept 
-    from emp e join department d on e.id = d.id;
+create table emp_dept as select e.dept_id as dept_id, e.seq as seq, e.name as name, d.name as dept 
+    from employee e join department d on e.dept_id = d.id;
 
 desc emp_dept;
 ```
@@ -1141,7 +1169,7 @@ desc emp_dept;
 +-----------+------------+----------+
 | col_name  | data_type  | comment  |
 +-----------+------------+----------+
-| id        | int        |          |
+| dept_id   | int        |          |
 | seq       | int        |          |
 | name      | string     |          |
 | dept      | string     |          |
