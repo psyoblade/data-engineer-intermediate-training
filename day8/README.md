@@ -222,30 +222,89 @@ describe database extended testdb;
 
 
 ### 2-2 하이브 테이블 DDL 가이드
-#### 1. CREATE
-> 테이블을 생성합니다
+
+#### 2-2-1. 테이블 생성 - CREATE
+
+> 테이블 생성 구문에 대부분의 중요한 키워드가 포함되어 있으므로 잘 이해하고 넘어가시길 바랍니다
+
 ```sql
 /** Usages
-    CREATE TABLE [IF NOT EXISTS] [db_name.] table_name [(col_name data_type [COMMENT col_comment], ... [COMMENT col_comment])]
+    CREATE TABLE [IF NOT EXISTS] [db_name.] table_name [(col_name data_type [COMMENT col_comment], ...)]
         [COMMENT table_comment]
         [ROW FORMAT row_format]
         [STORED AS file_format]
         [LOCATION hdfs_path];
+
+		data_type
+			: primitive_type
+			| array_type
+			| map_type
+			| struct_type
+			| union_type  -- (Note: Available in Hive 0.7.0 and later)
+		 
+		primitive_type
+			: TINYINT
+			| SMALLINT
+			| INT
+			| BIGINT
+			| BOOLEAN
+			| FLOAT
+			| DOUBLE
+			| DOUBLE PRECISION -- (Note: Available in Hive 2.2.0 and later)
+			| STRING
+			| BINARY      -- (Note: Available in Hive 0.8.0 and later)
+			| TIMESTAMP   -- (Note: Available in Hive 0.8.0 and later)
+			| DECIMAL     -- (Note: Available in Hive 0.11.0 and later)
+			| DECIMAL(precision, scale)  -- (Note: Available in Hive 0.13.0 and later)
+			| DATE        -- (Note: Available in Hive 0.12.0 and later)
+			| VARCHAR     -- (Note: Available in Hive 0.12.0 and later)
+			| CHAR        -- (Note: Available in Hive 0.13.0 and later)
+
+		array_type
+			: ARRAY < data_type >
+		 
+		map_type
+			: MAP < primitive_type, data_type >
+		 
+		struct_type
+			: STRUCT < col_name : data_type [COMMENT col_comment], ...>
+		 
+		union_type
+			 : UNIONTYPE < data_type, data_type, ... >  -- (Note: Available in Hive 0.7.0 and later)
+
+		row_format
+			: DELIMITED [FIELDS TERMINATED BY char [ESCAPED BY char]] [COLLECTION ITEMS TERMINATED BY char]
+						[MAP KEYS TERMINATED BY char] [LINES TERMINATED BY char]
+						[NULL DEFINED AS char]   -- (Note: Available in Hive 0.13 and later)
+			| SERDE serde_name [WITH SERDEPROPERTIES (property_name=property_value, property_name=property_value, ...)]
+
+		file_format:
+			: SEQUENCEFILE
+			| TEXTFILE    -- (Default, depending on hive.default.fileformat configuration)
+			| RCFILE      -- (Note: Available in Hive 0.6.0 and later)
+			| ORC         -- (Note: Available in Hive 0.11.0 and later)
+			| PARQUET     -- (Note: Available in Hive 0.13.0 and later)
+			| AVRO        -- (Note: Available in Hive 0.14.0 and later)
+			| JSONFILE    -- (Note: Available in Hive 4.0.0 and later)
+			| INPUTFORMAT input_format_classname OUTPUTFORMAT output_format_classname
 */
 ```
+
 * 실습을 위한 고객 테이블 (employee)을 생성합니다
 ```sql
 # beeline> 
-create table if not exists employee (emp_id string comment 'employee id',
-    emp_name string comment 'employee name', 
-    emp_salary bigint comment 'employee salary')
-    comment 'test employee table' 
-    row format delimited 
-    fields terminated by ','
-    stored as textfile;
+create table if not exists employee (
+		emp_id string comment 'employee id',
+		emp_name string comment 'employee name', 
+		emp_salary bigint comment 'employee salary'
+	)
+	comment 'test employee table' 
+	row format delimited 
+	fields terminated by ','
+	stored as textfile;
 ```
 
-#### 2. 테이블 목록 조회 - SHOW
+#### 2-2-2. 테이블 목록 조회 - SHOW
 ```sql
 /** Usages
     SHOW TABLES [IN database_name];
@@ -265,7 +324,7 @@ show tables 'emp*';
 <br>
 
 
-#### 3. 테이블 정보 조회 - DESCRIBE
+#### 2-2-3. 테이블 정보 조회 - DESCRIBE
 ```sql
 /** Usages
     DESCRIBE [EXTENDED|FORMATTED] [db_name.] table_name[.col_name ( [.field_name])];
@@ -278,7 +337,6 @@ show tables 'emp*';
 # beeline> 
 describe employee;
 ```
-* 
 <details><summary> [실습] EXTENDED 및 FORMATTED 명령을 통해 테이블 정보를 조회합니다 </summary>
 
 ```sql
@@ -289,251 +347,389 @@ describe formatted employee;
 </details>
 <br>
 
-#### 4. DROP
-> 테이블을 삭제합니다. 일반 DROP 의 경우 .Trash/current directory 경로로 이동하지만 PURGE 옵션을 주는 경우 즉시 삭제됩니다
+
+#### 2-2-4. 테이블 삭제 - DROP
 ```sql
 /** Usages
-DROP TABLE [IF EXISTS] table_name [PURGE];
+		DROP TABLE [IF EXISTS] table_name ;
 */
 ```
-* 명령어 설명
+* 테이블을 삭제합니다
 ```sql
 # beeline> 
-drop table if exists employee purge;
+drop table if exists employee;
 show tables;
 ```
+<br>
 
-#### 5. ALTER
-> 테이블을 변경합니다
-* RENAME
+
+#### 2-2-5. 테이블 변경 - ALTER
+
+> 테이블 변경 구문에는 RENAME, ADD COLUMNS 등의 구문이 존재합니다
+
+* 테이블 이름 변경 - RENAME TO
 ```sql
 /** Usages
-ALTER TABLE table_name RENAME TO new_table_name;
+    ALTER TABLE table_name RENAME TO new_table_name;
 */
 ```
-* 명령어 설명
+* 고객 테이블을 생성합니다
 ```sql
 # beeline> 
-create table if not exists employee (emp_id string comment 'employee id',
-emp_name string comment 'employee name', 
-emp_salary bigint comment 'employee salary')
-comment 'test employee table' 
-row format delimited 
-fields terminated by ','
-stored as textfile;
+create table if not exists employee (
+        emp_id string comment 'employee id',
+        emp_name string comment 'employee name', 
+        emp_salary bigint comment 'employee salary'
+    )
+    comment 'test employee table' 
+    row format delimited 
+    fields terminated by ','
+    stored as textfile;
+```
 
+<details><summary>[실습] 테이블 이름을 `employee` 에서 `renamed_emp` 로 변경합니다 </summary>
+
+```sql
+# beeline>
 alter table employee rename to renamed_emp;
 show tables;
 ```
-* ADD COLUMNS
+
+</details>
+<br>
+
+
+* 테이블 컬럼 추가 - ADD COLUMNS
 ```sql
 /** Usages
-ALTER TABLE table_name ADD COLUMNS (column1, column2) ;
+		ALTER TABLE table_name ADD COLUMNS (column1, column2) ;
 */
 ```
-* 명령어 설명
+* 고객 테이블을 생성합니다
 ```sql
 # beeline> 
-create table if not exists employee (emp_id string comment 'employee id')
-comment 'test employee table' 
-row format delimited 
-fields terminated by ','
-stored as textfile;
+create table if not exists employee (
+		emp_id string comment 'employee id',
+		emp_salary bigint comment 'employee salary'
+	)
+	comment 'test employee table' 
+	row format delimited 
+	fields terminated by ','
+	stored as textfile;
+```
 
-alter table employee add columns (emp_name string comment 'employee name', 
-emp_salary bigint comment 'employee salary');
+<details><summary>[실습] 코멘트 'employee name' 을 가진 고객 이름(`emp_name` string) 컬럼을 추가하세요 </summary>
 
+```sql
+alter table employee add columns (
+	emp_name string comment 'employee name', 
+);
 desc employee;
 desc renamed_emp;
 ```
 
-#### 6. TRUNCATE
-> 테이블의 데이터만 제거합니다
+</details>
+<br>
+
+
+#### 2-2-6. 테이블 데이터 제거 - TRUNCATE
+
 ```sql
 /** Usages
-TRUNCATE TABLE table_name;
+		TRUNCATE TABLE table_name;
 */
 ```
-* 명령어 설명
+* 테이블에 임의의 데이터를 추가 후, 데이터를 조회합니다
+  - 데이터 값은 자신의 이름으로 넣어도 좋습니다
 ```sql
 # beeline> 
 use testdb;
 insert into renamed_emp values (1, 'suhyuk', 1000);
-select count(1) from renamed_emp;
-+-------+
-|  _c0  |
-+-------+
-| 1     |
-+-------+
+select * from renamed_emp;
+```
 
+<details><summary>[실습] TRUNCATE 구문으로 데이터를 삭제해 보세요 </summary>
+
+```sql
+# beeline>
 truncate table renamed_emp;
 select count(1) from renamed_emp;
-+------+
-| _c0  |
-+------+
-| 0    |
-+------+
 ```
+
+</details>
+<br>
 
 
 ### 2-3 하이브 DML 가이드
 
-#### 1. LOAD
+#### 2-3-1. LOAD
+
 > 로컬(LOCAL) 혹은 클러스터 저장된 데이터를 하둡 클러스터에 업로드(Managed) 혹은 링크(External) 합니다
+
 ```sql
 /** Usages
-LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)];
+		LOAD DATA [LOCAL] INPATH 'filepath' [OVERWRITE] INTO TABLE tablename [PARTITION (partcol1=val1, partcol2=val2 ...)];
 */
 ```
-* 명령어 설명
+* 테이블이 존재하면 제거하고, 실습을 위한 IMDB 영화(`imdb_movies`) 테이블을 생성합니다
 ```sql
 # beeline> 
 drop table if exists imdb_movies;
-create table imdb_movies (rank int, title string, genre string, description string, director string, actors string, year string, runtime int, rating string, votes int, revenue string, metascore int) row format delimited fields terminated by '\t';
 
+create table imdb_movies (
+	rank int
+	, title string
+	, genre string
+	, description string
+	, director string
+	, actors string
+	, year string
+	, runtime int
+	, rating string
+	, votes int
+	, revenue string
+	, metascore int
+) row format delimited fields terminated by '\t';
+```
+* 생성된 테이블에 로컬에 존재하는 파일을 업로드합니다
+```sql
 load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 ```
 
-#### 2. SELECT
-> 테이블에 저장된 레코드를 SQL 구문을 통해서 조회합니다
-```sql
-/** Usages
-SELECT col1,col2 FROM tablename;
-*/
-```
-* 명령어 설명
-```sql
-# beeline> 
-select rank, title, genre from imdb_movies limit 5;
+<details><summary>[실습] 별도 터미널을 통해 하둡 명령어로 적재된 파일을 확인해 보세요 </summary>
+
+```bash
+# terminal
+docker compose exec hive-server bash
+hadoop fs -ls /user/hive/warehouse/testdb/
 ```
 
-#### 3. INSERT
-> 테이블에 읽어온 레코드 혹은 생성된 레코드를 저장합니다 
-* INSERT INTO
+</details>
+<br>
+
+
+#### 2-3-2. 데이터 조회 - SELECT
+
 ```sql
 /** Usages
-INSERT INTO TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...)] select_statement1 FROM from_statement;
+		SELECT [ALL | DISTINCT] select_expr, select_expr, ...
+				FROM table_reference
+				[WHERE where_condition]
+				[GROUP BY col_list]
+				[ORDER BY col_list [ASC | DESC]]
+		[LIMIT [offset,] rows]
 */
 ```
-* 명령어 설명
+* 테이블에 저장된 레코드를 SQL 구문을 통해서 조회합니다
+  - SELECT : 출력하고자 하는 컬럼을 선택 
+  - GROUP BY : 집계 연산을 위한 컬럼을 선택
+  - ORDER BY : 정렬을 위한 컬럼을 선택 (ASC: 오름차순, DESC: 내림차순)
+  - LIMIT : 조회 레코드의 수를 제한
+* 제목 오름차순으로 장르와 제목을 조회합니다
+```sql
+# beeline> 
+describe formatted imdb_movies;
+select genre, title from imdb_movies order by title asc;
+```
+
+<details><summary>[실습] 랭킹(rank) 오름차순(ASC)으로 장르(genre), 제목(title) 정보를 출력하세요 </summary>
+
+```bash
+# beeline>
+select rank, genre, title from imdb_movies order by rank asc;
+```
+
+</details>
+<br>
+
+
+#### 2-3-3. 데이터 입력 - INSERT ... FROM
+* 테이블로부터 또 다른 테이블에 레코드를 저장합니다 
+  - INSERT INTO 는 기본 동작이 Append 로 항상 추가됩니다
+```sql
+/** Usages
+		INSERT INTO TABLE tablename1 [PARTITION (partcol1=val1, partcol2=val2 ...)] select_statement1 FROM from_statement;
+*/
+```
+* 제목만 가진 `imdb_title`이라는 테이블을 생성합니다
 ```sql
 # beeline> 
 create table if not exists imdb_title (title string);
-insert into table imdb_title select title from imdb_movies;
-select title from imdb_title limit 5;
 ```
-* INSERT OVERWRTIE
+* INSERT ... FROM 구문을 이용하여 `imdb_movies` 테이블로부터 제목만 읽어와서 저장합니다
+```sql
+insert into table imdb_title select title from imdb_movies limit 5;
+select title from imdb_title;
+```
+
+<details><summary>[실습] 제목(title) 오름차순으로 5건, 내림차순으로 5건 각각 `imdb_title` 테이블에 입력하세요  </summary>
+
+```sql
+insert into table imdb_title select title from imdb_movies order by title asc limit 5;
+select title from imdb_title;
+insert into table imdb_title select title from imdb_movies order by title desc limit 5;
+select title from imdb_title;
+```
+
+</details>
+<br>
+
+* 테이블에 해당 데이터를 덮어씁니다
+  - INSERT OVERWITE 는 기본 동작이 Delete & Insert 로 삭제후 추가됩니다
 ```sql
 /** Usages
-INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, ..) [IF NOT EXISTS]] select_statement FROM from_statement;
+		INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, ..) [IF NOT EXISTS]] select_statement FROM from_statement;
 */
 ```
-* 명령어 설명
+* 제목만 가진 테이블에 OVERWRITE 키워드로 입력합니다
 ```sql
 # beeline> 
 create table if not exists imdb_title (title string);
 insert overwrite table imdb_title select description from imdb_movies;
 select title from imdb_title limit 5;
 ```
-* INSERT VALUES
+
+* 임의의 데이터를 직접 입력합니다 - INSERT VALUES
 ```sql
 /** Usages
-INSERT INTO TABLE tablename [PARTITION (partcol1[=val1], partcol2[=val2] ...)] VALUES values_row [, values_row ...];
+		INSERT INTO TABLE tablename [PARTITION (partcol1[=val1], partcol2[=val2] ...)] 
+				VALUES values_row [, values_row ...];
 */
 ```
-* 명령어 설명
+* 여러 레코드를 괄호를 통해서 입력할 수 있습니다
 ```sql
 # beeline> 
 insert into imdb_title values ('1 my first hive table record'), ('2 my second records'), ('3 third records');
+```
+* like 연산을 이용하여 특정 레코드만 가져옵니다
+```sql
 select title from imdb_title where title like '%record%';
 ```
 
-#### 4. DELETE
-> 테이블에 저장된 데이터를 삭제합니다
-* 현재 ACID-based transaction 을 지원하는 것은 Bucketed ORC 파일만 지원합니다
+<details><summary>[실습] `imdb_movies` 테이블로부터 OVERWRITE 옵션으로 모든 제목(title)을 `imdb_title` 테이블에 입력하세요 </summary>
+
+```sql
+insert ovewrite table imdb_title select title from imdb_movies;
+select count(1) from imdb_title;
+```
+
+</details>
+<br>
+
+
+#### 2-3-4. 테이블 데이터 삭제 - DELETE
+> Hive 2.3.2 버전에서 ACID-based transaction 을 지원하는 것은 Bucketed ORC 파일만 지원합니다
   * [Hive Transactions](https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions) 
 ```sql
 /** Usages
-DELETE FROM tablename [WHERE expression]
+		DELETE FROM tablename [WHERE expression]
 */
 ```
-* 명령어 설명
+* 트랜잭션 설정을 위한 ORC `imdb_orc` 테이블을 생성합니다 
+  - 아래와 같이 ORC 수행이 가능하도록 트랜잭션 설정이 사전에 수행되어야만 합니다
 ```sql
 # beeline> 
 create table imdb_orc (rank int, title string) clustered by (rank) into 4 buckets stored as orc tblproperties ('transactional'='true');
-
-// 아래와 같이 동시성 및 버킷팅 설정이 제대로 되어 있어서 ACID 트랜젝션 수행이 가능합니다
 set hive.support.concurrency=true;
 set hive.enforce.bucketing=true;
 set hive.exec.dynamic.partition.mode=nonstrict;
 set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
 set hive.compactor.initiator.on=true;
 set hive.compactor.worker.threads=1;
+```
+* 해당 테이블에 2개의 레코드를 아래와 같이 입력합니다
+```sql
+insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk'), (3, 'lgde course');
+```
 
-insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk');
+<details><summary>[실습] WHERE 절에 랭크(rank)가 1인 레코드를 삭제 후, 조회해 보세요 </summary>
+
+```sql
 delete from imdb_orc where rank = 1;
-
 select * from imdb_orc;
 ```
+
+</details>
+
 * 제대로 설정되지 않은 경우 아래와 같은 오류를 발생시킵니다
 ```sql
 delete from imdb_orc where rank = 1;
 Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
 ```
+<br>
 
-#### 5. UPDATE
+
+#### 2-3-5. 컬럼 값 갱신 - UPDATE
+
 > 대상 테이블의 컬럼을 업데이트 합니다. 단, 파티셔닝 혹은 버킷팅 컬럼은 업데이트 할 수 없습니다
+
 ```sql
 /** Usages
-UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
+		UPDATE tablename SET column = value [, column = value ...] [WHERE expression];
 */
 ```
-* 명령어 설명
+* 랭크(rank)가 1인 값의 제목을 임의의 제목으로 변경합니다
 ```sql
 # beeline> 
-update imdb_orc set title = 'psyoblade title';
+update imdb_orc set title = 'modified title' where rank = 1;
 select * from imdb_orc;
 ```
 
-#### 6. EXPORT
+#### 2-3-6. 테이블 백업 - EXPORT
+
 > 테이블 메타데이터(\_metadata)와 데이터(data) 정보를 HDFS 경로에 백업 합니다
+
 ```sql
 /** Usages
-EXPORT TABLE tablename [PARTITION (part_column="value"[, ...])] TO 'export_target_path' [ FOR replication('eventid') ];
+		EXPORT TABLE tablename [PARTITION (part_column="value"[, ...])] TO 'export_target_path' [ FOR replication('eventid') ];
 */
 ```
-* 명령어 설명
+* 테이블을 하둡의 임의의 경로에 백업합니다
 ```sql
 # beeline> 
 export table imdb_orc to '/user/ubuntu/archive/imdb_orc';
 ```
-* 익스포트 된 결과를 확인합니다
+
+<details><summary>[실습] 별도의 터미널을 통해 익스포트 된 결과를 확인합니다 </summary>
+
 ```bash
 bash>
-docker-compose exec hive-server bash
+docker compose exec hive-server bash
 hadoop fs -ls /user/ubuntu/archive/imdb_orc
 -rwxr-xr-x   3 root supergroup       1244 2020-08-23 14:17 /user/ubuntu/archive/imdb_orc/_metadata
 drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /user/ubuntu/archive/imdb_orc/data
 ```
 
-#### 7. IMPORT
+</details>
+<br>
+
+
+#### 2-3-7. IMPORT
+
 > 백업된 데이터로 새로운 테이블을 생성합니다
+
 ```sql
 /** Usages
-IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
+		IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
 */
 ```
-* 명령어 설명
+* 백업된 경로로부터 새로운 테이블을 생성합니다
 ```sql
 # beeline> 
 import table imdb_orc_imported from '/user/ubuntu/archive/imdb_orc';
 select * from imdb_orc_imported;
-+---------------------------+----------------------------+
-| imdb_title_imported.rank  | imdb_title_imported.title  |
-+---------------------------+----------------------------+
-| 2                         | psyoblade title            |
-+---------------------------+----------------------------+
 ```
+
+<details><summary>[실습] `imdb_title` 테이블을 `/user/ubuntu/archive/imdb_title` 경로로 백업후, `imdb_recover` 테이블로 복원해 보세요 </summary>
+
+```sql
+export table imdb_title to '/user/ubuntu/archive/imdb_title';
+import table imdb_recover from '/user/ubuntu/archive/imdb_title';
+select * from imdb_recover;
+```
+
+</details>
+<br>
 
 
 ## 3 하이브 트러블슈팅 가이드
