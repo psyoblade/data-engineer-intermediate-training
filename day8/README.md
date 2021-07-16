@@ -939,7 +939,7 @@ vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 <br>
 
 
-### 3-3 비정규화를 통한 성능 개선
+### 3-3. 비정규화를 통한 성능 개선
 
 > 일반적으로 관계형 데이터베이스의 경우 Redundent 한 데이터 적재를 피해야만 Consistency 문제를 회피할 수 있고 변경 시에 일관된 데이터를 저장할 수 있습니다. 그래서 **PK, FK 등으로 Normalization & Denormalization 과정**을 거치면서 모델링을 하게 됩니다. 하지만 **분산 환경에서의 정규화 했을 때의 관리 비용 보다 Join 에 의한 리소스 비용이 더 큰** 경우가 많고 Join 의 문제는 Columnar Storage 나 Spark 의 도움으로 많은 부분 해소될 수 있기 때문에 ***Denormalization 을 통해 Superset 데이터를 가지는 경우***가 더 많습니다. 
 
@@ -952,30 +952,44 @@ vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 ![star-schema](images/star-schema.jpg)
 
 
-### 3-4 글로벌 정렬 회피를 통한 성능 개선
->  Order By, Group By, Distribute By, Sort By, Cluster By 실습을 통해 차이점을 이해하고 활용합니다
-* Q1) 예제 emp.txt 파일은 중복된 레코드가 많아서 어떻게 하면 중복을 제거하고 emp.uniq.txt 파일을 생성할 수 있을까요?
-  * Hint) cat, sort and redirection
-```bash
-bash>
-docker-compose exec hive-server bash
-cd /opt/hive/examples/files
-cat emp.txt
+### 3-4. 글로벌 정렬 회피를 통한 성능 개선
 
-cat emp.uniq.txt # 정답
+>  Order By, Group By, Distribute By, Sort By, Cluster By 실습을 통해 차이점을 이해하고 활용합니다
+
+#### 3-4-1. 컨테이너 내부에 저장된  emp.txt 파일을 실습을 위해 중복제거하여 저장합니다
+
+* 컨테이너에 접속된 세션이 없다면 하이브 서버에 접속합니다
+```bash
+# terminal
+docker-compose exec hive-server bash
+```
+* 중복제거 하여 `emp.uniq.txt` 파일을 생성합니다
+```bash
+# docker
+cd /opt/hive/examples/files
+cat emp.txt | sort | uniq > emp.uniq.txt
+cat emp.uniq.txt
+```
+* 최종 결과 파일은 다음과 같습니다
+```sql
+/**
 John|31|6
 Jones|33|2
 Rafferty|31|1
 Robinson|34|4
 Smith|34|5
 Steinberg|33|3
+*/
 ```
+
+
 * 비라인을 통해 직원 및 부서 테이블을 생성합니다
 ```bash
 # terminal
 beeline jdbc:hive2://localhost:10000 scott tiger
 use testdb;
 ```
+
 * 명령어 수행 
 ```sql
 # beeline>
@@ -987,6 +1001,7 @@ drop table if exists department;
 create table department (id int, name string) row format delimited fields terminated by '|';
 load data local inpath '/opt/hive/examples/files/dept.txt' into table department;
 ```
+
 * Q2) 테이블의 정보를 조회하고 어떻게 조인해야 employee + department 정보를 가진 테이블을 조회할 수 있을까요?
   * Hint) SELECT a.key, b.key FROM tableA a JOIN tableB b ON a.key = b.key
 ```sql
@@ -1006,6 +1021,7 @@ select * from users; // 정답
 | Steinberg  | 3      | 33    | engineering  |
 +------------+--------+-------+--------------+
 ```
+
 * Q3) 직원 이름, 지원 부서 아이디, 직원 부서 이름을 가진 users 테이블을 생성할 수 있을까요?
   * Hint) CREATE TABLE users AS SELECT ...
 ```sql
