@@ -440,7 +440,7 @@ create table if not exists employee (
   stored as textfile;
 ```
 
-<details><summary>[실습] 코멘트 'employee name' 을 가진 고객 이름(`emp_name` string) 컬럼을 추가하세요 </summary>
+<details><summary>[실습] 코멘트 'employee name' 을 가진 고객 이름(emp_name string) 컬럼을 추가하세요 </summary>
 
 ```sql
 alter table employee add columns (
@@ -470,7 +470,7 @@ insert into renamed_emp values (1, 'suhyuk', 1000);
 select * from renamed_emp;
 ```
 
-<details><summary>[실습] TRUNCATE 구문으로 데이터를 삭제해 보세요 </summary>
+<details><summary>[실습] TRUNCATE 구문으로 `renamed_emp` 테이블의 데이터를 삭제해 보세요 </summary>
 
 ```sql
 # beeline>
@@ -652,7 +652,8 @@ select count(1) from imdb_title;
   - 아래와 같이 ORC 수행이 가능하도록 트랜잭션 설정이 사전에 수행되어야만 합니다
 ```sql
 # beeline> 
-create table imdb_orc (rank int, title string) clustered by (rank) into 4 buckets stored as orc tblproperties ('transactional'='true');
+create table imdb_orc (rank int, title string) clustered by (rank) into 4 buckets 
+	stored as orc tblproperties ('transactional'='true');
 set hive.support.concurrency=true;
 set hive.enforce.bucketing=true;
 set hive.exec.dynamic.partition.mode=nonstrict;
@@ -668,7 +669,8 @@ insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk'), (3,
 * 제대로 설정되지 않은 경우 아래와 같은 오류를 발생시킵니다
 ```sql
 delete from imdb_orc where rank = 1;
-Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
+Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: 
+Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
 ```
 
 <details><summary>[실습] WHERE 절에 랭크(rank)가 1인 레코드를 삭제 후, 조회해 보세요 </summary>
@@ -735,7 +737,8 @@ drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /user/ubuntu/archive/
 
 ```sql
 /** Usages
-    IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] FROM 'source_path' [LOCATION 'import_target_path'];
+    IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] 
+			FROM 'source_path' [LOCATION 'import_target_path'];
 */
 ```
 * 백업된 경로로부터 새로운 테이블을 생성합니다
@@ -824,8 +827,7 @@ load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 <details><summary>[실습] 년도(year) 별 개봉된 영화의 수를 년도 오름차순(asc)으로 출력하세요 </summary>
 
 ```sql
-
-select * from imdb_movies limit 10;
+select year, count(title) as movie_count from imdb_movies group by year asc;
 ```
 
 </details>
@@ -835,8 +837,7 @@ select * from imdb_movies limit 10;
 <details><summary>[실습] 2015년도 개봉된 영화 중에서 최고 매출 Top 3 영화 제목과 매출금액을 출력하세요 </summary>
 
 ```sql
-
-select * from imdb_movies limit 10;
+select title, revenue from imdb_movies where year = '2015' order by revenue desc limit 3;
 ```
 
 </details>
@@ -877,7 +878,8 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 * 기존 테이블로부터 데이터를 가져와서 동적으로 파티셔닝하여 저장합니다
 ```sql
 insert overwrite table imdb_partitioned partition (year) 
-select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore, year from imdb_movies;
+	select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore, year 
+	from imdb_movies;
 ```
 * 신규로 생성된 파티션 테이블을 통해 집계 연산을 수행합니다
 ```sql
@@ -911,10 +913,9 @@ vimdiff agg.imdb_movies.out agg.imdb_partitioned.out
 # beeline>
 drop table if exists imdb_parquet;
 
-create table imdb_parquet 
-	row format delimited 
-	stored as parquet
-as select * from imdb_movies;
+create table imdb_parquet row format delimited stored
+		as parquet as select * 
+		from imdb_movies;
 
 select year, count(1) as cnt from imdb_parquet group by year;
 ```
@@ -953,7 +954,8 @@ create table imdb_parquet_sorted stored as parquet
 ```sql
 # beeline>
 create table imdb_parquet_small stored as parquet 
-	as select title, rank, metascore, year from imdb_movies sort by metascore;
+	as select title, rank, metascore, year 
+	from imdb_movies sort by metascore;
 
 explain select rank, title, metascore from imdb_parquet order by metascore desc limit 10;
 # Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE
@@ -1099,7 +1101,9 @@ select e.id, e.name, e.seq, d.id, d.name from emp e join department d on e.id = 
 <details><summary>[실습] CTAS 구문을 이용하여 아이디(id), 순번(seq), 이름(name), 부서(dept) 를 가진 테이블을 생성하세요 </summary>
 
 ```sql
-create table emp_dept as select e.id as id, e.seq as seq, e.name as name, d.name as dept from emp e join department d on e.id = d.id;
+create table emp_dept as select e.id as id, e.seq as seq, e.name as name, d.name as dept 
+		from emp e join department d on e.id = d.id;
+
 desc emp_dept;
 ```
 * 아래와 유사하게 나오면 정답입니다
@@ -1244,8 +1248,13 @@ select * from employee cluster by dept_id;
 * Differences between rank and `row_number` : rank 는 tiebreak 시에 같은 등수를 매기고 다음 등수가 없으나 `row_number` 는 아님
 ```sql
 # beeline>
-select * from ( select name, dept_id, seq, rank() over (partition by dept_id order by seq desc) as rank from employee ) t where rank < 2;
+select * from (
+		select name, dept_id, seq, rank() over (
+				partition by dept_id order by seq desc
+		) as rank from employee 
+) t where rank < 2;
 ```
+
 * 클러스터 별 상위 1명을 출력합니다
 ```
 +------------+------------+--------+---------+
