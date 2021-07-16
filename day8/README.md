@@ -21,8 +21,8 @@
   * [Top 7 Hive DML Commands](https://data-flair.training/blogs/hive-dml-commands/)
   * [IMDB data from 2006 to 2016](https://www.kaggle.com/PromptCloudHQ/imdb-data)
   * [Hive update, delete ERROR](https://community.cloudera.com/t5/Support-Questions/Hive-update-delete-and-insert-ERROR-in-cdh-5-4-2/td-p/29485)
-
 <br>
+
 
 ## 1. 최신버전 업데이트
 > 원격 터미널에 접속하여 관련 코드를 최신 버전으로 내려받고, 과거에 실행된 컨테이너가 없는지 확인하고 종료합니다
@@ -41,6 +41,8 @@ git pull
 # terminal
 docker ps -a
 ```
+<br>
+
 
 #### 1-2-2. 기동된 컨테이너가 있다면 강제 종료합니다
 ```bash
@@ -48,6 +50,7 @@ docker ps -a
 docker rm -f `docker ps -aq`
 ```
 > 다시 `docker ps -a` 명령으로 결과가 없다면 모든 컨테이너가 종료되었다고 보시면 됩니다
+<br>
 
 
 #### 1-2-3. 하이브 실습을 위한 컨테이너를 기동합니다
@@ -58,6 +61,8 @@ docker compose pull
 docker compose up -d
 docker compose ps
 ```
+<br>
+
 
 #### 1-2-4. 실습에 필요한 IMDB 데이터를 컨테이너로 복사합니다
 ```bash
@@ -67,12 +72,16 @@ docker compose exec hive ls /opt/hive/examples
 ```
 
 > 마지막 ls /opt/hive/examples 명령어 결과로 imdb.tsv 파일이 확인되면 정상입니다
+<br>
+
 
 #### 1-2-5. 하이브 컨테이너로 접속합니다
 ```bash
 # terminal
 docker compose exec hive bash
 ```
+<br>
+
 
 #### 1-2-6. beeline 프로그램을 통해 hive 서버로 접속합니다
 
@@ -120,6 +129,8 @@ Transaction isolation: TRANSACTION_REPEATABLE_READ
 create database if not exists testdb comment 'test database'
 location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
 ```
+<br>
+
 
 #### 2-1-2. 데이터베이스 목록 출력 - SHOW
 
@@ -134,6 +145,8 @@ location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyobla
 # beeline> 
 show databases;
 ```
+<br>
+
 
 #### 2-1-3. 데이터베이스 정보를 출력합니다 - DESCRIBE
 
@@ -148,6 +161,8 @@ show databases;
 # beeline> 
 describe database testdb;
 ```
+<br>
+
 
 #### 2-1-4. 지정한 데이터베이스를 사용합니다 - USE
 ```sql
@@ -160,6 +175,8 @@ describe database testdb;
 # beeline> 
 use testdb;
 ```
+<br>
+
 
 #### 2-1-5. 데이터베이스를 삭제합니다 - DROP
 ```sql
@@ -174,6 +191,8 @@ use testdb;
 drop database testdb;
 show databases;
 ```
+<br>
+
 
 #### 2-1-6. 데이터베이스의 정보를 변경합니다 - ALTER
 > 데이터베이스에는 크게 DBPROPERTIES 와 OWNER 속성 2가지를 가지고 있습니다
@@ -200,6 +219,7 @@ alter database testdb set dbproperties ('createdfor'='park.suhyuk');
 describe database extended testdb;
 ```
 <br>
+
 
 ##### OWNER 속성
 * 데이터베이스 관리를 어떤 기준(User or Role)으로 할 지를 결정합니다 
@@ -303,6 +323,8 @@ create table if not exists employee (
   fields terminated by ','
   stored as textfile;
 ```
+<br>
+
 
 #### 2-2-2. 테이블 목록 조회 - SHOW
 ```sql
@@ -574,6 +596,7 @@ select title from imdb_title;
 </details>
 <br>
 
+
 * 테이블에 해당 데이터를 덮어씁니다
   - INSERT OVERWITE 는 기본 동작이 Delete & Insert 로 삭제후 추가됩니다
 ```sql
@@ -642,6 +665,12 @@ set hive.compactor.worker.threads=1;
 insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk'), (3, 'lgde course');
 ```
 
+* 제대로 설정되지 않은 경우 아래와 같은 오류를 발생시킵니다
+```sql
+delete from imdb_orc where rank = 1;
+Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
+```
+
 <details><summary>[실습] WHERE 절에 랭크(rank)가 1인 레코드를 삭제 후, 조회해 보세요 </summary>
 
 ```sql
@@ -650,12 +679,6 @@ select * from imdb_orc;
 ```
 
 </details>
-
-* 제대로 설정되지 않은 경우 아래와 같은 오류를 발생시킵니다
-```sql
-delete from imdb_orc where rank = 1;
-Error: Error while compiling statement: FAILED: SemanticException [Error 10294]: Attempt to do update or delete using transaction manager that does not support these operations. (state=42000,code=10294)
-```
 <br>
 
 
@@ -674,6 +697,8 @@ Error: Error while compiling statement: FAILED: SemanticException [Error 10294]:
 update imdb_orc set title = 'modified title' where rank = 1;
 select * from imdb_orc;
 ```
+<br>
+
 
 #### 2-3-6. 테이블 백업 - EXPORT
 
@@ -753,6 +778,8 @@ docker-compose exec hive-server bash
 !connect jdbc:hive2://localhost:10000 scott tiger
 use testdb;
 ```
+<br>
+
 
 #### 3-1.2. 데이터집합의 스키마를 확인하고 하이브 테이블을 생성합니다
 * 데이터집합은 10년(2006 ~ 2016)의 가장 인기있는 1,000개의 영화에 대한 데이터셋입니다
@@ -898,6 +925,8 @@ select year, count(1) as cnt from imdb_parquet group by year;
 cd /home/ubuntu/work/data-engineer-intermediate-training/day8/ex1
 vimdiff agg.imdb_partitioned.out agg.imdb_parquet.out
 ```
+<br>
+
 
 #### 3-2-2. 텍스트, 파티션 및 파케이 테이블의 성능차이 비교
 ```sql
@@ -917,6 +946,8 @@ explain select year, count(1) as cnt from imdb_parquet group by year;
 create table imdb_parquet_sorted stored as parquet 
 	as select title, rank, metascore, year from imdb_movies sort by metascore;
 ```
+<br>
+
 
 #### 3-2-3. 필요한 컬럼만 유지하는 것도 성능에 도움이 되는지 비교
 ```sql
@@ -950,6 +981,7 @@ vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 * OLAP 성 데이터 분석 조회는 Join 대신 모든 필드를 하나의 테이블에 다 가진 Superset 테이블이 더 효과적입니다
 
 ![star-schema](images/star-schema.jpg)
+<br>
 
 
 ### 3-4. 글로벌 정렬 회피를 통한 성능 개선
@@ -1086,10 +1118,13 @@ desc emp_dept;
 <br>
 
 
-#### 3-4-2. Order By - 모든 데이터가 해당 키에 대해 정렬됨을 보장합니다
+#### 3-4-2. Order By
 ```sql
 # beeline>
 select * from employee order by dept_id;
+```
+##### Order By : 모든 데이터가 해당 키에 대해 정렬됨을 보장합니다
+```bash
 +----------------+-------------------+---------------+
 | employee.name  | employee.dept_id  | employee.seq  |
 +----------------+-------------------+---------------+
@@ -1101,10 +1136,16 @@ select * from employee order by dept_id;
 | Robinson       | 34                | 4             |
 +----------------+-------------------+---------------+
 ```
-* Group By - 군집 후 집계함수를 사용할 수 있습니다
+<br>
+
+
+#### 3-4-3. Group By
 ```sql
 # beeline>
 select dept_id, count(*) from employee group by dept_id;
+```
+##### Group By : 군집 후 집계함수를 사용할 수 있습니다
+```bash
 +----------+------+
 | dept_id  | _c1  |
 +----------+------+
@@ -1113,11 +1154,18 @@ select dept_id, count(*) from employee group by dept_id;
 | 34       | 2    |
 +----------+------+
 ```
-* Sort By - 해당 파티션 내에서만 정렬을 보장합니다 - mapred.reduce.task = 2 라면 2개의 개별 파티션 내에서만 정렬됩니다
+<br>
+
+
+#### 3-4-4. Sort By
 ```sql
 # beeline>
 set mapred.reduce.task = 2;
 select * from employee sort by dept_id desc;
+```
+##### Sort By : 해당 파티션 내에서만 정렬을 보장합니다
+* mapred.reduce.task = 2 라면 2개의 개별 파티션 내에서만 정렬됩니다
+```bash
 +----------------+-------------------+---------------+
 | employee.name  | employee.dept_id  | employee.seq  |
 +----------------+-------------------+---------------+
@@ -1129,10 +1177,16 @@ select * from employee sort by dept_id desc;
 | John           | 31                | 6             |
 +----------------+-------------------+---------------+
 ```
-* Distribute By - 단순히 해당 파티션 별로 구분되어 실행됨을 보장합니다 - 정렬을 보장하지 않습니다.
+<br>
+
+
+#### 3-4-5. Distribute By
 ```sql
 # beeline>
 select * from employee distribute by dept_id;
+```
+##### Distribute By : 단순히 해당 파티션 별로 구분되어 실행됨을 보장합니다 - 정렬을 보장하지 않습니다.
+```bash
 +----------------+-------------------+---------------+
 | employee.name  | employee.dept_id  | employee.seq  |
 +----------------+-------------------+---------------+
@@ -1144,10 +1198,16 @@ select * from employee distribute by dept_id;
 | John           | 31                | 6             |
 +----------------+-------------------+---------------+
 ```
-* Distribute By Sort By - 파티션과 해당 필드에 대해 모두 정렬을 보장합니다
+<br>
+
+
+#### 3-4-6. Distribute By + Sort By
 ```sql
 # beeline>
 select * from employee distribute by dept_id sort by dept_id asc, seq desc;
+```
+##### Distribute By Sort By : 파티션과 해당 필드에 대해 모두 정렬을 보장합니다
+```bash
 +----------------+-------------------+---------------+
 | employee.name  | employee.dept_id  | employee.seq  |
 +----------------+-------------------+---------------+
@@ -1174,11 +1234,20 @@ select * from employee cluster by dept_id;
 | Robinson       | 34                | 4             |
 +----------------+-------------------+---------------+
 ```
-* 전체 Global Order 대신 어떤 방법을 쓸 수 있을까?
-  * Differences between rank and row\_number : rank 는 tiebreak 시에 같은 등수를 매기고 다음 등수가 없으나 row\_number 는 아님
+<br>
+
+
+#### 3-4-7. Global Top One
+
+> 레코드 수가 하나의 장비에서 정렬하기 어려울 만큼 충분히 많은 경우 Global Order 대신 어떤 방법을 쓸 수 있을까?
+
+* Differences between rank and `row_number` : rank 는 tiebreak 시에 같은 등수를 매기고 다음 등수가 없으나 `row_number` 는 아님
 ```sql
 # beeline>
 select * from ( select name, dept_id, seq, rank() over (partition by dept_id order by seq desc) as rank from employee ) t where rank < 2;
+```
+* 클러스터 별 상위 1명을 출력합니다
+```
 +------------+------------+--------+---------+
 |   t.name   | t.dept_id  | t.seq  | t.rank  |
 +------------+------------+--------+---------+
@@ -1189,40 +1258,102 @@ select * from ( select name, dept_id, seq, rank() over (partition by dept_id ord
 ```
 
 
-### 5 버킷팅을 통한 성능 개선
+### 3-5 버킷팅을 통한 성능 개선
+
 > 버킷팅을 통해 생성된 테이블의 조회 성능이 일반 파케이 테이블과 얼마나 성능에 차이가 나는지 비교해봅니다
-* 파케이 테이블의 생성시에 버킷을 통한 인덱스를 추가해서 성능을 비교해 봅니다 (단, CTAS 에서는 partition 혹은 clustered 를 지원하지 않습니다)
+
+
+#### 3-5-1. 파티션과 버킷을 모두 사용하여 테이블을 생성합니다
+
+* 파케이 테이블의 생성시에 버킷을 통한 인덱스를 추가해서 성능을 비교해 봅니다
+  -  단, CTAS 에서는 partition 혹은 clustered 를 지원하지 않습니다
 ```sql
 # beeline>
-create table imdb_parquet_bucketed (rank int, title string, genre string, description string, director string, actors string, runtime int, rating string, votes int, revenue string, metascore int) partitioned by (year string) clustered by (rank) sorted by (metascore) into 10 buckets row format delimited fields terminated by ',' stored as parquet;
-
+create table imdb_parquet_bucketed (
+		rank int
+	, title string
+	, genre string
+	, description string
+	, director string
+	, actors string
+	, runtime int
+	, rating string
+	, votes int
+	, revenue string
+	, metascore int
+) partitioned by (year string) 
+clustered by (rank) sorted by (metascore) into 10 buckets 
+row format delimited 
+fields terminated by ',' stored as parquet;
 set hive.exec.dynamic.partition=true;
 set hive.exec.dynamic.partition.mode=nonstrict;
-
-insert overwrite table imdb_parquet_bucketed partition(year='2006') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2006';
-insert overwrite table imdb_parquet_bucketed partition(year='2007') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2007';
-insert overwrite table imdb_parquet_bucketed partition(year='2008') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2008';
-insert overwrite table imdb_parquet_bucketed partition(year='2009') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2009';
-insert overwrite table imdb_parquet_bucketed partition(year='2010') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2010';
-insert overwrite table imdb_parquet_bucketed partition(year='2011') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2011';
-insert overwrite table imdb_parquet_bucketed partition(year='2012') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2012';
-insert overwrite table imdb_parquet_bucketed partition(year='2013') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2013';
-insert overwrite table imdb_parquet_bucketed partition(year='2014') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2014';
-insert overwrite table imdb_parquet_bucketed partition(year='2015') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2015';
-insert overwrite table imdb_parquet_bucketed partition(year='2016') select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore from imdb_movies where year = '2016';
 ```
+
+* 프로그래밍을 하면 더  좋지만, 현재는 수작업으로 직접 넣어주겠습니다 
+```
+insert overwrite table imdb_parquet_bucketed partition(year='2006') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2006';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2007') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2007';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2008') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2008';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2009') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2009';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2010') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2010';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2011') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2011';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2012') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2012';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2013') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2013';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2014') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2014';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2015') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2015';
+
+insert overwrite table imdb_parquet_bucketed partition(year='2016') 
+    select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
+    from imdb_movies where year = '2016';
+```
+
 * 생성된 파케이 테이블이 정상적으로 버킷이 생성되었는지 확인합니다
 ```sql
 # beeline>
 desc formatted imdb_parquet_bucketed;
+```
+* 버킷 컬럼과, 정렬 컬럼을 확인합니다
+```bash
 ...
 | Num Buckets:                  | 10                                                 | NULL                        |
 | Bucket Columns:               | [rank]                                             | NULL                        |
 | Sort Columns:                 | [Order(col:metascore, order:1)]                    | NULL                        |
 ...
 ```
+
 * 일반 파케이 테이블과 버킷이 생성된 테이블의 스캔 성능을 비교해봅니다
+
 > TableScan 텍스트 대비 레코드 수에서는 2% (44/1488 Rows)만 읽어오며, 데이터 크기 수준에서는 약 0.1% (484/309,656 Bytes)만 읽어오는 것으로 성능 향상이 있습니다
+
 ```sql
 # beeline>
 explain select rank, metascore, title from imdb_parquet where year = '2006' and rank < 101 order by metascore desc;
