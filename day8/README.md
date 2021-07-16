@@ -1281,10 +1281,14 @@ select * from employee distribute by dept_id sort by dept_id asc, seq desc;
 | Robinson       | 34                | 4             |
 +----------------+-------------------+---------------+
 ```
-* Cluster By - 파티션 정렬만 보장합니다 - 특정필드의 정렬이 필요하면 Distribute By Sort By 를 사용해야 합니다
+
+#### 3-4-7. Cluster By
 ```sql
 # beeline>
 select * from employee cluster by dept_id;
+```
+##### Cluster By : 파티션 정렬만 보장합니다 - 특정필드의 정렬이 필요하면 Distribute By Sort By 를 사용해야 합니다
+```bash
 +----------------+-------------------+---------------+
 | employee.name  | employee.dept_id  | employee.seq  |
 +----------------+-------------------+---------------+
@@ -1423,13 +1427,13 @@ desc formatted imdb_parquet_bucketed;
 
 ```sql
 # beeline>
+explain select rank, metascore, title from imdb_movies where year = '2006' and rank < 101 order by metascore desc;
+# Statistics: Num rows: 1488 Data size: 309656 Basic stats: COMPLETE Column stats: NONE
+
 explain select rank, metascore, title from imdb_parquet where year = '2006' and rank < 101 order by metascore desc;
 # Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE
 
 explain select rank, metascore, title from imdb_parquet_bucketed where year = '2006' and rank < 101 order by metascore desc;
 # Statistics: Num rows: 44 Data size: 484 Basic stats: COMPLETE Column stats: NONE
-
-explain select rank, metascore, title from imdb_movies where year = '2006' and rank < 101 order by metascore desc;
-# Statistics: Num rows: 1488 Data size: 309656 Basic stats: COMPLETE Column stats: NONE
 ```
 
