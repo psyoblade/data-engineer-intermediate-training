@@ -661,7 +661,7 @@ select count(1) from imdb_title;
 ```sql
 # beeline> 
 create table imdb_orc (rank int, title string) clustered by (rank) into 4 buckets 
-	stored as orc tblproperties ('transactional'='true');
+  stored as orc tblproperties ('transactional'='true');
 set hive.support.concurrency=true;
 set hive.enforce.bucketing=true;
 set hive.exec.dynamic.partition.mode=nonstrict;
@@ -746,7 +746,7 @@ drwxr-xr-x   - root supergroup          0 2020-08-23 14:17 /user/ubuntu/archive/
 ```sql
 /** Usages
     IMPORT [[EXTERNAL] TABLE new_or_original_tablename [PARTITION (part_column="value"[, ...])]] 
-			FROM 'source_path' [LOCATION 'import_target_path'];
+      FROM 'source_path' [LOCATION 'import_target_path'];
 */
 ```
 * 백업된 경로로부터 새로운 테이블을 생성합니다
@@ -815,18 +815,18 @@ use testdb;
 drop table if exists imdb_movies;
 
 create table imdb_movies (
-	rank int
-	, title string
-	, genre string
-	, description string
-	, director string
-	, actors string
-	, year string
-	, runtime int
-	, rating string
-	, votes int
-	, revenue string
-	, metascore int
+  rank int
+  , title string
+  , genre string
+  , description string
+  , director string
+  , actors string
+  , year string
+  , runtime int
+  , rating string
+  , votes int
+  , revenue string
+  , metascore int
 ) row format delimited fields terminated by '\t';
 
 load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
@@ -867,17 +867,17 @@ select title, revenue from imdb_movies where year = '2015' order by revenue desc
 drop table if exists imdb_partitioned;
 
 create table imdb_partitioned (
-	rank int
-	, title string
-	, genre string
-	, description string
-	, director string
-	, actors string
-	, runtime int
-	, rating string
-	, votes int
-	, revenue string
-	, metascore int
+  rank int
+  , title string
+  , genre string
+  , description string
+  , director string
+  , actors string
+  , runtime int
+  , rating string
+  , votes int
+  , revenue string
+  , metascore int
 ) partitioned by (year string) row format delimited fields terminated by '\t';
 
 set hive.exec.dynamic.partition=true;
@@ -886,8 +886,8 @@ set hive.exec.dynamic.partition.mode=nonstrict;
 * 기존 테이블로부터 데이터를 가져와서 동적으로 파티셔닝하여 저장합니다
 ```sql
 insert overwrite table imdb_partitioned partition (year) 
-	select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore, year 
-	from imdb_movies;
+  select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore, year 
+  from imdb_movies;
 ```
 * 신규로 생성된 파티션 테이블을 통해 집계 연산을 수행합니다
 ```sql
@@ -922,8 +922,8 @@ vimdiff agg.imdb_movies.out agg.imdb_partitioned.out
 drop table if exists imdb_parquet;
 
 create table imdb_parquet row format delimited stored
-		as parquet as select * 
-		from imdb_movies;
+    as parquet as select * 
+    from imdb_movies;
 
 select year, count(1) as cnt from imdb_parquet group by year;
 ```
@@ -953,7 +953,7 @@ explain select year, count(1) as cnt from imdb_parquet group by year;
 * 파케이 포맷의 정렬된 테이블을 생성합니다
 ```
 create table imdb_parquet_sorted stored as parquet 
-	as select title, rank, metascore, year from imdb_movies sort by metascore;
+  as select title, rank, metascore, year from imdb_movies sort by metascore;
 ```
 <br>
 
@@ -962,8 +962,8 @@ create table imdb_parquet_sorted stored as parquet
 ```sql
 # beeline>
 create table imdb_parquet_small stored as parquet 
-	as select title, rank, metascore, year 
-	from imdb_movies sort by metascore;
+  as select title, rank, metascore, year 
+  from imdb_movies sort by metascore;
 
 explain select rank, title, metascore from imdb_parquet order by metascore desc limit 10;
 # Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE
@@ -1038,9 +1038,9 @@ use testdb;
 drop table if exists employee;
 
 create table employee (
-	name string
-	, dept_id int
-	, seq int
+  name string
+  , dept_id int
+  , seq int
 ) row format delimited fields terminated by '|';
 
 load data local inpath '/opt/hive/examples/files/emp.uniq.txt' into table employee;
@@ -1057,8 +1057,8 @@ load data local inpath '/opt/hive/examples/files/emp.uniq.txt' into table employ
 drop table if exists department;
 
 create table department (
-	id int
-	, name string
+  id int
+  , name string
 ) row format delimited fields terminated by '|';
 
 load data local inpath '/opt/hive/examples/files/dept.txt' into table department;
@@ -1076,7 +1076,7 @@ select * from employee;
 
 desc department;
 select * from department;
-```	
+```  
 
 <details><summary>[실습] employee + department 정보를 가진 테이블을 조회하는 SQL문을 수행하세요 </summary>
 
@@ -1110,7 +1110,7 @@ select e.id, e.name, e.seq, d.id, d.name from emp e join department d on e.id = 
 
 ```sql
 create table emp_dept as select e.id as id, e.seq as seq, e.name as name, d.name as dept 
-		from emp e join department d on e.id = d.id;
+    from emp e join department d on e.id = d.id;
 
 desc emp_dept;
 ```
@@ -1257,9 +1257,9 @@ select * from employee cluster by dept_id;
 ```sql
 # beeline>
 select * from (
-		select name, dept_id, seq, rank() over (
-				partition by dept_id order by seq desc
-		) as rank from employee 
+    select name, dept_id, seq, rank() over (
+        partition by dept_id order by seq desc
+    ) as rank from employee 
 ) t where rank < 2;
 ```
 
@@ -1287,17 +1287,17 @@ select * from (
 ```sql
 # beeline>
 create table imdb_parquet_bucketed (
-		rank int
-	, title string
-	, genre string
-	, description string
-	, director string
-	, actors string
-	, runtime int
-	, rating string
-	, votes int
-	, revenue string
-	, metascore int
+    rank int
+  , title string
+  , genre string
+  , description string
+  , director string
+  , actors string
+  , runtime int
+  , rating string
+  , votes int
+  , revenue string
+  , metascore int
 ) partitioned by (year string) 
 clustered by (rank) sorted by (metascore) into 10 buckets 
 row format delimited 
