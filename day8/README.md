@@ -956,7 +956,8 @@ vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 
 >  Order By, Group By, Distribute By, Sort By, Cluster By 실습을 통해 차이점을 이해하고 활용합니다
 
-#### 3-4-1. 컨테이너 내부에 저장된  emp.txt 파일을 실습을 위해 중복제거하여 저장합니다
+
+#### 3-4-1. 실습을 위한 employee 및 department 테이블을 생성합니다
 
 * 컨테이너에 접속된 세션이 없다면 하이브 서버에 접속합니다
 ```bash
@@ -982,34 +983,67 @@ Steinberg|33|3
 */
 ```
 
-
-* 비라인을 통해 직원 및 부서 테이블을 생성합니다
+* Beeline 커맨드를 통해 직원 및 부서 테이블을 생성합니다
 ```bash
 # terminal
 beeline jdbc:hive2://localhost:10000 scott tiger
 use testdb;
 ```
 
-* 명령어 수행 
+* 직원(employee) 테이블을 생성합니다, 데이터를 로딩합니다
 ```sql
 # beeline>
 drop table if exists employee;
-create table employee (name string, dept_id int, seq int) row format delimited fields terminated by '|';
-load data local inpath '/opt/hive/examples/files/emp.uniq.txt' into table employee;
 
+create table employee (
+	name string
+	, dept_id int
+	, seq int
+) row format delimited fields terminated by '|';
+
+load data local inpath '/opt/hive/examples/files/emp.uniq.txt' into table employee;
+```
+
+* 부서 테이블 정보
+  - 테이블 이름 : department
+  - 테이블 파일 : /opt/hive/examples/files/dept.txt
+  - 테이블 스키마 : (id int, name string) 
+
+<details><summary>[실습] 유사한 방식으로  부서(department) 테이블을 생성하고 데이터를 로딩하세요 </summary>
+
+```sql
 drop table if exists department;
-create table department (id int, name string) row format delimited fields terminated by '|';
+
+create table department (
+	id int
+	, name string
+) row format delimited fields terminated by '|';
+
 load data local inpath '/opt/hive/examples/files/dept.txt' into table department;
 ```
 
-* Q2) 테이블의 정보를 조회하고 어떻게 조인해야 employee + department 정보를 가진 테이블을 조회할 수 있을까요?
-  * Hint) SELECT a.key, b.key FROM tableA a JOIN tableB b ON a.key = b.key
-```sql
+</details>
+<br>
+
+
+* 테이블 스키마 정보와 데이터를 눈으로 확인합니다
+```
 # beeline>
 desc employee;
-desc department;
+select * from employee;
 
-select * from users; // 정답
+desc department;
+select * from department;
+```	
+
+<details><summary>[실습] employee + department 정보를 가진 테이블을 조회하는 SQL문을 수행하세요 </summary>
+
+```sql
+# beeline
+select e.id, e.name, e.seq, d.id, d.name from emp e join department d on e.id = d.id;
+```
+> 아래와 같이 나오면 정답입니다
+```bash
 +------------+--------+-------+--------------+
 |   e.name   | e.seq  | d.id  |    d.name    |
 +------------+--------+-------+--------------+
@@ -1022,22 +1056,37 @@ select * from users; // 정답
 +------------+--------+-------+--------------+
 ```
 
-* Q3) 직원 이름, 지원 부서 아이디, 직원 부서 이름을 가진 users 테이블을 생성할 수 있을까요?
-  * Hint) CREATE TABLE users AS SELECT ...
-```sql
-# beeline>
+</details>
+<br>
 
-desc users; // 정답
+
+* `직원 테이블 (emp_dept)` 생성
+  - 테이블 이름 : `emp_dept`
+  - 테이블 스키마 : (id int, seq int, name string, dept name) 
+
+<details><summary>[실습] CTAS 구문을 이용하여 아이디(id), 순번(seq), 이름(name), 부서(dept) 를 가진 테이블을 생성하세요 </summary>
+
+```sql
+create table emp_dept as select e.id as id, e.seq as seq, e.name as name, d.name as dept from emp e join department d on e.id = d.id;
+desc emp_dept;
+```
+* 아래와 유사하게 나오면 정답입니다
+```bash
 +-----------+------------+----------+
 | col_name  | data_type  | comment  |
 +-----------+------------+----------+
-| username  | string     |          |
-| seq       | int        |          |
 | id        | int        |          |
+| seq       | int        |          |
 | name      | string     |          |
+| dept      | string     |          |
 +-----------+------------+----------+
 ```
-* Order By - 모든 데이터가 해당 키에 대해 정렬됨을 보장합니다
+
+</details>
+<br>
+
+
+#### 3-4-2. Order By - 모든 데이터가 해당 키에 대해 정렬됨을 보장합니다
 ```sql
 # beeline>
 select * from employee order by dept_id;
