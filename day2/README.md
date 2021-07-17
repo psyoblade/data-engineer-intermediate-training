@@ -229,8 +229,8 @@ ls /tmp/sqoop/seoul_popular_trip
 ask cat /tmp/sqoop/seoul_popular_trip/part-m-00000
 ```
 
-* 예제 실습 테이블 스키마와 데이터 2건
-  - 테이블 이름 : account
+* 예제 실습 테이블 스키마와 데이터 2건 (테이블 이름 : account)
+
 | 컬럼 | 타입 | 로우1 | 로우2 |
 | --- | --- | --- | --- |
 | id | int | 1 | 2 |
@@ -257,7 +257,9 @@ select * from account;
 
 ```bash
 # docker
-ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --table account --target-dir /home/sqoop/target/account
+ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb \
+--username sqoop --password sqoop --table account --target-dir /home/sqoop/target/account
+
 ls -al /home/sqoop/target/account
 ```
 
