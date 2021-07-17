@@ -54,23 +54,29 @@ docker compose ps
 
 ### 1-4. SQL 기본 실습
 
-#### 1-4-1. 아파치 스쿱 MySQL 터미널 접속
+#### 1-4-1. SQL 실습을 위해 root 유저로 데이터베이스 (foo) 생성
 ```bash
 # terminal
-docker compose exec mysql mysql -usqoop -psqoop
+docker compose exec mysql mysql -uroot -proot
 ```
 
 #### 1-4-2. 테이블 확인 및 SQL 실습
 ```sql
-use testdb;
-show tables;
+# mysql>
+CREATE DATABASE foo;
+GRANT ALL ON foo.* TO 'sqoop'@'%';
 ```
 
-#### 1-4-3. 기본 SQL 명령어 리마인드
+#### 1-4-3. SQL 실습을 위해 sqoop 유저로 접속
+```sql
+use foo;
+```
+
+#### 1-4-4. 기본 SQL 명령어 리마인드
 
 ![SQL](images/SQL.png)
 
-* 테이블 생성 및 삭제
+* 테이블 생성
 ```sql
 CREATE TABLE table1 (
     col1 INT NOT NULL,
@@ -84,13 +90,32 @@ CREATE TABLE table2 (
 );
 
 CREATE TABLE foo (
-    bar INT;
+    foo INT;
 );
+```
+
+* 테이블 변경 및 삭제
+```sql
+ALTER TABLE foo ADD COLUMN ( bar VARCHAR(10) );
+
+DESC foo;
 
 DROP TABLE foo;
 ```
 
-* SELECT
+* 데이터 추가
+```sql
+INSERT INTO table1 ( col1 ) VALUES ( 1 );
+INSERT INTO table2 VALUES ( 1, 'one' );
+INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
+```
+
+* 데이터 변경
+```sql
+UPDATE table1 SET col1 = 100 WHERE col1 = 1;
+```
+
+* 데이터 조회
 ```sql
 SELECT col1, col2
 FROM table1;
@@ -100,23 +125,27 @@ FROM table2
 WHERE col1 = '찾는값'
 ```
 
-* INSERT
-```sql
-INSERT INTO table1 ( col1 ) VALUES ( 1 );
-INSERT INTO table2 VALUES ( 1, 'one' );
-INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
-```
-
-* UPDATE
-```sql
-UPDATE table1 SET col1 = 100 WHERE col1 = 1;
-```
-
-* DELETE
+* 데이터 삭제
 ```sql
 DELETE FROM table1 WHERE col1 = 100;
 DELETE FROM table2;
 ```
+
+> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
+
+
+#### 1-4-5. 데이터베이스 삭제
+
+> 테스트로 생성했던 foo 데이터베이스를 삭제합니다
+
+```bash
+# terminal
+docker compose exec mysql mysql -uroot -proot
+```
+```sql
+drop database foo;
+```
+
 
 
 * 로컬 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
