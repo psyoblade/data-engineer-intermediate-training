@@ -868,8 +868,8 @@ hadoop fs -ls /user/sqoop/target/inc_table
 
 #### 2-4-6. 조인을 통한 최적화
 
-* 모든 스테이징 테이블을 다 스냅샷으로 저장하는 것이 일반적인 접근이고, 향후 사용에도 용이하지만, 원본 테이블이 충분히 크고 복잡하다면 추천합니다
-  - 스테이징을 다 해서, 다시 분산환경에서 Join 을 하는 것은 충분히 큰 비용이고, 필요 없는 작업일 수도 있기 때문입니다
+* 모든 스테이징 테이블을 다 스냅샷으로 저장하는 것이 일반적인 접근이고, 향후 사용에도 용이하지만, **원본 테이블이 충분히 크고 복잡하다면 추천**합니다
+  - 스테이징을 다 해서, 다시 *분산환경에서 Join 을 하는 것은 충분히 큰 비용이고, 필요 없는 작업일 수*도 있기 때문입니다
   - 최대한 필요한 데이터만 최소화 하여 저장하여 활용하는 것을 첫 번째 단계로 보아도 좋습니다
 
 <br>
@@ -923,7 +923,8 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
 ```
 
-* 오류 확인은 리소스매니저 (http://<cloud-public-ip>:8088) 사이트에서 할 수 있습니다
+![RM](images/RM.png)
+* 오류 확인은 리소스매니저 (http://`<cloud-public-ip>`:8088) 사이트에서 할 수 있습니다
   * `application_id` 링크를 클릭하고 logs 경로를 클릭하면 http://9e48393c5f39:8042/ 와 같이 docker-container 아이로 redirect 됩니다
   * 해당 문자열을 자신의 클라우드 장비의 IP 혹은 DNS 주소로 변경하면 됩니다
   * 해당 로그 페이지에서 "syslog : Total file length is 49301 bytes." 링크를 클릭하고 "here" 링크를 클릭하면 전체 로그를 한 번에 확인할 수 있습니다
