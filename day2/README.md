@@ -463,10 +463,10 @@ ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/test
   --username sqoop --password sqoop --table student --target-dir /home/sqoop/target/student_parquet \
   --as-parquetfile
 ```
-* 생성된 파일이 파케이로 저장되었는지 확인합니다
+* 생성된 파일이 파케이로 저장되었는지 확인후 파일명을 기억해둡니다
 ```
 # docker
-ls /home/sqoop/target/student_parquet
+ask ls -d1 /home/sqoop/target/student_parquet/*
 ```
 
 </details>
@@ -477,26 +477,32 @@ ls /home/sqoop/target/student_parquet
 
 > 파케이 포맷은 바이너리 포맷이라 문서편집기 등을 통해 직접 확인할 수 없기 때문에 별도의 도구를 통해서만 읽어들일 수 있습니다
 
+* 생성된 파일이 파케이로 저장되었는지 확인후 파일명을 기억해둡니다
+```bash
+# docker
+filename=`ls -d1 /home/sqoop/target/student_parquet/*`
+```
+
 * 파케이 포맷으로 저장된 테이블을 출력합니다 
   - 파케이 포맷의 파일은 바이너리 포맷이라 cat 혹은 vi 등으로 내용을 확인할 수 없습니다
   - 서버에 설치된 /jdbc/parquet-tools-1.8.1.jar 어플리케이션을 이용하여 확인이 가능합니다
 ```bash
-ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head file:///tmp/target/table/student_parquet
+ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
 ```
 
 * 파케이 포맷 도구를 이용하여 사용가능한 기능
-  - head -n 5 : 상위 5개의 문서를 출력합니다 (default: 5)
-  - cat : 문서를 그대로 출력합니다
-  - schema : 테이블 스키마를 출력합니다
-  - meta : 파케이 포맷의 메타데이터를 출력합니다 
-  - dump : 텍스트 포맷으로 출력 합니다
+  - `head -n 5` : 상위 5개의 문서를 출력합니다 (default: 5)
+  - `cat` : 문서를 그대로 출력합니다
+  - `schema` : 테이블 스키마를 출력합니다
+  - `meta` : 파케이 포맷의 메타데이터를 출력합니다 
+  - `dump` : 텍스트 포맷으로 출력 합니다
 
 ```bash
-ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head -n 10 file:///tmp/target/table/student_parquet
+ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head -n 10 file://${filename}
 
-ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file:///tmp/target/table/student_parquet
+ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 
-ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file:///tmp/target/table/student_parquet
+ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
 ```
 
 
