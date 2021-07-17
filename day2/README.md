@@ -222,7 +222,8 @@ ask echo hello world
 
 * 테이블 수집 합니다
 ```bash
-ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
+ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb \
+  --username sqoop --password sqoop --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
 ```
 
 * 로컬 저장소에 제대로 수집이 되었는지 확인합니다
@@ -265,12 +266,12 @@ select * from account;
 </details>
 <br>
 
-<details><summary><span style="color:blue">[실습] account 테이블을 로컬 경로(/home/sqoop/target/account)에 수집하세요</span> </summary>
+<details><summary>**[실습]** account 테이블을 로컬 경로(/home/sqoop/target/account)에 수집하세요 </summary>
 
 ```bash
 # docker
 ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb \
---username sqoop --password sqoop --table account --target-dir /home/sqoop/target/account
+  --username sqoop --password sqoop --table account --target-dir /home/sqoop/target/account
 
 ls -al /home/sqoop/target/account
 ```
