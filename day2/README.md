@@ -84,7 +84,8 @@ use foo;
 
 ![SQL](images/SQL.png)
 
-* [테이블 생성](https://dev.mysql.com/doc/refman/8.0/en/create-table.html)
+* [테이블 생성](https://dev.mysql.com/doc/refman/8.0/en/create-table.html){:target="\_blank"}
+
 ```sql
 CREATE TABLE table1 (
     col1 INT NOT NULL,
