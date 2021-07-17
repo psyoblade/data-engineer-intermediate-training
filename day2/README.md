@@ -914,7 +914,7 @@ show tables;
 
 > 적재 서비스는 스키마 불일치에 따른 실패가 자주 발생하는데 의도적으로 발생시켜 디버깅하는 방법을 익힙니다
 
-#### 3-2-1. 실패하는 테이블 적재 작업 디버깅
+#### 3-2-1. 구분자 오류에 따른 실패 확인
 
 * 적재 작업을 수행하면 오류가 발생하고 예외가 발생하고, 정확한 오류를 확인할 수 없습니다
 ```bash
@@ -931,11 +931,11 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 <br>
 
 
-#### 3-2-2. 구분자 오류에 따른 실패 복구
+#### 3-2-2. 탭구분자로 테이블 재수집
 
 * 수집한 테이블의 경우 콤마를 기준으로 수집했는데, 필드에 콤마(,)가 들어가 있어서 export 시에 필드의 개수가 맞지 않는다는 오류를 확인합니다
-  - 적재 수행 시에 콤마 구분자로 수행하거나 (단, 이번 예제는 내부에 콤마가 들어가 있는 튜플이 있어서 사용할 수 없다)
-  - 테이블 수집을 탭 구분자로 변경하거나 (하여 콤마 보다는 탭을 구분자로 선택하는 것이 좀 더 일반적입니다)
+  - 방법#1. 적재 수행 시에 콤마 구분자로 수행하거나 (단, 이번 예제는 내부에 콤마가 들어가 있는 튜플이 있어서 사용할 수 없다)
+  - 방법#2. 테이블 수집을 탭 구분자로 변경하거나 (하여 콤마 보다는 탭을 구분자로 선택하는 것이 좀 더 일반적입니다)
 
 ```bash
 # docker
@@ -943,17 +943,25 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_exp \
   --fields-terminated-by '\t' --delete-target-dir 
 ```
-
-* 올바르게 수집 되었는지 데이터를 확인합니다
 ```bash
 # docker
 ask hadoop fs -cat /user/sqoop/target/seoul_popular_exp/part-m-00000 | more
 ```
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 아래와 같다면 성공입니다
+
 ```text
 0	281	통인시장	110-043 서울 종로구 통인동 10-3 	03036 서울 종로구 자하문로15길 18 	02-722-0911	엽전도시락,종로통인시장,통인시장닭꼬치,런닝맨,엽전시장,통인시장데이트,효자베이커리,통인시장, 1박2일,기름떡볶이
 0	345	타르틴	140-863 서울 용산구 이태원동 119-15 	04350 서울 용산구 이태원로23길 4 (이태원동) 	02-3785-3400	타르틴,이태원디저트카페,파이,런닝맨,파이맛집,이태원맛집, 유재석,식신로드,타르트맛집
-
 ```
+
+</details>
+<br>
+
+
+#### 3-2-3. 탭구분자로 테이블 재적재
 
 * 탭 구분자로 익스포트된 경로의 파일을 이용하여 다시 익스포트를 수행합니다
 ```bash
@@ -961,28 +969,16 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_exp \
   --fields-terminated-by '\t' 
 ```
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 아래와 같다면 성공입니다
+
 ```text
 21/07/17 10:09:44 INFO mapreduce.ExportJobBase: Transferred 483.1064 KB in 12.7846 seconds (37.7882 KB/sec)
 21/07/17 10:09:44 INFO mapreduce.ExportJobBase: Exported 1956 records.
 ```
 
-```sql
-# mysql>
-SELECT category, id, name FROM seoul_popular_exp LIMIT 3;
-```
-```sql
-# mysql>
-SELECT category, id, name FROM seoul_popular_exp LIMIT 3;
-```
-```text
-+----------+-----+--------------+
-| category | id  | name         |
-+----------+-----+--------------+
-|        0 | 281 | 통인시장     |
-|        0 | 345 | 타르틴       |
-|        0 | 383 | 해랑         |
-+----------+-----+--------------+
-```
+</details>
 <br>
 
 
@@ -1019,13 +1015,33 @@ ask sqoop export -m 4 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 ```
 * 적재 과정에서 stg 및 exp 테이블을 조회해 보면 상태를 확인할 수 있습니다
 ```sql
-# mysql>
-SELECT COUNT(1) FROM seoul_popular_stg;
-SELECT COUNT(1) FROM seoul_popular_exp;
+# docker
+cmd "SELECT COUNT(1) FROM seoul_popular_stg"
+cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 ```
 
 > 적재시에 4개의 맵 작업수로 수행된 사항에 대해서도 디버깅 해보시면 어떻게 동작하는 지 확인할 수 있습니다
 
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 아래와 같다면 성공입니다 - 단, 수집 과정에서는 `seoul_popular_stg` 카운트가 나오거나 exp 테이블 레코드가 없을 수 있습니다
+
+```text
+# "SELECT COUNT(1) FROM seoul_popular_stg"
+-----------------------
+| COUNT(1)            |
+-----------------------
+| 0                   |
+-----------------------
+# "SELECT COUNT(1) FROM seoul_popular_exp"
+-----------------------
+| COUNT(1)            |
+-----------------------
+| 1956                |
+-----------------------
+```
+
+</details>
 <br>
 
 
