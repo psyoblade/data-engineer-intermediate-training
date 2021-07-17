@@ -59,6 +59,7 @@ docker compose ps
 # terminal
 docker compose exec mysql mysql -uroot -proot
 ```
+> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
 
 #### 1-4-2. 테이블 확인 및 SQL 실습
 ```bash
