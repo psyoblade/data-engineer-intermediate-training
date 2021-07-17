@@ -59,17 +59,20 @@ docker compose ps
 # terminal
 docker compose exec mysql mysql -uroot -proot
 ```
+* sqoop 유저가 해당 데이터베이스를 사용할 수 있도록 권한 부여를 합니다
+```sql
+# mysql>
+CREATE DATABASE foo;
+GRANT ALL ON foo.* TO 'sqoop'@'%';
+```
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
+<br>
+
 
 #### 1-4-2. 테이블 확인 및 SQL 실습
 ```bash
 # terminal
 docker compose exec mysql mysql -usqoop -psqoop
-```
-```sql
-# mysql>
-CREATE DATABASE foo;
-GRANT ALL ON foo.* TO 'sqoop'@'%';
 ```
 
 #### 1-4-3. SQL 실습을 위해 sqoop 유저로 접속
