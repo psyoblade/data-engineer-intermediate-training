@@ -84,7 +84,7 @@ use foo;
 
 ![SQL](images/SQL.png)
 
-* 테이블 생성
+* [테이블 생성](https://dev.mysql.com/doc/refman/8.0/en/create-table.html)
 ```sql
 CREATE TABLE table1 (
     col1 INT NOT NULL,
@@ -104,51 +104,52 @@ CREATE TABLE foo (
 SHOW TABLES;
 ```
 
-* 테이블 변경
+* [테이블 변경](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
 ```sql
 ALTER TABLE foo ADD COLUMN ( bar VARCHAR(10) );
 
 DESC foo;
 ```
 
-* 테이블 삭제
+* [테이블 삭제](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html)
 ```sql
 DROP TABLE foo;
 
 SHOW TABLES;
 ```
 
-* 데이터 추가
+* [데이터 추가](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
 ```sql
 INSERT INTO table1 ( col1 ) VALUES ( 1 );
 INSERT INTO table2 VALUES ( 1, 'one' );
 INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
 ```
 
-* 데이터 조회
+* [데이터 조회](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 ```sql
 SELECT col1, col2
 FROM table1;
 
 SELECT col2
 FROM table2
-WHERE col1 = 'two'
+WHERE col2 = 'two';
 ```
 
-* 데이터 변경
+* [데이터 변경](https://dev.mysql.com/doc/refman/8.0/en/update.html)
 ```sql
 UPDATE table1 SET col1 = 100 WHERE col1 = 1;
 
 SELECT col1, col2 FROM table1;
 ```
 
-* 데이터 삭제
+* [데이터 삭제](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
 ```sql
 DELETE FROM table1 WHERE col1 = 100;
 DELETE FROM table2;
 ```
 
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
+<br>
 
 
 #### 1-4-5. 데이터베이스 삭제
@@ -162,19 +163,112 @@ docker compose exec mysql mysql -uroot -proot
 ```sql
 drop database foo;
 ```
+> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
+<br>
 
 
+### 1-5. 실습명령어 검증을 위한 ask 를 리뷰하고 실습합니다
 
-* 로컬 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
+> ask 명령어는 아래와 같이 전달받은 명령을 실행하는 스크립트입니다
+
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/sbin
-docker exec -it sqoop sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
-docker exec -it sqoop ls /tmp/sqoop/seoul_popular_trip
-docker exec -it sqoop cat /tmp/sqoop/seoul_popular_trip/part-m-00000
+#!/bin/bash
+while true; do
+    echo
+    echo "$ $@"
+    echo
+    read -p "위 명령을 실행 하시겠습니까? [y/n] " yn
+    case $yn in
+        [Yy]* ) "$@"; break;;
+        [Nn]* ) exit;;
+        * ) echo "[y/n] 을 입력해 주세요.";;
+    esac
+done
 ```
+
+* 스쿱 명령어 실습을 위해 컨테이너에 접속합니다
+```bash
+# terminal
+docker compose exec sqoop bash
+```
+
+```bash
+# docker
+ask echo hello world
+```
+<details><summary> 정답확인</summary>
+
+> "hello world" 가 출력되면 정상입니다
+
+</details>
+<br>
+
+
+### 1-6. 로컬 프로세스로, 로컬 저장소에 테이블 수집
+
+> 스쿱은 분산 저장소와 분산 처리를 지원하지만, 로컬 리소스 (프로세스) 그리고 로컬 저장소 (디스크, SATA) 에도 저장하는 기능을 가지고 있습니다
+
+* 컨테이너 로컬 디스크에 예제 테이블(`seoul_popular_trip`)을 수집합니다
+  - `-jt local` : 로컬 프로세스로 (원격 분산처리가 아니라) 테이블을 수집
+  - `-fs local` : 로컬 디스크에 (원격 부산저장소가 아니라) 테이블을 수집
+  - `-m 1` : 하나의 프로세스로 실행
+  - `--connect jdbc:mysql://mysql:3306/testdb` : 대상 서버 Connection String
+  - `--username` : 이용자
+  - `--password` : 패스워드
+  - `--table` : 테이블이름
+  - `--target-dir` : 저장경로 (컨테이너 내부의 로컬 저장소)
+
+* 테이블 수집 합니다
+```bash
+ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
+```
+
+* 로컬 저장소에 제대로 수집이 되었는지 확인합니다
+```bash
+ls /tmp/sqoop/seoul_popular_trip
+ask cat /tmp/sqoop/seoul_popular_trip/part-m-00000
+```
+
+* 예제 실습 테이블 스키마와 데이터 2건
+  - 테이블 이름 : account
+| 컬럼 | 타입 | 로우1 | 로우2 |
+| --- | --- | --- | --- |
+| id | int | 1 | 2 |
+| name | varchar(10) | 김엘지 | 박전자 |
+
+<details><summary>[실습] 별도의 터미널을 통해 임의의 테이블을 생성하고 데이터를 입력하세요 </summary>
+
+```bash
+# terminal
+docker compose exec mysql mysql -usqoop -psqoop
+```
+```sql
+# mysql
+use testdb;
+create table account (id int, name varchar(10));
+insert into account values (1, '김엘지'), (2, '박전자');
+select * from account;
+```
+
+</details>
+<br>
+
+<details><summary>[실습] account 테이블을 로컬 경로(/home/sqoop/target/account)에 수집하세요 </summary>
+
+```bash
+# docker
+ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --table account --target-dir /home/sqoop/target/account
+ls -al /home/sqoop/target/account
+```
+
+</details>
+<br>
+
+
+
 * 클러스터 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
 ```bash
-docker exec -it sqoop sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip
+docker exec -it sqoop sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip
 docker exec -it sqoop hadoop fs -ls /user/sqoop/target/seoul_popular_trip
 docker exec -it sqoop hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
@@ -187,7 +281,7 @@ docker exec -it sqoop hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-
 ```
 * 위의 sqoop-import.sh 명령 대신 아래와 같이 직접 모두 입력해도 됩니다
 ```bash
-docker exec -it sqoop sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_v2 --fields-terminated-by '\t' --delete-target-dir --verbose --username user --password pass
+docker exec -it sqoop sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_v2 --fields-terminated-by '\t' --delete-target-dir --verbose --username sqoop --password pass
 ```
 
 
@@ -203,9 +297,9 @@ docker exec -it sqoop sqoop import -m 4 --split-by id --connect jdbc:mysql://mys
 ```
 * 확인한 값의 범위를 이용하여 조건을 달리하여 하나의 테이블을 3번으로 나누어 수집을 수행합니다
 ```bash
-docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --delete-target-dir -m 1 --table seoul_popular_trip --where "id < 10000" --target-dir /user/sqoop/target/seoul_popular_partition/part=0
-docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 10001 and id < 20000" --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
-docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 20001" --target-dir /user/sqoop/target/seoul_popular_partition/part=20000
+docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --delete-target-dir -m 1 --table seoul_popular_trip --where "id < 10000" --target-dir /user/sqoop/target/seoul_popular_partition/part=0
+docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 10001 and id < 20000" --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
+docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 20001" --target-dir /user/sqoop/target/seoul_popular_partition/part=20000
 ```
 * 테이블 수집이 정상적으로 수행 되었는지 하둡 명령어를 통해 확인해 봅니다
 ```bash
@@ -252,7 +346,7 @@ insert into inc_table (name, salary) values ('psyoblade', 20000);
 ```
 * 생성된 경로를 루트로 하위로 모든 테이블을 수집합니다 (반드시 --autoreset-to-one-mapper 를 지정해 주어야 primary key 가 없는 경우에도 -m 1 으로 수집이 됩니다)
 ```bash
-docker exec -it sqoop sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --autoreset-to-one-mapper --warehouse-dir /user/sqoop/target/testdb --username user --password pass
+docker exec -it sqoop sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --autoreset-to-one-mapper --warehouse-dir /user/sqoop/target/testdb --username sqoop --password pass
 ```
 
 

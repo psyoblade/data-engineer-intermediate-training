@@ -71,6 +71,9 @@ docker compose exec sqoop bash
 
 
 ### 2-2. 실습명령어 검증을 위한 ask 를 리뷰하고 실습합니다
+
+> ask 명령어는 아래와 같이 전달받은 명령을 실행하는 스크립트입니다
+
 ```bash
 #!/bin/bash
 while true; do
@@ -79,7 +82,7 @@ while true; do
     echo
     read -p "위 명령을 실행 하시겠습니까? [y/n] " yn
     case $yn in
-        [Yy]* ) $@; break;;
+        [Yy]* ) "$@"; break;;
         [Nn]* ) exit;;
         * ) echo "[y/n] 을 입력해 주세요.";;
     esac
