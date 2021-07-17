@@ -84,8 +84,7 @@ use foo;
 
 ![SQL](images/SQL.png)
 
-* [테이블 생성](https://dev.mysql.com/doc/refman/8.0/en/create-table.html){:target="\_blank"}
-* < href="https://dev.mysql.com/doc/refman/8.0/en/create-table.html" target="\_blank">테이블생성</a>
+* [테이블 생성](https://dev.mysql.com/doc/refman/8.0/en/create-table.html)
 
 
 ```sql
