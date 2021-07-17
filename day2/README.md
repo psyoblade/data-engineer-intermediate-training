@@ -816,16 +816,18 @@ ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --pas
 hadoop fs -ls /user/sqoop/target/inc_table
 hadoop fs -cat /user/sqoop/target/inc_table/part-m-00001
 ```
-> 결과가 `1,suhyuk,10000` 로 나오면 정답입니다
+> 결과가 `2,psyoblade,20000` 로 나오면 정답입니다
 
 <br>
 
 
 #### 2-3-5. 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
+
+> append 된 파일은 일련번호가 하나씩 늘어나면서 파일이 생성됩니다
+
 ```bash
 # docker
-hadoop fs -ls /user/sqoop/target/seoul_popular_inc
-hadoop fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00001
+hadoop fs -ls /user/sqoop/target/inc_table
 ```
 <br>
 
