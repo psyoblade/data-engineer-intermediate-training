@@ -476,7 +476,8 @@ ls /home/sqoop/target/student_tab
 
 
 #### 1-7-2. 파케이 포맷으로 저장
-* `--as-parquetfile` : 옵션을 추가하면 파케이 포맷으로 저장됩니다
+
+> 파케이 포맷 저장 <kbd>--as-parquetfile</kbd> 
 
 <details><summary>[실습] 앞서 생성된 학생(student) 테이블을 파케이 포맷으로 로컬 `/home/sqoop/target/student_parquet` 경로에 저장하세요 </summary>
 
@@ -517,15 +518,15 @@ filename=`ls -d1 /home/sqoop/target/student_parquet/*`
   - 서버에 설치된 /jdbc/parquet-tools-1.8.1.jar 어플리케이션을 이용하여 확인이 가능합니다
 ```bash
 # docker
-ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
+hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
 ```
 
 * 파케이 포맷 도구를 이용하여 사용가능한 기능
-  - `head -n 5` : 상위 5개의 문서를 출력합니다 (default: 5)
-  - `cat` : 문서를 그대로 출력합니다
-  - `schema` : 테이블 스키마를 출력합니다
-  - `meta` : 파케이 포맷의 메타데이터를 출력합니다 
-  - `dump` : 텍스트 포맷으로 출력 합니다
+  - <kbd>head -n 5</kbd> : 상위 5개의 문서를 출력합니다 (default: 5)
+  - <kbd>cat</kbd> : 문서를 그대로 출력합니다
+  - <kbd>schema</kbd> : 테이블 스키마를 출력합니다
+  - <kbd>meta</kbd> : 파케이 포맷의 메타데이터를 출력합니다 
+  - <kbd>dump</kbd> : 텍스트 포맷으로 출력 합니다
 
 <details><summary>[실습] 같은 방식으로 해당 파케이 파일의 상위(head) 3개문서, 스키마(schema), 메타(meta) 출력을 해보세요 </summary>
 
@@ -558,8 +559,8 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
 
 > **"클러스터 모드"** 란? 분산 저장/처리 엔진을 활용하여 원격지 장비의 리소스를 활용하여 원격 디스크에 저장할 수 있는 모드입니다
 
-* "-fs namenode:port" 옵션 : File System 이 분산 파일시스템 의미 (Ex. HDFS)
-* "-jt jobtracker:port" 옵션 : Job Tracker 가 분산 처리시스템 의미 (Ex. YARN)
+* <kbd>-fs namenode:port</kbd> : File System 이 분산 파일시스템 의미 (Ex. HDFS)
+* <kbd>-jt jobtracker:port</kbd> : Job Tracker 가 분산 처리시스템 의미 (Ex. YARN)
   - 본 예제에서는 관련 설정이 되어 있으므로 -fs, -jt 옵션을 지정하지 않아도 됩니다
   - 저장경로의 경우에도 hdfs:// 는 명시하지 않아도 hdfs 에 저장됩니다
 
@@ -569,9 +570,8 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
   - 명시적으로 hdfs:// 를 넣어도 무관합니다
 ```bash
 # docker
-ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb \
-  --username sqoop --password sqoop --table seoul_popular_trip \
-  --target-dir /user/sqoop/target/seoul_popular_trip
+ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip
 ```
 
 * 원격 하둡 저장소에 제대로 수집이 되었는지 확인합니다
@@ -585,7 +585,7 @@ ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 
 ## 2. 성능 향상 기법
 
-> 스쿱을 통해 대용량 테이블 수집을 위해서는 다양한 방법으로 접근할 수 있는데, 수집 시에 성능을 향상 시키는 **병렬수집(split-by)**, 수집된 데이터가 너무 크거나 분할되어 있지 않다면 조회 및 처리 시에 영향을 주기 때문에 파티션 단위로 **분할저장(partition)** 하는 기법이 있고, 자주 사용되지는 않으나, 증분되는 데이터만 가져와서 지속적으로 **증분추가(append) 하는 기법**을 실습합니다
+>  스쿱을 통해 대용량 테이블 수집을 위해서는 다양한 방법으로 접근할 수 있는데, 수집 시에 성능을 향상 시키는 **병렬수집(split-by)**, 수집된 데이터가 너무 크거나 분할되어 있지 않다면 조회 및 처리 시에 영향을 주기 때문에 파티션 단위로 **분할저장(partition)** 하는 기법이 있고, 자주 사용되지는 않으나, 증분되는 데이터만 가져와서 지속적으로 **증분추가(append) 하는 기법**을 실습합니다
 
 
 ### 2-1. 병렬 수행을 통한 테이블 수집
@@ -594,27 +594,35 @@ ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 
 * 병렬수행 방식
   - 이용자 아이디가 (id int) 가 1부터 100만까지 존재하는 테이블이 있다면
-  - 병렬 수행을 4개로 수행한다고 가정한ㄷ나면, 내부적으로 min(id), max(id) 값을 조회합니다
-  - 하여 조건 절에 0 < id <= 25만, 25만 < id <= 50만 ... 75만 < id <= 100만 으로 4개 그룹을 생성합니다
-  - 각 4개의 조건에 맞는 테이블 수집을 동시에 수집하여 병렬성을 보장합니다
-  - 단, 특정 컬럼이 편중된 값을 가진다면 특정 작업만 느려질 수 있으므로 데이터에 대한 이해가 필요합니다
+  - 병렬 수행을 4개로 수행한다고 가정한다면, 내부적으로 `min(id), max(id) 값을 조회`합니다
+  - 하여 조건 절에 `0 < id <= 25만, 25만 < id <= 50만 ... 75만 < id <= 100만 으로 4개 그룹`을 생성합니다
+  - 각 `4개의 조건에 맞는 테이블 수집을 동시에 수집`하여 병렬성을 보장합니다
+  - 단, 특정 컬럼이 `편중된 값을 가진다면 특정 작업만 느려`질 수 있으므로 데이터에 대한 이해가 필요합니다
 
 * 병렬 수집 실습
 ```bash
 # docker
-ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb \
-  --username sqoop --password sqoop --table seoul_popular_trip \
-  --target-dir /user/sqoop/target/seoul_popular_trip_split \
+ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_split \
   --fields-terminated-by '\t' --delete-target-dir
 ```
 <br>
 
 
 ### 2-2. 파티션 테이블 수집
-* 하나의 테이블을 조건에 따라 분리해서 저장히기 위해 id 값의 범위를 확인해 봅니다 (Min(id), Max(id))
+
+* 하나의 테이블을 조건에 따라 분리해서 저장히기 위해 id 값의 최소, 최대값을 확인해 봅니다
+
 ```bash
-sqoop eval "SELECT MIN(id), MAX(id) FROM seoul_popular_trip"
-sqoop eval "SELECT COUNT(1) FROM seoul_popular_trip"
+cmd "SELECT MIN(id), MAX(id) FROM seoul_popular_trip"
+ask cmd "SELECT COUNT(1) FROM seoul_popular_trip"
+```
+```text
+-----------------------
+| COUNT(1)            |
+-----------------------
+| 1956                |
+-----------------------
 ```
 * 테이블을 파티션 단위로 저장하기 위해서는 루트 경로를 생성해 두어야만 합니다 (그래야 하위에 key=value 형식의 경로로 저장할 수 있습니다)
 ```bash
