@@ -611,35 +611,74 @@ ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --u
 
 ### 2-2. 파티션 테이블 수집
 
-* 하나의 테이블을 조건에 따라 분리해서 저장히기 위해 id 값의 최소, 최대값을 확인해 봅니다
+> 하나의 테이블을 특정 조건에 따라 분산해서 저장히기 위해 id 값이 적절하다 판단되며, 이 값의 최소, 최대값을 확인해 봅니다
 
+#### 2-2-1. id 필드의 최대, 최소값 확인
 ```bash
 cmd "SELECT MIN(id), MAX(id) FROM seoul_popular_trip"
 ask cmd "SELECT COUNT(1) FROM seoul_popular_trip"
 ```
-```text
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 아래와 같다면 성공입니다
+
+```bash
+# SELECT MIN(id), MAX(id) FROM seoul_popular_trip;
+---------------------------
+| MIN(id)    | MAX(id)    |
+---------------------------
+| 34         | 29578      |
+---------------------------
+
+# SELECT COUNT(1) FROM seoul_popular_trip;
 -----------------------
 | COUNT(1)            |
 -----------------------
 | 1956                |
 -----------------------
 ```
-* 테이블을 파티션 단위로 저장하기 위해서는 루트 경로를 생성해 두어야만 합니다 (그래야 하위에 key=value 형식의 경로로 저장할 수 있습니다)
+
+</details>
+<br>
+
+
+#### 2-2-2. 저장 경로 생성
+
+* 테이블을 파티션 단위로 저장하기 위해서는 루트 경로를 생성해 두어야만 합니다
+  - 하위에 key=value 형식의 경로로 저장할 예정이기 때문입니다
+  - `seoul_popular_partition/id_range=1_10000`
+  - `seoul_popular_partition/id_range=10000_20000`
+  - `seoul_popular_partition/id_range=20000_30000`
 ```bash
-./hadoop.sh fs -mkdir -p /user/sqoop/target/seoul_popular_partition
+hadoop fs -mkdir -p /user/sqoop/target/seoul_popular_partition
+ask hadoop fs -ls /user/sqoop/target
 ```
-* 확인한 값의 범위를 이용하여 조건을 달리하여 하나의 테이블을 3번으로 나누어 수집을 수행합니다
+<br>
+
+
+#### 2-2-3. 파티션 별 테이블 수집
+
+> 확인한 값의 범위를 이용하여 조건을 달리하여 하나의 테이블을 3번으로 나누어 수집을 수행합니다
+
+* `id < 10000` 범위에 해당하는 값을 수집합니다
 ```bash
 sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --delete-target-dir -m 1 --table seoul_popular_trip \
   --where "id < 10000" \
   --target-dir /user/sqoop/target/seoul_popular_partition/part=0
+```
 
+* `id > 10001 and id < 20000` 범위에 해당하는 값을 수집합니다
+```bash
 sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --delete-target-dir -m 1 --table seoul_popular_trip \
   --where "id > 10001 and id < 20000" \
   --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
+```
 
+* `id > 20001` 범위에 해당하는 값을 수집합니다
+```bash
 sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --delete-target-dir -m 1 --table seoul_popular_trip \
   --where "id > 20001" \
@@ -648,8 +687,18 @@ sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passwor
 
 * 테이블 수집이 정상적으로 수행 되었는지 하둡 명령어를 통해 확인해 봅니다
 ```bash
-./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_partition
+hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition
 ```
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 아래와 같다면 성공입니다
+
+```bash
+
+```
+
+</details>
 <br>
 
 
