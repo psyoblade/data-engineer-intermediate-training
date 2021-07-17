@@ -735,6 +735,7 @@ ask cmd "SELECT * FROM inc_table"
 > 출력 결과가 아래와 같다면 성공입니다
 
 ```sql
+# DESCRIBE inc_table
 ---------------------------------------------------------------------------------------------------------
 | Field                | Type                 | Null| Key | Default              | Extra                |
 ---------------------------------------------------------------------------------------------------------
@@ -742,6 +743,13 @@ ask cmd "SELECT * FROM inc_table"
 | name                 | varchar(30)          | YES |     | (null)               |                      |
 | salary               | int(11)              | YES |     | (null)               |                      |
 ---------------------------------------------------------------------------------------------------------
+
+# SELECT * FROM inc_table
+--------------------------------------------------
+| id         | name                 | salary     |
+--------------------------------------------------
+| 1          | suhyuk               | 10000      |
+--------------------------------------------------
 ```
 
 </details>
@@ -751,16 +759,28 @@ ask cmd "SELECT * FROM inc_table"
 
 
 #### 2-3-2. 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
-  * 증분 테이블 수집 후 마지막에 --last-value 값이 1인 점을 확인해 둡니다 (다음 수집 시에 사용할 예정입니다)
-  * 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
+
+> 증분 테이블 수집의 경우는 마지막으로 갱신된 레코드의 최대값을 기억해두고 있어야만 하며, 별도로 저장관리되어야 합니다.
+
+
+* 처음 수집인 경우에는 최대값이 0이므로 --last-value 는 0입니다
+  - <kbd>--delete-target-dir </kbd> : 증분 테이블 최초 수집이므로 삭제후 진행합니다
+  - <kbd>--incremental append </kbd> : 증분 테이블이며 append 모드입니다
+  - <kbd>--check-column id </kbd> : 증분의 마지막 갱신 값을 가지는 컬럼입니다
+  - <kbd>--last-value 0 </kbd> : 마지막으로 갱신된 최대값을 말합니다
+  - 수집 결과에 증분 테이블 수집 후 마지막에 --last-value 값이 1인 점을 확인해 둡니다 (다음 수집 시에 사용할 예정입니다)
 ```bash
 # docker
-sqoop import --table inc_table --incremental append --check-column id --last-value 0 --target-dir /user/sqoop/target/seoul_popular_inc
+sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --delete-target-dir -m 1 --table inc_table --incremental append --check-column id \
+  --last-value 0 --target-dir /user/sqoop/target/inc_table
 ```
+
+* 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
 ```
 # docker
-hadoop fs -ls /user/sqoop/target/seoul_popular_inc
-hadoop fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00000
+hadoop fs -ls /user/sqoop/target/inc_table
+hadoop fs -cat /user/sqoop/target/inc_table/part-m-00000
 ```
 <br>
 
