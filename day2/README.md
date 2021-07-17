@@ -497,13 +497,31 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
   - `meta` : 파케이 포맷의 메타데이터를 출력합니다 
   - `dump` : 텍스트 포맷으로 출력 합니다
 
+<details><summary>[실습] 같은 방식으로 해당 파케이 파일의 상위(head) 3개문서, 스키마(schema), 메타(meta) 출력을 해보세요 </summary>
+
+* 컨테이너에 접속되어 있지 않다면 접속합니다
 ```bash
+# terminal
+docker compose exec mysql mysql -usqoop -psqoop
+```
+* 상위 3개 문서 반환
+```
+# docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head -n 10 file://${filename}
-
+```
+* 스키마 출력 
+```
+# docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
-
+```
+* 메타정보 출력
+```
+# docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
 ```
+
+</details>
+<br>
 
 
 ### 1-8. 클러스터 환경에서 하둡 저장소로 예제 테이블 수집
