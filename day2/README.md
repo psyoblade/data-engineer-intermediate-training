@@ -726,7 +726,7 @@ ask cmd "CREATE TABLE inc_table (
 
 ```bash
 cmd "DESCRIBE inc_table"
-ask cmd "INSERT INTO inc_table (name, salary) VALUES ('suhyuk', 10000)"
+cmd "INSERT INTO inc_table (name, salary) VALUES ('suhyuk', 10000)"
 ask cmd "SELECT * FROM inc_table"
 ```
 
