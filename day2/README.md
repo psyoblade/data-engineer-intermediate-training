@@ -571,7 +571,7 @@ ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```bash
 # docker
 ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb \
-  --username sqoop --password pass --table seoul_popular_trip \
+  --username sqoop --password sqoop --table seoul_popular_trip \
   --target-dir /user/sqoop/target/seoul_popular_trip_split \
   --fields-terminated-by '\t' --delete-target-dir
 ```
@@ -599,15 +599,27 @@ docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --us
 ```
 
 
-### 증분 테이블 수집
-* 증분 테이블 수집을 위해 MySQL 접속 후, 예제 테이블을 생성합니다 (inc\_table)
-  * userid: user, password: pass
+### 2-3. 증분 테이블 수집
+
+> 테이블의 크기는 너무 크지만, 아주 작은 범위의 데이터가 추가되는 테이블의 경우 스냅샷으로 수집하는 것은 너무 부하가 크기 때문에 변경되는 증분만 수집해야 하는 경우가 있습니다. 이런 경우에 변경사항을 반영하는 테이블 컬럼 (ex_ timestamp)이 있어야 하지만, 효과적인 수집이 가능합니다
+
+* 증분 테이블 수집의 제약 사항
+  - 변경되는 정보를 확인할 수 있는 컬럼이 존재해야 합니다
+  - 항상 append 되어야 수집 이후의 중복 문제가 없습니다
+
+#### 2-3-1. 증분 테이블 실습을 위해, 예제 테이블을 생성합니다 `inc_table`
+  - 아까 생성해 두었던 cmd 명령어를 이용해서 테스트 합니다
 ```bash
-docker exec -it mysql mysql -uuser -p
-create table inc_table (id int not null auto_increment, name varchar(30), salary int, primary key (id));
-insert into inc_table (name, salary) values ('suhyuk', 10000);
+# docker
+ask cmd "create table inc_table (id int not null auto_increment, name varchar(30), salary int, primary key (id));"
 ```
-* 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
+```bash
+ask cmd "insert into inc_table (name, salary) values ('suhyuk', 10000);"
+```
+<br>
+
+
+#### 2-3-2. 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
   * 증분 테이블 수집 후 마지막에 --last-value 값이 1인 점을 확인해 둡니다 (다음 수집 시에 사용할 예정입니다)
   * 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
 ```bash
@@ -615,54 +627,105 @@ insert into inc_table (name, salary) values ('suhyuk', 10000);
 ./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_inc
 ./hadoop.sh fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00000
 ```
-* 초기 수집 이후에 데이터가 추가되었(증분)다는 것을 테스트하기 위해 데이터를 추가합니다
+<br>
+
+
+#### 2-3-3. 초기 수집 이후에 데이터가 추가되었(증분)다는 것을 테스트하기 위해 데이터를 추가합니다
 ```bash
 docker exec -it mysql mysql -uuser -p
 insert into inc_table (name, salary) values ('psyoblade', 20000);
 ```
-* 증분 테이블 수집을 위해 이전 --last-value 1 을 입력하고 다시 수집합니다
+<br>
+
+
+#### 2-3-4. 증분 테이블 수집을 위해 이전 --last-value 1 을 입력하고 다시 수집합니다
 ```bash
 ./sqoop-import.sh --table inc_table --incremental append --check-column id --last-value 1 --target-dir /user/sqoop/target/seoul_popular_inc
 ```
-* 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
+<br>
+
+
+#### 2-3-5. 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
 ```bash
 ./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_inc
 ./hadoop.sh fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00001
 ```
+<br>
 
 
-### 모든 테이블 수집
-* 모든 테이블 수집을 위한 데이터베이스(testdb) 경로를 하나 생성합니다
+### 2-4. 수집 옵션 최적화
+
+> 스쿱은 JDBC 를 통해 데이터를 수집하기 때문에 여러가지 JDBC 옵션을 통한 최적화가 가능합니다. 데이터베이스 엔진의 차이에 따른 옵션도 존재하므로, 개별 옵션을 확인해둘 필요가 있습니다
+
+
+#### 2-4-1. 패치 크기 조정
+
+#### 2-4-2. 배치 옵션
+
+#### 2-4-3. 압축 옵션
+
+#### 2-4-4. 필요한 컬럼만 선택
+
+#### 2-4-5. 조인을 통한 최적화
+
+<br>
+
+
+
+## 3. 하둡에서 관계형 테이블로 적재
+
+> 스쿱은 관계형 데이터를 하둡 분산 저장소에 저장(import)도 하지만, 반대로 관계형 데이터베이스에 다시 적재(export)하는 기능도 있습니다. 특히 **적재 서비스는 파일 스키마와 테이블 스키마가 다른 경우 전체 작업이 실패**하므로 사전에 확인해 둘 필요가 있습니다
+
+
+### 3-1. 새로운 테이블을 생성하고 적재
+
+#### 3-1-1. 동일한 스키마를 가진 테이블(`seoul_popular_exp`) 생성
+
 ```bash
-./hadoop.sh fs -mkdir /user/sqoop/target/testdb
+# terminal
+docker compose exec mysql mysql -usqoop -psqoop
 ```
-* 생성된 경로를 루트로 하위로 모든 테이블을 수집합니다 (반드시 --autoreset-to-one-mapper 를 지정해 주어야 primary key 가 없는 경우에도 -m 1 으로 수집이 됩니다)
+* 테스트 적재를 위한 테이블을 생성합니다
+```
+# mysql>
+use testdb;
+create table testdb.seoul_popular_exp (
+  category int not null
+  , id int not null
+  , name varchar(100)
+  , address varchar(100)
+  , naddress varchar(100)
+  , tel varchar(20)
+  , tag varchar(500)
+) character set utf8 collate utf8_general_ci;
+show tables;
+```
+
+
+### 3-2. 적재 오류시에 디버깅 하는방법
+
+> 적재 서비스는 스키마 불일치에 따른 실패가 자주 발생하는데 의도적으로 발생시켜 디버깅하는 방법을 익힙니다
+
+#### 3-1-2. 실패하는 테이블 적재 작업 디버깅
+
+* 적재 작업을 수행하면 오류가 발생하고 예외가 발생하고, 정확한 오류를 확인할 수 없습니다
 ```bash
-docker exec -it sqoop sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --autoreset-to-one-mapper --warehouse-dir /user/sqoop/target/testdb --username sqoop --password pass
+# docker
+ask sqoop export -m 1 --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
 ```
 
-
-## 아파치 스쿱을 통한 테이블 적재
-
-### 새로운 테이블을 생성하고 적재
-* 테이블 익스포트를 위해 적재 테이블(seoul\_popular\_exp)을 생성합니다
-  * userid: user, password: pass
-```bash
-bash>
-docker exec -it mysql mysql -uuser -p
-
-mysql>
-create table testdb.seoul_popular_exp (category int not null, id int not null, name varchar(100), address varchar(100), naddress varchar(100), tel varchar(20), tag varchar(500)) character set utf8 collate utf8_general_ci;
-
-bash>
-./sqoop-eval.sh "show tables"
-./sqoop-export.sh -m 1 --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
-```
-* 위의 익스포트 명령어를 수행하면 오류가 발생하는데 리소스매니저(http://student#.lgebigdata.com:8088) 사이트를 통해 디버깅을 해봅니다
-  * application\_number 링크를 클릭하고 logs 경로를 클릭하면 http://9e48393c5f39:8042/ 와 같이 docker-container 아이로 redirect 되는데 이 값을 student#.lgebigdata.com 값으로 변경해 주면 디버깅이 가능합니다
+* 오류 확인은 리소스매니저 (http://<cloud-public-ip>:8088) 사이트에서 할 수 있습니다
+  * `application_id` 링크를 클릭하고 logs 경로를 클릭하면 http://9e48393c5f39:8042/ 와 같이 docker-container 아이로 redirect 됩니다
+  * 해당 문자열을 자신의 클라우드 장비의 IP 혹은 DNS 주소로 변경하면 됩니다
   * 해당 로그 페이지에서 "syslog : Total file length is 49301 bytes." 링크를 클릭하고 "here" 링크를 클릭하면 전체 로그를 한 번에 확인할 수 있습니다
-  * 초기에 수집한 테이블의 경우 콤마를 기준으로 수집했는데, 필드에 콤마(,)가 들어가 있어서 export 시에 필드의 개수가 맞지 않는다는 오류를 확인합니다
+
+
+#### 3-1-3. 구분자 오류에 따른 실패 복구
+
+* 수집한 테이블의 경우 콤마를 기준으로 수집했는데, 필드에 콤마(,)가 들어가 있어서 export 시에 필드의 개수가 맞지 않는다는 오류를 확인합니다
+
 * 탭을 구분자로 테이블 임포트를 다시 수행합니다
+
 ```bash
 ./sqoop-import.sh -m 1 --table seoul_popular_trip --fields-terminated-by '\t' --delete-target-dir --target-dir /user/sqoop/target/seoul_popular_exp
 ```
@@ -671,16 +734,16 @@ bash>
 ./sqoop-export.sh -m 1 --table seoul_popular_exp --fields-terminated-by '\t' --export-dir /user/sqoop/target/seoul_popular_exp
 ./sqoop-eval.sh "select count(1) from seoul_popular_exp"
 ```
+<br>
 
 
-### 테이블 익스포트 시에 스테이징을 통한 적재
+### 3-2. 테이블 익스포트 시에 스테이징을 통한 적재
 * 적재 시에 도중에 실패하는 경우 대상 테이블에 일부 데이터만 적재되는 경우가 있는데 이러한 경우를 회피하기 위해 스테이징 테이블을 사용할 수 있습니다.
 * 스테이징 테이블은 원본 테이블을 그대로 두고 별도의 스테이징 테이블에 적재 후 완전 export 가 성공하면 원본 테이블을 clear 후 적재합니다
 * 아래와 같이 임시 스테이징 테이블을 동일한 스키마로 생성하고 익스포트를 수행합니다
-  * userid: user, password: pass
 ```bash
 bash>
-docker exec -it mysql mysql -uuser -p
+docker compose exec mysql mysql -usqoop -psqoop
 
 mysql>
 create table testdb.seoul_popular_stg (category int not null, id int not null, name varchar(100), address varchar(100), naddress varchar(100), tel varchar(20), tag varchar(500)) character set utf8 collate utf8_general_ci;
@@ -691,11 +754,31 @@ bash>
 ./sqoop-eval.sh "truncate testdb.seoul_popular_exp"
 ./sqoop-export.sh -m 4 --table seoul_popular_exp --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table --export-dir /user/sqoop/target/seoul_popular_exp
 ```
+<br>
 
-### 컨테이너 정리
+
+
+## 4. 유틸리티
+
+### 4-1. 모든 테이블 수집
+* 모든 테이블 수집을 위한 데이터베이스(testdb) 경로를 하나 생성합니다
+```bash
+# docker
+hadoop fs -mkdir /user/sqoop/target/testdb
+```
+
+* 생성된 경로를 루트로 하위로 모든 테이블을 수집합니다 (반드시 --autoreset-to-one-mapper 를 지정해 주어야 primary key 가 없는 경우에도 -m 1 으로 수집이 됩니다)
+```bash
+# docker
+sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --autoreset-to-one-mapper --warehouse-dir /user/sqoop/target/testdb --username sqoop --password sqoop
+```
+<br>
+
+
+
+### 4-2. 컨테이너 정리
 * 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
 ```bash
-docker stop `docker ps -q`
-docker rm `docker ps -aq`
-docker rm -f `docker ps -aq` # 위의 두 가지 작업을 한 번에 수행
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2
+docker compose down
 ```
