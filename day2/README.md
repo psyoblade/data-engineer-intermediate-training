@@ -661,23 +661,19 @@ ask hadoop fs -ls /user/sqoop/target
 
 > 확인한 값의 범위를 이용하여 조건을 달리하여 하나의 테이블을 3번으로 나누어 수집을 수행합니다
 
-* `id < 10000` 범위에 해당하는 값을 수집합니다
+* id 의 범위가 각각  <kbd>id < 10000</kbd>, <kbd>id > 10001 and id < 20000</kbd>, <kbd>id > 20001</kbd> 범위에 해당하는 값을 수집합니다
 ```bash
 sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --delete-target-dir -m 1 --table seoul_popular_trip \
   --where "id < 10000" \
   --target-dir /user/sqoop/target/seoul_popular_partition/part=0
 ```
-
-* `id > 10001 and id < 20000` 범위에 해당하는 값을 수집합니다
 ```bash
 sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --delete-target-dir -m 1 --table seoul_popular_trip \
   --where "id > 10001 and id < 20000" \
   --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
 ```
-
-* `id > 20001` 범위에 해당하는 값을 수집합니다
 ```bash
 sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --delete-target-dir -m 1 --table seoul_popular_trip \
@@ -687,7 +683,7 @@ sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passwor
 
 * 테이블 수집이 정상적으로 수행 되었는지 하둡 명령어를 통해 확인해 봅니다
 ```bash
-hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition
+hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
 ```
 
 <details><summary>[실습] 출력 결과 확인</summary>
@@ -695,6 +691,10 @@ hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition
 > 출력 결과가 아래와 같다면 성공입니다
 
 ```bash
+# hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
+-rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=0/_SUCCESS
+-rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=10000/_SUCCESS
+-rw-r--r--   1 root supergroup          0 2021-07-17 12:23 /user/sqoop/target/seoul_popular_partition/part=20000/_SUCCESS
 
 ```
 
