@@ -61,6 +61,10 @@ docker compose exec mysql mysql -uroot -proot
 ```
 
 #### 1-4-2. 테이블 확인 및 SQL 실습
+```bash
+# terminal
+docker compose exec mysql mysql -usqoop -psqoop
+```
 ```sql
 # mysql>
 CREATE DATABASE foo;
