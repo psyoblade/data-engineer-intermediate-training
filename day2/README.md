@@ -659,7 +659,7 @@ ask hadoop fs -ls /user/sqoop/target
 
 #### 2-2-3. 파티션 별 테이블 수집
 
-> 확인한 값의 범위를 이용하여 조건을 달리하여 하나의 테이블을 3번으로 나누어 수집을 수행합니다
+> 확인한 값의 범위를 이용하여 조건을 달리하여 **하나의 테이블을 3번으로 나누어 수집**을 수행합니다
 
 * id 의 범위가 각각  <kbd>id < 10000</kbd>, <kbd>id > 10001 and id < 20000</kbd>, <kbd>id > 20001</kbd> 범위에 해당하는 값을 수집합니다
 ```bash
@@ -704,28 +704,50 @@ hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
 
 ### 2-3. 증분 테이블 수집
 
-> 테이블의 크기는 너무 크지만, 아주 작은 범위의 데이터가 추가되는 테이블의 경우 스냅샷으로 수집하는 것은 너무 부하가 크기 때문에 변경되는 증분만 수집해야 하는 경우가 있습니다. 이런 경우에 변경사항을 반영하는 테이블 컬럼 (ex_ timestamp)이 있어야 하지만, 효과적인 수집이 가능합니다
+> 테이블의 크기는 너무 크지만, **아주 작은 범위의 데이터가 추가**되는 테이블의 경우 *매번 전체 스냅샷으로 수집하는 것은 너무 부하가 크기* 때문에 변경되는 증분만 수집해야 하는 경우가 있습니다. 이런 경우에 변경사항을 반영하는 테이블 컬럼 (ex_ timestamp)이 있어야 하지만, 효과적인 수집이 가능합니다
 
 * 증분 테이블 수집의 제약 사항
-  - 변경되는 정보를 확인할 수 있는 컬럼이 존재해야 합니다
-  - 항상 append 되어야 수집 이후의 중복 문제가 없습니다
+  - *변경되는 정보를 확인할 수 있는 컬럼*이 존재해야 합니다
+  - *항상 변경되는 데이터가 append* 되어야 합니다
+  - update 가 발생하는 컬럼이 있다면 프로그래밍을 통해 해결하거나, 전체 snapshot 만 가능합니다
 
 #### 2-3-1. 증분 테이블 실습을 위해, 예제 테이블을 생성합니다 `inc_table`
-  - 아까 생성해 두었던 cmd 명령어를 이용해서 테스트 합니다
+
+* cmd 명령어를 통해 sqoop eval 명령을 수행합니다
 ```bash
 # docker
 ask cmd "CREATE TABLE inc_table (
-  id INT NOT NULL auto_increment
+  id INT NOT NULL AUTO_INCREMENT
   , name VARCHAR(30)
   , salary INT
-  , primary key (id)
+  , PRIMARY KEY (id)
 );"
 ```
 
 ```bash
-ask cmd "INSERT INTO inc_table (name, salary) VALUES ('suhyuk', 10000);"
+cmd "DESCRIBE inc_table"
+ask cmd "INSERT INTO inc_table (name, salary) VALUES ('suhyuk', 10000)"
+ask cmd "SELECT * FROM inc_table"
 ```
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 아래와 같다면 성공입니다
+
+```sql
+---------------------------------------------------------------------------------------------------------
+| Field                | Type                 | Null| Key | Default              | Extra                |
+---------------------------------------------------------------------------------------------------------
+| id                   | int(11)              | NO  | PRI | (null)               | auto_increment       |
+| name                 | varchar(30)          | YES |     | (null)               |                      |
+| salary               | int(11)              | YES |     | (null)               |                      |
+---------------------------------------------------------------------------------------------------------
+```
+
+</details>
 <br>
+<br>
+
 
 
 #### 2-3-2. 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
