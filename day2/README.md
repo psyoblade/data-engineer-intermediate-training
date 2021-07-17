@@ -761,17 +761,24 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 #### 3-1-3. 구분자 오류에 따른 실패 복구
 
 * 수집한 테이블의 경우 콤마를 기준으로 수집했는데, 필드에 콤마(,)가 들어가 있어서 export 시에 필드의 개수가 맞지 않는다는 오류를 확인합니다
-  - 1. 해결 방안은 export 를 콤마 구분자로 수행하거나
-  - 2. 테이블 수집을 탭 구분자로 변경하거나
-
+  - 적재 수행 시에 콤마 구분자로 수행하거나 (단, 이번 예제는 내부에 콤마가 들어가 있는 튜플이 있어서 사용할 수 없다)
+  - 테이블 수집을 탭 구분자로 변경하거나 (하여 콤마 보다는 탭을 구분자로 선택하는 것이 좀 더 일반적입니다)
 
 ```bash
-./sqoop-import.sh -m 1 --table seoul_popular_trip --fields-terminated-by '\t' --delete-target-dir --target-dir /user/sqoop/target/seoul_popular_exp
+# docker
+ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_exp \
+  --fields-terminated-by '\t' --delete-target-dir 
 ```
+
 * 탭 구분자로 익스포트된 경로의 파일을 이용하여 다시 익스포트를 수행합니다
 ```bash
-./sqoop-export.sh -m 1 --table seoul_popular_exp --fields-terminated-by '\t' --export-dir /user/sqoop/target/seoul_popular_exp
-./sqoop-eval.sh "select count(1) from seoul_popular_exp"
+ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
+```
+```
+ask sqoop export -m 1 --table seoul_popular_exp --fields-terminated-by '\t' --export-dir /user/sqoop/target/seoul_popular_exp
+cmd "select count(1) from seoul_popular_exp"
 ```
 <br>
 
