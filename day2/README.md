@@ -230,19 +230,23 @@ ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/test
 ls /tmp/sqoop/seoul_popular_trip
 ask cat /tmp/sqoop/seoul_popular_trip/part-m-00000
 ```
+<br>
 
-* 예제 실습 테이블 스키마와 데이터 2건
-  - 테이블 이름 : account
-  - 테이블 스키마 :
+
+### 1-7. 예제 테이블 생성 및 수집 실습
+
+> 아래와 같은 조건에 맞는 테이블을 생성하고, 스쿱을 통한 수집을 수행하세요
+
+#### 1-7-1. 수집 대상
+* 테이블 이름 : account
+* 예제 데이터 :
+  - (1, '김엘지')
+  - (2, '박전자')
 
 | 컬럼 | 타입 |
 | --- | --- |
 | id | int |
 | name | varchar(10) |
-
-  - 예제 데이터 :
-    - (1, '김엘지')
-    - (2, '박전자')
 
 <details><summary>[실습] 별도의 터미널을 통해 임의의 테이블을 생성하고 데이터를 입력하세요 </summary>
 
@@ -261,7 +265,7 @@ select * from account;
 </details>
 <br>
 
-<details><summary>[실습] account 테이블을 로컬 경로(/home/sqoop/target/account)에 수집하세요 </summary>
+<details><summary><span style="color:blue">[실습] account 테이블을 로컬 경로(/home/sqoop/target/account)에 수집하세요</span> </summary>
 
 ```bash
 # docker
