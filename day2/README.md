@@ -229,7 +229,7 @@ sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password 
 ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -e "select * from user_20201025"
 ```
 
-> 위와 같이 특정 데이터베이스에 계속 명령을 날리기에는 불편함이 있으므로 eval.sh 같은 명령어를 하는 만들어보면 편하게 사용할 수 있습니다
+> 위와 같이 특정 데이터베이스에 계속 명령을 날리기에는 불편함이 있으므로 반복되는 명령어를 bash 쉘을 통해 만들어보면 편하게 사용할 수 있습니다
 
 <details><summary>[실습] eval 명령을 쉽게 할 수 있는 간단한 bash 스크립트를 만들어 보세요 </summary>
 
@@ -253,6 +253,98 @@ cmd "describe user_20201025"
 <br>
 
 
+#### 1-5-2. 테이블 조인, DDL, DML 명령어 수행
+
+> eval 명령어를 이용하면 Join, Create, Insert, Select 등 DDL, DML 명령을 수행할 수 있으며, *실제 테이블 수집 시에도 다수의 테이블 대신 Join 한 결과를 사용하는 경우 효과적인 경우*도 있습니다
+
+* 고객 테이블과 매출 테이블을 조인하는 예제
+```bash
+# docker
+ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+    -e "select u.*, p.* from user_20201025 u join purchase_20201025 p on (u.u_id = p.p_uid) limit 10"
+```
+
+* 테이블 생성 예제
+```bash
+ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+    -e "create table tbl_salary (id int not null auto_increment, name varchar(30), salary int, primary key (id))"
+```
+
+* 데이터 입력 예제
+```bash
+ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+    -e "insert into tbl_salary (name, salary) values ('suhyuk', 10000)"
+```
+
+* 데이터 조회 예제
+```bash
+ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+    -e "select * from tbl_salary"
+```
+
+###### 실습용 테이블 정보 
+
+* 데이터베이스: testdb
+* 테이블 이름: student 
+
+| 컬럼명 | 컬럼유형 | 데이터 예제 |
+| - | - | - |
+| no | int | 1~10까지의 숫자 |
+| name | varchar(50) | 박수혁 |
+| email | varchar(50) | suhyuk.park@gmail.com |
+| age | int | 30 | 나이 |
+| gender | varchar(10) | 남 |
+
+<details><summary>[실습] 위에서 명시한 student 테이블을 sqoop eval 명령어를 통해 testdb 에 생성하세요 </summary>
+
+```sql
+# mysql>
+use testdb;
+create table student (no int, name varchar(50), email varchar(50), age int, gender varchar(10));
+desc student;
+```
+
+</details>
+<br>
+
+
+###### 실습용 데이터 정보 
+
+* 고객 데이터 정보
+```text
+('권보안','Kwon.Boan@lgde.com',18,'여')
+,('민의주','Min.Euiju@lgde.com',20,'여')
+,('김혀시','Kim.Hyeosi@lgde.com',20,'남')
+,('김유은','Kim.Yueun@lgde.com',38,'여')
+,('박윤미','Park.Yoonmi@lgde.com',27,'여')
+,('박예하','Park.Yeha@lgde.com',30,'남')
+,('이병하','Lee.Byungha@lgde.com',21,'남')
+,('김휘비','Kim.Hwibi@lgde.com',38,'남')
+,('박재문','Park.Jaemoon@lgde.com',49,'남')
+,('우소은','Woo.Soeun@lgde.com',30,'여')
+```
+
+<details><summary>[실습] sqoop eval 명령어를 통해 student 테이블에 입력하세요 </summary>
+
+```sql
+# mysql>
+use testdb;
+insert into student values 
+('권보안','Kwon.Boan@lgde.com',18,'여')
+,('민의주','Min.Euiju@lgde.com',20,'여')
+,('김혀시','Kim.Hyeosi@lgde.com',20,'남')
+,('김유은','Kim.Yueun@lgde.com',38,'여')
+,('박윤미','Park.Yoonmi@lgde.com',27,'여')
+,('박예하','Park.Yeha@lgde.com',30,'남')
+,('이병하','Lee.Byungha@lgde.com',21,'남')
+,('김휘비','Kim.Hwibi@lgde.com',38,'남')
+,('박재문','Park.Jaemoon@lgde.com',49,'남')
+,('우소은','Woo.Soeun@lgde.com',30,'여');
+select * from student;
+```
+
+</details>
+<br>
 
 
 
@@ -331,13 +423,17 @@ ls -al /home/sqoop/target/account
 
 
 
-### 1-8. 클러스터 환경에서 하둡 저장소로 예제 테이블(`seoul_poppular_trip`) 수집
+### 1-8. 클러스터 환경에서 하둡 저장소로 예제 테이블 수집
 
 
-* 클러스터 환경에서 테이블을 수집 합니다
+#### 1-8-1. 클러스터 환경에서 에제 테이블 `seoul_popular_trip`을 수집 합니다
+
+* 클러스터 환경의 경우 `-jt`, `-fs` 옵션이 없으며, 저장 경로를 하둡 경로로 인식합니다
+  - 명시적으로 hdfs:// 를 넣어도 무관합니다
 ```bash
 ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb \
-  --username sqoop --password sqoop --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip
+  --username sqoop --password sqoop --table seoul_popular_trip \
+  --target-dir /user/sqoop/target/seoul_popular_trip
 ```
 
 * 원격 하둡 저장소에 제대로 수집이 되었는지 확인합니다
@@ -347,7 +443,7 @@ ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
 
 
-### 유형별 테이블 수집 
+### 1-9. 유형별 테이블 수집 
 * 하나의 테이블을 4개의 맵작업으로 병렬 수행 (sqoop-import.sh 반복적인 "접속정보, 계정, 패스워드"를 저장해두고 편리하기 쓰기 위한 배시스크립트입니다)
 ```bash
 ./sqoop-import.sh -m 4 --split-by id --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_v1 --fields-terminated-by '\t'
