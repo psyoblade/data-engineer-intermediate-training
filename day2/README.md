@@ -726,6 +726,7 @@ ask cmd "CREATE TABLE inc_table (
 
 ```bash
 cmd "DESCRIBE inc_table"
+cmd "TRUNCATE inc_table"
 cmd "INSERT INTO inc_table (name, salary) VALUES ('suhyuk', 10000)"
 ask cmd "SELECT * FROM inc_table"
 ```
@@ -764,15 +765,16 @@ ask cmd "SELECT * FROM inc_table"
 
 
 * 처음 수집인 경우에는 최대값이 0이므로 --last-value 는 0입니다
-  - <kbd>--delete-target-dir </kbd> : 증분 테이블 최초 수집이므로 삭제후 진행합니다
   - <kbd>--incremental append </kbd> : 증분 테이블이며 append 모드입니다
   - <kbd>--check-column id </kbd> : 증분의 마지막 갱신 값을 가지는 컬럼입니다
   - <kbd>--last-value 0 </kbd> : 마지막으로 갱신된 최대값을 말합니다
   - 수집 결과에 증분 테이블 수집 후 마지막에 --last-value 값이 1인 점을 확인해 둡니다 (다음 수집 시에 사용할 예정입니다)
+  - `--delete-target-dir` 옵션과 `--incremental` 옵션은 같이 사용될 수 없습니다
+
 ```bash
 # docker
-sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  --delete-target-dir -m 1 --table inc_table --incremental append --check-column id \
+ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  -m 1 --table inc_table --incremental append --check-column id \
   --last-value 0 --target-dir /user/sqoop/target/inc_table
 ```
 
