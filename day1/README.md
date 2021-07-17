@@ -353,3 +353,128 @@ services:
       - 8183:80
 ```
 
+
+### 1-4. SQL 기본 실습
+
+#### 1-4-1. SQL 실습을 위해 root 유저로 데이터베이스 (foo) 생성
+```bash
+# terminal
+docker compose exec mysql mysql -uroot -proot
+```
+* sqoop 유저가 해당 데이터베이스를 사용할 수 있도록 권한 부여를 합니다
+```sql
+# mysql>
+CREATE DATABASE foo;
+GRANT ALL ON foo.* TO 'sqoop'@'%';
+```
+> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
+<br>
+
+
+#### 1-4-2. 테이블 확인 및 SQL 실습
+```bash
+# terminal
+docker compose exec mysql mysql -usqoop -psqoop
+```
+
+#### 1-4-3. SQL 실습을 위해 sqoop 유저로 접속
+```sql
+# mysql>
+use foo;
+```
+
+#### 1-4-4. 기본 SQL 명령어 리마인드
+
+![SQL](images/SQL.png)
+
+* [테이블 생성](https://dev.mysql.com/doc/refman/8.0/en/create-table.html)
+
+
+```sql
+# mysql>
+CREATE TABLE table1 (
+    col1 INT NOT NULL,
+    col2 VARCHAR(10)
+);
+
+CREATE TABLE table2 (
+    col1 INT NOT NULL AUTO_INCREMENT,
+    col2 VARCHAR(10) NOT NULL,
+    PRIMARY KEY (col1)
+);
+
+CREATE TABLE foo (
+    foo INT
+);
+
+SHOW TABLES;
+```
+
+* [테이블 변경](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
+```sql
+# mysql>
+ALTER TABLE foo ADD COLUMN ( bar VARCHAR(10) );
+
+DESC foo;
+```
+
+* [테이블 삭제](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html)
+```sql
+# mysql>
+DROP TABLE foo;
+
+SHOW TABLES;
+```
+
+* [데이터 추가](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
+```sql
+# mysql>
+INSERT INTO table1 ( col1 ) VALUES ( 1 );
+INSERT INTO table2 VALUES ( 1, 'one' );
+INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
+```
+
+* [데이터 조회](https://dev.mysql.com/doc/refman/8.0/en/select.html)
+```sql
+# mysql>
+SELECT col1, col2
+FROM table1;
+
+SELECT col2
+FROM table2
+WHERE col2 = 'two';
+```
+
+* [데이터 변경](https://dev.mysql.com/doc/refman/8.0/en/update.html)
+```sql
+# mysql>
+UPDATE table1 SET col1 = 100 WHERE col1 = 1;
+
+SELECT col1, col2 FROM table1;
+```
+
+* [데이터 삭제](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
+```sql
+# mysql>
+DELETE FROM table1 WHERE col1 = 100;
+DELETE FROM table2;
+```
+
+> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
+<br>
+
+
+#### 1-4-5. 데이터베이스 삭제
+
+> 테스트로 생성했던 foo 데이터베이스를 삭제합니다
+
+```bash
+# terminal
+docker compose exec mysql mysql -uroot -proot
+```
+```sql
+# mysql>
+drop database foo;
+```
+> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
+<br>

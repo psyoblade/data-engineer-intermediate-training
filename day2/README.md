@@ -4,13 +4,10 @@
 
 - 목차
   * [1. 최신버전 업데이트](#1-최신버전-업데이트)
-  * [1-1. 아파치 스쿱 테이블 수집 예제 테이블](#아파치-스쿱-테이블-수집-예제-테이블)
-  * [1-3. 유형별 테이블 수집](#유형별-테이블-수집)
-  * [1-4. 파티션 테이블 수집](#파티션-테이블-수집)
-  * [1-5. 증분 테이블 수집](#증분-테이블-수집)
-  * [1-6. 모든 테이블 수집](#모든-테이블-수집)
-  * [2. 아파치 스쿱을 통한 테이블 적재](#아파치-스쿱을-통한-테이블-적재)
-  * [2-1. 새로운 테이블을 생성하고 적재](#새로운-테이블을-생성하고-적재)
+  * [2. 테이블 임포트 실습](#2-테이블-임포트-실습)
+  * [3. 테이블 익스포트 실습](#3-테이블-익스포트-실습)
+  * [4. 아파치 스쿱 성능 튜닝](#4-아파치-스쿱-성능-튜닝)
+  * [5. 아파치 스쿱 유틸리티](#5-아파치-스쿱-유틸리티)
 
 
 ## 1. 최신버전 업데이트
@@ -52,133 +49,9 @@ docker compose ps
 <br>
 
 
-### 1-4. SQL 기본 실습
+## 2. 테이블 임포트 실습
 
-#### 1-4-1. SQL 실습을 위해 root 유저로 데이터베이스 (foo) 생성
-```bash
-# terminal
-docker compose exec mysql mysql -uroot -proot
-```
-* sqoop 유저가 해당 데이터베이스를 사용할 수 있도록 권한 부여를 합니다
-```sql
-# mysql>
-CREATE DATABASE foo;
-GRANT ALL ON foo.* TO 'sqoop'@'%';
-```
-> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
-<br>
-
-
-#### 1-4-2. 테이블 확인 및 SQL 실습
-```bash
-# terminal
-docker compose exec mysql mysql -usqoop -psqoop
-```
-
-#### 1-4-3. SQL 실습을 위해 sqoop 유저로 접속
-```sql
-# mysql>
-use foo;
-```
-
-#### 1-4-4. 기본 SQL 명령어 리마인드
-
-![SQL](images/SQL.png)
-
-* [테이블 생성](https://dev.mysql.com/doc/refman/8.0/en/create-table.html)
-
-
-```sql
-# mysql>
-CREATE TABLE table1 (
-    col1 INT NOT NULL,
-    col2 VARCHAR(10)
-);
-
-CREATE TABLE table2 (
-    col1 INT NOT NULL AUTO_INCREMENT,
-    col2 VARCHAR(10) NOT NULL,
-    PRIMARY KEY (col1)
-);
-
-CREATE TABLE foo (
-    foo INT
-);
-
-SHOW TABLES;
-```
-
-* [테이블 변경](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
-```sql
-# mysql>
-ALTER TABLE foo ADD COLUMN ( bar VARCHAR(10) );
-
-DESC foo;
-```
-
-* [테이블 삭제](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html)
-```sql
-# mysql>
-DROP TABLE foo;
-
-SHOW TABLES;
-```
-
-* [데이터 추가](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
-```sql
-# mysql>
-INSERT INTO table1 ( col1 ) VALUES ( 1 );
-INSERT INTO table2 VALUES ( 1, 'one' );
-INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
-```
-
-* [데이터 조회](https://dev.mysql.com/doc/refman/8.0/en/select.html)
-```sql
-# mysql>
-SELECT col1, col2
-FROM table1;
-
-SELECT col2
-FROM table2
-WHERE col2 = 'two';
-```
-
-* [데이터 변경](https://dev.mysql.com/doc/refman/8.0/en/update.html)
-```sql
-# mysql>
-UPDATE table1 SET col1 = 100 WHERE col1 = 1;
-
-SELECT col1, col2 FROM table1;
-```
-
-* [데이터 삭제](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
-```sql
-# mysql>
-DELETE FROM table1 WHERE col1 = 100;
-DELETE FROM table2;
-```
-
-> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
-<br>
-
-
-#### 1-4-5. 데이터베이스 삭제
-
-> 테스트로 생성했던 foo 데이터베이스를 삭제합니다
-
-```bash
-# terminal
-docker compose exec mysql mysql -uroot -proot
-```
-```sql
-# mysql>
-drop database foo;
-```
-> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
-<br>
-
-
-### 1-5. 실습명령어 검증을 위한 ask 를 리뷰하고 실습합니다
+### 2-1. 실습명령어 검증을 위한 ask 를 리뷰하고 실습합니다
 
 > ask 명령어는 아래와 같이 전달받은 명령을 실행하는 스크립트입니다
 
@@ -197,7 +70,7 @@ while true; do
 done
 ```
 
-#### 1-5-1. 스쿱 명령어 실습을 위해 컨테이너에 접속합니다
+#### 2-1-1. 스쿱 명령어 실습을 위해 컨테이너에 접속합니다
 ```bash
 # terminal
 docker compose exec sqoop bash
@@ -216,7 +89,7 @@ ask echo hello world
 <br>
 
 
-#### 1-5-2. 데이터베이스, 테이블 목록 조회
+#### 2-1-2. 데이터베이스, 테이블 목록 조회
 
 > 스쿱을 이용하여 별도의 데이터베이스 접속 클라이언트가 없어도 기본적인 명령어(DDL, DML)을 수행할 수 있습니다
 
@@ -265,7 +138,7 @@ foo "DESCRIBE user_20201025"
 <br>
 
 
-#### 1-5-2. 테이블 조인, DDL, DML 명령어 수행
+#### 2-1-3. 테이블 조인, DDL, DML 명령어 수행
 
 > eval 명령어를 이용하면 Join, Create, Insert, Select 등 DDL, DML 명령을 수행할 수 있으며, *실제 테이블 수집 시에도 다수의 테이블 대신 Join 한 결과를 사용하는 경우 효과적인 경우*도 있습니다
 
@@ -299,7 +172,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 <br>
 
 
-#### 1-5-3. 실습 테이블 생성 및 수집 실습
+#### 2-1-4. 실습 테이블 생성 및 수집 실습
 
 ##### 실습용 테이블 정보를 활용하여 테이블을 생성하세요
 
@@ -411,7 +284,7 @@ SELECT * FROM student;
 
 
 
-### 1-6. 로컬 프로세스로, 로컬 저장소에 텍스트 파일로 테이블 수집
+### 2-2. 로컬 프로세스로, 로컬 저장소에 텍스트 파일로 테이블 수집
 
 > 스쿱은 분산 저장소와 분산 처리를 지원하지만, 로컬 리소스 (프로세스) 그리고 로컬 저장소 (디스크, SATA) 에도 저장하는 기능을 가지고 있습니다
 
@@ -445,11 +318,11 @@ ask cat /home/sqoop/target/student/part-m-00000
 <br>
 
 
-### 1-7. 저장 파일 포맷을 변경하며 수집
+### 2-3. 저장 파일 포맷을 변경하며 수집
 
 > 스쿱은 텍스트 파일 (TSV, CSV) 뿐만 아니라 파케이 (Parquet 컬럼지향 바이너리 압축 포맷) 포맷으로 저장이 가능합니다
 
-#### 1-7-1. 탭 구분자 포맷으로 저장
+#### 2-3-1. 탭 구분자 포맷으로 저장
 
 <details><summary>[실습] 앞서 생성된 학생(student) 테이블을 탭으로 구분된 포맷으로 로컬 `/home/sqoop/target/student_tab` 경로에 저장하세요 </summary>
 
@@ -475,7 +348,7 @@ ls /home/sqoop/target/student_tab
 <br>
 
 
-#### 1-7-2. 파케이 포맷으로 저장
+#### 2-3-2. 파케이 포맷으로 저장
 
 > 파케이 포맷 저장 <kbd>--as-parquetfile</kbd> 
 
@@ -503,7 +376,7 @@ ask ls -d1 /home/sqoop/target/student_parquet/*
 <br>
 
 
-#### 1-7-3. 파케이 포맷 읽기
+#### 2-3-3. 파케이 포맷 읽기
 
 > 파케이 포맷은 바이너리 포맷이라 문서편집기 등을 통해 직접 확인할 수 없기 때문에 별도의 도구를 통해서만 읽어들일 수 있습니다
 
@@ -555,7 +428,7 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
 <br>
 
 
-### 1-8. 클러스터 환경에서 하둡 저장소로 예제 테이블 수집
+### 2-4. 클러스터 환경에서 하둡 저장소로 예제 테이블 수집
 
 > **"클러스터 모드"** 란? 분산 저장/처리 엔진을 활용하여 원격지 장비의 리소스를 활용하여 원격 디스크에 저장할 수 있는 모드입니다
 
@@ -564,7 +437,7 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
   - 본 예제에서는 관련 설정이 되어 있으므로 -fs, -jt 옵션을 지정하지 않아도 됩니다
   - 저장경로의 경우에도 hdfs:// 는 명시하지 않아도 hdfs 에 저장됩니다
 
-#### 1-8-1. 클러스터 환경에서 에제 테이블 `seoul_popular_trip`을 수집 합니다
+#### 2-4-1. 클러스터 환경에서 에제 테이블 `seoul_popular_trip`을 수집 합니다
 
 * 클러스터 환경의 경우 `-jt`, `-fs` 옵션이 없으며, 저장 경로를 하둡 경로로 인식합니다
   - 명시적으로 hdfs:// 를 넣어도 무관합니다
@@ -583,300 +456,7 @@ ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 <br>
 
 
-## 2. 성능 향상 기법
-
->  스쿱을 통해 대용량 테이블 수집을 위해서는 다양한 방법으로 접근할 수 있는데, 수집 시에 성능을 향상 시키는 **병렬수집(split-by)**, 수집된 데이터가 너무 크거나 분할되어 있지 않다면 조회 및 처리 시에 영향을 주기 때문에 파티션 단위로 **분할저장(partition)** 하는 기법이 있고, 자주 사용되지는 않으나, 증분되는 데이터만 가져와서 지속적으로 **증분추가(append) 하는 기법**을 실습합니다
-
-
-### 2-1. 병렬 수행을 통한 테이블 수집
-
-> 한 번에 여러개의 작업이 기동되어 하나의 테이블을 조건을 나누어 분할하여 동시에 수집하는 기법이며, 이렇게 분할해서 수집하기 위해서는 min, max 값을 가질 수 있는 편중되지 않은 값을 가진 컬럼이 반드시 존재해야 합니다.
-
-* 병렬수행 방식
-  - 이용자 아이디가 (id int) 가 1부터 100만까지 존재하는 테이블이 있다면
-  - 병렬 수행을 4개로 수행한다고 가정한다면, 내부적으로 `min(id), max(id) 값을 조회`합니다
-  - 하여 조건 절에 `0 < id <= 25만, 25만 < id <= 50만 ... 75만 < id <= 100만 으로 4개 그룹`을 생성합니다
-  - 각 `4개의 조건에 맞는 테이블 수집을 동시에 수집`하여 병렬성을 보장합니다
-  - 단, 특정 컬럼이 `편중된 값을 가진다면 특정 작업만 느려`질 수 있으므로 데이터에 대한 이해가 필요합니다
-
-* 병렬 수집 실습
-```bash
-# docker
-ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_split \
-  --fields-terminated-by '\t' --delete-target-dir
-```
-<br>
-
-
-### 2-2. 파티션 테이블 수집
-
-> 하나의 테이블을 특정 조건에 따라 분산해서 저장히기 위해 id 값이 적절하다 판단되며, 이 값의 최소, 최대값을 확인해 봅니다
-
-#### 2-2-1. id 필드의 최대, 최소값 확인
-```bash
-cmd "SELECT MIN(id), MAX(id) FROM seoul_popular_trip"
-ask cmd "SELECT COUNT(1) FROM seoul_popular_trip"
-```
-
-<details><summary>[실습] 출력 결과 확인</summary>
-
-> 출력 결과가 아래와 같다면 성공입니다
-
-```bash
-# SELECT MIN(id), MAX(id) FROM seoul_popular_trip;
----------------------------
-| MIN(id)    | MAX(id)    |
----------------------------
-| 34         | 29578      |
----------------------------
-
-# SELECT COUNT(1) FROM seoul_popular_trip;
------------------------
-| COUNT(1)            |
------------------------
-| 1956                |
------------------------
-```
-
-</details>
-<br>
-
-
-#### 2-2-2. 저장 경로 생성
-
-* 테이블을 파티션 단위로 저장하기 위해서는 루트 경로를 생성해 두어야만 합니다
-  - 하위에 key=value 형식의 경로로 저장할 예정이기 때문입니다
-  - `seoul_popular_partition/id_range=1_10000`
-  - `seoul_popular_partition/id_range=10000_20000`
-  - `seoul_popular_partition/id_range=20000_30000`
-```bash
-hadoop fs -mkdir -p /user/sqoop/target/seoul_popular_partition
-ask hadoop fs -ls /user/sqoop/target
-```
-<br>
-
-
-#### 2-2-3. 파티션 별 테이블 수집
-
-> 확인한 값의 범위를 이용하여 조건을 달리하여 **하나의 테이블을 3번으로 나누어 수집**을 수행합니다
-
-* id 의 범위가 각각  <kbd>id < 10000</kbd>, <kbd>id > 10001 and id < 20000</kbd>, <kbd>id > 20001</kbd> 범위에 해당하는 값을 수집합니다
-```bash
-sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  --delete-target-dir -m 1 --table seoul_popular_trip \
-  --where "id < 10000" \
-  --target-dir /user/sqoop/target/seoul_popular_partition/part=0
-```
-```bash
-sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  --delete-target-dir -m 1 --table seoul_popular_trip \
-  --where "id > 10001 and id < 20000" \
-  --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
-```
-```bash
-sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  --delete-target-dir -m 1 --table seoul_popular_trip \
-  --where "id > 20001" \
-  --target-dir /user/sqoop/target/seoul_popular_partition/part=20000
-```
-
-* 테이블 수집이 정상적으로 수행 되었는지 하둡 명령어를 통해 확인해 봅니다
-```bash
-hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
-```
-
-<details><summary>[실습] 출력 결과 확인</summary>
-
-> 출력 결과가 아래와 같다면 성공입니다
-
-```bash
-# hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
--rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=0/_SUCCESS
--rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=10000/_SUCCESS
--rw-r--r--   1 root supergroup          0 2021-07-17 12:23 /user/sqoop/target/seoul_popular_partition/part=20000/_SUCCESS
-
-```
-
-</details>
-<br>
-
-
-### 2-3. 증분 테이블 수집
-
-> 테이블의 크기는 너무 크지만, **아주 작은 범위의 데이터가 추가**되는 테이블의 경우 *매번 전체 스냅샷으로 수집하는 것은 너무 부하가 크기* 때문에 변경되는 증분만 수집해야 하는 경우가 있습니다. 이런 경우에 변경사항을 반영하는 테이블 컬럼 (ex_ timestamp)이 있어야 하지만, 효과적인 수집이 가능합니다
-
-* 증분 테이블 수집의 제약 사항
-  - *변경되는 정보를 확인할 수 있는 컬럼*이 존재해야 합니다
-  - *항상 변경되는 데이터가 append* 되어야 합니다
-  - update 가 발생하는 컬럼이 있다면 프로그래밍을 통해 해결하거나, 전체 snapshot 만 가능합니다
-
-#### 2-3-1. 증분 테이블 실습을 위해, 예제 테이블을 생성합니다 `inc_table`
-
-* cmd 명령어를 통해 sqoop eval 명령을 수행합니다
-```bash
-# docker
-ask cmd "CREATE TABLE inc_table (
-  id INT NOT NULL AUTO_INCREMENT
-  , name VARCHAR(30)
-  , salary INT
-  , PRIMARY KEY (id)
-);"
-```
-
-```bash
-cmd "DESCRIBE inc_table"
-cmd "TRUNCATE inc_table"
-cmd "INSERT INTO inc_table (name, salary) VALUES ('suhyuk', 10000)"
-ask cmd "SELECT * FROM inc_table"
-```
-
-<details><summary>[실습] 출력 결과 확인</summary>
-
-> 출력 결과가 아래와 같다면 성공입니다
-
-```sql
-# DESCRIBE inc_table
----------------------------------------------------------------------------------------------------------
-| Field                | Type                 | Null| Key | Default              | Extra                |
----------------------------------------------------------------------------------------------------------
-| id                   | int(11)              | NO  | PRI | (null)               | auto_increment       |
-| name                 | varchar(30)          | YES |     | (null)               |                      |
-| salary               | int(11)              | YES |     | (null)               |                      |
----------------------------------------------------------------------------------------------------------
-
-# SELECT * FROM inc_table
---------------------------------------------------
-| id         | name                 | salary     |
---------------------------------------------------
-| 1          | suhyuk               | 10000      |
---------------------------------------------------
-```
-
-</details>
-<br>
-<br>
-
-
-
-#### 2-3-2. 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
-
-> 증분 테이블 수집의 경우는 마지막으로 갱신된 레코드의 최대값을 기억해두고 있어야만 하며, 별도로 저장관리되어야 합니다.
-
-
-* 처음 수집인 경우에는 최대값이 0이므로 --last-value 는 0입니다
-  - <kbd>--incremental append </kbd> : 증분 테이블이며 append 모드입니다
-  - <kbd>--check-column id </kbd> : 증분의 마지막 갱신 값을 가지는 컬럼입니다
-  - <kbd>--last-value 0 </kbd> : 마지막으로 갱신된 최대값을 말합니다
-  - 수집 결과에 증분 테이블 수집 후 마지막에 --last-value 값이 1인 점을 확인해 둡니다 (다음 수집 시에 사용할 예정입니다)
-  - `--delete-target-dir` 옵션과 `--incremental` 옵션은 같이 사용될 수 없습니다
-
-```bash
-# docker
-last_value=0
-
-ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  -m 1 --table inc_table --incremental append --check-column id \
-  --last-value ${last_value} --target-dir /user/sqoop/target/inc_table
-```
-
-* 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
-```
-# docker
-hadoop fs -ls /user/sqoop/target/inc_table
-hadoop fs -cat /user/sqoop/target/inc_table/part-m-00000
-```
-> 결과가 `1,suhyuk,10000` 로 나오면 정답입니다
-
-<br>
-
-
-#### 2-3-3. 테이블에 증분 데이터를 추가합니다
-```bash
-# docker
-cmd "INSERT INTO inc_table (name, salary) VALUES ('psyoblade', 20000)"
-```
-
-<br>
-
-
-#### 2-3-4. 증분 테이블 수집을 위해 --last-value 1 다시 수집합니다
-```bash
-# docker
-last_value=1
-
-ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  -m 1 --table inc_table --incremental append --check-column id \
-  --last-value ${last_value} --target-dir /user/sqoop/target/inc_table
-```
-
-* 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
-```
-# docker
-hadoop fs -ls /user/sqoop/target/inc_table
-hadoop fs -cat /user/sqoop/target/inc_table/part-m-00001
-```
-> 결과가 `2,psyoblade,20000` 로 나오면 정답입니다
-
-<br>
-
-
-#### 2-3-5. 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
-
-> append 된 파일은 일련번호가 하나씩 늘어나면서 파일이 생성됩니다
-
-```bash
-# docker
-hadoop fs -ls /user/sqoop/target/inc_table
-```
-<br>
-
-
-### 2-4. 수집 옵션 최적화
-
-> 스쿱은 JDBC 를 통해 데이터를 수집하기 때문에 여러가지 JDBC 옵션을 통한 최적화가 가능합니다. 데이터베이스 엔진의 차이에 따른 옵션도 존재하므로, 개별 옵션을 확인해둘 필요가 있습니다
-
-
-#### 2-4-1. 패치 크기 조정
-
-* <kbd>--fetch-size <n></kbd> : 데이터베이스로부터 한 번에 가져오는 레코드의 수를 말합니다 (default=1000)
-  - 데이터의 크기에 따라서 조정할 수 있으며 데이터 레코드의 크기에 따라서 50,000 이상 수치 까지 조정할 수 있습니다
-  - SQLServer 의 경우 한 번에 패치해 올 수 있는 용량이 제한되어 있으므로, Database 에 따라 조정하면서 튜닝합니다
-
-#### 2-4-2. 배치 옵션
-
-* <kbd>--batch</kbd> : 데이터베이스에 저장시에 한 번에 대량의 데이터를 Export 할 수 있는 Values 구문과 유사하게 동작합니다
-  - export 명령에서만 동작하며, export 시에는 반드시 명시하는 것이 좋습니다
-
-#### 2-4-3. 압축 옵션
-
-* <kbd>--compress, -z</kbd> : 압축하여 저장합니다. 기본은 gzip 압축이며, snappy 등의 코덱을 지정할 수 있습니다
-  - import 명령에만 동작하며, 저장 시에 압축 코덱을 활용하여 저장할 수 있습니다
-  - <kbd>--compression-codec snappy</kbd> : 추가 압축을 위한 외부 jar 는 같이 배포 되어야 합니다
-
-#### 2-4-4. 필요한 컬럼만 선택
-
-* <kbd>--columns col,col,col...</kbd> : 반드시 필요한 컬럼만 지정하여 수집 및 저장 데이터 공간을 최적화 할 수 있습니다
-  - 필요 없이 많은 데이터를 수집하는 것은 네트워크 I/O 및 저장소 공간만 더 차지하게 됩니다
-* <kbd>--query statement</kbd> : 전체 쿼리문을 지정하여 수집할 수도 있습니다.
-  - 가장 일반적으로 많이 취하는 방법이며, 테이블 스키마 변경 시에도 대응이 가능하여 전체 수집 보다 운영에 용이합니다
-
-#### 2-4-5. 다이렉트 방식 수집
-
-* <kbd>--direct</kbd> : 모든 데이터베이스가 지원하는 것은 아니지만, MySQL 과 같이 mysqldump 등의 도구를 직접 활용할 수 있도록 지원합니다
-  - import 명령에만 동작하며, MySQL 데이터베이스를 사용하는 경우 추천할 수 있는 옵션입니다
-
-#### 2-4-6. 조인을 통한 최적화
-
-* 모든 스테이징 테이블을 다 스냅샷으로 저장하는 것이 일반적인 접근이고, 향후 사용에도 용이하지만, **원본 테이블이 충분히 크고 복잡하다면 추천**합니다
-  - 스테이징을 다 해서, 다시 *분산환경에서 Join 을 하는 것은 충분히 큰 비용이고, 필요 없는 작업일 수*도 있기 때문입니다
-  - 최대한 필요한 데이터만 최소화 하여 저장하여 활용하는 것을 첫 번째 단계로 보아도 좋습니다
-
-<br>
-
-
-
-## 3. 하둡에서 관계형 테이블로 적재
+## 3. 테이블 익스포트 실습
 
 > 스쿱은 관계형 데이터를 하둡 분산 저장소에 저장(import)도 하지만, 반대로 관계형 데이터베이스에 다시 적재(export)하는 기능도 있습니다. 특히 **적재 서비스는 파일 스키마와 테이블 스키마가 다른 경우 전체 작업이 실패**하므로 사전에 확인해 둘 필요가 있습니다
 
@@ -1045,9 +625,301 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 <br>
 
 
-## 4. 유틸리티
+## 4. 아파치 스쿱 성능 튜닝
 
-### 4-1. 모든 테이블 수집
+>  스쿱을 통해 대용량 테이블 수집을 위해서는 다양한 방법으로 접근할 수 있는데, 수집 시에 성능을 향상 시키는 **병렬수집(split-by)**, 수집된 데이터가 너무 크거나 분할되어 있지 않다면 조회 및 처리 시에 영향을 주기 때문에 파티션 단위로 **분할저장(partition)** 하는 기법이 있고, 자주 사용되지는 않으나, 증분되는 데이터만 가져와서 지속적으로 **증분추가(append) 하는 기법**을 실습합니다
+
+
+### 4-1. 병렬 수행을 통한 테이블 수집
+
+> 한 번에 여러개의 작업이 기동되어 하나의 테이블을 조건을 나누어 분할하여 동시에 수집하는 기법이며, 이렇게 분할해서 수집하기 위해서는 min, max 값을 가질 수 있는 편중되지 않은 값을 가진 컬럼이 반드시 존재해야 합니다.
+
+* 병렬수행 방식
+  - 이용자 아이디가 (id int) 가 1부터 100만까지 존재하는 테이블이 있다면
+  - 병렬 수행을 4개로 수행한다고 가정한다면, 내부적으로 `min(id), max(id) 값을 조회`합니다
+  - 하여 조건 절에 `0 < id <= 25만, 25만 < id <= 50만 ... 75만 < id <= 100만 으로 4개 그룹`을 생성합니다
+  - 각 `4개의 조건에 맞는 테이블 수집을 동시에 수집`하여 병렬성을 보장합니다
+  - 단, 특정 컬럼이 `편중된 값을 가진다면 특정 작업만 느려`질 수 있으므로 데이터에 대한 이해가 필요합니다
+
+* 병렬 수집 실습
+```bash
+# docker
+ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_split \
+  --fields-terminated-by '\t' --delete-target-dir
+```
+<br>
+
+
+### 4-2. 파티션 테이블 수집
+
+> 하나의 테이블을 특정 조건에 따라 분산해서 저장히기 위해 id 값이 적절하다 판단되며, 이 값의 최소, 최대값을 확인해 봅니다
+
+#### 4-2-1. id 필드의 최대, 최소값 확인
+```bash
+cmd "SELECT MIN(id), MAX(id) FROM seoul_popular_trip"
+ask cmd "SELECT COUNT(1) FROM seoul_popular_trip"
+```
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 아래와 같다면 성공입니다
+
+```bash
+# SELECT MIN(id), MAX(id) FROM seoul_popular_trip;
+---------------------------
+| MIN(id)    | MAX(id)    |
+---------------------------
+| 34         | 29578      |
+---------------------------
+
+# SELECT COUNT(1) FROM seoul_popular_trip;
+-----------------------
+| COUNT(1)            |
+-----------------------
+| 1956                |
+-----------------------
+```
+
+</details>
+<br>
+
+
+#### 4-2-2. 저장 경로 생성
+
+* 테이블을 파티션 단위로 저장하기 위해서는 루트 경로를 생성해 두어야만 합니다
+  - 하위에 key=value 형식의 경로로 저장할 예정이기 때문입니다
+  - `seoul_popular_partition/id_range=1_10000`
+  - `seoul_popular_partition/id_range=10000_20000`
+  - `seoul_popular_partition/id_range=20000_30000`
+```bash
+hadoop fs -mkdir -p /user/sqoop/target/seoul_popular_partition
+ask hadoop fs -ls /user/sqoop/target
+```
+<br>
+
+
+#### 4-2-3. 파티션 별 테이블 수집
+
+> 확인한 값의 범위를 이용하여 조건을 달리하여 **하나의 테이블을 3번으로 나누어 수집**을 수행합니다
+
+* id 의 범위가 각각  <kbd>id < 10000</kbd>, <kbd>id > 10001 and id < 20000</kbd>, <kbd>id > 20001</kbd> 범위에 해당하는 값을 수집합니다
+```bash
+sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --delete-target-dir -m 1 --table seoul_popular_trip \
+  --where "id < 10000" \
+  --target-dir /user/sqoop/target/seoul_popular_partition/part=0
+```
+```bash
+sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --delete-target-dir -m 1 --table seoul_popular_trip \
+  --where "id > 10001 and id < 20000" \
+  --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
+```
+```bash
+sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --delete-target-dir -m 1 --table seoul_popular_trip \
+  --where "id > 20001" \
+  --target-dir /user/sqoop/target/seoul_popular_partition/part=20000
+```
+
+* 테이블 수집이 정상적으로 수행 되었는지 하둡 명령어를 통해 확인해 봅니다
+```bash
+hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
+```
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 아래와 같다면 성공입니다
+
+```bash
+# hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
+-rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=0/_SUCCESS
+-rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=10000/_SUCCESS
+-rw-r--r--   1 root supergroup          0 2021-07-17 12:23 /user/sqoop/target/seoul_popular_partition/part=20000/_SUCCESS
+
+```
+
+</details>
+<br>
+
+
+### 4-3. 증분 테이블 수집
+
+> 테이블의 크기는 너무 크지만, **아주 작은 범위의 데이터가 추가**되는 테이블의 경우 *매번 전체 스냅샷으로 수집하는 것은 너무 부하가 크기* 때문에 변경되는 증분만 수집해야 하는 경우가 있습니다. 이런 경우에 변경사항을 반영하는 테이블 컬럼 (ex_ timestamp)이 있어야 하지만, 효과적인 수집이 가능합니다
+
+* 증분 테이블 수집의 제약 사항
+  - *변경되는 정보를 확인할 수 있는 컬럼*이 존재해야 합니다
+  - *항상 변경되는 데이터가 append* 되어야 합니다
+  - update 가 발생하는 컬럼이 있다면 프로그래밍을 통해 해결하거나, 전체 snapshot 만 가능합니다
+
+#### 4-3-1. 증분 테이블 실습을 위해, 예제 테이블을 생성합니다 `inc_table`
+
+* cmd 명령어를 통해 sqoop eval 명령을 수행합니다
+```bash
+# docker
+ask cmd "CREATE TABLE inc_table (
+  id INT NOT NULL AUTO_INCREMENT
+  , name VARCHAR(30)
+  , salary INT
+  , PRIMARY KEY (id)
+);"
+```
+
+```bash
+cmd "DESCRIBE inc_table"
+cmd "TRUNCATE inc_table"
+cmd "INSERT INTO inc_table (name, salary) VALUES ('suhyuk', 10000)"
+ask cmd "SELECT * FROM inc_table"
+```
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 아래와 같다면 성공입니다
+
+```sql
+# DESCRIBE inc_table
+---------------------------------------------------------------------------------------------------------
+| Field                | Type                 | Null| Key | Default              | Extra                |
+---------------------------------------------------------------------------------------------------------
+| id                   | int(11)              | NO  | PRI | (null)               | auto_increment       |
+| name                 | varchar(30)          | YES |     | (null)               |                      |
+| salary               | int(11)              | YES |     | (null)               |                      |
+---------------------------------------------------------------------------------------------------------
+
+# SELECT * FROM inc_table
+--------------------------------------------------
+| id         | name                 | salary     |
+--------------------------------------------------
+| 1          | suhyuk               | 10000      |
+--------------------------------------------------
+```
+
+</details>
+<br>
+<br>
+
+
+#### 4-3-2. 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
+
+> 증분 테이블 수집의 경우는 마지막으로 갱신된 레코드의 최대값을 기억해두고 있어야만 하며, 별도로 저장관리되어야 합니다.
+
+
+* 처음 수집인 경우에는 최대값이 0이므로 --last-value 는 0입니다
+  - <kbd>--incremental append </kbd> : 증분 테이블이며 append 모드입니다
+  - <kbd>--check-column id </kbd> : 증분의 마지막 갱신 값을 가지는 컬럼입니다
+  - <kbd>--last-value 0 </kbd> : 마지막으로 갱신된 최대값을 말합니다
+  - 수집 결과에 증분 테이블 수집 후 마지막에 --last-value 값이 1인 점을 확인해 둡니다 (다음 수집 시에 사용할 예정입니다)
+  - `--delete-target-dir` 옵션과 `--incremental` 옵션은 같이 사용될 수 없습니다
+
+```bash
+# docker
+last_value=0
+
+ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  -m 1 --table inc_table --incremental append --check-column id \
+  --last-value ${last_value} --target-dir /user/sqoop/target/inc_table
+```
+
+* 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
+```
+# docker
+hadoop fs -ls /user/sqoop/target/inc_table
+hadoop fs -cat /user/sqoop/target/inc_table/part-m-00000
+```
+> 결과가 `1,suhyuk,10000` 로 나오면 정답입니다
+
+<br>
+
+
+#### 4-3-3. 테이블에 증분 데이터를 추가합니다
+```bash
+# docker
+cmd "INSERT INTO inc_table (name, salary) VALUES ('psyoblade', 20000)"
+```
+
+<br>
+
+
+#### 4-3-4. 증분 테이블 수집을 위해 --last-value 1 다시 수집합니다
+```bash
+# docker
+last_value=1
+
+ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  -m 1 --table inc_table --incremental append --check-column id \
+  --last-value ${last_value} --target-dir /user/sqoop/target/inc_table
+```
+
+* 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
+```
+# docker
+hadoop fs -ls /user/sqoop/target/inc_table
+hadoop fs -cat /user/sqoop/target/inc_table/part-m-00001
+```
+> 결과가 `2,psyoblade,20000` 로 나오면 정답입니다
+
+<br>
+
+
+#### 4-3-5. 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
+
+> append 된 파일은 일련번호가 하나씩 늘어나면서 파일이 생성됩니다
+
+```bash
+# docker
+hadoop fs -ls /user/sqoop/target/inc_table
+```
+<br>
+
+
+### 4-4. 수집 옵션 최적화
+
+> 스쿱은 JDBC 를 통해 데이터를 수집하기 때문에 여러가지 JDBC 옵션을 통한 최적화가 가능합니다. 데이터베이스 엔진의 차이에 따른 옵션도 존재하므로, 개별 옵션을 확인해둘 필요가 있습니다
+
+
+#### 4-4-1. 패치 크기 조정
+
+* <kbd>--fetch-size <n></kbd> : 데이터베이스로부터 한 번에 가져오는 레코드의 수를 말합니다 (default=1000)
+  - 데이터의 크기에 따라서 조정할 수 있으며 데이터 레코드의 크기에 따라서 50,000 이상 수치 까지 조정할 수 있습니다
+  - SQLServer 의 경우 한 번에 패치해 올 수 있는 용량이 제한되어 있으므로, Database 에 따라 조정하면서 튜닝합니다
+
+#### 4-4-2. 배치 옵션
+
+* <kbd>--batch</kbd> : 데이터베이스에 저장시에 한 번에 대량의 데이터를 Export 할 수 있는 Values 구문과 유사하게 동작합니다
+  - export 명령에서만 동작하며, export 시에는 반드시 명시하는 것이 좋습니다
+
+#### 4-4-3. 압축 옵션
+
+* <kbd>--compress, -z</kbd> : 압축하여 저장합니다. 기본은 gzip 압축이며, snappy 등의 코덱을 지정할 수 있습니다
+  - import 명령에만 동작하며, 저장 시에 압축 코덱을 활용하여 저장할 수 있습니다
+  - <kbd>--compression-codec snappy</kbd> : 추가 압축을 위한 외부 jar 는 같이 배포 되어야 합니다
+
+#### 4-4-4. 필요한 컬럼만 선택
+
+* <kbd>--columns col,col,col...</kbd> : 반드시 필요한 컬럼만 지정하여 수집 및 저장 데이터 공간을 최적화 할 수 있습니다
+  - 필요 없이 많은 데이터를 수집하는 것은 네트워크 I/O 및 저장소 공간만 더 차지하게 됩니다
+* <kbd>--query statement</kbd> : 전체 쿼리문을 지정하여 수집할 수도 있습니다.
+  - 가장 일반적으로 많이 취하는 방법이며, 테이블 스키마 변경 시에도 대응이 가능하여 전체 수집 보다 운영에 용이합니다
+
+#### 4-4-5. 다이렉트 방식 수집
+
+* <kbd>--direct</kbd> : 모든 데이터베이스가 지원하는 것은 아니지만, MySQL 과 같이 mysqldump 등의 도구를 직접 활용할 수 있도록 지원합니다
+  - import 명령에만 동작하며, MySQL 데이터베이스를 사용하는 경우 추천할 수 있는 옵션입니다
+
+#### 4-4-6. 조인을 통한 최적화
+
+* 모든 스테이징 테이블을 다 스냅샷으로 저장하는 것이 일반적인 접근이고, 향후 사용에도 용이하지만, **원본 테이블이 충분히 크고 복잡하다면 추천**합니다
+  - 스테이징을 다 해서, 다시 *분산환경에서 Join 을 하는 것은 충분히 큰 비용이고, 필요 없는 작업일 수*도 있기 때문입니다
+  - 최대한 필요한 데이터만 최소화 하여 저장하여 활용하는 것을 첫 번째 단계로 보아도 좋습니다
+
+<br>
+
+
+
+## 5. 아파치 스쿱 유틸리티
+
+### 5-1. 모든 테이블 수집
 
 > 데이터베이스에 존재하는 모든 테이블을 순차적으로 백업하는 기능입니다. 자주 사용되지는 않지만, 전체 데이터 백업 시에 참고해볼 만한 도구입니다
 
@@ -1067,10 +939,10 @@ ask sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --username 
 <br>
 
 
-
-### 4-2. 컨테이너 정리
+### 5-2. 컨테이너 정리
 * 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2
 docker compose down
 ```
+
