@@ -507,7 +507,7 @@ docker compose exec mysql mysql -usqoop -psqoop
 * 상위 3개 문서 반환
 ```
 # docker
-ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head -n 10 file://${filename}
+ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head -n 3 file://${filename}
 ```
 * 스키마 출력 
 ```
@@ -526,6 +526,12 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
 
 ### 1-8. 클러스터 환경에서 하둡 저장소로 예제 테이블 수집
 
+> **"클러스터 모드"** 란? 분산 저장/처리 엔진을 활용하여 원격지 장비의 리소스를 활용하여 원격 디스크에 저장할 수 있는 모드입니다
+
+* "-fs namenode:port" 옵션 : File System 이 분산 파일시스템 의미 (Ex. HDFS)
+* "-jt jobtracker:port" 옵션 : Job Tracker 가 분산 처리시스템 의미 (Ex. YARN)
+  - 본 예제에서는 관련 설정이 되어 있으므로 -fs, -jt 옵션을 지정하지 않아도 됩니다
+  - 저장경로의 경우에도 hdfs:// 는 명시하지 않아도 hdfs 에 저장됩니다
 
 #### 1-8-1. 클러스터 환경에서 에제 테이블 `seoul_popular_trip`을 수집 합니다
 
@@ -542,20 +548,36 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb \
 hadoop fs -ls /user/sqoop/target/seoul_popular_trip
 ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
+<br>
 
 
-### 1-9. 유형별 테이블 수집 
-* 하나의 테이블을 4개의 맵작업으로 병렬 수행 (sqoop-import.sh 반복적인 "접속정보, 계정, 패스워드"를 저장해두고 편리하기 쓰기 위한 배시스크립트입니다)
+## 2. 성능 향상 기법
+
+> 스쿱을 통해 대용량 테이블 수집을 위해서는 다양한 방법으로 접근할 수 있는데, 수집 시에 성능을 향상 시키는 **병렬수집(split-by)**, 수집된 데이터가 너무 크거나 분할되어 있지 않다면 조회 및 처리 시에 영향을 주기 때문에 파티션 단위로 **분할저장(partition)** 하는 기법이 있고, 자주 사용되지는 않으나, 증분되는 데이터만 가져와서 지속적으로 **증분추가(append) 하는 기법**을 실습합니다
+
+
+### 2-1. 병렬 수행을 통한 테이블 수집
+
+> 한 번에 여러개의 작업이 기동되어 하나의 테이블을 조건을 나누어 분할하여 동시에 수집하는 기법이며, 이렇게 분할해서 수집하기 위해서는 min, max 값을 가질 수 있는 편중되지 않은 값을 가진 컬럼이 반드시 존재해야 합니다.
+
+* 병렬수행 방식
+  - 이용자 아이디가 (id int) 가 1부터 100만까지 존재하는 테이블이 있다면
+  - 병렬 수행을 4개로 수행한다고 가정한ㄷ나면, 내부적으로 min(id), max(id) 값을 조회합니다
+  - 하여 조건 절에 0 < id <= 25만, 25만 < id <= 50만 ... 75만 < id <= 100만 으로 4개 그룹을 생성합니다
+  - 각 4개의 조건에 맞는 테이블 수집을 동시에 수집하여 병렬성을 보장합니다
+  - 단, 특정 컬럼이 편중된 값을 가진다면 특정 작업만 느려질 수 있으므로 데이터에 대한 이해가 필요합니다
+
+* 병렬 수집 실습
 ```bash
-./sqoop-import.sh -m 4 --split-by id --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_v1 --fields-terminated-by '\t'
-```
-* 위의 sqoop-import.sh 명령 대신 아래와 같이 직접 모두 입력해도 됩니다
-```bash
-docker exec -it sqoop sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip_v2 --fields-terminated-by '\t' --delete-target-dir --verbose --username sqoop --password pass
+# docker
+ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb \
+  --username sqoop --password pass --table seoul_popular_trip \
+  --target-dir /user/sqoop/target/seoul_popular_trip_split \
+  --fields-terminated-by '\t' --delete-target-dir
 ```
 
 
-### 파티션 테이블 수집
+### 2-2. 파티션 테이블 수집
 * 하나의 테이블을 조건에 따라 분리해서 저장히기 위해 id 값의 범위를 확인해 봅니다 (Min(id), Max(id))
 ```bash
 ./sqoop-eval.sh "select min(id), max(id) from seoul_popular_trip"
