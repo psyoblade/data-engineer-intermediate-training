@@ -743,7 +743,7 @@ show tables;
 
 > 적재 서비스는 스키마 불일치에 따른 실패가 자주 발생하는데 의도적으로 발생시켜 디버깅하는 방법을 익힙니다
 
-#### 3-1-2. 실패하는 테이블 적재 작업 디버깅
+#### 3-2-1. 실패하는 테이블 적재 작업 디버깅
 
 * 적재 작업을 수행하면 오류가 발생하고 예외가 발생하고, 정확한 오류를 확인할 수 없습니다
 ```bash
@@ -756,9 +756,10 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   * `application_id` 링크를 클릭하고 logs 경로를 클릭하면 http://9e48393c5f39:8042/ 와 같이 docker-container 아이로 redirect 됩니다
   * 해당 문자열을 자신의 클라우드 장비의 IP 혹은 DNS 주소로 변경하면 됩니다
   * 해당 로그 페이지에서 "syslog : Total file length is 49301 bytes." 링크를 클릭하고 "here" 링크를 클릭하면 전체 로그를 한 번에 확인할 수 있습니다
+<br>
 
 
-#### 3-1-3. 구분자 오류에 따른 실패 복구
+#### 3-2-2. 구분자 오류에 따른 실패 복구
 
 * 수집한 테이블의 경우 콤마를 기준으로 수집했는데, 필드에 콤마(,)가 들어가 있어서 export 시에 필드의 개수가 맞지 않는다는 오류를 확인합니다
   - 적재 수행 시에 콤마 구분자로 수행하거나 (단, 이번 예제는 내부에 콤마가 들어가 있는 튜플이 있어서 사용할 수 없다)
@@ -767,41 +768,79 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 ```bash
 # docker
 ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_exp \
+  --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_exp \
   --fields-terminated-by '\t' --delete-target-dir 
+```
+
+* 올바르게 수집 되었는지 데이터를 확인합니다
+```bash
+# docker
+ask hadoop fs -cat /user/sqoop/target/seoul_popular_exp/part-m-00000 | more
+```
+```text
+0	281	통인시장	110-043 서울 종로구 통인동 10-3 	03036 서울 종로구 자하문로15길 18 	02-722-0911	엽전도시락,종로통인시장,통인시장닭꼬치,런닝맨,엽전시장,통인시장데이트,효자베이커리,통인시장, 1박2일,기름떡볶이
+0	345	타르틴	140-863 서울 용산구 이태원동 119-15 	04350 서울 용산구 이태원로23길 4 (이태원동) 	02-3785-3400	타르틴,이태원디저트카페,파이,런닝맨,파이맛집,이태원맛집, 유재석,식신로드,타르트맛집
+
 ```
 
 * 탭 구분자로 익스포트된 경로의 파일을 이용하여 다시 익스포트를 수행합니다
 ```bash
 ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
+  --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_exp \
+  --fields-terminated-by '\t' 
 ```
+```text
+21/07/17 10:09:44 INFO mapreduce.ExportJobBase: Transferred 483.1064 KB in 12.7846 seconds (37.7882 KB/sec)
+21/07/17 10:09:44 INFO mapreduce.ExportJobBase: Exported 1956 records.
 ```
-ask sqoop export -m 1 --table seoul_popular_exp --fields-terminated-by '\t' --export-dir /user/sqoop/target/seoul_popular_exp
-cmd "select count(1) from seoul_popular_exp"
+
+```sql
+# mysql>
+select category, id, name from seoul_popular_exp limit 3;
+```
+```text
+mysql> select category, id, name from seoul_popular_exp limit 3;
++----------+-----+--------------+
+| category | id  | name         |
++----------+-----+--------------+
+|        0 | 281 | 통인시장     |
+|        0 | 345 | 타르틴       |
+|        0 | 383 | 해랑         |
++----------+-----+--------------+
 ```
 <br>
 
 
-### 3-2. 테이블 익스포트 시에 스테이징을 통한 적재
-* 적재 시에 도중에 실패하는 경우 대상 테이블에 일부 데이터만 적재되는 경우가 있는데 이러한 경우를 회피하기 위해 스테이징 테이블을 사용할 수 있습니다.
+### 3-3. 테이블 익스포트 시에 스테이징을 통한 적재
+
+> 적재 시에 도중에 일부 컬럼 때문에 실패하는 경우 대상 테이블에 일부 데이터만 적재되어 사용되는 경우가 있는데 이러한 경우를 회피하기 위해 스테이징 테이블을 사용할 수 있습니다. 즉, 한 번 테스트로 적재를 해보는 개념으로 이해하시면 됩니다
+
 * 스테이징 테이블은 원본 테이블을 그대로 두고 별도의 스테이징 테이블에 적재 후 완전 export 가 성공하면 원본 테이블을 clear 후 적재합니다
 * 아래와 같이 임시 스테이징 테이블을 동일한 스키마로 생성하고 익스포트를 수행합니다
-```bash
-bash>
-docker compose exec mysql mysql -usqoop -psqoop
+```sql
+create table testdb.seoul_popular_stg (
+  category int not null
+  , id int not null
+  , name varchar(100)
+  , address varchar(100)
+  , naddress varchar(100)
+  , tel varchar(20)
+  , tag varchar(500)
+) character set utf8 collate utf8_general_ci;
+```
 
-mysql>
-create table testdb.seoul_popular_stg (category int not null, id int not null, name varchar(100), address varchar(100), naddress varchar(100), tel varchar(20), tag varchar(500)) character set utf8 collate utf8_general_ci;
-```
 * 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 truncate 는 수작업으로 수행되어야만 합니다
-```
-bash>
-./sqoop-eval.sh "truncate testdb.seoul_popular_exp"
-./sqoop-export.sh -m 4 --table seoul_popular_exp --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table --export-dir /user/sqoop/target/seoul_popular_exp
+  - 수행 시에 맵 갯수를 4개로 늘려서 테스트 해보겠습니다
+```bash
+sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  -e "truncate seoul_popular_exp"
+
+ask sqoop export -m 4 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_exp \
+  --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table \
+  --export-dir /user/sqoop/target/seoul_popular_exp
 ```
 <br>
-
 
 
 ## 4. 유틸리티
