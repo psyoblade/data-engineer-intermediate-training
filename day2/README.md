@@ -77,6 +77,7 @@ docker compose exec mysql mysql -usqoop -psqoop
 
 #### 1-4-3. SQL 실습을 위해 sqoop 유저로 접속
 ```sql
+# mysql>
 use foo;
 ```
 
@@ -88,6 +89,7 @@ use foo;
 
 
 ```sql
+# mysql>
 CREATE TABLE table1 (
     col1 INT NOT NULL,
     col2 VARCHAR(10)
@@ -108,6 +110,7 @@ SHOW TABLES;
 
 * [테이블 변경](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
 ```sql
+# mysql>
 ALTER TABLE foo ADD COLUMN ( bar VARCHAR(10) );
 
 DESC foo;
@@ -115,6 +118,7 @@ DESC foo;
 
 * [테이블 삭제](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html)
 ```sql
+# mysql>
 DROP TABLE foo;
 
 SHOW TABLES;
@@ -122,6 +126,7 @@ SHOW TABLES;
 
 * [데이터 추가](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
 ```sql
+# mysql>
 INSERT INTO table1 ( col1 ) VALUES ( 1 );
 INSERT INTO table2 VALUES ( 1, 'one' );
 INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
@@ -129,6 +134,7 @@ INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
 
 * [데이터 조회](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 ```sql
+# mysql>
 SELECT col1, col2
 FROM table1;
 
@@ -139,6 +145,7 @@ WHERE col2 = 'two';
 
 * [데이터 변경](https://dev.mysql.com/doc/refman/8.0/en/update.html)
 ```sql
+# mysql>
 UPDATE table1 SET col1 = 100 WHERE col1 = 1;
 
 SELECT col1, col2 FROM table1;
@@ -146,6 +153,7 @@ SELECT col1, col2 FROM table1;
 
 * [데이터 삭제](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
 ```sql
+# mysql>
 DELETE FROM table1 WHERE col1 = 100;
 DELETE FROM table2;
 ```
@@ -163,6 +171,7 @@ DELETE FROM table2;
 docker compose exec mysql mysql -uroot -proot
 ```
 ```sql
+# mysql>
 drop database foo;
 ```
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
@@ -225,17 +234,19 @@ sqoop list-tables --connect jdbc:mysql://mysql:3306/testdb --username sqoop --pa
 
 * 테이블 정보 및 조회를 합니다
 ```bash
-sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -e "describe user_20201025"
-ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -e "select * from user_20201025"
+# docker
+sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -e "DESCRIBE user_20201025"
+ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -e "SELECT * FROM user_20201025"
 ```
 
 > 위와 같이 특정 데이터베이스에 계속 명령을 날리기에는 불편함이 있으므로 반복되는 명령어를 bash 쉘을 통해 만들어보면 편하게 사용할 수 있습니다
 
-<details><summary>[실습] eval 명령을 쉽게 할 수 있는 간단한 bash 스크립트를 만들어 보세요 </summary>
+<details><summary>[실습] eval 명령을 쉽게 할 수 있는 간단한 bash 스크립트(예제: foo)를 만들어 보세요 </summary>
 
 * 아래의 명령으로 터미널이 명령을 받을 준비를 하도록 하고
 ```bash
-cat > cmd
+# docker
+cat > foo
 ```
 * 아래의 내용을 복사해서 붙여넣은 다음 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 나오면 파일이 생성됩니다
 ```bash
@@ -245,8 +256,9 @@ sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password 
 * 실행 가능한 파일로 만들기 위해서 모드를 변경합니다
   - 실행 시에 반드시 쌍따옴표("")로 묶어야 제대로 수행됩니다
 ```bash
-chmod +x cmd
-cmd "describe user_20201025"
+# docker
+chmod +x foo
+foo "DESCRIBE user_20201025"
 ```
 
 </details>
@@ -258,29 +270,34 @@ cmd "describe user_20201025"
 > eval 명령어를 이용하면 Join, Create, Insert, Select 등 DDL, DML 명령을 수행할 수 있으며, *실제 테이블 수집 시에도 다수의 테이블 대신 Join 한 결과를 사용하는 경우 효과적인 경우*도 있습니다
 
 * 고객 테이블과 매출 테이블을 조인하는 예제
-```bash
+```sql
 # docker
 ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-    -e "select u.*, p.* from user_20201025 u join purchase_20201025 p on (u.u_id = p.p_uid) limit 10"
+    -e "SELECT u.*, p.* FROM user_20201025 u JOIN purchase_20201025 p ON (u.u_id = p.p_uid) LIMIT 10"
 ```
 
 * 테이블 생성 예제
-```bash
+```sql
+# docker
 ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-    -e "create table tbl_salary (id int not null auto_increment, name varchar(30), salary int, primary key (id))"
+    -e "CREATE TABLE tbl_salary (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(30), salary INT, PRIMARY KEY (id))"
 ```
 
 * 데이터 입력 예제
-```bash
+```sql
+# docker
 ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-    -e "insert into tbl_salary (name, salary) values ('suhyuk', 10000)"
+    -e "INSERT INTO tbl_salary (name, salary) VALUES ('suhyuk', 10000)"
 ```
 
 * 데이터 조회 예제
-```bash
+```sql
+# docker
 ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-    -e "select * from tbl_salary"
+    -e "SELECT * FROM tbl_salary"
 ```
+<br>
+
 
 #### 1-5-3. 실습 테이블 생성 및 수집 실습
 
@@ -291,11 +308,11 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 
 | 컬럼명 | 컬럼유형 | 데이터 예제 |
 | - | - | - |
-| no | int | `AUTO_INCREMENT` |
-| name | varchar(50) | 박수혁 |
-| email | varchar(50) | suhyuk.park@gmail.com |
-| age | int | 30 | 나이 |
-| gender | varchar(10) | 남 |
+| no | INT | `AUTO_INCREMENT` |
+| name | VARCHAR(50) | 박수혁 |
+| email | VARCHAR(50) | suhyuk.park@gmail.com |
+| age | INT | 30 | 나이 |
+| gender | VARCHAR(10) | 남 |
 
 <details><summary>[실습] 위에서 명시한 student 테이블을 sqoop eval 명령어를 통해 testdb 에 생성하세요 </summary>
 
@@ -305,20 +322,29 @@ docker compose exec mysql mysql -usqoop -psqoop
 ```
 ```sql
 # mysql>
-use testdb;
-create table student (no int not null auto_increment, name varchar(50), email varchar(50), age int, gender varchar(10), primary key (no));
-desc student;
+USE testdb;
+
+CREATE TABLE student (
+  no INT NOT NULL AUTO_INCREMENT
+  , name VARCHAR(50)
+  , email VARCHAR(50)
+  , age INT
+  , gender VARCHAR(10)
+  , PRIMARY KEY (no)
+);
+
+DESC student;
 ```
 * 아래와 같이 나오면 정답입니다
 ```text
 +--------+-------------+------+-----+---------+----------------+
 | Field  | Type        | Null | Key | Default | Extra          |
 +--------+-------------+------+-----+---------+----------------+
-| no     | int(11)     | NO   | PRI | NULL    | auto_increment |
-| name   | varchar(50) | YES  |     | NULL    |                |
-| email  | varchar(50) | YES  |     | NULL    |                |
-| age    | int(11)     | YES  |     | NULL    |                |
-| gender | varchar(10) | YES  |     | NULL    |                |
+| no     | INT(11)     | NO   | PRI | NULL    | AUTO_INCREMENT |
+| name   | VARCHAR(50) | YES  |     | NULL    |                |
+| email  | VARCHAR(50) | YES  |     | NULL    |                |
+| age    | INT(11)     | YES  |     | NULL    |                |
+| gender | VARCHAR(10) | YES  |     | NULL    |                |
 +--------+-------------+------+-----+---------+----------------+
 ```
 
@@ -347,7 +373,8 @@ desc student;
 ```sql
 # mysql>
 use testdb;
-insert into student (name, email, age, gender) values 
+
+INSERT INTO student (name, email, age, gender) VALUES 
 ('권보안','Kwon.Boan@lgde.com',18,'여')
 ,('민의주','Min.Euiju@lgde.com',20,'여')
 ,('김혀시','Kim.Hyeosi@lgde.com',20,'남')
@@ -358,7 +385,7 @@ insert into student (name, email, age, gender) values
 ,('김휘비','Kim.Hwibi@lgde.com',38,'남')
 ,('박재문','Park.Jaemoon@lgde.com',49,'남')
 ,('우소은','Woo.Soeun@lgde.com',30,'여');
-select * from student;
+SELECT * FROM student;
 ```
 * 아래와 같이 나오면 정답입니다
 ```text
@@ -388,28 +415,30 @@ select * from student;
 
 > 스쿱은 분산 저장소와 분산 처리를 지원하지만, 로컬 리소스 (프로세스) 그리고 로컬 저장소 (디스크, SATA) 에도 저장하는 기능을 가지고 있습니다
 
-* 컨테이너 로컬 디스크에 예제 테이블(`student`)을 수집합니다
-  - `-jt local` : 로컬 프로세스로 (원격 분산처리가 아니라) 테이블을 수집
-  - `-fs local` : 로컬 디스크에 (원격 부산저장소가 아니라) 테이블을 수집
-  - `-m 1` : 하나의 프로세스로 실행
-  - `--connect jdbc:mysql://mysql:3306/testdb` : 대상 서버 Connection String
-  - `--username` : 이용자
-  - `--password` : 패스워드
-  - `--table` : 테이블이름
-  - `--target-dir` : 저장경로 (컨테이너 내부의 로컬 저장소)
-  - `--as-parquetfile` : 옵션을 추가하면 파케이 포맷으로 저장됩니다
-  - `--fields-terminated-by '\t'` : 문자열을 구분자로 텍스트 파일로 저장됩니다 (파케이 옵션과 사용 불가)
-  - `--relaxed-isolation` : 테이블에 Shared Lock 을 잡지 않고 가져옵니다
-  - `--delete-target-dir` : 대상 경로가 있다면 삭제 후 수집합니다
+* 컨테이너 로컬 디스크에 예제 테이블(student)을 수집합니다
+  - <kbd>-jt local</kbd> : 로컬 프로세스로 (원격 분산처리가 아니라) 테이블을 수집
+  - <kbd>-fs local</kbd> : 로컬 디스크에 (원격 부산저장소가 아니라) 테이블을 수집
+  - <kbd>-m 1</kbd> : 하나의 프로세스로 실행
+  - <kbd>--connect jdbc:mysql://mysql:3306/testdb</kbd> : 대상 서버 Connection String
+  - <kbd>--username</kbd> : 이용자
+  - <kbd>--password</kbd> : 패스워드
+  - <kbd>--table</kbd> : 테이블이름
+  - <kbd>--target-dir</kbd> : 저장경로 (컨테이너 내부의 로컬 저장소)
+  - <kbd>--as-parquetfile</kbd> : 옵션을 추가하면 파케이 포맷으로 저장됩니다
+  - <kbd>--fields-terminated-by '\t'</kbd> : 문자열을 구분자로 텍스트 파일로 저장됩니다 (파케이 옵션과 사용 불가)
+  - <kbd>--relaxed-isolation</kbd> : 테이블에 Shared Lock 을 잡지 않고 가져옵니다
+  - <kbd>--delete-target-dir</kbd> : 대상 경로가 있다면 삭제 후 수집합니다
 
 * 테이블 수집 합니다
 ```bash
+# docker
 ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb \
   --username sqoop --password sqoop --table student --target-dir /home/sqoop/target/student
 ```
 
 * 로컬 저장소에 제대로 수집이 되었는지 확인합니다
 ```bash
+# docker
 ls /home/sqoop/target/student
 ask cat /home/sqoop/target/student/part-m-00000
 ```
@@ -487,6 +516,7 @@ filename=`ls -d1 /home/sqoop/target/student_parquet/*`
   - 파케이 포맷의 파일은 바이너리 포맷이라 cat 혹은 vi 등으로 내용을 확인할 수 없습니다
   - 서버에 설치된 /jdbc/parquet-tools-1.8.1.jar 어플리케이션을 이용하여 확인이 가능합니다
 ```bash
+# docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
 ```
 
@@ -538,6 +568,7 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
 * 클러스터 환경의 경우 `-jt`, `-fs` 옵션이 없으며, 저장 경로를 하둡 경로로 인식합니다
   - 명시적으로 hdfs:// 를 넣어도 무관합니다
 ```bash
+# docker
 ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb \
   --username sqoop --password sqoop --table seoul_popular_trip \
   --target-dir /user/sqoop/target/seoul_popular_trip
@@ -545,6 +576,7 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb \
 
 * 원격 하둡 저장소에 제대로 수집이 되었는지 확인합니다
 ```bash
+# docker
 hadoop fs -ls /user/sqoop/target/seoul_popular_trip
 ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
@@ -581,8 +613,8 @@ ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb \
 ### 2-2. 파티션 테이블 수집
 * 하나의 테이블을 조건에 따라 분리해서 저장히기 위해 id 값의 범위를 확인해 봅니다 (Min(id), Max(id))
 ```bash
-./sqoop-eval.sh "select min(id), max(id) from seoul_popular_trip"
-./sqoop-eval.sh "select count(1) from seoul_popular_trip"
+sqoop eval "SELECT MIN(id), MAX(id) FROM seoul_popular_trip"
+sqoop eval "SELECT COUNT(1) FROM seoul_popular_trip"
 ```
 * 테이블을 파티션 단위로 저장하기 위해서는 루트 경로를 생성해 두어야만 합니다 (그래야 하위에 key=value 형식의 경로로 저장할 수 있습니다)
 ```bash
@@ -625,16 +657,16 @@ sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passwor
   - 아까 생성해 두었던 cmd 명령어를 이용해서 테스트 합니다
 ```bash
 # docker
-ask cmd "create table inc_table (
-  id int not null auto_increment
-  , name varchar(30)
-  , salary int
+ask cmd "CREATE TABLE inc_table (
+  id INT NOT NULL auto_increment
+  , name VARCHAR(30)
+  , salary INT
   , primary key (id)
 );"
 ```
 
 ```bash
-ask cmd "insert into inc_table (name, salary) values ('suhyuk', 10000);"
+ask cmd "INSERT INTO inc_table (name, salary) VALUES ('suhyuk', 10000);"
 ```
 <br>
 
@@ -661,7 +693,7 @@ docker exec -it mysql mysql -usqoop -psqoop
 ```
 ```sql
 # mysql>
-insert into inc_table (name, salary) values ('psyoblade', 20000);
+INSERT INTO inc_table (name, salary) VALUES ('psyoblade', 20000);
 ```
 <br>
 
@@ -719,20 +751,20 @@ hadoop fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00001
 docker compose exec mysql mysql -usqoop -psqoop
 ```
 * 테스트 적재를 위한 테이블을 생성합니다
-```
+```sql
 # mysql>
 
 use testdb;
 
-create table testdb.seoul_popular_exp (
-  category int not null
-  , id int not null
-  , name varchar(100)
-  , address varchar(100)
-  , naddress varchar(100)
-  , tel varchar(20)
-  , tag varchar(500)
-) character set utf8 collate utf8_general_ci;
+CREATE TABLE testdb.seoul_popular_exp (
+  category INT NOT NULL
+  , id INT NOT NULL
+  , name VARCHAR(100)
+  , address VARCHAR(100)
+  , naddress VARCHAR(100)
+  , tel VARCHAR(20)
+  , tag VARCHAR(500)
+) CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
 
 show tables;
 ```
@@ -796,10 +828,13 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 
 ```sql
 # mysql>
-select category, id, name from seoul_popular_exp limit 3;
+SELECT category, id, name FROM seoul_popular_exp LIMIT 3;
+```
+```sql
+# mysql>
+SELECT category, id, name FROM seoul_popular_exp LIMIT 3;
 ```
 ```text
-mysql> select category, id, name from seoul_popular_exp limit 3;
 +----------+-----+--------------+
 | category | id  | name         |
 +----------+-----+--------------+
@@ -818,44 +853,60 @@ mysql> select category, id, name from seoul_popular_exp limit 3;
 * 스테이징 테이블은 원본 테이블을 그대로 두고 별도의 스테이징 테이블에 적재 후 완전 export 가 성공하면 원본 테이블을 clear 후 적재합니다
 * 아래와 같이 임시 스테이징 테이블을 동일한 스키마로 생성하고 익스포트를 수행합니다
 ```sql
-create table testdb.seoul_popular_stg (
-  category int not null
-  , id int not null
-  , name varchar(100)
-  , address varchar(100)
-  , naddress varchar(100)
-  , tel varchar(20)
-  , tag varchar(500)
-) character set utf8 collate utf8_general_ci;
+# mysql>
+CREATE TABLE testdb.seoul_popular_stg (
+  category INT NOT NULL
+  , id INT NOT NULL
+  , name VARCHAR(100)
+  , address VARCHAR(100)
+  , naddress VARCHAR(100)
+  , tel VARCHAR(20)
+  , tag VARCHAR(500)
+) CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
+
+show tables;
 ```
 
-* 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 truncate 는 수작업으로 수행되어야만 합니다
+* 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 TRUNCATE 는 수작업으로 수행되어야만 합니다
   - 수행 시에 맵 갯수를 4개로 늘려서 테스트 해보겠습니다
 ```bash
 sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-  -e "truncate seoul_popular_exp"
+  -e "TRUNCATE seoul_popular_exp"
 
 ask sqoop export -m 4 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_exp \
-  --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table \
-  --export-dir /user/sqoop/target/seoul_popular_exp
+  --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table
 ```
+* 적재 과정에서 stg 및 exp 테이블을 조회해 보면 상태를 확인할 수 있습니다
+```sql
+# mysql>
+SELECT COUNT(1) FROM seoul_popular_stg;
+SELECT COUNT(1) FROM seoul_popular_exp;
+```
+
+> 적재시에 4개의 맵 작업수로 수행된 사항에 대해서도 디버깅 해보시면 어떻게 동작하는 지 확인할 수 있습니다
+
 <br>
 
 
 ## 4. 유틸리티
 
 ### 4-1. 모든 테이블 수집
+
+> 데이터베이스에 존재하는 모든 테이블을 순차적으로 백업하는 기능입니다. 자주 사용되지는 않지만, 전체 데이터 백업 시에 참고해볼 만한 도구입니다
+
 * 모든 테이블 수집을 위한 데이터베이스(testdb) 경로를 하나 생성합니다
 ```bash
 # docker
 hadoop fs -mkdir /user/sqoop/target/testdb
 ```
 
-* 생성된 경로를 루트로 하위로 모든 테이블을 수집합니다 (반드시 --autoreset-to-one-mapper 를 지정해 주어야 primary key 가 없는 경우에도 -m 1 으로 수집이 됩니다)
+* 생성된 경로를 루트로 하위로 모든 테이블을 수집합니다
+  - 반드시 --autoreset-to-one-mapper 를 지정해 주어야 primary key 가 없는 경우에도 -m 1 으로 수집이 됩니다
 ```bash
 # docker
-sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --autoreset-to-one-mapper --warehouse-dir /user/sqoop/target/testdb --username sqoop --password sqoop
+ask sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --autoreset-to-one-mapper --warehouse-dir /user/sqoop/target/testdb
 ```
 <br>
 
