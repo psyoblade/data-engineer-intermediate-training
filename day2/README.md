@@ -98,17 +98,24 @@ CREATE TABLE table2 (
 );
 
 CREATE TABLE foo (
-    foo INT;
+    foo INT
 );
+
+SHOW TABLES;
 ```
 
-* 테이블 변경 및 삭제
+* 테이블 변경
 ```sql
 ALTER TABLE foo ADD COLUMN ( bar VARCHAR(10) );
 
 DESC foo;
+```
 
+* 테이블 삭제
+```sql
 DROP TABLE foo;
+
+SHOW TABLES;
 ```
 
 * 데이터 추가
@@ -118,11 +125,6 @@ INSERT INTO table2 VALUES ( 1, 'one' );
 INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
 ```
 
-* 데이터 변경
-```sql
-UPDATE table1 SET col1 = 100 WHERE col1 = 1;
-```
-
 * 데이터 조회
 ```sql
 SELECT col1, col2
@@ -130,7 +132,14 @@ FROM table1;
 
 SELECT col2
 FROM table2
-WHERE col1 = '찾는값'
+WHERE col1 = 'two'
+```
+
+* 데이터 변경
+```sql
+UPDATE table1 SET col1 = 100 WHERE col1 = 1;
+
+SELECT col1, col2 FROM table1;
 ```
 
 * 데이터 삭제
