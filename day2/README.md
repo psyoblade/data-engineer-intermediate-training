@@ -188,12 +188,13 @@ while true; do
 done
 ```
 
-* 스쿱 명령어 실습을 위해 컨테이너에 접속합니다
+#### 1-5-1. 스쿱 명령어 실습을 위해 컨테이너에 접속합니다
 ```bash
 # terminal
 docker compose exec sqoop bash
 ```
 
+* 간단한 출력 명령을 수행합니다
 ```bash
 # docker
 ask echo hello world
@@ -204,6 +205,55 @@ ask echo hello world
 
 </details>
 <br>
+
+
+#### 1-5-2. 데이터베이스, 테이블 목록 조회
+
+> 스쿱을 이용하여 별도의 데이터베이스 접속 클라이언트가 없어도 기본적인 명령어(DDL, DML)을 수행할 수 있습니다
+
+* 데이터베이스 목록을 조회합니다
+```bash
+# docker
+sqoop list-databases --connect jdbc:mysql://mysql:3306 --username sqoop --password sqoop
+```
+
+* 테이블 목록을 조회합니다
+```bash
+# docker
+sqoop list-tables --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop
+```
+
+* 테이블 정보 및 조회를 합니다
+```bash
+sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -e "describe user_20201025"
+ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -e "select * from user_20201025"
+```
+
+> 위와 같이 특정 데이터베이스에 계속 명령을 날리기에는 불편함이 있으므로 eval.sh 같은 명령어를 하는 만들어보면 편하게 사용할 수 있습니다
+
+<details><summary>[실습] eval 명령을 쉽게 할 수 있는 간단한 bash 스크립트를 만들어 보세요 </summary>
+
+* 아래의 명령으로 터미널이 명령을 받을 준비를 하도록 하고
+```bash
+cat > cmd
+```
+* 아래의 내용을 복사해서 붙여넣은 다음 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 나오면 파일이 생성됩니다
+```bash
+#!/bin/bash
+sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -e "$@"
+```
+* 실행 가능한 파일로 만들기 위해서 모드를 변경합니다
+  - 실행 시에 반드시 쌍따옴표("")로 묶어야 제대로 수행됩니다
+```bash
+chmod +x cmd
+cmd "describe user_20201025"
+```
+
+</details>
+<br>
+
+
+
 
 
 ### 1-6. 로컬 프로세스로, 로컬 저장소에 테이블 수집
@@ -223,13 +273,13 @@ ask echo hello world
 * 테이블 수집 합니다
 ```bash
 ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb \
-  --username sqoop --password sqoop --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
+  --username sqoop --password sqoop --table seoul_popular_trip --target-dir /home/sqoop/target/seoul_popular_trip
 ```
 
 * 로컬 저장소에 제대로 수집이 되었는지 확인합니다
 ```bash
-ls /tmp/sqoop/seoul_popular_trip
-ask cat /tmp/sqoop/seoul_popular_trip/part-m-00000
+ls /home/sqoop/target/seoul_popular_trip
+ask cat /home/sqoop/target/seoul_popular_trip/part-m-00000
 ```
 <br>
 
@@ -266,7 +316,7 @@ select * from account;
 </details>
 <br>
 
-<details><summary>**[실습]** account 테이블을 로컬 경로(/home/sqoop/target/account)에 수집하세요 </summary>
+<details><summary>[실습] account 테이블을 로컬 경로(/home/sqoop/target/account)에 수집하세요 </summary>
 
 ```bash
 # docker
@@ -281,11 +331,19 @@ ls -al /home/sqoop/target/account
 
 
 
-* 클러스터 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
+### 1-8. 클러스터 환경에서 하둡 저장소로 예제 테이블(`seoul_poppular_trip`) 수집
+
+
+* 클러스터 환경에서 테이블을 수집 합니다
 ```bash
-docker exec -it sqoop sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip
-docker exec -it sqoop hadoop fs -ls /user/sqoop/target/seoul_popular_trip
-docker exec -it sqoop hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
+ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb \
+  --username sqoop --password sqoop --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip
+```
+
+* 원격 하둡 저장소에 제대로 수집이 되었는지 확인합니다
+```bash
+hadoop fs -ls /user/sqoop/target/seoul_popular_trip
+ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
 
 
