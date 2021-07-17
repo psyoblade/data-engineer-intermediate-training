@@ -229,12 +229,18 @@ ls /tmp/sqoop/seoul_popular_trip
 ask cat /tmp/sqoop/seoul_popular_trip/part-m-00000
 ```
 
-* 예제 실습 테이블 스키마와 데이터 2건 (테이블 이름 : account)
+* 예제 실습 테이블 스키마와 데이터 2건
+  - 테이블 이름 : account
+  - 테이블 스키마 :
 
-| 컬럼 | 타입 | 로우1 | 로우2 |
-| --- | --- | --- | --- |
-| id | int | 1 | 2 |
-| name | varchar(10) | 김엘지 | 박전자 |
+| 컬럼 | 타입 |
+| --- | --- |
+| id | int |
+| name | varchar(10) |
+
+  - 예제 데이터 :
+    - (1, '김엘지')
+    - (2, '박전자')
 
 <details><summary>[실습] 별도의 터미널을 통해 임의의 테이블을 생성하고 데이터를 입력하세요 </summary>
 
