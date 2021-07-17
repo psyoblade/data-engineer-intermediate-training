@@ -575,6 +575,7 @@ ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb \
   --target-dir /user/sqoop/target/seoul_popular_trip_split \
   --fields-terminated-by '\t' --delete-target-dir
 ```
+<br>
 
 
 ### 2-2. 파티션 테이블 수집
@@ -589,14 +590,27 @@ ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb \
 ```
 * 확인한 값의 범위를 이용하여 조건을 달리하여 하나의 테이블을 3번으로 나누어 수집을 수행합니다
 ```bash
-docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --delete-target-dir -m 1 --table seoul_popular_trip --where "id < 10000" --target-dir /user/sqoop/target/seoul_popular_partition/part=0
-docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 10001 and id < 20000" --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
-docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --delete-target-dir -m 1 --table seoul_popular_trip --where "id > 20001" --target-dir /user/sqoop/target/seoul_popular_partition/part=20000
+sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --delete-target-dir -m 1 --table seoul_popular_trip \
+  --where "id < 10000" \
+  --target-dir /user/sqoop/target/seoul_popular_partition/part=0
+
+sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --delete-target-dir -m 1 --table seoul_popular_trip \
+  --where "id > 10001 and id < 20000" \
+  --target-dir /user/sqoop/target/seoul_popular_partition/part=10000
+
+sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --delete-target-dir -m 1 --table seoul_popular_trip \
+  --where "id > 20001" \
+  --target-dir /user/sqoop/target/seoul_popular_partition/part=20000
 ```
+
 * 테이블 수집이 정상적으로 수행 되었는지 하둡 명령어를 통해 확인해 봅니다
 ```bash
 ./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_partition
 ```
+<br>
 
 
 ### 2-3. 증분 테이블 수집
@@ -611,8 +625,14 @@ docker exec -it sqoop sqoop import --connect jdbc:mysql://mysql:3306/testdb --us
   - 아까 생성해 두었던 cmd 명령어를 이용해서 테스트 합니다
 ```bash
 # docker
-ask cmd "create table inc_table (id int not null auto_increment, name varchar(30), salary int, primary key (id));"
+ask cmd "create table inc_table (
+  id int not null auto_increment
+  , name varchar(30)
+  , salary int
+  , primary key (id)
+);"
 ```
+
 ```bash
 ask cmd "insert into inc_table (name, salary) values ('suhyuk', 10000);"
 ```
@@ -623,16 +643,24 @@ ask cmd "insert into inc_table (name, salary) values ('suhyuk', 10000);"
   * 증분 테이블 수집 후 마지막에 --last-value 값이 1인 점을 확인해 둡니다 (다음 수집 시에 사용할 예정입니다)
   * 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
 ```bash
-./sqoop-import.sh --table inc_table --incremental append --check-column id --last-value 0 --target-dir /user/sqoop/target/seoul_popular_inc
-./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_inc
-./hadoop.sh fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00000
+# docker
+sqoop import --table inc_table --incremental append --check-column id --last-value 0 --target-dir /user/sqoop/target/seoul_popular_inc
+```
+```
+# docker
+hadoop fs -ls /user/sqoop/target/seoul_popular_inc
+hadoop fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00000
 ```
 <br>
 
 
 #### 2-3-3. 초기 수집 이후에 데이터가 추가되었(증분)다는 것을 테스트하기 위해 데이터를 추가합니다
 ```bash
-docker exec -it mysql mysql -uuser -p
+# terminal
+docker exec -it mysql mysql -usqoop -psqoop
+```
+```sql
+# mysql>
 insert into inc_table (name, salary) values ('psyoblade', 20000);
 ```
 <br>
@@ -640,15 +668,20 @@ insert into inc_table (name, salary) values ('psyoblade', 20000);
 
 #### 2-3-4. 증분 테이블 수집을 위해 이전 --last-value 1 을 입력하고 다시 수집합니다
 ```bash
-./sqoop-import.sh --table inc_table --incremental append --check-column id --last-value 1 --target-dir /user/sqoop/target/seoul_popular_inc
+# docker
+ask sqoop import --table inc_table \
+  --incremental append \
+  --check-column id --last-value 1 \
+  --target-dir /user/sqoop/target/seoul_popular_inc
 ```
 <br>
 
 
 #### 2-3-5. 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
 ```bash
-./hadoop.sh fs -ls /user/sqoop/target/seoul_popular_inc
-./hadoop.sh fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00001
+# docker
+hadoop fs -ls /user/sqoop/target/seoul_popular_inc
+hadoop fs -cat /user/sqoop/target/seoul_popular_inc/part-m-00001
 ```
 <br>
 
@@ -688,7 +721,9 @@ docker compose exec mysql mysql -usqoop -psqoop
 * 테스트 적재를 위한 테이블을 생성합니다
 ```
 # mysql>
+
 use testdb;
+
 create table testdb.seoul_popular_exp (
   category int not null
   , id int not null
@@ -698,8 +733,10 @@ create table testdb.seoul_popular_exp (
   , tel varchar(20)
   , tag varchar(500)
 ) character set utf8 collate utf8_general_ci;
+
 show tables;
 ```
+<br>
 
 
 ### 3-2. 적재 오류시에 디버깅 하는방법
@@ -711,7 +748,8 @@ show tables;
 * 적재 작업을 수행하면 오류가 발생하고 예외가 발생하고, 정확한 오류를 확인할 수 없습니다
 ```bash
 # docker
-ask sqoop export -m 1 --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
+ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
 ```
 
 * 오류 확인은 리소스매니저 (http://<cloud-public-ip>:8088) 사이트에서 할 수 있습니다
@@ -723,8 +761,9 @@ ask sqoop export -m 1 --table seoul_popular_exp --export-dir /user/sqoop/target/
 #### 3-1-3. 구분자 오류에 따른 실패 복구
 
 * 수집한 테이블의 경우 콤마를 기준으로 수집했는데, 필드에 콤마(,)가 들어가 있어서 export 시에 필드의 개수가 맞지 않는다는 오류를 확인합니다
+  - 1. 해결 방안은 export 를 콤마 구분자로 수행하거나
+  - 2. 테이블 수집을 탭 구분자로 변경하거나
 
-* 탭을 구분자로 테이블 임포트를 다시 수행합니다
 
 ```bash
 ./sqoop-import.sh -m 1 --table seoul_popular_trip --fields-terminated-by '\t' --delete-target-dir --target-dir /user/sqoop/target/seoul_popular_exp
