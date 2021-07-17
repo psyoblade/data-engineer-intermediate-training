@@ -773,9 +773,11 @@ ask cmd "SELECT * FROM inc_table"
 
 ```bash
 # docker
+last_value=0
+
 ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   -m 1 --table inc_table --incremental append --check-column id \
-  --last-value 0 --target-dir /user/sqoop/target/inc_table
+  --last-value ${last_value} --target-dir /user/sqoop/target/inc_table
 ```
 
 * 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
@@ -784,29 +786,38 @@ ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --pas
 hadoop fs -ls /user/sqoop/target/inc_table
 hadoop fs -cat /user/sqoop/target/inc_table/part-m-00000
 ```
+> 결과가 `1,suhyuk,10000` 로 나오면 정답입니다
+
 <br>
 
 
-#### 2-3-3. 초기 수집 이후에 데이터가 추가되었(증분)다는 것을 테스트하기 위해 데이터를 추가합니다
-```bash
-# terminal
-docker exec -it mysql mysql -usqoop -psqoop
-```
-```sql
-# mysql>
-INSERT INTO inc_table (name, salary) VALUES ('psyoblade', 20000);
-```
-<br>
-
-
-#### 2-3-4. 증분 테이블 수집을 위해 이전 --last-value 1 을 입력하고 다시 수집합니다
+#### 2-3-3. 테이블에 증분 데이터를 추가합니다
 ```bash
 # docker
-ask sqoop import --table inc_table \
-  --incremental append \
-  --check-column id --last-value 1 \
-  --target-dir /user/sqoop/target/seoul_popular_inc
+cmd "INSERT INTO inc_table (name, salary) VALUES ('psyoblade', 20000)"
 ```
+
+<br>
+
+
+#### 2-3-4. 증분 테이블 수집을 위해 --last-value 1 다시 수집합니다
+```bash
+# docker
+last_value=1
+
+ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  -m 1 --table inc_table --incremental append --check-column id \
+  --last-value ${last_value} --target-dir /user/sqoop/target/inc_table
+```
+
+* 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
+```
+# docker
+hadoop fs -ls /user/sqoop/target/inc_table
+hadoop fs -cat /user/sqoop/target/inc_table/part-m-00001
+```
+> 결과가 `1,suhyuk,10000` 로 나오면 정답입니다
+
 <br>
 
 
