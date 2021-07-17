@@ -282,14 +282,16 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
     -e "select * from tbl_salary"
 ```
 
-###### 실습용 테이블 정보 
+#### 1-5-3. 실습 테이블 생성 및 수집 실습
+
+##### 실습용 테이블 정보를 활용하여 테이블을 생성하세요
 
 * 데이터베이스: testdb
 * 테이블 이름: student 
 
 | 컬럼명 | 컬럼유형 | 데이터 예제 |
 | - | - | - |
-| no | int | 1~10까지의 숫자 |
+| no | int | `AUTO_INCREMENT` |
 | name | varchar(50) | 박수혁 |
 | email | varchar(50) | suhyuk.park@gmail.com |
 | age | int | 30 | 나이 |
@@ -297,18 +299,34 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 
 <details><summary>[실습] 위에서 명시한 student 테이블을 sqoop eval 명령어를 통해 testdb 에 생성하세요 </summary>
 
+```bash
+# terminal
+docker compose exec mysql mysql -usqoop -psqoop
+```
 ```sql
 # mysql>
 use testdb;
-create table student (no int, name varchar(50), email varchar(50), age int, gender varchar(10));
+create table student (no int not null auto_increment, name varchar(50), email varchar(50), age int, gender varchar(10), primary key (no));
 desc student;
+```
+* 아래와 같이 나오면 정답입니다
+```text
++--------+-------------+------+-----+---------+----------------+
+| Field  | Type        | Null | Key | Default | Extra          |
++--------+-------------+------+-----+---------+----------------+
+| no     | int(11)     | NO   | PRI | NULL    | auto_increment |
+| name   | varchar(50) | YES  |     | NULL    |                |
+| email  | varchar(50) | YES  |     | NULL    |                |
+| age    | int(11)     | YES  |     | NULL    |                |
+| gender | varchar(10) | YES  |     | NULL    |                |
++--------+-------------+------+-----+---------+----------------+
 ```
 
 </details>
 <br>
 
 
-###### 실습용 데이터 정보 
+##### 실습용 데이터 정보를 활용하여 데이터를 입력하세요
 
 * 고객 데이터 정보
 ```text
@@ -329,7 +347,7 @@ desc student;
 ```sql
 # mysql>
 use testdb;
-insert into student values 
+insert into student (name, email, age, gender) values 
 ('권보안','Kwon.Boan@lgde.com',18,'여')
 ,('민의주','Min.Euiju@lgde.com',20,'여')
 ,('김혀시','Kim.Hyeosi@lgde.com',20,'남')
@@ -342,17 +360,35 @@ insert into student values
 ,('우소은','Woo.Soeun@lgde.com',30,'여');
 select * from student;
 ```
+* 아래와 같이 나오면 정답입니다
+```text
++----+-----------+-----------------------+------+--------+
+| no | name      | email                 | age  | gender |
++----+-----------+-----------------------+------+--------+
+|  1 | 권보안    | Kwon.Boan@lgde.com    |   18 | 여     |
+|  2 | 민의주    | Min.Euiju@lgde.com    |   20 | 여     |
+|  3 | 김혀시    | Kim.Hyeosi@lgde.com   |   20 | 남     |
+|  4 | 김유은    | Kim.Yueun@lgde.com    |   38 | 여     |
+|  5 | 박윤미    | Park.Yoonmi@lgde.com  |   27 | 여     |
+|  6 | 박예하    | Park.Yeha@lgde.com    |   30 | 남     |
+|  7 | 이병하    | Lee.Byungha@lgde.com  |   21 | 남     |
+|  8 | 김휘비    | Kim.Hwibi@lgde.com    |   38 | 남     |
+|  9 | 박재문    | Park.Jaemoon@lgde.com |   49 | 남     |
+| 10 | 우소은    | Woo.Soeun@lgde.com    |   30 | 여     |
++----+-----------+-----------------------+------+--------+
+10 rows in set (0.00 sec)
+```
 
 </details>
 <br>
 
 
 
-### 1-6. 로컬 프로세스로, 로컬 저장소에 테이블 수집
+### 1-6. 로컬 프로세스로, 로컬 저장소에 텍스트 파일로 테이블 수집
 
 > 스쿱은 분산 저장소와 분산 처리를 지원하지만, 로컬 리소스 (프로세스) 그리고 로컬 저장소 (디스크, SATA) 에도 저장하는 기능을 가지고 있습니다
 
-* 컨테이너 로컬 디스크에 예제 테이블(`seoul_popular_trip`)을 수집합니다
+* 컨테이너 로컬 디스크에 예제 테이블(`student`)을 수집합니다
   - `-jt local` : 로컬 프로세스로 (원격 분산처리가 아니라) 테이블을 수집
   - `-fs local` : 로컬 디스크에 (원격 부산저장소가 아니라) 테이블을 수집
   - `-m 1` : 하나의 프로세스로 실행
@@ -361,66 +397,107 @@ select * from student;
   - `--password` : 패스워드
   - `--table` : 테이블이름
   - `--target-dir` : 저장경로 (컨테이너 내부의 로컬 저장소)
+  - `--as-parquetfile` : 옵션을 추가하면 파케이 포맷으로 저장됩니다
+  - `--fields-terminated-by '\t'` : 문자열을 구분자로 텍스트 파일로 저장됩니다 (파케이 옵션과 사용 불가)
+  - `--relaxed-isolation` : 테이블에 Shared Lock 을 잡지 않고 가져옵니다
+  - `--delete-target-dir` : 대상 경로가 있다면 삭제 후 수집합니다
 
 * 테이블 수집 합니다
 ```bash
 ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb \
-  --username sqoop --password sqoop --table seoul_popular_trip --target-dir /home/sqoop/target/seoul_popular_trip
+  --username sqoop --password sqoop --table student --target-dir /home/sqoop/target/student
 ```
 
 * 로컬 저장소에 제대로 수집이 되었는지 확인합니다
 ```bash
-ls /home/sqoop/target/seoul_popular_trip
-ask cat /home/sqoop/target/seoul_popular_trip/part-m-00000
+ls /home/sqoop/target/student
+ask cat /home/sqoop/target/student/part-m-00000
 ```
 <br>
 
 
-### 1-7. 예제 테이블 생성 및 수집 실습
+### 1-7. 저장 파일 포맷을 변경하며 수집
 
-> 아래와 같은 조건에 맞는 테이블을 생성하고, 스쿱을 통한 수집을 수행하세요
+> 스쿱은 텍스트 파일 (TSV, CSV) 뿐만 아니라 파케이 (Parquet 컬럼지향 바이너리 압축 포맷) 포맷으로 저장이 가능합니다
 
-#### 1-7-1. 수집 대상
-* 테이블 이름 : account
-* 예제 데이터 :
-  - (1, '김엘지')
-  - (2, '박전자')
+#### 1-7-1. 탭 구분자 포맷으로 저장
 
-| 컬럼 | 타입 |
-| --- | --- |
-| id | int |
-| name | varchar(10) |
+<details><summary>[실습] 앞서 생성된 학생(student) 테이블을 탭으로 구분된 포맷으로 로컬 `/home/sqoop/target/student_tab` 경로에 저장하세요 </summary>
 
-<details><summary>[실습] 별도의 터미널을 통해 임의의 테이블을 생성하고 데이터를 입력하세요 </summary>
-
+* 컨테이너에 접속되어 있지 않다면 접속합니다
 ```bash
 # terminal
 docker compose exec mysql mysql -usqoop -psqoop
 ```
-```sql
-# mysql
-use testdb;
-create table account (id int, name varchar(10));
-insert into account values (1, '김엘지'), (2, '박전자');
-select * from account;
-```
-
-</details>
-<br>
-
-<details><summary>[실습] account 테이블을 로컬 경로(/home/sqoop/target/account)에 수집하세요 </summary>
-
+* 스쿱 명령어로 테이블을 수집합니다
 ```bash
 # docker
 ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb \
-  --username sqoop --password sqoop --table account --target-dir /home/sqoop/target/account
-
-ls -al /home/sqoop/target/account
+  --username sqoop --password sqoop --table student --target-dir /home/sqoop/target/student_tab \
+  --fields-terminated-by '\t'
+```
+* 생성된 파일이 파케이로 저장되었는지 확인합니다
+```
+# docker
+ls /home/sqoop/target/student_tab
 ```
 
 </details>
 <br>
 
+
+#### 1-7-2. 파케이 포맷으로 저장
+* `--as-parquetfile` : 옵션을 추가하면 파케이 포맷으로 저장됩니다
+
+<details><summary>[실습] 앞서 생성된 학생(student) 테이블을 파케이 포맷으로 로컬 `/home/sqoop/target/student_parquet` 경로에 저장하세요 </summary>
+
+* 컨테이너에 접속되어 있지 않다면 접속합니다
+```bash
+# terminal
+docker compose exec mysql mysql -usqoop -psqoop
+```
+* 스쿱 명령어로 테이블을 수집합니다
+```bash
+# docker
+ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb \
+  --username sqoop --password sqoop --table student --target-dir /home/sqoop/target/student_parquet \
+  --as-parquetfile
+```
+* 생성된 파일이 파케이로 저장되었는지 확인합니다
+```
+# docker
+ls /home/sqoop/target/student_parquet
+```
+
+</details>
+<br>
+
+
+#### 1-7-3. 파케이 포맷 읽기
+
+> 파케이 포맷은 바이너리 포맷이라 문서편집기 등을 통해 직접 확인할 수 없기 때문에 별도의 도구를 통해서만 읽어들일 수 있습니다
+
+* 파케이 포맷으로 저장된 테이블을 출력합니다 
+  - 파케이 포맷의 파일은 바이너리 포맷이라 cat 혹은 vi 등으로 내용을 확인할 수 없습니다
+  - 서버에 설치된 /jdbc/parquet-tools-1.8.1.jar 어플리케이션을 이용하여 확인이 가능합니다
+```bash
+ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head file:///tmp/target/table/student_parquet
+```
+
+* 파케이 포맷 도구를 이용하여 사용가능한 기능
+  - head -n 5 : 상위 5개의 문서를 출력합니다 (default: 5)
+  - cat : 문서를 그대로 출력합니다
+  - schema : 테이블 스키마를 출력합니다
+  - meta : 파케이 포맷의 메타데이터를 출력합니다 
+  - dump : 텍스트 포맷으로 출력 합니다
+
+```bash
+ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head -n 10 file:///tmp/target/table/student_parquet
+
+ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file:///tmp/target/table/student_parquet
+
+ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file:///tmp/target/table/student_parquet
+```
 
 
 ### 1-8. 클러스터 환경에서 하둡 저장소로 예제 테이블 수집
