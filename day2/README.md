@@ -1,9 +1,9 @@
-# 1일차. 아파치 스쿱을 통한 테이블 수집 실습 - Apache Sqoop
+# 2일차. 아파치 스쿱을 통한 테이블 수집 실습 - Apache Sqoop
 > 아파치 스쿱을 통해 다양한 수집 예제를 실습합니다
 
 
 - 목차
-  * [1. 아파치 스쿱을 통한 테이블 수집](#아파치-스쿱을-통한-테이블-수집)
+  * [1. 최신버전 업데이트](#1-최신버전-업데이트)
   * [1-1. 아파치 스쿱 테이블 수집 예제 테이블](#아파치-스쿱-테이블-수집-예제-테이블)
   * [1-3. 유형별 테이블 수집](#유형별-테이블-수집)
   * [1-4. 파티션 테이블 수집](#파티션-테이블-수집)
@@ -13,45 +13,115 @@
   * [2-1. 새로운 테이블을 생성하고 적재](#새로운-테이블을-생성하고-적재)
 
 
-## 아파치 스쿱을 통한 테이블 수집
+## 1. 최신버전 업데이트
+> 원격 터미널에 접속하여 관련 코드를 최신 버전으로 내려받고, 과거에 실행된 컨테이너가 없는지 확인하고 종료합니다
 
-### 1. 스쿱 도커 기동 확인
-* 최신 버전 코드를 내려 받습니다
+### 1-1. 최신 소스를 내려 받습니다
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training
 git pull
 ```
-* 아래의 명령을 확인합니다
+
+### 1-2. 현재 기동되어 있는 도커 컨테이너를 확인하고, 종료합니다
+
+#### 1-2-1. 현재 기동된 컨테이너를 확인합니다
 ```bash
-docker ps --filter name=sqoop
-```
-* 기동되지 않았다면 Network, MySQL, Sqoop 순서대로 생성합니다
-```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day1/sbin
-./docker-create-network.sh
-./docker-run-mysql.sh
-./docker-run-sqoop.sh
+# terminal
+docker ps -a
 ```
 
-### 아파치 스쿱 테이블 수집 예제 테이블
-* 이전에 생성된 가비지 정보들을 모두 삭제하기 위해 하둡 및 MySQL 삭제 작업을 수행합니다 (처음이라면 스킵합니다)
-  * userid: user, password: pass
+#### 1-2-2. 기동된 컨테이너가 있다면 강제 종료합니다
 ```bash
-bash>
-./hadoop.sh fs -rm -r /user/sqoop
+# terminal 
+docker rm -f `docker ps -aq`
+```
+> 다시 `docker ps -a` 명령으로 결과가 없다면 모든 컨테이너가 종료되었다고 보시면 됩니다
+<br>
 
+
+### 1-3. 실습을 위한 이미지를 내려받고 컨테이너를 기동합니다
 ```bash
-docker exec -it mysql mysql -uuser -p
-mysql>
+# terminal
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2
+
+docker compose pull
+docker compose up -d
+docker compose ps
+```
+<br>
+
+
+### 1-4. SQL 기본 실습
+
+#### 1-4-1. 아파치 스쿱 MySQL 터미널 접속
+```bash
+# terminal
+docker compose exec mysql mysql -usqoop -psqoop
+```
+
+#### 1-4-2. 테이블 확인 및 SQL 실습
+```sql
 use testdb;
-drop table inc_table;
-drop table users;
-drop table seoul_popular_stg;
-drop table seoul_popular_exp;
+show tables;
 ```
+
+#### 1-4-3. 기본 SQL 명령어 리마인드
+
+![SQL](images/SQL.png)
+
+* 테이블 생성 및 삭제
+```sql
+CREATE TABLE table1 (
+    col1 INT NOT NULL,
+    col2 VARCHAR(10)
+);
+
+CREATE TABLE table2 (
+    col1 INT NOT NULL AUTO_INCREMENT,
+    col2 VARCHAR(10) NOT NULL,
+    PRIMARY KEY (col1)
+);
+
+CREATE TABLE foo (
+    bar INT;
+);
+
+DROP TABLE foo;
+```
+
+* SELECT
+```sql
+SELECT col1, col2
+FROM table1;
+
+SELECT col2
+FROM table2
+WHERE col1 = '찾는값'
+```
+
+* INSERT
+```sql
+INSERT INTO table1 ( col1 ) VALUES ( 1 );
+INSERT INTO table2 VALUES ( 1, 'one' );
+INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
+```
+
+* UPDATE
+```sql
+UPDATE table1 SET col1 = 100 WHERE col1 = 1;
+```
+
+* DELETE
+```sql
+DELETE FROM table1 WHERE col1 = 100;
+DELETE FROM table2;
+```
+
+
 * 로컬 환경에서 서울인기여행(testdb.seoul\_popular\_trip) 테이블을 수집합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day1/sbin
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/sbin
 docker exec -it sqoop sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb --username user --password pass --table seoul_popular_trip --target-dir /tmp/sqoop/seoul_popular_trip
 docker exec -it sqoop ls /tmp/sqoop/seoul_popular_trip
 docker exec -it sqoop cat /tmp/sqoop/seoul_popular_trip/part-m-00000
