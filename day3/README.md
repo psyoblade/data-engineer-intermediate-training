@@ -57,10 +57,12 @@ cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
 
 ## 2. 플루언트디를 웹서버처럼 사용하기
 
-> 플루언트디 로그 수집기는 **에이전트 방식의 데몬 서버**이기 때문에 일반적인 웹서버 처럼 *http 프로토콜을 통해서도 로그를 전송받을 수 있습*니다. 가장 일반적인 데이터 포맷인 *JSON 으로 로그를 수신하고, 표준출력(stdout)으로 출력*하는 예제를 실습해봅니다. 다른 부서 혹은 팀내의 다른 애플리케이션 간의 **로그 전송 프로토콜이 명확하지 않은 경우 가볍게 연동해볼 만한 모델**이기도 합니다
+> 플루언트디 로그 수집기는 **에이전트 방식의 데몬 서버**이기 때문에 일반적인 웹서버 처럼 *http 프로토콜을 통해서도 로그를 전송받을 수 있습*니다
+
+* 가장 일반적인 데이터 포맷인 *JSON 으로 로그를 수신하고, 표준출력(stdout)으로 출력*하는 예제를 실습해봅니다
+* 다른 부서 혹은 팀내의 다른 애플리케이션 간의 **로그 전송 프로토콜이 명확하지 않은 경우 가볍게 연동해볼 만한 모델**입니다
 
 ![ex1](images/ex1.png)
-
 
 ### 2-1. 도커 컨테이너 기동
 ```bash
@@ -74,8 +76,6 @@ docker compose up -d
 > 기본 설정은 /etc/fluentd/fluent.conf 파일을 바라보는데 예제 환경에서는 `docker-compose.yml` 설정에서 해당 위치에 ex1/fluent.conf 파일을 마운트해 두었기 때문에 컨테이너 환경 내에서 바로 실행을 해도 잘 동작합니다. 별도로 `fluentd -c /etc/fluentd/fluent.conf` 로 실행해도 동일하게 동작합니다
 
 #### 2-2-1 도커 컴포즈 파일 구성 `docker compose.yml`
-
-> 플루언트디가 9880 포트를 통해 http 웹서버를 기동했기 때문에 컴포즈 파일에서 해당 포트를 노출시킨 점도 참고 부탁 드립니다
 
 ```yml
 version: "3"
@@ -97,6 +97,7 @@ networks:
   default:
     name: default_network
 ```
+> 플루언트디가 9880 포트를 통해 http 웹서버를 기동했기 때문에 컴포즈 파일에서 해당 포트를 노출시킨 점도 확인합니다
 
 #### 2-2-2 플루언트디 파일 구성 `fluent.conf`
 ```xml
@@ -110,6 +111,8 @@ networks:
     @type stdout
 </match>
 ```
+<br>
+
 
 ### 2-3. 플루언트디 기동 및 확인
 
@@ -118,12 +121,11 @@ networks:
 # terminal
 docker compose exec fluentd bash
 ```
-
-* `fluentd -c /etc/fluentd/fluent.conf`로 기동해도 동일하게 동작합니다
 ```bash
 # docker
 fluentd
 ```
+* `fluentd -c /etc/fluentd/fluent.conf`로 기동해도 동일하게 동작합니다
 
 <details><summary>[실습] 출력 결과 확인</summary>
 
@@ -152,9 +154,10 @@ fluentd
 ```
 
 </details>
+<br>
 
 
-#### 2-3-2. 브라우저 혹은 별도의 터미널에서 CURL 명령으로 확인합니다
+#### 2-3-2. 별도의 터미널에서 CURL 명령으로 확인합니다
 
 * 웹 브라우저를 통해 POST 전달이 안되기 때문에 별도 터미널로 접속합니다
   - 클라우드 터미널에 curl 설치가 되어있지 않을 수도 있으므로 도커 컨테이너에 접속합니다
@@ -162,8 +165,6 @@ fluentd
 # terminal
 docker compose exec fluentd bash
 ```
-
-* 사전에 설치된 `send_http.sh` 혹은 직접 입력하셔도 됩니다
 ```bash
 # docker
 curl -i -X POST -d json={"action":"login","user":2} http://localhost:9880/test
@@ -172,16 +173,26 @@ Content-Type: text/plain
 Connection: Keep-Alive
 Content-Length: 0
 ```
+> 사전에 배포된 `send_http.sh` 를 실행해도 동일한 결과를 얻습니다
 
-* 에이전트가 기동된 컨테이너의 화면에는 아래와 같이 수신된 로그를 출력하면 성공입니다
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 에이전트가 기동된 컨테이너의 화면에는 아래와 같이 수신된 로그를 출력하면 성공입니다
+
 ```text
 2021-07-18 11:12:47.866146971 +0000 test: {"action":"login","user":2}
 2021-07-18 11:13:38.334081170 +0000 test: {"action":"login","user":2}
 ```
 
+</details>
+<br>
+
+
 #### 2-3-2. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 
 > 1번 예제 실습이 모두 종료되었으므로 컨테이너 접속을 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 종료합니다
+
+![stop](images/stop.png)
 
 * 실습한 컨테이너까지 모두 종료되어야 다음 실습에 영향이 없습니다
 ```bash
