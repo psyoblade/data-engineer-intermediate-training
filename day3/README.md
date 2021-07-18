@@ -44,42 +44,62 @@ docker rm -f `docker ps -aq`
 
 ### 1-3. 이번 실습은 예제 별로 다른 컨테이너를 사용합니다
 
-> `cd /home/ubuntu/work/data-engineer-intermediate-training/day3/`<kbd>ex1</kbd> 와 같이 마지막 경로가 다르지 유의 하시기 바랍니다
+> `cd /home/ubuntu/work/data-engineer-intermediate-training/day3/`<kbd>ex1</kbd> 와 같이 마지막 경로가 다른 점에 유의 하시기 바랍니다
 
 * 1번 실습의 경로는 <kbd>ex1</kbd>이므로 아래와 같습니다
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
-docker compose pull
-docker compose up -d
-docker compose ps
-
-# 실습 종료 후
-docker compose down
 ```
 <br>
 
 
 
-## 1. 웹 서버를 통해서 전송 받은 데이터를 표준 출력으로 전달
+## 2. 플루언트디를 웹서버처럼 사용하기
 
-### 1-1. 도커 컨테이너 기동
+> 플루언트디 로그 수집기는 **에이전트 방식의 데몬 서버**이기 때문에 일반적인 웹서버 처럼 *http 프로토콜을 통해서도 로그를 전송받을 수 있습*니다. 가장 일반적인 데이터 포맷인 *JSON 으로 로그를 수신하고, 표준출력(stdout)으로 출력*하는 예제를 실습해봅니다. 다른 부서 혹은 팀내의 다른 애플리케이션 간의 **로그 전송 프로토콜이 명확하지 않은 경우 가볍게 연동해볼 만한 모델**이기도 합니다
+
+![ex1](images/ex1.png)
+
+
+### 2-1. 도커 컨테이너 기동
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
 docker compose pull
 docker compose up -d
-docker logs -f fluentd
 ```
 
-### 1-2. HTTP 로 Fluentd 서버 동작 유무 확인
-```bash
-docker compose ps
-curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
+### 2-2. 도커 및 플루언트디 설정파일 확인
+
+> 기본 설정은 /etc/fluentd/fluent.conf 파일을 바라보는데 예제 환경에서는 `docker-compose.yml` 설정에서 해당 위치에 ex1/fluent.conf 파일을 마운트해 두었기 때문에 컨테이너 환경 내에서 바로 실행을 해도 잘 동작합니다. 별도로 `fluentd -c /etc/fluentd/fluent.conf` 로 실행해도 동일하게 동작합니다
+
+#### 2-2-1 도커 컴포즈 파일 구성 `docker compose.yml`
+
+> 플루언트디가 9880 포트를 통해 http 웹서버를 기동했기 때문에 컴포즈 파일에서 해당 포트를 노출시킨 점도 참고 부탁 드립니다
+
+```yml
+version: "3"
+
+services:
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-fluentd:2.1
+    user: root
+    tty: true
+    ports:
+      - 9880:9880
+    volumes:
+      - ./fluent.conf:/etc/fluentd/fluent.conf
+      - ./send_http.sh:/home/root/send_http.sh
+    working_dir: /home/root
+
+networks:
+  default:
+    name: default_network
 ```
 
-### 1-3. Fluentd 구성 파일을 분석합니다
-* fluent.conf
-```conf
+#### 2-2-2 플루언트디 파일 구성 `fluent.conf`
+```xml
 <source>
     @type http
     port 9880
@@ -90,25 +110,86 @@ curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
     @type stdout
 </match>
 ```
-* docker compose.yml
-```yml
-version: "3"
-services:
-  fluentd:
-    container_name: fluentd
-    image: psyoblade/data-engineer-fluentd
-    user: root
-    tty: true
-    ports:
-      - 9880:9880
-    volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
-```
-### 4. 기동된 Fluentd 를 종료합니다
+
+### 2-3. 플루언트디 기동 및 확인
+
+#### 2-3-1. 에이전트 기동을 위해 컨테이너로 접속 후, 에이전트를 기동합니다
 ```bash
-docker compose down
-docker ps -a
+# terminal
+docker compose exec fluentd bash
 ```
+
+* `fluentd -c /etc/fluentd/fluent.conf`로 기동해도 동일하게 동작합니다
+```bash
+# docker
+fluentd
+```
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```bash
+[Default] Start fluentd agent w/ default configuration
+/opt/td-agent/embedded/bin/fluentd -c /etc/fluentd/fluent.conf
+2021-07-18 11:03:23 +0000 [info]: parsing config file is succeeded path="/etc/fluentd/fluent.conf"
+2021-07-18 11:03:23 +0000 [info]: using configuration file: <ROOT>
+  <source>
+    @type http
+    port 9880
+    bind "0.0.0.0"
+  </source>
+  <match test>
+    @type stdout
+  </match>
+</ROOT>
+2021-07-18 11:03:23 +0000 [info]: starting fluentd-1.11.5 pid=22 ruby="2.4.10"
+2021-07-18 11:03:23 +0000 [info]: spawn command to main:  cmdline=["/opt/td-agent/embedded/bin/ruby", "-Eascii-8bit:ascii-8bit", "/opt/td-agent/embedded/bin/fluentd", "-c", "/etc/fluentd/fluent.conf", "--under-supervisor"]
+2021-07-18 11:03:24 +0000 [info]: adding match pattern="test" type="stdout"
+2021-07-18 11:03:24 +0000 [info]: adding source type="http"
+2021-07-18 11:03:24 +0000 [info]: #0 starting fluentd worker pid=31 ppid=22 worker=0
+2021-07-18 11:03:24 +0000 [info]: #0 fluentd worker is now running worker=0
+```
+
+</details>
+
+
+#### 2-3-2. 브라우저 혹은 별도의 터미널에서 CURL 명령으로 확인합니다
+
+* 웹 브라우저를 통해 POST 전달이 안되기 때문에 별도 터미널로 접속합니다
+  - 클라우드 터미널에 curl 설치가 되어있지 않을 수도 있으므로 도커 컨테이너에 접속합니다
+```bash
+# terminal
+docker compose exec fluentd bash
+```
+
+* 사전에 설치된 `send_http.sh` 혹은 직접 입력하셔도 됩니다
+```bash
+# docker
+curl -i -X POST -d json={"action":"login","user":2} http://localhost:9880/test
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Connection: Keep-Alive
+Content-Length: 0
+```
+
+* 에이전트가 기동된 컨테이너의 화면에는 아래와 같이 수신된 로그를 출력하면 성공입니다
+```text
+2021-07-18 11:12:47.866146971 +0000 test: {"action":"login","user":2}
+2021-07-18 11:13:38.334081170 +0000 test: {"action":"login","user":2}
+```
+
+#### 2-3-2. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
+
+> 1번 예제 실습이 모두 종료되었으므로 컨테이너 접속을 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 종료합니다
+
+* 실습한 컨테이너까지 모두 종료되어야 다음 실습에 영향이 없습니다
+```bash
+# docker
+docker compose down
+```
+
+<br>
 
 
 ## 2. 더미 에이전트를 통해 생성된 이벤트를 로컬 저장소에 저장
