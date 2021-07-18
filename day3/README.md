@@ -725,7 +725,8 @@ curl -X POST -d '{ "column1":"1", "column2":"hello-world", "logtime": 1593379470
 
 ```bash
 for x in $(seq 1626479572 3600 1726479572); do \
-	curl -X POST -d "{ \"column1\":\"1\", \"column2\":\"hello-world\", \"logtime\": \"$x\" }" http://localhost:8080/lgde; \
+	curl -X POST -d "{ \"column1\":\"1\", \"column2\":\"hello-world\", \"logtime\": \"$x\" }" \
+	http://localhost:8080/lgde; \
 	sleep 1; \
 done
 ```
