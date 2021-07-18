@@ -952,7 +952,7 @@ fluentd  | 2021-07-18 17:03:11.177728881 +0000 docker.fortune: {"container_id":"
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
-```yaml
+```yml
 version: '3'
 
 services:
@@ -1007,9 +1007,6 @@ networks:
 <br>
 
 
-
-
-
 ### 6-3. 에이전트 및 컨테이너 종료
 
 #### 6-3-1. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>ctrl</samp>+<samp>c</samp></kbd> 명령으로 종료합니다
@@ -1019,93 +1016,9 @@ networks:
 <br>
 
 
+<details><summary>[ 작성 중입니다 ]</summary>
 
-
-
-
-
-### 1. 도커 로그 수집 컨테이너를 기동합니다
-```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex5
-./start_fluentd.sh
-```
-* 위와 같이 명령을 수행하고 Ctrl+P,Q 를 누르고 컨테이너를 종료하지 않고 밖으로 빠져나옵니다
-### 2. 더미 어플리케이션을 기동하여 도커로그 수집기로 로그를 전송합니다
-```bash
-./start_application.sh
-```
-### 3. 다시 로그 수집기(aggregator)에 로그가 정상적으로 수신되는지 확인합니다
-```bash
-docker logs -f aggregator
-```
-### 3. Fluentd 구성 파일을 분석합니다
-* aggregator.conf
-```conf
-<source>
-    @type forward
-    port 24224
-    bind 0.0.0.0
-</source>
-
-<filter docker.*>
-    @type parser
-    key_name log
-    reserve_data true
-    <parse>
-        @type json
-    </parse>
-</filter>
-
-<filter docker.*>
-    @type record_transformer
-    <record>
-        table_name ${tag_parts[1]}
-    </record>
-</filter>
-
-<match docker.*>
-    @type stdout
-</match>
-```
-* start\_fluentd.sh
-```bash
-#!/bin/bash
-if [ -z $PROJECT_HOME ]; then
-    echo "\$PROJECT_HOME 이 지정되지 않았습니다"
-    exit 1
-fi
-docker run --name aggregator -it -p 24224:24224 -v $PROJECT_HOME/aggregator.conf:/fluentd/etc/fluent.conf fluent/fluentd
-```
-* start dummy docker container
-```bash
-./start_fluentd.sh
-```
-* execute my container and generate my message with --log-driver
-  * [By default, the logging driver connects to localhost:24224](https://docs.docker.com/config/containers/logging/fluentd/)
-```bash
-docker run --rm --log-driver=fluentd ubuntu echo '{"message":"null tag message"}'
-docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.ID}} ubuntu echo '{"message":"send message with id"}'
-docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.Name}} ubuntu echo '{"message":"send message with name"}'
-docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.FullID}} ubuntu echo '{"message":"send message with full-id"}'
-
-# in case of connect other container
-aggregator_address=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' aggregator`
-docker run --rm --log-driver=fluentd --log-opt tag=docker.helloworld --log-opt fluentd-address=$aggregator_address:24224 ubuntu echo '{"message":"exact ip send message"}'
-```
-* stop and remove container
-```bash
-docker stop aggregator
-docker rm aggregator
-```
-### 4. 기동된 Fluentd 를 종료합니다
-```bash
-docker stop aggregator
-docker rm aggregator
-docker ps -a
-```
-
-
-## 6. 도커 컴포즈를 통한 로그 전송 구성
+## 7. 도커 컴포즈를 통한 로그 전송 구성
 ### 1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex6
@@ -1447,3 +1360,7 @@ Ctrl+C
 docker compose down
 docker ps -a
 ```
+
+</details>
+<br>
+
