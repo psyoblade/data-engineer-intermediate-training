@@ -765,14 +765,265 @@ done
 <br>
 
 
+## 6. 컨테이너 환경에서의 로그 전송
+
+> 클라우드 환경에서의 애플리케이션 들은 컨테이너 환경에서 운영되기 때문에 **로컬 스토리지를 이용해서 로그를 저장하는 경우 예기치 않은 컨테이너 종료 시에는 로그 유실**을 피할 수 없게 됩니다. 하여 *도커 컨테이너와 같이 플루언트디와 연동된 플러그인을 지원*합니다. 도커의 경우 Log Driver 형태로 플루언트디를 지원하며 기동 시에 설정을 하게 되면 **유실 없는 로그 저장 및 관리가 가능**합니다
+
+* 임의의 로그를 출력하는 도커 컨테이너(ubuntu)를 기동 시킵니다
+* 해당 컨테이너 기동 시에 플루언트디로 전송설정을 합니다
+* 설정된 로그 수집기(fluent.conf)를 통해 로그를 출력합니다
+* 하나의 애플리케이션과 전송 에이전트가 하나의 셋트로 배포됩니다
+  - **결구 다른 수집기(aggregator)로 전송하여 전체 로그를 집계**하게 됩니다
+
+
+### 6-1. 이전 컨테이너 종료 및 컨테이너 기동
+
+> 이전 실습에서 기동된 컨테이너를 종료 후, 기동합니다.
+
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex4
+docker compose down
+
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex5
+docker compose pull
+docker compose up -d
+```
+<br>
+
+
+#### 6-1-1 도커 컴포즈 파일 구성 `docker compose.yml`
+
+```yml
+version: '3'
+
+services:
+  ubuntu:
+    container_name: ubuntu
+    image: psyoblade/data-engineer-ubuntu:20.04
+    tty: true
+    restart: always
+    volumes:
+      - ./fortune_teller.sh:/fortune_teller.sh
+    entrypoint: [ "/fortune_teller.sh", "1000" ]
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.fortune
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-fluentd:2.1
+    user: root
+    tty: true
+    ports:
+      - 24224:24224
+    volumes:
+      - ./fluent.conf:/etc/fluentd/fluent.conf
+    entrypoint: [ "/home/root/fluentd" ]
+    working_dir: /home/root
+
+networks:
+  default:
+    name: default_network
+```
+> 로그를 생성하는 ubuntu 컨테이너와 로그를 수신하는 fluentd 컨테이너를 기동합니다
+
+* ubuntu 기반 애플리케이션을 entrypoint 통해 수행됩니다
+* fortune 명령을 1000회 반복하는 `fortune_teller.sh` 을 기동
+* logging 설정을 통해 docker.fortune 태그를 생성하여 전송합니다
+* fluentd 에이전트 또한 entrypoint 통해 같이 수행 되어야 합니다
+
+
+#### 6-1-2 플루언트디 파일 구성 `fluent.conf`
+
+```xml
+<source>
+    @type forward
+    port 24224
+    bind 0.0.0.0
+</source>
+
+<filter docker.*>
+    @type parser
+    key_name log
+    reserve_data true
+    <parse>
+        @type json
+    </parse>
+</filter>
+
+<filter docker.*>
+    @type record_transformer
+    <record>
+        table_name ${tag_parts[1]}
+    </record>
+</filter>
+
+<match docker.*>
+    @type stdout
+</match>
+```
+> 기본 플루언트디 포트(24224)로 전송된 이벤트들을 표준 출력으로 내보냅니다
+
+* 필터 플러그인 설정
+  - docker 로 시작하는 태그를 모두 필터하고, JSON 포맷만 전달합니다
+  - dokcer 로 시작하는 태그 이벤트를 필터하여 docker.{} 에 해당하는 레코드를 추가합니다
+
+
+#### 6-1-3 포츈텔러 파일 구성 `fortune_teller.sh`
+
+```bash
+#!/bin/bash
+sleep 3
+for x in $(seq 1 $1); do 
+    say=`fortune -s`
+    out=`echo ${say@Q} | sed -e "s/'//g" | sed -e 's/"//g' | sed -e 's/\\\\//g'`
+    echo "{\"key\":\"$out\"}"
+    sleep 1
+done
+```
+> 3초 대기 후 fortune 명령을 1초 간격으로 입력된 횟수만큼(1,000)회 반복합니다출력합니다
+
+<br>
+
+
+### 6-2. 에이전트 기동 및 확인
+
+#### 6-2-1. 에이전트 기동을 위해 컨테이너로 접속 후, 에이전트를 기동합니다
+
+```bash
+# terminal
+docker compose up -d
+```
+```bash
+docker compose logs -f ubuntu
+```
+> 애플리케이션에서 로그가 잘 전송되고 있는지 확인합니다
+```bash
+docker compose logs -f fluentd
+```
+> 플루언트디로 전송되어 출력이 되는지 확인합니다
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+* 애플리케이션 로그
+```bash
+ubuntu  | {"key":"You will gain money by an illegal action."}
+ubuntu  | {"key":"$Q:tWhats the difference between Bell Labs and the Boy Scouts of America?nA:tThe Boy Scouts have adult supervision."}
+ubuntu  | {"key":"$Its a very *__bbUN*lucky week in which to be took dead.ntt-- Churchy La Femme"}
+ubuntu  | {"key":"$Many pages make a thick book, except for pocket Bibles which are on verynvery thin paper."}
+ubuntu  | {"key":"Your heart is pure, and your mind clear, and your soul devout."}
+ubuntu  | {"key":"$Q:tHow many lawyers does it take to change a light bulb?nA:tOne. Only its his light bulb when hes done."}
+ubuntu  | {"key":"$FORTUNE PROVIDES QUESTIONS FOR THE GREAT ANSWERS: #21nA:tDr. Livingston I. Presume.nQ:tWhats Dr. Presumes full name?"}
+ubuntu  | {"key":"Snow Day -- stay home."}
+
+```
+
+* 플루언트디 로그
+```bash
+fluentd  | 2021-07-18 17:03:09.161100283 +0000 docker.fortune: {"source":"stdout","log":"{\"key\":\"Executive ability is prominent in your make-up.\"}\r","container_id":"af6051b411773b40623f57203e85054a085af57d02097e083dd1e7aade854484","container_name":"/ubuntu","key":"Executive ability is prominent in your make-up.","table_name":"fortune"}
+fluentd  | 2021-07-18 17:03:10.170363442 +0000 docker.fortune: {"log":"{\"key\":\"$Q:tWhat do you call a half-dozen Indians with Asian flu?nA:tSix sick Sikhs (sic).\"}\r","container_id":"af6051b411773b40623f57203e85054a085af57d02097e083dd1e7aade854484","container_name":"/ubuntu","source":"stdout","key":"$Q:tWhat do you call a half-dozen Indians with Asian flu?nA:tSix sick Sikhs (sic).","table_name":"fortune"}
+fluentd  | 2021-07-18 17:03:11.177728881 +0000 docker.fortune: {"container_id":"af6051b411773b40623f57203e85054a085af57d02097e083dd1e7aade854484","container_name":"/ubuntu","source":"stdout","log":"{\"key\":\"$Fine day for friends.nSo-so day for you.\"}\r","key":"$Fine day for friends.nSo-so day for you.","table_name":"fortune"}
+```
+
+</details>
+<br>
+
+#### 6-2-2. 컨테이너를 통해 전달할 수 있는 파라메터
+
+* [Customize log driver output](https://docs.docker.com/config/containers/logging/log_tags/) 참고하여 작성 되었습니다
+
+| Markup | Description |
+| --- | --- |
+| {{.ID}} | 	The first 12 characters of the container ID. |
+| {{.FullID}} | 	The full container ID. |
+| {{.Name}} | 	The container name. |
+| {{.ImageID}} | 	The first 12 characters of the container’s image ID. |
+| {{.ImageFullID}} | 	The container’s full image ID. |
+| {{.ImageName}} | 	The name of the image used by the container. |
+| {{.DaemonName}} | 	The name of the docker program (docker). |
+
+
+<details><summary>[실습] 컨테이너 이름을 web 으로 tag 를 `docker.{{.Name}}}`로 출력하는 `docker-compose.yml`을 작성하세요 </summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```yaml
+version: '3'
+
+services:
+  ubuntu:
+    container_name: ubuntu
+    image: psyoblade/data-engineer-ubuntu:20.04
+    tty: true
+    restart: always
+    volumes:
+      - ./fortune_teller.sh:/fortune_teller.sh
+    entrypoint: [ "/fortune_teller.sh", "1000" ]
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.fortune
+  web:
+    container_name: web
+    image: psyoblade/data-engineer-ubuntu:20.04
+    tty: true
+    restart: always
+    volumes:
+      - ./fortune_teller.sh:/fortune_teller.sh
+    entrypoint: [ "/fortune_teller.sh", "1000" ]
+    links:
+      - fluentd
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: docker.{{.Name}}
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-fluentd:2.1
+    user: root
+    tty: true
+    ports:
+      - 24224:24224
+    volumes:
+      - ./fluent.conf:/etc/fluentd/fluent.conf
+    entrypoint: [ "/home/root/fluentd" ]
+    working_dir: /home/root
+
+networks:
+  default:
+    name: default_network
+```
+
+</details>
+<br>
+
+
+
+
+
+### 6-3. 에이전트 및 컨테이너 종료
+
+#### 6-3-1. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>ctrl</samp>+<samp>c</samp></kbd> 명령으로 종료합니다
+
+#### 6-3-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>ctrl</samp>+<samp>d</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+
+<br>
 
 
 
 
 
 
-## 5. 컨테이너 환경에서의 로그 전송
-> 도커 어플리케이션에서 발생하는 로그를 플루언트디로 적재합니다
+
 ### 1. 도커 로그 수집 컨테이너를 기동합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex5

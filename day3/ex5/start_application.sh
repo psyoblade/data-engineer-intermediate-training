@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # https://docs.docker.com/config/containers/logging/fluentd/ - By default, the logging driver connects to localhost:24224
 docker run --rm --log-driver=fluentd ubuntu echo '{"message":"null tag message"}'
 docker run --rm --log-driver=fluentd --log-opt tag=docker.{{.ID}} ubuntu echo '{"message":"send message with id"}'
