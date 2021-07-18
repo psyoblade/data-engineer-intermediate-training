@@ -4,30 +4,80 @@
 
 
 - 목차
-  * [예제 1. 웹 서버를 통해서 전송 받은 데이터를 표준 출력으로 전달](#예제-1-웹-서버를-통해서-전송-받은-데이터를-표준-출력으로-전달)
-  * [예제 2. 더미 에이전트를 통해 생성된 이벤트를 로컬 저장소에 저장](#예제-2-더미-에이전트를-통해-생성된-이벤트를-로컬-저장소에-저장)
-  * [예제 3. 시스템 로그를 테일링 하면서 표준 출력으로 전달](#예제-3-시스템-로그를-테일링-하면서-표준-출력으로-전달)
-  * [예제 4. 트랜스포머를 통한 시간 데이터 변환](#예제-4-트랜스포머를-통한-시간-데이터-변환)
-  * [예제 5. 컨테이너 환경에서의 로그 전송](#예제-5-컨테이너-환경에서의-로그-전송)
-  * [예제 6. 도커 컴포즈를 통한 로그 전송 구성](#예제-6-도커-컴포즈를-통한-로그-전송-구성)
-  * [예제 7. 멀티 프로세스를 통한 성능 향상](#예제-7-멀티-프로세스를-통한-성능-향상)
-  * [예제 8. 멀티 프로세스를 통해 하나의 위치에 저장](#예제-8-멀티-프로세스를-통해-하나의-위치에-저장)
-  * [예제 9. 전송되는 데이터를 분산 저장소에 저장](#예제-9-전송되는-데이터를-분산-저장소에-저장)
+  * [1. 웹 서버를 통해서 전송 받은 데이터를 표준 출력으로 전달](#1-웹-서버를-통해서-전송-받은-데이터를-표준-출력으로-전달)
+  * [2. 더미 에이전트를 통해 생성된 이벤트를 로컬 저장소에 저장](#2-더미-에이전트를-통해-생성된-이벤트를-로컬-저장소에-저장)
+  * [3. 시스템 로그를 테일링 하면서 표준 출력으로 전달](#3-시스템-로그를-테일링-하면서-표준-출력으로-전달)
+  * [4. 트랜스포머를 통한 시간 데이터 변환](#4-트랜스포머를-통한-시간-데이터-변환)
+  * [5. 컨테이너 환경에서의 로그 전송](#5-컨테이너-환경에서의-로그-전송)
+  * [6. 도커 컴포즈를 통한 로그 전송 구성](#6-도커-컴포즈를-통한-로그-전송-구성)
+  * [7. 멀티 프로세스를 통한 성능 향상](#7-멀티-프로세스를-통한-성능-향상)
+  * [8. 멀티 프로세스를 통해 하나의 위치에 저장](#8-멀티-프로세스를-통해-하나의-위치에-저장)
+  * [9. 전송되는 데이터를 분산 저장소에 저장](#9-전송되는-데이터를-분산-저장소에-저장)
 
 
-## 예제 1 웹 서버를 통해서 전송 받은 데이터를 표준 출력으로 전달
-### 1. 도커 컨테이너 기동
+## 1. 최신버전 업데이트
+> 원격 터미널에 접속하여 관련 코드를 최신 버전으로 내려받고, 과거에 실행된 컨테이너가 없는지 확인하고 종료합니다
+
+### 1-1. 최신 소스를 내려 받습니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex1
-docker-compose up -d
+# terminal
+cd /home/ubuntu/work/data-engineer-intermediate-training
+git pull
+```
+
+### 1-2. 현재 기동되어 있는 도커 컨테이너를 확인하고, 종료합니다
+
+#### 1-2-1. 현재 기동된 컨테이너를 확인합니다
+```bash
+# terminal
+docker ps -a
+```
+
+#### 1-2-2. 기동된 컨테이너가 있다면 강제 종료합니다
+```bash
+# terminal 
+docker rm -f `docker ps -aq`
+```
+> 다시 `docker ps -a` 명령으로 결과가 없다면 모든 컨테이너가 종료되었다고 보시면 됩니다
+<br>
+
+
+### 1-3. 이번 실습은 예제 별로 다른 컨테이너를 사용합니다
+
+> `cd /home/ubuntu/work/data-engineer-intermediate-training/day3/`<kbd>ex1</kbd> 와 같이 마지막 경로가 다르지 유의 하시기 바랍니다
+
+* 1번 실습의 경로는 <kbd>ex1</kbd>이므로 아래와 같습니다
+```bash
+# terminal
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
+docker compose pull
+docker compose up -d
+docker compose ps
+
+# 실습 종료 후
+docker compose down
+```
+<br>
+
+
+
+## 1. 웹 서버를 통해서 전송 받은 데이터를 표준 출력으로 전달
+
+### 1-1. 도커 컨테이너 기동
+```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
+docker compose pull
+docker compose up -d
 docker logs -f fluentd
 ```
-### 2. HTTP 로 Fluentd 서버 동작 유무 확인
+
+### 1-2. HTTP 로 Fluentd 서버 동작 유무 확인
 ```bash
-docker ps --filter name=fluentd
+docker compose ps
 curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
 ```
-### 3. Fluentd 구성 파일을 분석합니다
+
+### 1-3. Fluentd 구성 파일을 분석합니다
 * fluent.conf
 ```conf
 <source>
@@ -40,13 +90,13 @@ curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
     @type stdout
 </match>
 ```
-* docker-compose.yml
+* docker compose.yml
 ```yml
 version: "3"
 services:
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    image: psyoblade/data-engineer-fluentd
     user: root
     tty: true
     ports:
@@ -56,16 +106,16 @@ services:
 ```
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-docker-compose down
+docker compose down
 docker ps -a
 ```
 
 
-## 예제 2 더미 에이전트를 통해 생성된 이벤트를 로컬 저장소에 저장
+## 2. 더미 에이전트를 통해 생성된 이벤트를 로컬 저장소에 저장
 ### 1. 도커 컨테이너 기동
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex2
-docker-compose up -d
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex2
+docker compose up -d
 docker logs -f fluentd
 ```
 ### 2. 로컬 경로에 파일이 저장되는 지 확인
@@ -113,13 +163,13 @@ tree target
     </buffer>
 </match>
 ```
-* docker-compose.yml
+* docker compose.yml
 ```yml
 version: "3"
 services:
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    image: psyoblade/data-engineer-fluentd
     user: root
     tty: true
     volumes:
@@ -129,17 +179,17 @@ services:
 ```
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-docker-compose down
+docker compose down
 docker ps -a
 ```
 
 
-## 예제 3 시스템 로그를 테일링 하면서 표준 출력으로 전달
+## 3. 시스템 로그를 테일링 하면서 표준 출력으로 전달
 ### 1. 도커 컨테이너 기동 및 수집해야 할 로그폴더(source)를 생성합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex3
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex3
 mkdir source
-docker-compose up -d
+docker compose up -d
 docker logs -f fluentd
 ```
 ### 2. 시스템 로그를 임의로 생성
@@ -226,13 +276,13 @@ fr.close()
     @log_level debug
 </match>
 ```
-* docker-compose.yml
+* docker compose.yml
 ```yml
 version: "3"
 services:
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    image: psyoblade/data-engineer-fluentd
     user: root
     tty: true
     volumes:
@@ -242,16 +292,16 @@ services:
 ```
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-docker-compose down
+docker compose down
 docker ps -a
 ```
 
 
-## 예제 4 트랜스포머를 통한 시간 데이터 변환
+## 4. 트랜스포머를 통한 시간 데이터 변환
 ### 1. 도커 컨테이너 기동
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex4
-docker-compose up -d
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex4
+docker compose up -d
 docker logs -f fluentd
 ```
 ### 2. http://student#.lgebigdata.com:8080/test 위치로 POST 데이터를 전송합니다
@@ -266,16 +316,16 @@ curl -X POST -d '{ "column1":"1", "column2":"hello-world", "logtime": 1593379470
 ### 3. 수신된 데이터가 로그에 정상 출력됨을 확인합니다
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-docker-compose down
+docker compose down
 docker ps -a
 ```
 
 
-## 예제 5 컨테이너 환경에서의 로그 전송
+## 5. 컨테이너 환경에서의 로그 전송
 > 도커 어플리케이션에서 발생하는 로그를 플루언트디로 적재합니다
 ### 1. 도커 로그 수집 컨테이너를 기동합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex5
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex5
 ./start_fluentd.sh
 ```
 * 위와 같이 명령을 수행하고 Ctrl+P,Q 를 누르고 컨테이너를 종료하지 않고 밖으로 빠져나옵니다
@@ -354,11 +404,11 @@ docker ps -a
 ```
 
 
-## 예제 6 도커 컴포즈를 통한 로그 전송 구성
+## 6. 도커 컴포즈를 통한 로그 전송 구성
 ### 1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex6
-docker-compose up -d
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex6
+docker compose up -d
 docker ps
 ```
 ### 2. 키바나를 통해 엘라스틱 서치를 구성합니다
@@ -373,7 +423,7 @@ docker ps
   * 2. 다시 Kibana 에서 Refresh 버튼을 누르면 접속 로그가 전송됨을 확인
 
 ### 3. Fluentd 구성 파일을 분석합니다
-* docker-compose.yml
+* docker compose.yml
 ```yml
 version: "3"
 services:
@@ -391,7 +441,7 @@ services:
         tag: httpd.access
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    image: psyoblade/data-engineer-fluentd
     volumes:
       - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
     links:
@@ -437,22 +487,22 @@ services:
 ```
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-docker-compose down
+docker compose down
 docker ps -a
 ```
 
 
-## 예제 7 멀티 프로세스를 통한 성능 향상
+## 7. 멀티 프로세스를 통한 성능 향상
 ### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex7
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex7
 mkdir source
 ./startup.sh
 ```
 ### 2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
 * 첫 번째 프로세스가 파일로 받은 입력을 표준 출력으로 내보내는 프로세스입니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex7
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex7
 for x in $(seq 1 1000); do echo "{\"hello\":\"world\"}" >> source/start.log; done
 ```
 * 두 번째 프로세스는 HTTP 로 입력 받은 내용을 표준 출력으로 내보내는 프로세스입니다
@@ -496,8 +546,8 @@ curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
 #!/bin/bash
 export PROJECT_HOME=`pwd`
 name="multi-process"
-echo "docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd"
-docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd
+echo "docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd"
+docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd
 ```
 * shutdown.sh
 ```bash
@@ -513,10 +563,10 @@ docker ps -a
 ```
 
 
-## 예제 8 멀티 프로세스를 통해 하나의 위치에 저장
+## 8. 멀티 프로세스를 통해 하나의 위치에 저장
 ### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex8
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex8
 mkdir source
 ./startup.sh
 ```
@@ -579,8 +629,8 @@ tree target
 #!/bin/bash
 export PROJECT_HOME=`pwd`
 name="multi-process-ex"
-echo "docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd"
-docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-intermediate-day2-fluentd
+echo "docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd"
+docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd
 ```
 * progress.sh
 ```bash
@@ -608,15 +658,15 @@ docker rm -f $container_name
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
 Ctrl+C
-docker-compose down
+docker compose down
 docker ps -a
 ```
 
 
-## 예제 9 전송되는 데이터를 분산 저장소에 저장
+## 9. 전송되는 데이터를 분산 저장소에 저장
 ### 1. 서비스를 기동합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2/ex9
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex9
 ./startup.sh
 ```
 ### 2. 별도의 터미널에서 모든 서비스(fluentd, namenode, datanode)가 떠 있는지 확인합니다
@@ -660,7 +710,7 @@ services:
       - 50075:50075
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    image: psyoblade/data-engineer-fluentd
     depends_on:
       - namenode
       - datanode
@@ -676,7 +726,7 @@ volumes:
 ```
 * start container
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 * generate logs with progress.sh
 ```bash
@@ -693,6 +743,6 @@ done
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
 Ctrl+C
-docker-compose down
+docker compose down
 docker ps -a
 ```
