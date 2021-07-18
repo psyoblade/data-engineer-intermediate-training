@@ -1,10 +1,16 @@
 version: "3"
+
 services:
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    image: psyoblade/data-engineer-fluentd:2.1
     user: root
     tty: true
     volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
+      - ./fluent.conf:/etc/fluentd/fluent.conf
       - ./target:/fluentd/target
+    working_dir: /home/root
+
+networks:
+  default:
+    name: default_network

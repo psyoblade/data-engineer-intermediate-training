@@ -190,38 +190,66 @@ Content-Length: 0
 
 #### 2-3-2. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 
-> 1번 예제 실습이 모두 종료되었으므로 컨테이너 접속을 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 종료합니다
-
 ![stop](images/stop.png)
 
-* 실습한 컨테이너까지 모두 종료되어야 다음 실습에 영향이 없습니다
-```bash
-# docker
-docker compose down
-```
+#### 2-3-3. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+
+> 컨테이너가 종료된 터미널의 프롬프트(도커의 경우 root@2a50c30293829 형식)를 통해 확인할 수 있습니다
 
 <br>
 
 
-## 2. 더미 에이전트를 통해 생성된 이벤트를 로컬 저장소에 저장
-### 1. 도커 컨테이너 기동
+## 3. 수신된 로그를 로컬에 저장하는 예제
+
+> 로그를 전송해 주는 서비스 혹은 애플리케이션을 별도로 기동하는 것도 귀찮은 일이기 때문에, 플루언트디에서 제공하는 로그를 자동으로 발생시키는 더미 로그 플러그인을 이용하여 로그를 발생시키고, 발생된 로그를 로컬 저장소에 저장하는 예제를 실습합니다
+
+* 플루언트디 더미 에이전트를 이용하여 임의의 로그를 자동으로 발생시킴
+* 발생된 로그(이벤트)를 로컬 저장소에 임의의 경로에 저장합니다
+
+### 3-1. 이전 컨테이너 종료 및 컨테이너 기동
+
+> 이전 실습에서 기동된 컨테이너를 종료 후, 기동합니다.
+
 ```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
+docker compose down
+
 cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex2
+docker compose pull
 docker compose up -d
-docker logs -f fluentd
 ```
-### 2. 로컬 경로에 파일이 저장되는 지 확인
-* target 경로에 로그가 1분 단위로 플러시 됩니다
-```bash
-ls -al target
-tree target
+<br>
+
+
+#### 3-1-1 도커 컴포즈 파일 구성 `docker compose.yml`
+
+```yml
+version: "3"
+
+services:
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-fluentd:2.1
+    user: root
+    tty: true
+    ports:
+      - 9880:9880
+    volumes:
+      - ./fluent.conf:/etc/fluentd/fluent.conf
+      - ./target:/fluentd/target
+    working_dir: /home/root
+
+networks:
+  default:
+    name: default_network
 ```
-### 3. Fluentd 구성 파일을 분석합니다
-* fluent.conf
-```conf
+> 저장되는 로그를 호스트 장비의 볼륨에 마운트하여 컨테이너가 종료되는 경우에도 유지될 수 있도록 구성합니다
+
+#### 3-1-2 플루언트디 파일 구성 `fluent.conf`
+```xml
 <source>
     @type dummy
-    tag dummy.info
+    tag lgde.info
     size 5
     rate 1
     auto_increment_key seq
@@ -230,20 +258,20 @@ tree target
 
 <source>
     @type dummy
-    tag dummy.debug
+    tag lgde.debug
     size 3
     rate 1
     dummy {"debug":"hello-world"}
 </source>
 
-<filter dummy.info>
+<filter lgde.info>
     @type record_transformer
     <record>
         table_name ${tag_parts[0]}
     </record>
 </filter>
 
-<match dummy.info>
+<match lgde.info>
     @type file
     path_suffix .log
     path /fluentd/target/${table_name}/%Y%m%d/part-%Y%m%d.%H%M
@@ -254,6 +282,94 @@ tree target
         timekey_zone +0900
     </buffer>
 </match>
+
+<match lgde.debug>
+    @type stdout
+</match>
+```
+> 더미 에이전트가 로그를 발생시키고, 발생된 로그를 로컬 저장소에 저장합니다. 
+
+* 더미 에이전트 로그 생성
+  - lgde.info 와 lgde.debug 2가지 이벤트가 발생
+  - info 이벤트만 filter, match 되도록 구성
+  - debug 이벤트는 stdout 출력만 되도록 구성
+* 필터 플러그인 구성
+  - `record_transformer`를 통해 별도의 필트를 추가합니다
+  - `${tag_parts[0]}` : 태그의 0번째 즉 lgde 를 말합니다
+  - `record` : 앨리먼트를 통해서 `table_name`:`lgde` 라는 값이 추가됩니다
+* 매치 플러그인 구성
+  - 지정된 경로에 log 파일로 생성합니다
+  - 1분에 한 번 저장하되 10초 까지 지연된 로그를 저장합니다
+  - 한국 시간 기준으로 포맷을 생성 유지합니다
+
+<br>
+
+
+#### 3-1-3. 에이전트 기동을 위해 컨테이너로 접속 후, 에이전트를 기동합니다
+
+```bash
+# terminal
+docker compose exec fluentd bash
+```
+```bash
+# docker
+fluentd
+```
+* 아래와 같이 출력되고 있다면 정상입니다 (lgde.debug)
+```bash
+# docker
+2021-07-18 11:52:24 +0000 [info]: #0 starting fluentd worker pid=58 ppid=49 worker=0
+2021-07-18 11:52:24 +0000 [info]: #0 fluentd worker is now running worker=0
+2021-07-18 11:52:25.081705098 +0000 lgde.debug: {"debug":"hello-world"}
+2021-07-18 11:52:25.081710640 +0000 lgde.debug: {"debug":"hello-world"}
+```
+
+#### 3-1-4. 별도의 터미널에서 생성되는 로그 파일을 확인합니다
+
+```bash
+# terminal
+docker compose exec fluentd bash
+```
+```bash
+# docker
+tree /fluentd/target/
+```
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```text
+
+root@7d33f313cc13:~# 
+/fluentd/target/
+├── ${table_name}
+│   └── %Y%m%d
+│       └── part-%Y%m%d.%H%M
+│           ├── buffer.b5c7647447f29a8c135e1164e39113f3b.log
+│           └── buffer.b5c7647447f29a8c135e1164e39113f3b.log.meta
+└── lgde
+    └── 20210718
+        └── part-20210718.2051_0.log
+
+5 directories, 3 files
+```
+
+</details>
+<br>
+
+
+
+
+
+
+
+### 2-2. 로컬 경로에 파일이 저장되는 지 확인
+* 
+```bash
+ls -al target
+tree target
+
 ```
 * docker compose.yml
 ```yml
