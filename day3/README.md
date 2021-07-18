@@ -188,11 +188,11 @@ Content-Length: 0
 <br>
 
 
-#### 2-3-2. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
+#### 2-3-3. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 
 ![stop](images/stop.png)
 
-#### 2-3-3. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+#### 2-3-4. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 
 > 컨테이너가 종료된 터미널의 프롬프트(도커의 경우 root@2a50c30293829 형식)를 통해 확인할 수 있습니다
 
@@ -305,7 +305,9 @@ networks:
 <br>
 
 
-#### 3-1-3. 에이전트 기동을 위해 컨테이너로 접속 후, 에이전트를 기동합니다
+### 3-2. 에이전트 기동 및 확인
+
+#### 3-2-1. 에이전트 기동을 위해 컨테이너로 접속 후, 에이전트를 기동합니다
 
 ```bash
 # terminal
@@ -324,7 +326,7 @@ fluentd
 2021-07-18 11:52:25.081710640 +0000 lgde.debug: {"debug":"hello-world"}
 ```
 
-#### 3-1-4. 별도의 터미널에서 생성되는 로그 파일을 확인합니다
+#### 3-2-2. 별도의 터미널에서 생성되는 로그 파일을 확인합니다
 
 ```bash
 # terminal
@@ -358,94 +360,65 @@ root@7d33f313cc13:~#
 </details>
 <br>
 
+### 3-3. 에이전트 및 컨테이너 종료
+
+#### 3-3-1. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
+
+#### 3-3-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+
+<br>
 
 
 
+## 4. 서버에 남는 로그를 지속적으로 모니터링하기
+
+> 앞의 예제에서는 로그가 자동으로 생성된다는 것을 가정했는데, 이번 예제에서는 실제 로그가 생성되는 것을 재현해보고, 임의의 아파치 웹서버로그가 생성되는 것을 잘 모니터링하면서 수집하는 지를 실습합니다
 
 
+### 4-1. 이전 컨테이너 종료 및 컨테이너 기동
 
-### 2-2. 로컬 경로에 파일이 저장되는 지 확인
-* 
+> 이전 실습에서 기동된 컨테이너를 종료 후, 기동합니다.
+
 ```bash
-ls -al target
-tree target
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex2
+docker compose down
 
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex3
+docker compose pull
+docker compose up -d
 ```
-* docker compose.yml
+<br>
+
+
+#### 4-1-1 도커 컴포즈 파일 구성 `docker compose.yml`
+
 ```yml
 version: "3"
+
 services:
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-fluentd
+    image: psyoblade/data-engineer-fluentd:2.1
     user: root
     tty: true
     volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
+      - ./apache_logs:/home/root/apache_logs
+      - ./flush_logs.py:/home/root/flush_logs.py
+      - ./fluent.conf:/etc/fluentd/fluent.conf
       - ./source:/fluentd/source
       - ./target:/fluentd/target
+    working_dir: /home/root
+
+networks:
+  default:
+    name: default_network
 ```
-### 4. 기동된 Fluentd 를 종료합니다
-```bash
-docker compose down
-docker ps -a
-```
+> 아파치 웹서버의 로그가 생성될 source 경로와 수집된 로그가 저장될 target 경로를 호스트 경로에 마운트 되었습니다.
 
 
-## 3. 시스템 로그를 테일링 하면서 표준 출력으로 전달
-### 1. 도커 컨테이너 기동 및 수집해야 할 로그폴더(source)를 생성합니다
-```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex3
-mkdir source
-docker compose up -d
-docker logs -f fluentd
-```
-### 2. 시스템 로그를 임의로 생성
-* 로그 생성기를 통해 accesslog 파일을 계속 source 경로에 append 하고, target 경로에서는 수집되는지 확인합니다
-```bash
-python flush_logs.py
-tree source
-tree target
-```
-* 임의 로그 생성기 (flush\_logs.py) 코드를 분석합니다
-```python
-#!/usr/bin/env python
-import sys, time, os, shutil
+#### 4-1-2 플루언트디 파일 구성 `fluent.conf`
 
-# 1. read apache_logs flush every 100 lines until 1000 lines
-# 2. every 1000 lines file close & rename file with seq
-# 3. create new accesslogs and goto 1.
-
-def readlines(fp, num_of_lines):
-    lines = ""
-    for line in fp:
-        lines += line
-        num_of_lines = num_of_lines - 1
-        if num_of_lines == 0:
-            break
-    return lines
-
-
-fr = open("apache_logs", "r")
-for x in range(0, 10):
-    fw = open("source/accesslogs", "w+")
-    for y in range(0, 10):
-        lines = readlines(fr, 100)
-        fw.write(lines)
-        fw.flush()
-        time.sleep(0.1)
-        sys.stdout.write(".")
-        sys.stdout.flush()
-    fw.close()
-    print("file flushed ... sleep 10 secs")
-    time.sleep(10)
-    shutil.move("source/accesslogs", "source/accesslogs.%d" % x)
-    print("renamed accesslogs.%d" % x)
-fr.close()
-```
-### 3. Fluentd 구성 파일을 분석합니다
-* fluent.conf
-```conf
+```xml
 <source>
     @type tail
     @log_level info
@@ -484,25 +457,148 @@ fr.close()
     @log_level debug
 </match>
 ```
-* docker compose.yml
-```yml
-version: "3"
-services:
-  fluentd:
-    container_name: fluentd
-    image: psyoblade/data-engineer-fluentd
-    user: root
-    tty: true
-    volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
-      - ./source:/fluentd/source
-      - ./target:/fluentd/target
+> 소스 경로에 저장되는 로그를 모니터링하여 타겟 경로에 저장합니다 
+
+* 소스 플러그인 설정
+  - 로그 레벨은 info 로 지정된 경로에서 tail 플러그인으로 모니터링합니다
+  - weblog.info 태그를 이용하였으며, apache2 로그를 파싱합니다
+  - 로그파일이 새로 작성(log-rotate) 되더라도 최대 5초간 대기합니다
+* 매치 플러그인 설정
+  - 즉각적인 확인을 위해 최대한 자주 플러시 하도록 설정 했습니다
+<br>
+
+#### 4-1-3. 아파치 로그 생성기 (`flush_logs.py`) 코드를 분석합니다
+
+> 아파치 웹서버의 로그를 실제와 유사하게 저장하고, 롤링까지 하게 만들기 위해서 별도의 파이썬 스크립트가 필요합니다.
+
+```python
+#!/usr/bin/env python
+import sys, time, os, shutil
+
+# 1. read apache_logs flush every 100 lines until 1000 lines
+# 2. every 1000 lines file close & rename file with seq
+# 3. create new accesslogs and goto 1.
+
+def readlines(fp, num_of_lines):
+    lines = ""
+    for line in fp:
+        lines += line
+        num_of_lines = num_of_lines - 1
+        if num_of_lines == 0:
+            break
+    return lines
+
+fr = open("apache_logs", "r")
+for x in range(0, 10):
+    fw = open("source/accesslogs", "w+")
+    for y in range(0, 10):
+        lines = readlines(fr, 100)
+        fw.write(lines)
+        fw.flush()
+        time.sleep(0.1)
+        sys.stdout.write(".")
+        sys.stdout.flush()
+    fw.close()
+    print("file flushed ... sleep 10 secs")
+    time.sleep(10)
+    shutil.move("source/accesslogs", "source/accesslogs.%d" % x)
+    print("renamed accesslogs.%d" % x)
+fr.close()
 ```
-### 4. 기동된 Fluentd 를 종료합니다
+> 원본 로그를 읽어서 source 경로에 저장하는 스크립트
+
+* 한 번에 100 라인씩을 읽어서 source 의 accesslogs 에 flush 합니다
+* 매 1000라인 마다 마치 용량이 커서 롤링된 것처럼 파일명을 변경합니다
+* 롤링된 이후에는 원본 accesslogs 파일에 계속 append 합니다
+<br>
+
+
+### 4-2. 에이전트 기동 및 확인
+
+#### 4-2-1. 에이전트 기동을 위해 컨테이너로 접속 후, 에이전트를 기동합니다
+
 ```bash
-docker compose down
-docker ps -a
+# terminal
+docker compose exec fluentd bash
 ```
+```bash
+# docker
+fluentd
+```
+> 플루언트디의 경우 기동 시에 오류가 없었다면 정상적으로 기동 되었다고 보시면 됩니다
+
+
+#### 4-2-2. 시스템 로그를 임의로 생성
+
+> 웹서버의 로그를 생성하기 어렵기 때문에 기존에 적재된 액세스로그를 읽어서 주기적으로 accesslog 파일에 append 하는 프로그램(`flush_logs.py`)을 통해서 시뮬레이션 합니다
+
+* 로그 생성기를 통해 accesslog 파일을 계속 source 경로에 append 하고, target 경로에서는 수집되는지 확인합니다
+
+```bash
+# terminal
+docker compose exec fluentd bash
+```
+```bash
+python flush_logs.py
+```
+```
+for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -L 2 /fluentd/target; sleep 10; done
+```
+> 위의 명령어로 주기적으로 출력 경로를 확인할 수 있습니다
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```bash
+021-07-18 13:01:20 +0000 [info]: #0 detected rotation of /fluentd/source/accesslogs
+2021-07-18 13:01:20 +0000 [info]: #0 following tail of /fluentd/source/accesslogs
+2021-07-18 13:01:31 +0000 [info]: #0 detected rotation of /fluentd/source/accesslogs
+2021-07-18 13:01:31 +0000 [info]: #0 following tail of /fluentd/source/accesslogs
+2021-07-18 13:01:32 +0000 [warn]: #0 pattern not matched: "46.118.127.106 - - [20/May/2015:12:05:17 +0000] \"GET /scripts/grok-py-test/configlib.py HTTP/1.1\" 200 235 \"-\" \"Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html"
+2021-07-18 13:01:43 +0000 [info]: #0 detected rotation of /fluentd/source/accesslogs
+2021-07-18 13:01:43 +0000 [info]: #0 following tail of /fluentd/source/accesslogs
+2021-07-18 13:01:54 +0000 [info]: #0 detected rotation of /fluentd/source/accesslogs; waiting 5.0 seconds
+```
+
+```bash
+root@2cf7c79e8367:~# for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -L 2 /fluentd/target; sleep 10; done
+/fluentd/source
+├── accesslogs.0
+├── accesslogs.1
+├── accesslogs.2
+├── accesslogs.3
+├── accesslogs.4
+├── accesslogs.5
+├── accesslogs.6
+├── accesslogs.7
+├── accesslogs.8
+├── accesslogs.9
+└── accesslogs.pos
+
+0 directories, 11 files
+/fluentd/target
+├── ${tag}
+│   └── %Y%m%d
+└── weblog.info
+    ├── 20150517
+    ├── 20150518
+    ├── 20150519
+    ├── 20150520
+    ├── 20150521
+    └── 20210718
+```
+
+</details>
+<br>
+
+### 4-3. 에이전트 및 컨테이너 종료
+
+#### 4-3-1. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
+
+#### 4-3-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+
+<br>
 
 
 ## 4. 트랜스포머를 통한 시간 데이터 변환

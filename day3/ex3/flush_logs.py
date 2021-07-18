@@ -17,7 +17,7 @@ def readlines(fp, num_of_lines):
 
 fr = open("apache_logs", "r")
 for x in range(0, 10):
-    fw = open("source/accesslogs", "w+")
+    fw = open("/fluentd/source/accesslogs", "w+")
     for y in range(0, 10):
         lines = readlines(fr, 100)
         fw.write(lines)
@@ -28,6 +28,6 @@ for x in range(0, 10):
     fw.close()
     print("file flushed ... sleep 10 secs")
     time.sleep(10)
-    shutil.move("source/accesslogs", "source/accesslogs.%d" % x)
+    shutil.move("/fluentd/source/accesslogs", "/fluentd/source/accesslogs.%d" % x)
     print("renamed accesslogs.%d" % x)
 fr.close()
