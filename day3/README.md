@@ -601,28 +601,173 @@ root@2cf7c79e8367:~# for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -
 <br>
 
 
-## 4. 트랜스포머를 통한 시간 데이터 변환
-### 1. 도커 컨테이너 기동
-```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex4
-docker compose up -d
-docker logs -f fluentd
-```
-### 2. http://student#.lgebigdata.com:8080/test 위치로 POST 데이터를 전송합니다
-* ARC Rest Client 를 사용해도 되고 curl 을 사용해도 됩니다
-  * Epoch 시간은 https://www.epochconverter.com/ 사이트를 이용합니다
-```bash
-POST: http://student{no}.lgebigdata.com:8080/test
-BODY: { "column1":"1", "column2":"hello-world", "logtime": 1593379470 }
+## 5. 데이터 변환 플러그인을 통한 시간 변경 예제
 
-curl -X POST -d '{ "column1":"1", "column2":"hello-world", "logtime": 1593379470 }' http://student{no}.lgebigdata.com:8080/test
-```
-### 3. 수신된 데이터가 로그에 정상 출력됨을 확인합니다
-### 4. 기동된 Fluentd 를 종료합니다
+> 로그 수집 및 적재 시에 가장 민감한 부분이 시간이며, 이에 따라 지연, 유실 등의 다양한 문제의 원인이 되기도 합니다. 원본 로그에는 Unix Timestamp 형식의 로그로 저장되는 것이 일반적이므로 이를 어떻게 수신, 분석 및 저장하는 지에 대한 실습을 합니다
+
+
+### 5-1. 이전 컨테이너 종료 및 컨테이너 기동
+
+> 이전 실습에서 기동된 컨테이너를 종료 후, 기동합니다.
+
 ```bash
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex3
 docker compose down
-docker ps -a
+
+cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex4
+docker compose pull
+docker compose up -d
 ```
+<br>
+
+
+#### 5-1-1 도커 컴포즈 파일 구성 `docker compose.yml`
+
+```yml
+version: "3"
+
+services:
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-fluentd:2.1
+    user: root
+    tty: true
+    ports:
+      - 8080:8080
+    volumes:
+      - ./fluent.conf:/etc/fluentd/fluent.conf
+    working_dir: /home/root
+
+networks:
+  default:
+    name: default_network
+
+```
+> 시간 정보를 담은 JSON 을 전송할 포트를 8080 으로 정했습니다  
+
+#### 5-1-2 플루언트디 파일 구성 `fluent.conf`
+
+```xml
+<source>
+    @type http
+    port 8080
+    <parse>
+        @type json
+        time_type float
+        time_key logtime
+        types column1:integer,column2:string,logtime:time:unixtime
+        localtime true
+        keep_time_key true
+    </parse>
+</source>
+
+<filter lgde>
+    @type record_transformer
+    enable_ruby
+    <record>
+        filtered_logtime ${Time.at(time).strftime('%Y-%m-%d %H:%M:%S')}
+    </record>
+</filter>
+
+<match lgde>
+    @type stdout
+    <format>
+        @type json
+        time_format %Y-%m-%d %H:%M:%S.%L
+        timezone +09:00
+    </format>
+</match>
+```
+> HTTP 서버를 통해 JSON 수신 및 변환 이후에 화면에 출력합니다
+
+* 소스 HTTP 플러그인 구성
+  - 입력 데이터의 포맷은 column1, column2, logtime 이며 JSON 형식입니다 
+  - 각 컬럼별 데이터 타입을 지정 할 수 있으며 time 컬럼은 logtime 입니다
+  - 기존의 시간 컬럼은 유지합니다
+* 필터 및 매치 플러그인 구성
+  - lgde 태그를 통해 전송되는 로그에 대해서 '2021-07-18 22:28:00' 포맷으로 변환합니다
+  - `filtered_logtime` 컬럼이 추가됩니다
+  - 출력 포맷 또한 JSON 이며 현재 시간을 기준으로 출력됩니다
+
+
+### 5-2. 에이전트 기동 및 확인
+
+#### 5-2-1. 에이전트 기동을 위해 컨테이너로 접속 후, 에이전트를 기동합니다
+
+```bash
+# terminal
+docker compose exec fluentd bash
+```
+```bash
+# docker
+fluentd
+```
+
+#### 5-2-2. 컨테이너에 접속하여 시간을 포함한 JSON 을 POST 로 전송합니다
+
+> Epoch 시간은 https://www.epochconverter.com/ 사이트를 활용합니다
+
+* 별도로 컨테이너에 접속하여 예제로 현재 시간을 넣고 로그를 출력합니다
+```bash
+# terminal
+docker compose exec fluentd bash
+```
+```
+# docker
+curl -X POST -d '{ "column1":"1", "column2":"hello-world", "logtime": 1593379470 }' http://localhost:8080/lgde
+```
+
+#### 5-2-3. 1시간 단위로 시간을 늘려가며 전송하는 테스트를 해봅니다
+
+> seq 라는 커맨드라인을 이용하여 `2021-07-17 ~ 2021-08-17` 까지 1시간(3600초)씩 늘려가면서 로그를 전송해봅니다
+
+* bash 에서 실행 시에 JSON 이 POST 데이터로 제대로 넘어가기 위해서는 escape 문자(back-slash`\`)를 이용해야 합니다
+
+```bash
+for x in $(seq 1626479572 3600 1726479572); do \
+	curl -X POST -d "{ \"column1\":\"1\", \"column2\":\"hello-world\", \"logtime\": \"$x\" }" http://localhost:8080/lgde; \
+	sleep 1; \
+done
+```
+
+<details><summary>[실습] 출력 결과 확인</summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```bash
+2021-07-18 13:22:39 +0000 [info]: starting fluentd-1.11.5 pid=196 ruby="2.4.10"
+2021-07-18 13:22:39 +0000 [info]: spawn command to main:  cmdline=["/opt/td-agent/embedded/bin/ruby", "-Eascii-8bit:ascii-8bit", "/opt/td-agent/embedded/bin/fluentd", "-c", "/etc/fluentd/fluent.conf", "--under-supervisor"]
+2021-07-18 13:22:39 +0000 [info]: adding filter pattern="test" type="record_transformer"
+2021-07-18 13:22:40 +0000 [info]: adding match pattern="test" type="stdout"
+2021-07-18 13:22:40 +0000 [info]: adding source type="http"
+2021-07-18 13:22:40 +0000 [info]: #0 starting fluentd worker pid=205 ppid=196 worker=0
+2021-07-18 13:22:40 +0000 [info]: #0 fluentd worker is now running worker=0
+{"column1":1,"column2":"hello-world","logtime":1626479572,"filtered_logtime":"2021-07-16 23:52:52"}
+{"column1":1,"column2":"hello-world","logtime":1626483172,"filtered_logtime":"2021-07-17 00:52:52"}
+{"column1":1,"column2":"hello-world","logtime":1626486772,"filtered_logtime":"2021-07-17 01:52:52"}
+{"column1":1,"column2":"hello-world","logtime":1626490372,"filtered_logtime":"2021-07-17 02:52:52"}
+{"column1":1,"column2":"hello-world","logtime":1626493972,"filtered_logtime":"2021-07-17 03:52:52"}
+{"column1":1,"column2":"hello-world","logtime":1626497572,"filtered_logtime":"2021-07-17 04:52:52"}
+{"column1":1,"column2":"hello-world","logtime":1626501172,"filtered_logtime":"2021-07-17 05:52:52"}
+```
+
+</details>
+<br>
+
+
+### 5-3. 에이전트 및 컨테이너 종료
+
+#### 5-3-1. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
+
+#### 5-3-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+
+<br>
+
+
+
+
+
+
 
 
 ## 5. 컨테이너 환경에서의 로그 전송

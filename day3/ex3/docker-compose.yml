@@ -7,9 +7,9 @@ services:
     user: root
     tty: true
     volumes:
+      - ./fluent.conf:/etc/fluentd/fluent.conf
       - ./apache_logs:/home/root/apache_logs
       - ./flush_logs.py:/home/root/flush_logs.py
-      - ./fluent.conf:/etc/fluentd/fluent.conf
       - ./source:/fluentd/source
       - ./target:/fluentd/target
     working_dir: /home/root
