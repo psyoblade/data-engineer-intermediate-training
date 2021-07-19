@@ -1020,6 +1020,19 @@ networks:
 <br>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 <details><summary>[ 작성 중입니다 ]</summary>
 
 ## 7. 도커 컴포즈를 통한 로그 전송 구성
