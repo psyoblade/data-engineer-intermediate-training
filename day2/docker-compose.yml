@@ -41,6 +41,7 @@ services:
     volumes:
       - ./sqoop/jars:/jdbc
       - ./notebooks:/tmp/target
+
 networks:
   default:
     name: default_network

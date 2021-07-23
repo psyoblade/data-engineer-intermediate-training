@@ -7,6 +7,7 @@
     * [2-1. 하이브 데이터베이스 DDL 가이드](#2-1-하이브-데이터베이스-DDL-가이드)
     * [2-2. 하이브 테이블 DDL 가이드](#2-2-하이브-테이블-DDL-가이드)
     * [2-3. 하이브 DML 가이드](#2-3-하이브-DML-가이드)
+    * [2-4. 하이브 외부 저장소 테이블](#2-4-하이브-외부-저장소-테이블)
   * [3. 하이브 트러블슈팅 가이드](#3-하이브-트러블슈팅-가이드)
     * [3-1. 파티셔닝을 통한 성능 개선](#3-1-파티셔닝을-통한-성능-개선)
     * [3-2. 파일포맷 변경을 통한 성능 개선](#3-2-파일포맷-변경을-통한-성능-개선)
@@ -14,13 +15,6 @@
     * [3-4. 글로벌 정렬 회피를 통한 성능 개선](#3-4-글로벌-정렬-회피를-통한-성능-개선)
     * [3-5. 버킷팅을 통한 성능 개선](#3-5-버킷팅을-통한-성능-개선)
 
-* 참고 자료
-  * [Hive Language Manual DDL](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
-  * [Hive Language Manual DML](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML)
-  * [Top 7 Hive DDL Commands](https://data-flair.training/blogs/hive-ddl-commands/)
-  * [Top 7 Hive DML Commands](https://data-flair.training/blogs/hive-dml-commands/)
-  * [IMDB data from 2006 to 2016](https://www.kaggle.com/PromptCloudHQ/imdb-data)
-  * [Hive update, delete ERROR](https://community.cloudera.com/t5/Support-Questions/Hive-update-delete-and-insert-ERROR-in-cdh-5-4-2/td-p/29485)
 <br>
 
 
@@ -68,7 +62,7 @@ docker compose ps
 ```bash
 # terminal
 docker compose cp data/imdb.tsv hive:/opt/hive/examples/imdb.tsv
-docker compose exec hive ls /opt/hive/examples
+docker compose exec hive-serverls /opt/hive/examples
 ```
 
 > 마지막 ls /opt/hive/examples 명령어 결과로 imdb.tsv 파일이 확인되면 정상입니다
@@ -78,7 +72,7 @@ docker compose exec hive ls /opt/hive/examples
 #### 1-2-5. 하이브 컨테이너로 접속합니다
 ```bash
 # terminal
-docker compose exec hive bash
+docker compose exec hive-serverbash
 ```
 <br>
 
@@ -787,6 +781,157 @@ select * from imdb_recover;
 <br>
 
 
+## 2-4. 하이브 외부 저장소 테이블
+
+> 하이브의 경우 local 데이터를 하둡에 load 하여 Managed 테이블을 생성할 수도 있지만, 대게 외부 데이터 수집 및 적재의 경우 External 테이블로 생성합니다
+
+### 2-4-1. 매출 테이블의 외부 제공을 위해 외부 테이블로 생성합니다
+
+> 로컬 경로에 수집되었던 테이블 parquet 파일이 존재하므로, 해당 파일을 이용하여 생성합니다
+
+* 하이브 컨테이너로 접속합니다
+```bash
+# terminal
+docker-compose exec hive-server bash
+```
+* 원본 파일의 스키마를 확인 및 파일을 하둡 클러스터에 업로드합니다
+```
+hadoop jar /tmp/source/parquet-tools-1.8.1.jar schema file:///tmp/source/user/20201025/2e3738ff-5e2b-4bec-bdf4-278fe21daa3b.parquet
+```
+```text
+message purchase_20201025 {
+  optional binary p_time (UTF8);
+  optional int32 p_uid;
+  optional int32 p_id;
+  optional binary p_name (UTF8);
+  optional int32 p_amount;
+}
+```
+* 경로 확인 및 생성
+```bash
+hadoop fs -mkdir -p /user/lgde/purchase/dt=20201025
+hadoop fs -mkdir -p /user/lgde/purchase/dt=20201026
+hadoop fs -put /tmp/source/purchase/20201025/* /user/lgde/purchase/dt=20201025
+hadoop fs -put /tmp/source/purchase/20201026/* /user/lgde/purchase/dt=20201026
+```
+
+* 하이브 명령 수행을 위해 beeline 을 실행합니다
+```bash
+beeline
+```
+* 콘솔로 접속하여 데이터베이스 및 테이블을 생성합니다 
+```bash
+# beeline>
+!connect jdbc:hive2://localhost:10000 scott tiger
+```
+```sql
+# beeline>
+create database if not exists testdb comment 'test database' 
+  location '/user/lgde/warehouse/testdb'
+  with dbproperties ('createdBy' = 'lgde');
+
+use testdb;
+
+create external table if not exists purchase (
+  p_time string
+  , p_uid int
+  , p_id int
+  , p_name string
+  , p_amount int
+) partitioned by (dt string) 
+row format delimited 
+stored as parquet 
+location 'hdfs:///user/lgde/purchase';
+
+alter table purchase add if not exists partition (dt = '20201025') location 'hdfs:///user/lgde/purchase/dt=20201025';
+alter table purchase add if not exists partition (dt = '20201026') location 'hdfs:///user/lgde/purchase/dt=20201026';
+```
+
+* 생성된 하이브 테이블을 조회합니다
+```sql
+# beeline>
+show partitions purchase;
+select * from purchase where dt = '20201025';
+```
+* 일자별 빈도를 조회합니다
+```sql
+# beeline>
+select dt, count(1) as cnt from purchase group by dt;
+```
+
+### 2-4-2. 고객 테이블의 외부 제공을 위해 외부 테이블로 생성합니다
+
+> 마찬가지로 유사한 방식으로 적재 및 테이블 생성을 수행합니다
+
+* 하이브 컨테이너로 접속합니다
+```bash
+# terminal
+docker-compose exec hive-server bash
+```
+
+* 파일 업로드 및 스키마 확인, 경로 생성 및 업로드
+
+```bash
+# docker
+hadoop fs -mkdir -p /user/lgde/user/dt=20201025
+hadoop fs -mkdir -p /user/lgde/user/dt=20201026
+hadoop fs -put /tmp/source/user/20201025/* /user/lgde/user/dt=20201025
+hadoop fs -put /tmp/source/user/20201026/* /user/lgde/user/dt=20201026
+hadoop jar /tmp/source/parquet-tools-1.8.1.jar schema file:///tmp/source/purchase/20201025/38dc1f5b-d49d-436d-a84a-4e5c2a4022a5.parquet
+```
+```text
+message user_20201025 {
+  optional int32 u_id;
+  optional binary u_name (UTF8);
+  optional binary u_gender (UTF8);
+  optional int32 u_signup;
+}
+```
+
+* 하이브 명령 수행을 위해 beeline 을 실행합니다
+```bash
+beeline
+```
+* 하이브 테이블 생성 및 조회
+```bash
+# beeline>
+!connect jdbc:hive2://localhost:10000 scott tiger
+```
+```sql
+# beeline>
+drop table if exists `user`;
+
+create external table if not exists `user` (
+  u_id int
+  , u_name string
+  , u_gender string
+  , u_signup int
+) partitioned by (dt string)
+row format delimited 
+stored as parquet 
+location 'hdfs:///user/lgde/user';
+
+alter table `user` add if not exists partition (dt = '20201025') location 'hdfs:///user/lgde/user/dt=20201025';
+alter table `user` add if not exists partition (dt = '20201026') location 'hdfs:///user/lgde/user/dt=20201026';
+```
+* 생성된 결과를 확인합니다
+```sql
+# beeline>
+select * from `user` where dt = '20201025';
+select dt, count(1) as cnt from `user` group by dt;
+```
+
+### 2-4-3. Parquet 포맷과 Hive 테이블 데이터 타입
+| Parquet | Hive | Description |
+| - | - | - |
+| int32 | int | 32비트 정수 |
+| int64 | bigint | 64비트 정수 |
+| float | float | 실수형 |
+| double | double | 실수형 |
+| binary | string | 문자열 |
+<br>
+
+
 ## 3 하이브 트러블슈팅 가이드
 
 > IMDB 영화 예제를 통해 테이블을 생성하고, 다양한 성능 개선 방법을 시도해보면서 왜 그리고 얼마나 성능에 영향을 미치는 지 파악합니다
@@ -1437,3 +1582,11 @@ explain select rank, metascore, title from imdb_parquet_bucketed where year = '2
 # Statistics: Num rows: 44 Data size: 484 Basic stats: COMPLETE Column stats: NONE
 ```
 
+
+* 참고 자료
+  * [Hive Language Manual DDL](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
+  * [Hive Language Manual DML](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML)
+  * [Top 7 Hive DDL Commands](https://data-flair.training/blogs/hive-ddl-commands/)
+  * [Top 7 Hive DML Commands](https://data-flair.training/blogs/hive-dml-commands/)
+  * [IMDB data from 2006 to 2016](https://www.kaggle.com/PromptCloudHQ/imdb-data)
+  * [Hive update, delete ERROR](https://community.cloudera.com/t5/Support-Questions/Hive-update-delete-and-insert-ERROR-in-cdh-5-4-2/td-p/29485)
