@@ -55,7 +55,10 @@ cd /home/ubuntu/work
 git clone https://github.com/psyoblade/data-engineer-basic-training.git
 git clone https://github.com/psyoblade/helloworld.git
 ```
+
+[목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 <br>
+
 
 
 ## 2. Git 명령어 실습
