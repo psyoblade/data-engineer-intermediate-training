@@ -559,6 +559,8 @@ docker pull alpine
 docker pull ubuntu
 docker image ls
 ```
+<br>
+
 
 ### 3-7-2. 알파인 리눅스 명령어 실습
 
@@ -616,8 +618,7 @@ apk del vim
 ```bash
 docker run --name ubuntu_500m -dit -m 500m ubuntu
 ```
-
-* 제약을 두고 띄운 컨테이너의 상태를 확인합니다
+* 메모리 제약을 두고 띄운 컨테이너의 상태를 확인합니다
 ```bash
 docker ps -f name=ubuntu_500m
 # docker stats <CONTAINER ID>
@@ -672,7 +673,8 @@ docker run --name mysql-volatile \
 docker exec -it mysql-volatile mysql -uuser -ppass
 ```
 
-* 테스트 디비에 접속하여 테이블을 생성해봅니다
+#### 3-8-2. 테스트용 테이블을 생성해봅니다
+
 ```sql
 # mysql>
 use testdb;
@@ -682,11 +684,13 @@ select * from foo;
 ```
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 명령으로 빠져나옵니다
 
-* 컨테이너를 강제로 종료하고, 볼륨을 확인해 봅니다
+
+#### 3-8-3. 컨테이너를 강제로 종료합니다
 ```bash
 docker rm -f mysql-volatile
 docker volume ls
 ```
+
 <details><summary>[실습] mysql-volatile 컨테이너를 다시 생성하고 테이블을 확인해 보세요</summary>
 
 > 테이블이 존재하지 않는다면 정답입니다.
@@ -701,9 +705,12 @@ docker rm -f mysql-volatile
 <br>
 
 
-#### 3-8-2. 볼륨 마운트를 추가하여 저장소 관리하기 
+### 3-9. 볼륨 마운트 통하 MySQL 서버 기동하기
 
 > 이번에는 별도의 볼륨을 생성하여, 컨테이너가 예기치 않게 종료되었다가 다시 생성되더라도, 데이터를 보존할 수 있게 볼륨을 생성합니다. 
+
+
+#### 3-9-1. 볼륨 마운트 생성
 
 * 아래와 같이 볼륨의 이름만 명시하여 마운트하는 것을 [Volume Mount](https://docs.docker.com/storage/volumes/) 방식이라고 합니다
   - `docker volume ls` 명령을 통해 생성된 볼륨을 확인할 수 있습니다
@@ -721,6 +728,8 @@ docker run --name mysql-persist \
 sleep 5
 docker exec -it mysql-persist mysql --port=3307 -uuser -ppass
 ```
+
+#### 3-9-2. 볼륨 확인 실습
 
 <details><summary>[실습] mysql-persist 컨테이너를 강제 종료하고, 동일한 설정으로 다시 생성하여 테이블이 존재하는지 확인해 보세요</summary>
 
@@ -760,7 +769,9 @@ select * from foo;
 <br>
 
 
-#### 3-8-3. 바인드 마운트를 추가하여 저장소 관리하기 
+### 3-10. 바인드 마운트 생성
+
+#### 3-10-1. 바인드 마운트를 추가하여 저장소 관리하기 
 
 > 이번에는 호스트 장비의 경로에 직접 저장하는 바인드 마운트에 대해 실습합니다
 
