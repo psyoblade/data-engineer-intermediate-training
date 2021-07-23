@@ -74,7 +74,6 @@ cd /home/ubuntu/work
 git clone https://github.com/psyoblade/test.git
 ls -al test/*
 ```
-<br>
 
 <details><summary>[실습] 터미널에 접속하여 /home/ubuntu/work 경로 아래에 https://github.com/psyoblade/helloworld.git 을 clone 하세요 </summary>
 
@@ -340,7 +339,7 @@ ls -al
 
 > 도커 이미지로 만들어져 있는 컨테이너를 생성, 실행 종료하는 명령어를 학습합니다
 
-* create : 컨테이너를 생성합니다 
+#### 3-1-1. create : 컨테이너를 생성합니다 
   - <kbd>--name <container_name></kbd> : 컨테이너 이름을 직접 지정합니다 (지정하지 않으면 임의의 이름이 명명됩니다)
   - 로컬에 이미지가 없다면 다운로드(pull) 후 컨테이너를 생성까지만 합니다
   - 생성된 컨테이너는 실행 중이 아니라면 `docker ps -a` 실행으로만 확인이 가능합니다
@@ -349,28 +348,28 @@ ls -al
 docker create -name ubuntu ubuntu:18.04
 ```
 
-* start : 생성된 컨테이너를 기동합니다
+#### 3-1-2. start : 생성된 컨테이너를 기동합니다
   - 예제의 `busy_herschel` 는 자동으로 생성된 컨테이너 이름입니다
 ```bash
 # docker start <container_name> 
 docker start busy_herschel
 ```
 
-* stop : 컨테이너를 잠시 중지시킵니다
+#### 3-1-3. stop : 컨테이너를 잠시 중지시킵니다
   - 해당 컨테이너가 삭제되는 것이 아니라 잠시 실행만 멈추게 됩니다
 ```bash
 # docker stop <container_name>
 docker stop busy_herschel
 ```
 
-* rm : 중단된 컨테이너를 삭제합니다
+#### 3-1-4. rm : 중단된 컨테이너를 삭제합니다
   - <kbd>-f, --force</kbd> : 실행 중인 컨테이너도 강제로 종료합니다 (실행 중인 컨테이너는 삭제되지 않습니다)
 ```bash
 # docker rm <container_name>
 docker rm busy_herschel
 ```
 
-* run : 컨테이너의 생성과 시작을 같이 합니다 (create + start)
+#### 3-1-5. run : 컨테이너의 생성과 시작을 같이 합니다 (create + start)
   - <kbd>--rm</kbd> : 종료 시에 컨테이너까지 같이 삭제합니다
   - <kbd>-d, --detach</kbd> : 터미널을 붙지않고 데몬 처럼 백그라운드 실행이 되게 합니다
   - <kbd>-i, --interactive</kbd> : 인터액티브하게 표준 입출력을 키보드로 동작하게 합니다
@@ -380,7 +379,7 @@ docker rm busy_herschel
 docker run --rm --name ubuntu -dit ubuntu:20.04
 ```
 
-* kill : 컨테이너를 종료합니다
+#### 3-1-6. kill : 컨테이너를 종료합니다
 ```bash
 # docker kill <container_name>
 docker kill ubuntu
@@ -390,20 +389,20 @@ docker kill ubuntu
 
 ### 3-2. 컨테이너 모니터링
 
-* ps : 실행 중인 컨테이너를 확인합니다
+#### 3-2-1. ps : 실행 중인 컨테이너를 확인합니다
   - <kbd>-a</kbd> : 실행 중이지 않은 컨테이너까지 출력합니다
 ```bash
 docker ps
 ```
 
-* logs : 컨테이너 로그를 표준 출력으로 보냅니다
+#### 3-2-2. logs : 컨테이너 로그를 표준 출력으로 보냅니다
   - <kbd>-f</kbd> : 로그를 지속적으로 tailing 합니다
 ```bash
 # docker logs <container_name>
 docker logs -f mysql
 ```
 
-* top : 컨테이너에 떠 있는 프로세스를 확인합니다
+#### 3-2-3. top : 컨테이너에 떠 있는 프로세스를 확인합니다
 ```bash
 # docker top <container_name> <ps options>
 docker ps ubuntu
@@ -1287,13 +1286,6 @@ hdfs -du -h /tmp/*
 du -sh /*
 ```
 <br>
-
-
-
-
-
-
-
 
 
 ## 2 도커 컴포즈를 통한 실행
