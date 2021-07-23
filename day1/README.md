@@ -9,6 +9,8 @@
   * [4. 도커 컴포즈 명령어 실습](#4-도커-컴포즈-명령어-실습)
   * [5. Linux 커맨드라인 명령어 실습](#5-Linux-커맨드라인-명령어-실습)
   * [6. Hadoop 커맨드라인 명령어 실습](#6-Hadoop-커맨드라인-명령어-실습)
+  * [7. SQL 기본 실습](#7-SQL-기본-실습)
+<br>
 
 
 ## 1. 클라우드 장비에 접속
@@ -1629,14 +1631,14 @@ hdfs -du -h /tmp/*
 # -du [-s] [-h] <path> ...
 du -sh /*
 ```
+[목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 <br>
 
 
+## 7. SQL 기본 실습
 
+### 7-1. SQL 실습을 위해 root 유저로 데이터베이스 (foo) 생성
 
-### 1-4. SQL 기본 실습
-
-#### 1-4-1. SQL 실습을 위해 root 유저로 데이터베이스 (foo) 생성
 ```bash
 # terminal
 docker compose exec mysql mysql -uroot -proot
@@ -1651,24 +1653,27 @@ GRANT ALL ON foo.* TO 'sqoop'@'%';
 <br>
 
 
-#### 1-4-2. 테이블 확인 및 SQL 실습
+### 7-2. 테이블 확인 및 SQL 실습
 ```bash
 # terminal
 docker compose exec mysql mysql -usqoop -psqoop
 ```
+<br>
 
-#### 1-4-3. SQL 실습을 위해 sqoop 유저로 접속
+
+### 7-3. SQL 실습을 위해 sqoop 유저로 접속
 ```sql
 # mysql>
 use foo;
 ```
+<br>
 
-#### 1-4-4. 기본 SQL 명령어 리마인드
+
+### 7-4. 기본 SQL 명령어 리마인드
 
 ![SQL](images/SQL.png)
 
-* [테이블 생성](https://dev.mysql.com/doc/refman/8.0/en/create-table.html)
-
+#### 7-4-1. [테이블 생성](https://dev.mysql.com/doc/refman/8.0/en/create-table.html)
 
 ```sql
 # mysql>
@@ -1689,32 +1694,40 @@ CREATE TABLE foo (
 
 SHOW TABLES;
 ```
+<br>
 
-* [테이블 변경](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
+
+#### 7-4-2. [테이블 변경](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html)
 ```sql
 # mysql>
 ALTER TABLE foo ADD COLUMN ( bar VARCHAR(10) );
 
 DESC foo;
 ```
+<br>
 
-* [테이블 삭제](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html)
+
+#### 7-4-3. [테이블 삭제](https://dev.mysql.com/doc/refman/8.0/en/drop-table.html)
 ```sql
 # mysql>
 DROP TABLE foo;
 
 SHOW TABLES;
 ```
+<br>
 
-* [데이터 추가](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
+
+#### 7-4-4. [데이터 추가](https://dev.mysql.com/doc/refman/8.0/en/insert.html)
 ```sql
 # mysql>
 INSERT INTO table1 ( col1 ) VALUES ( 1 );
 INSERT INTO table2 VALUES ( 1, 'one' );
 INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
 ```
+<br>
 
-* [데이터 조회](https://dev.mysql.com/doc/refman/8.0/en/select.html)
+
+#### 7-4-5. [데이터 조회](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 ```sql
 # mysql>
 SELECT col1, col2
@@ -1724,16 +1737,20 @@ SELECT col2
 FROM table2
 WHERE col2 = 'two';
 ```
+<br>
 
-* [데이터 변경](https://dev.mysql.com/doc/refman/8.0/en/update.html)
+
+#### 7-4-6. [데이터 변경](https://dev.mysql.com/doc/refman/8.0/en/update.html)
 ```sql
 # mysql>
 UPDATE table1 SET col1 = 100 WHERE col1 = 1;
 
 SELECT col1, col2 FROM table1;
 ```
+<br>
 
-* [데이터 삭제](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
+
+#### 7-4-7. [데이터 삭제](https://dev.mysql.com/doc/refman/8.0/en/delete.html)
 ```sql
 # mysql>
 DELETE FROM table1 WHERE col1 = 100;
@@ -1744,7 +1761,7 @@ DELETE FROM table2;
 <br>
 
 
-#### 1-4-5. 데이터베이스 삭제
+### 7-5. 데이터베이스 삭제
 
 > 테스트로 생성했던 foo 데이터베이스를 삭제합니다
 
@@ -1758,3 +1775,4 @@ drop database foo;
 ```
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
 <br>
+
