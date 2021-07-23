@@ -1078,10 +1078,10 @@ cat /etc/passwd | cut -d: -f6 | sort | uniq -c | sort -nr | head -3
 #### 5-4-1. cut : 데이터를 구분자로 잘라서 출력합니다
 
   - <kbd>-b, --bytes=LIST	</kbd> : 지정한 바이트 수 만큼의 컬럼 값들을 출력합니다
-    - N : 첫 번째 컬럼을 1로 계산하여 N 번째 바이트만 출력 
-    - N- : N번째 바이트 부터 라인 끝까지 출력  
-    - N-M : N~M 바이트까지 출력 
-    - -M : 라인 처음부터 M 바이트까지 출력 
+    - `N` : 첫 번째 컬럼을 1로 계산하여 N 번째 바이트만 출력 
+    - `N-` : N번째 바이트 부터 라인 끝까지 출력  
+    - `N-M` : N~M 바이트까지 출력 
+    - `-M` : 라인 처음부터 M 바이트까지 출력 
   - <kbd>-d, --delimiter=DELIM</kbd> :	기본 구분자 TAB 대신 지정한 문자를 구분자로 동작합니다
   - <kbd>-f, --fields=LIST</kbd> :	구분자를 기준으로 컬럼을 지정하여 지정된 컬럼만 출력합니다
   - <kbd>--complement</kbd> :	선택한 조건의 컬럼을 제외한 나머지를 출력합니다
@@ -1093,17 +1093,19 @@ $ cut -f 2 cut_txt    # 탭으로 구분된 라인들의 2번째 컬럼만 출�
 $ cut -f1- --output-delimiter=',' cut_text    # 탭으로 구분된 라인을 콤마로 구분된 라인으로 변경하여 출력합니다
 $ ls -al | cut -b -10 --complement    # ls -al 결과의 앞 10바이트를 제외한 나머지 컬럼 들만 출력합니다
 ```
+<br>
+
 
 #### 5-4-2. tr : 데이터를 변환하여 출력합니다
 
   - <kbd>-c, --complement</kbd> : SET1 에 지정한 범위 외의 문자를 선택합니다
   - <kbd>-d, --delete</kbd> : SET1 에 지정한 범위 외의 문자를 삭제합니다 (단, 변환은 -d 옵션이 없을 경우에만 발생합니다)
-    - CHAR1-CHAR2 : CHAR1 부터 CHAR2 까지를 선택합니다 (ex_ a-z)
-    - [:alnum:] : 알파벳 + 숫자
-    - [:alpha:] : 알파벳
-    - [:blank:] : 공백
-    - [:space:] : 공백 + 줄바꿈
-    - [:lower:] / [:upper:] : 소문자 / 대문자
+    - `CHAR1-CHAR2` : CHAR1 부터 CHAR2 까지를 선택합니다 (ex_ a-z)
+    - `[:alnum:]` : 알파벳 + 숫자
+    - `[:alpha:]` : 알파벳
+    - `[:blank:]` : 공백
+    - `[:space:]` : 공백 + 줄바꿈
+    - `[:lower:]` / [:upper:] : 소문자 / 대문자
 
 ```bash
 # tr [OPTION] ... SET1 [SET2]
@@ -1126,11 +1128,11 @@ head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
   - <kbd>-n, --quiet, --silent</kbd> : 패턴에 만족하는 기본 출력을 하지 않습니다
   - <kbd>-i[SUFFIX], --in-place[=SUFFIX]</kbd> : 파일을 직접 수정합니다. SUFFIX 가 주어진 경우는 백업 파일을 생성해 둡니다
   - <kbd>-E, -r, --regexp-extended</kbd> : SET1 에 지정한 범위 외의 문자를 삭제합니다 (단, 변환은 -d 옵션이 없을 경우에만 발생합니다)
-    - {RANGE}p : range 내의 라인을 출력합니다 (단, 패턴에 만족하는 출력까지 포함하면 2번 출력될 수 있습니다)
-    - {RANGE}d : range 내의 라인을 삭제합니다
-    - /pattern/p : pattern 에 만족하는 라인을 출력합니다
-    - /pattern/d : pattern 에 만족하는 라인을 제거합니다
-    - s/pattern/replaced/g : pattern 에 만족하는 부분을 replaced 로 교체합니다
+    - `{RANGE}p` : range 내의 라인을 출력합니다 (단, 패턴에 만족하는 출력까지 포함하면 2번 출력될 수 있습니다)
+    - `{RANGE}d` : range 내의 라인을 삭제합니다
+    - `/pattern/p` : pattern 에 만족하는 라인을 출력합니다
+    - `/pattern/d` : pattern 에 만족하는 라인을 제거합니다
+    - `s/pattern/replaced/g` : pattern 에 만족하는 부분을 replaced 로 교체합니다
 
 ```bash
 # sed [OPTION] ... {script-only-if-no-other-script} [FILE]
@@ -1154,12 +1156,12 @@ sed '/^bin/p' /etc/passwd
   - <kbd>-f</kbd> : 입력 파일 명을 지정합니다 (-f 옵션을 여러번 사용할 수 있습니다)
   - <kbd>-v VAR=VALUE</kbd> : 변수(VAR)를 할당(VALUE)하여 사용할 수 있습니다
   - <kbd>pattern { action }</kbd> : 
-    - NR (Number of Records) : 레코드 수
-    - NF (Number of Fields) : 필드 수
-    - FS (Field Separator, default: 공백) : 필드 구분자
-    - RS (Record Separator, default: 줄바꿈) : 레코드 구분자
-    - OFS (Output Field Separator) : 출력시 필드 구분자
-    - ORS (Output Record Separator) : 출력시 레코드 구분자
+    - `NR (Number of Records)` : 레코드 수
+    - `NF (Number of Fields)` : 필드 수
+    - `FS (Field Separator, default: 공백)` : 필드 구분자
+    - `RS (Record Separator, default: 줄바꿈)` : 레코드 구분자
+    - `OFS (Output Field Separator)` : 출력시 필드 구분자
+    - `ORS (Output Record Separator)` : 출력시 레코드 구분자
 
 ```bash
 # awk [-W OPTION] [-F VALUE] [-v VAR=VALUE] [--] 'PATTERN { ACTION }' [FILE ...]
