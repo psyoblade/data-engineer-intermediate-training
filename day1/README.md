@@ -868,10 +868,224 @@ docker-compose top ubuntu
 
 ### 4-3. 컴포즈 파일을 통한 실습
 
-* image, conatainer
-* volume
-* network
-* cpu, memory
+#### 4-3-1. 도커 컴포즈를 통해서 커맨드라인 옵션을 설정을 통해 수행할 수 있습니다
+
+```yaml
+# cat docker-compose.yml
+version: "3"
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - mysql_default:/var/lib/mysql
+```
+
+
+### 4-4. 외부 볼륨을 통한 환경설정
+
+> 외부 볼륨을 통한 환경설정 제공 및 설정을 실습합니다
+
+#### 4-4-1. 캐릭터셋 변경 적용하기
+
+```bash
+# cat custom/my.cnf
+[client]
+default-character-set=utf8
+
+[mysqld]
+character-set-client-handshake=FALSE
+init_connect="SET collation_connection = utf8_general_ci"
+init_connect="SET NAMES utf8"
+character-set-server=utf8
+collation-server=utf8_general_ci
+
+[mysql]
+default-character-set=utf8
+```
+
+#### 4-4-2. MySQL 설정파일 사용
+
+> 지정한 설정파일을 사용하고, 내부 볼륨을 통한 MySQL 기동으로 변경합니다
+
+```bash
+# cat docker-compose.yml
+version: "3"
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./custom:/etc/myslq/conf.d
+      - mysql_utf8:/etc/myslq/conf.d
+```
+
+### 4-5. 초기화 파일을 적용한  MySQL 도커 이미지 생성
+
+#### 4-5-1. 초기화 파일을 생성합니다
+
+```bash
+# cat init/testdb.sql
+DROP TABLE IF EXISTS `seoul_popular_trip`;
+CREATE TABLE `seoul_popular_trip` (
+  `category` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `naddress` varchar(100) DEFAULT NULL,
+  `tel` varchar(20) DEFAULT NULL,
+  `tag` varchar(500) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+LOCK TABLES `seoul_popular_trip` WRITE;
+INSERT INTO `seoul_popular_trip` VALUES (0,25931,'통인가게 ','110-300 서울 종로구 관훈동 16 ','03148 서울 종로구 인사동길 32 (관훈동) ','02-733-4867','오래된가게,고미술,통인정신,통인가게,공예샵,현대공예');
+UNLOCK TABLES;
+```
+
+#### 4-5-2. 도커파일을 생성합니다
+
+```Dockerfile
+# cat Dockerfile
+ARG BASE_CONTAINER=mysql:5.7
+FROM $BASE_CONTAINER
+LABEL maintainer="student@lg.com"
+
+ADD ./init /docker-entrypoint-initdb.d
+
+EXPOSE 3306
+
+CMD ["mysqld"]
+```
+
+#### 4-5-3. 로컬에서 도커 이미지를 빌드합니다
+
+```bash
+docker build -t local/mysql:5.7 .
+```
+
+#### 4-5-4. 빌드된 이미지로 다시 테스트
+
+```bash
+# cat docker-compose.yml
+version: "3"
+
+services:
+  mysql:
+    container_name: mysql
+    image: local/mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
+```
+```bash
+docker exec -it mysql mysql -u user -p
+```
+```sql
+use testdb;
+select * from seoul_popular_trip;
+```
+<br>
+
+
+### 4-6. 도커 컴포즈 통한 여러 이미지 실행
+
+> MySQL 과 phpMyAdmin 2가지 서비스를 실행합니다
+
+#### 4-6-1. 도커 컴포즈를 통해 phpMyAdmin 추가 설치
+
+```bash
+# cat docker-compose.yml
+version: "3"
+
+services:
+  mysql:
+    image: psyoblade/mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
+  php:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8183:80
+```
+> [phpMyAdmin](http://localhost:8183/index.php) 사이트에 접속하여 mysql/user/pass 로 접속합니다
+
+
+### 4-7. MySQL 이 정상적으로 로딩된 이후에 접속하도록 설정합니다
+
+* 테스트 헬스체크를 통해 MySQL 이 정상 기동되었을 때에 다른 어플리케이션을 띄웁니다
+
+```bash
+# cat docker-compose.yml
+version: "3"
+
+services:
+  mysql:
+    image: psyoblade/mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 1s
+      retries: 3
+    volumes:
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
+  php:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8183:80
+```
 <br>
 
 
@@ -1224,37 +1438,41 @@ rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/hom
 
 ### 6-1. 파일/디렉토리 관리
 
-* ls : 경로의 파일/디렉토리 목록을 출력합니다
+#### 6-1-1. ls : 경로의 파일/디렉토리 목록을 출력합니다
+
   - <kbd>-d</kbd> : 디렉토리 목록만 출력합니다
   - <kbd>-h</kbd> : 파일크기를 읽기쉽게 출력합니다
   - <kbd>-R</kbd> : 하위노드까지 모두 출력합니다
+
 ```bash
 # -ls [-d] [-h] [-R] [<path> ...]
-
+hdfs dfs -ls /user
 ```
-
 <br>
 
 
 ### 6-2. 파일 읽고/쓰기
 
-* text : 텍스트 파일(zip 압축)을 읽어서 출력합니다
+#### 6-2-1. text : 텍스트 파일(zip 압축)을 읽어서 출력합니다
   - <kbd>-ignoreCrc</kbd> : CRC 체크를 하지 않습니다
 ```bash
 # -text [-ignoreCrc] <src>
-
+hdfs dfs -text /
 ```
+<br>
 
-* cat : 텍스트 파일(plain)을 읽어서 출력합니다
+#### 6-2-2. cat : 텍스트 파일(plain)을 읽어서 출력합니다
   - <kbd>-ignoreCrc</kbd> : CRC 체크를 하지 않습니다
 ```bash
 # -cat [-ignoreCrc] <src>
-
+hdfs dfs -cat /tmp
 ```
+<br>
 
-* appendToFile : 소스 데이터를 읽어서 타겟 데이터 파일에 append 하며, 존재하지 않는 파일의 경우 생성됩니다
+#### 6-2-3. appendToFile : 소스 데이터를 읽어서 타겟 데이터 파일에 append 하며, 존재하지 않는 파일의 경우 생성됩니다
 ```bash
 # -appendToFile <localsrc> ... <dst>
+hdfs dfs -appendToFile 
 ```
 <br>
 
@@ -1268,11 +1486,13 @@ rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/hom
 ```bash
 # -put [-f] [-p] [-l] <localsrc> ... <dst>
 ```
+<br>
 
 * moveFromLocal : put 과 동일하지만 저장이 성공한 이후에 로컬 파일이 삭제됩니다
 ```bash
 # -moveFromLocal <localsrc> ... <dst> 
 ```
+<br>
 
 * get : 분산 저장소로부터 파일을 가져옵니다 
   - <kbd>-p</kbd> : 소유자 및 변경시간을 유지합니다 (preserve)
@@ -1281,6 +1501,7 @@ rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/hom
 ```bash
 # -get [-p] [-ignoreCrc] [-crc] <src> ... <localdst>
 ```
+<br>
 
 * getmerge : 디렉토리의 모든 파일을 하나로 묶어서 가져옵니다
   - <kbd>-nl</kbd> : 매 파일의 마지막에 줄바꿈 문자를 넣습니다
@@ -1288,6 +1509,7 @@ rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/hom
 # -getmerge [-nl] <src> <localdst>
 hdfs dfs -getmerge /tmp/manyfiles
 ```
+<br>
 
 * copyToLocal : get 과 동일합니다
 ```bash
@@ -1306,11 +1528,13 @@ hdfs dfs -getmerge /tmp/manyfiles
 ```bash
 # -cp [-f] [-p | -p[topax]] <src> ... <dst>
 ```
+<br>
 
 * mv : 소스 데이터를 타겟으로 이동합니다
 ```bash
 # -mv <src> ... <dst>
 ```
+<br>
 
 * rm : 지정한 패턴에 매칭되는 모든 파일을 삭제합니다
   - <kbd>-f</kbd> : 파일이 존재하지 않아도 에러 메시지를 출력하지 않습니다
@@ -1320,12 +1544,14 @@ hdfs dfs -getmerge /tmp/manyfiles
 # -rm [-f] [-r|-R] [-skipTrash] <src> ...
 
 ```
+<br>
 
 * rmdir : 
   - <kbd>--ignore-fail-on-non-empty</kbd> : 와일드카드 삭제 시에 파일을 가진 디렉토리가 존재해도 오류를 출력하지 않습니다
 ```bash
 # -rmdir [--ignore-fail-on-non-empty] <dir> ...
 ```
+<br>
 
 * mkdir : 디렉토리를 생성합니다
   - <kbd>-p</kbd> : 중간경로가 없어도 생성합니다
@@ -1333,6 +1559,7 @@ hdfs dfs -getmerge /tmp/manyfiles
 # -mkdir [-p] <path>
 hdfs -mkdir -p /create/also/mid/path
 ```
+<br>
 
 * touchz : 파일 크기가 0인 파일을 생성합니다
   - <kbd></kbd> :
@@ -1340,7 +1567,6 @@ hdfs -mkdir -p /create/also/mid/path
 # -touchz <path> ...
 hdfs -touchz  /tmp/zero_size_file
 ```
-
 <br>
 
 
@@ -1354,6 +1580,7 @@ hdfs -touchz  /tmp/zero_size_file
 # -chmod [-R] <MODE[,MODE]... | OCTALMODE> PATH...
 hdfs -chmod 777 /tmp/zero_size_file
 ```
+<br>
 
 * chown : 파일의 오너/그룹을 변경합니다
   - <kbd>-R</kbd> : 하위 경로의 파일도 동일하게 적용합니다
@@ -1361,6 +1588,7 @@ hdfs -chmod 777 /tmp/zero_size_file
 # -chown [-R] [OWNER][:[GROUP]] PATH...
 hdfs -chown lguser:lggroup /tmp/zero_size_file
 ```
+<br>
 
 * chgrp : 파일의 그룹을 변경합니다. chown 의 그룹변경과 동일합니다
   - <kbd>-R</kbd> : 하위 경로의 파일도 동일하게 적용합니다
@@ -1379,6 +1607,7 @@ hdfs -chown lgde /tmp/zero_size_file
 # -df [-h] [<path> ...]
 hdfs -du -h /tmp/*
 ```
+<br>
 
 * du : 디스크 사용 용량을 확인합니다
   - <kbd>-s</kbd> : 개별 파일은 생략하고 매칭된 전체의 집계(summary)된 용량을 출력
@@ -1390,207 +1619,6 @@ du -sh /*
 <br>
 
 
-## 2 도커 컴포즈를 통한 실행
-* 도커 컴포즈를 통해서 커맨드라인 옵션을 설정을 통해 수행할 수 있습니다
-```bash
-$ cat docker-compose.yml
-version: "3"
-
-services:
-  mysql:
-    container_name: mysql
-    image: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    volumes:
-      - mysql_default:/var/lib/mysql
-```
-
-
-## 3 외부 볼륨을 통한 환경설정
-> 외부 볼륨을 통한 환경설정 제공 및 설정을 실습합니다
-
-### 캐릭터셋 변경 적용하기
-```bash
-$> cat custom/my.cnf
-[client]
-default-character-set=utf8
-
-[mysqld]
-character-set-client-handshake=FALSE
-init_connect="SET collation_connection = utf8_general_ci"
-init_connect="SET NAMES utf8"
-character-set-server=utf8
-collation-server=utf8_general_ci
-
-[mysql]
-default-character-set=utf8
-```
-
-### MySQL 설정파일 사용
-> 지정한 설정파일을 사용하고, 내부 볼륨을 통한 MySQL 기동으로 변경합니다
-```bash
-$> cat docker-compose.yml
-version: "3"
-
-services:
-  mysql:
-    container_name: mysql
-    image: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    volumes:
-      - ./custom:/etc/myslq/conf.d
-      - mysql_utf8:/etc/myslq/conf.d
-```
-
-
-## 4 도커 이미지 빌드 및 실행
-* 아래와 같이 초기화 파일을 생성합니다
-```bash
-$> cat init/testdb.sql
-DROP TABLE IF EXISTS `seoul_popular_trip`;
-CREATE TABLE `seoul_popular_trip` (
-  `category` int(11) NOT NULL,
-  `id` int(11) NOT NULL,
-  `name` varchar(100) DEFAULT NULL,
-  `address` varchar(100) DEFAULT NULL,
-  `naddress` varchar(100) DEFAULT NULL,
-  `tel` varchar(20) DEFAULT NULL,
-  `tag` varchar(500) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-LOCK TABLES `seoul_popular_trip` WRITE;
-INSERT INTO `seoul_popular_trip` VALUES (0,25931,'통인가게 ','110-300 서울 종로구 관훈동 16 ','03148 서울 종로구 인사동길 32 (관훈동) ','02-733-4867','오래된가게,고미술,통인정신,통인가게,공예샵,현대공예');
-UNLOCK TABLES;
-```
-* 도커파일을 생성합니다
-```bash
-$> cat Dockerfile
-ARG BASE_CONTAINER=mysql:5.7
-FROM $BASE_CONTAINER
-LABEL maintainer="student@lg.com"
-
-ADD ./init /docker-entrypoint-initdb.d
-
-EXPOSE 3306
-
-CMD ["mysqld"]
-```
-* 로컬에서 도커 이미지를 빌드합니다
-```bash
-$> docker build -t local/mysql:5.7 .
-```
-
-### 빌드된 이미지로 다시 테스트
-```bash
-$ docker image ls
-$ cat docker-compose.yml
-version: "3"
-
-services:
-  mysql:
-    container_name: mysql
-    image: local/mysql:5.7
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    volumes:
-      - ./custom:/etc/mysql/conf.d
-      - mysql_utf8:/var/lib/mysql
-
-$> docker exec -it mysql mysql -u user -p
-$> use testdb;
-$> select * from seoul_popular_trip;
-```
-
-
-## 5 도커 컴포즈 통한 여러 이미지 실행
-> MySQL 과 phpMyAdmin 2가지 서비스를 실행합니다
-
-### 도커 컴포즈를 통해 phpMyAdmin 추가 설치
-```bash
-$> cat docker-compose.yml
-version: "3"
-
-services:
-  mysql:
-    image: psyoblade/mysql:5.7
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    volumes:
-      - ./custom:/etc/mysql/conf.d
-      - mysql_utf8:/var/lib/mysql
-  php:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    links:
-      - mysql
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
-    ports:
-      - 8183:80
-```
-* [phpMyAdmin](http://localhost:8183/index.php) 사이트에 접속하여 mysql/user/pass 로 접속합니다
-
-
-### MySQL 이 정상적으로 로딩된 이후에 접속하도록 설정합니다
-* 테스트 헬스체크를 통해 MySQL 이 정상 기동되었을 때에 다른 어플리케이션을 띄웁니다
-```bash
-$> cat docker-compose.yml
-version: "3"
-
-services:
-  mysql:
-    image: psyoblade/mysql:5.7
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 3s
-      timeout: 1s
-      retries: 3
-    volumes:
-      - ./custom:/etc/mysql/conf.d
-      - mysql_utf8:/var/lib/mysql
-  php:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
-    depends_on:
-      - mysql
-    links:
-      - mysql
-    environment:
-      PMA_HOST: mysql
-      PMA_PORT: 3306
-      PMA_ARBITRARY: 1
-    restart: always
-    ports:
-      - 8183:80
-```
 
 
 ### 1-4. SQL 기본 실습
