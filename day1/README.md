@@ -412,14 +412,14 @@ docker ps ubuntu
 
 ### 3-3. 컨테이너 상호작용
 
-* cp :  호스트에서 컨테이너로 혹은 반대로 파일을 복사합니다
+#### 3-3-1. cp :  호스트에서 컨테이너로 혹은 반대로 파일을 복사합니다
 ```bash
 # docker cp <container_name>:<path> <host_path> and vice-versa
 touch README.md
 docker cp ./README.md ubuntu:/home/ubuntu/
 ```
 
-* exec : 컨테이너 내부에 명령을 실행합니다 
+#### 3-3-2. exec : 컨테이너 내부에 명령을 실행합니다 
 ```bash
 # docker exec <container_name> <args>
 docker exec ubuntu echo 'hello world'
@@ -429,18 +429,18 @@ docker exec ubuntu echo 'hello world'
 
 ### 3-4. 컨테이너 이미지 생성관리
 
-* images : 현재 로컬에 저장된 이미지 목록을 출력합니다 
+#### 3-4-1. images : 현재 로컬에 저장된 이미지 목록을 출력합니다 
 ```bash
 docker images
 ```
 
-* docker commit : 현재 컨테이너를 별도의 이미지로 저장합니다 
+#### 3-4-2. commit : 현재 컨테이너를 별도의 이미지로 저장합니다 
 ```bash
 # docker commit <container_name>:<tag>
 docker commit ubuntu:latest
 ```
 
-* rmi : 해당 이미지를 삭제합니다
+#### 3-4-3. rmi : 해당 이미지를 삭제합니다
 ```bash
 docker rmi ubuntu:latest
 ```
@@ -451,24 +451,24 @@ docker rmi ubuntu:latest
 
 > 본 명령은 dockerhub.com 과 같은 docker registry 계정이 있어야 실습이 가능합니다
 
-* pull : 대상 이미지를 레포지토리에서 로컬로 다운로드합니다
+#### 3-5-1. pull : 대상 이미지를 레포지토리에서 로컬로 다운로드합니다
 ```bash
 # docker pull repository[:tag]
 docker pull psyoblade/data-engineer-ubuntu:18.04
 ```
 
-* push : 대상 이미지를 레포지토리로 업로드합니다
+#### 3-5-2. push : 대상 이미지를 레포지토리로 업로드합니다
 ```bash
 # docker push repository[:tag]
 docker push psyoblade/data-engineer-ubuntu:18.04
 ```
 
-* login : 레지스트리에 로그인 합니다
+#### 3-5-3. login : 레지스트리에 로그인 합니다
 ```bash
 docker login
 ```
 
-* logout : 레지스트리에 로그아웃 합니다
+#### 3-5-4. logout : 레지스트리에 로그아웃 합니다
 ```bash
 docker logout
 ```
