@@ -690,13 +690,19 @@ docker volume ls
 ```
 <details><summary>[실습] mysql-volatile 컨테이너를 다시 생성하고 테이블을 확인해 보세요</summary>
 
-> 테이블이 존재하지 않는다면 정답입니다. 볼륨을 마운트하지 않은 상태에서 생성된 MySQL 데이터베이스는 컨테이너의 임시 볼륨 저장소에 저장되므로, 컨테이너가 종료되면 더이상 사용할 수 없습니다
+> 테이블이 존재하지 않는다면 정답입니다.
+
+* 볼륨을 마운트하지 않은 상태에서 생성된 MySQL 데이터베이스는 컨테이너의 임시 볼륨 저장소에 저장되므로, 컨테이너가 종료되면 더이상 사용할 수 없습니다
+  - 사용한 컨테이너는 종료해 둡니다
+```bash
+docker rm -f mysql-volatile
+```
 
 </details>
 <br>
 
 
-#### 3-8-2. 볼륨을 추가하여 저장소 관리하기 
+#### 3-8-2. 볼륨 마운트를 추가하여 저장소 관리하기 
 
 > 이번에는 별도의 볼륨을 생성하여, 컨테이너가 예기치 않게 종료되었다가 다시 생성되더라도, 데이터를 보존할 수 있게 볼륨을 생성합니다. 
 
@@ -742,7 +748,7 @@ docker run --name mysql-persist \
   -d mysql
 
 sleep 5
-docker exec -it mysql-persist --port=3307 mysql -uuser -ppass
+docker exec -it mysql-persist mysql --port=3307 -uuser -ppass
 ```
 
 ```sql
@@ -755,27 +761,28 @@ select * from foo;
 <br>
 
 
-* 생성된 볼륨을 확인하고 기존의 서버를 강제로 종료시킵니다
-$> docker volume ls
+#### 3-8-3. 바인드 마운트를 추가하여 저장소 관리하기 
 
-$> docker run --name mysql 
-    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes 
-    -e MYSQL_DATABASE=testdb 
-    -e MYSQL_USER=user 
-    -e MYSQL_PASSWORD=pass 
-    -v ./data:/var/lib/mysql 
-    -d mysql
-```
-* 일반적으로 볼륨은 파일이 많이 발생하므로 굳이 쉐어하지 않는 편이 좋습니다
+> 이번에는 호스트 장비의 경로에 직접 저장하는 바인드 마운트에 대해 실습합니다
+
+* 아래와 같이 상대 혹은 절대 경로를 포함한 볼륨의 이름을 명시하여 마운트하는 것을 [Bind Mount](https://docs.docker.com/storage/bind-mounts/) 방식이라고 합니다
+  - 호스트의 특정 경로를 저장소로 사용하게 되어, 호스트에서 직접 접근 및 확인이 가능합니다
 ```bash
-$> docker run --name mysql 
-    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes 
-    -e MYSQL_DATABASE=testdb 
-    -e MYSQL_USER=user 
-    -e MYSQL_PASSWORD=pass 
-    -v mysql_default:/var/lib/mysql 
-    -d mysql
+docker run --name mysql-bind \
+  -p 3308:3306 \
+  -e MYSQL_ROOT_PASSWORD=rootpass \
+  -e MYSQL_DATABASE=testdb \
+  -e MYSQL_USER=user \
+  -e MYSQL_PASSWORD=pass \
+  -v mysql/bind:/var/lib/mysql \
+  -d mysql
+
+sleep 5
+docker exec -it mysql-bind mysql --port=3308 -uuser -ppass
 ```
+
+> 이번 예제는 경로만 다를 뿐 동일하므로 실습은 각자 해보시기 바랍니다
+
 <br>
 
 
