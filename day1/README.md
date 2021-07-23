@@ -658,7 +658,7 @@ docker rm -f `docker ps | grep ubuntu | awk '{ print $1 }'`
 
 * 아래와 같이 도커 명령어를 통해 MySQL 서버를 기동합니다
 ```bash
-docker run --name mysql 
+docker run --name mysql \
     -e MYSQL_ROOT_PASSWORD=rootpass \
     -e MYSQL_DATABASE=testdb \
     -e MYSQL_USER=user \
