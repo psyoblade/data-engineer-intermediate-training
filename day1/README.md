@@ -14,7 +14,7 @@
 ### 1-1. 원격 서버로 접속합니다
 ```bash
 # terminal
-# ssh ubuntu@vm<number>.aiffelbiz.co.kr
+# ssh ubuntu@vm001.aiffelbiz.co.kr
 # password: ******
 ```
 
@@ -27,7 +27,7 @@ git --version
 
 <details><summary>[실습] 출력 결과 확인</summary>
 
-> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+> 출력 결과가 오류가 발생하지 않고, 아래와 같다면 성공입니다
 
 ```text
 Docker version 20.10.6, build 370c289
@@ -62,13 +62,17 @@ git clone https://github.com/psyoblade/helloworld.git
   - `.git` 경로가 생성되고, 하위에 index 및 object 들이 존재합니다
 ```bash
 # git init
+mkdir -p /home/ubuntu/work/git
+cd /home/ubuntu/work/git
 git init
 ```
 * clone : 원격 저장소의 내용을 로컬 저장소에 다운로드 합니다
-  - target directory 를 지정하지 않으면 프로젝트이름(`helloworld`)이 자동으로 생성됩니다
+  - target directory 를 지정하지 않으면 프로젝트이름(`test`)이 자동으로 생성됩니다
 ```bash
 # git clone [uri]
-git clone https://github.com/psyoblade/helloworld.git
+cd /home/ubuntu/work
+git clone https://github.com/psyoblade/test.git
+ls -al test/*
 ```
 <br>
 
@@ -77,12 +81,14 @@ git clone https://github.com/psyoblade/helloworld.git
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
 ```bash
-Cloning into 'helloworld'...
-remote: Enumerating objects: 86, done.
-remote: Counting objects: 100% (40/40), done.
-remote: Compressing objects: 100% (29/29), done.
-remote: Total 86 (delta 14), reused 34 (delta 8), pack-reused 46
-Unpacking objects: 100% (86/86), done.
+cd /home/ubuntu/work
+git clone https://github.com/psyoblade/helloworld.git
+# Cloning into 'helloworld'...
+# remote: Enumerating objects: 86, done.
+# remote: Counting objects: 100% (40/40), done.
+# remote: Compressing objects: 100% (29/29), done.
+# remote: Total 86 (delta 14), reused 34 (delta 8), pack-reused 46
+# Unpacking objects: 100% (86/86), done.
 ```
 
 </details>
@@ -535,113 +541,135 @@ Removing intermediate container 88f12333612b
  ---> da9a0e997fc0
 Successfully built da9a0e997fc0
 Successfully tagged ubuntu:local
-
 ```
 
 </details>
+<br>
 
 
-> 도커 엔진의 기본적인 동작 방식을 이해하기 위한 실습을 수행합니다
+### 3-7. 도커 이미지 이해하기
+
+> 도커 컨테이너 이미지들의 다른점을 이해하고 다양한 실습을 통해 깊이 이해합니다
 
 
-### 3-7. 도커 기본 명령어 실습
+### 3-7-1. 도커 이미지 크기 비교
 
-#### 3-7-1. 도커 설치 및 서비스 기동
-
-```bash
-bash>
-curl -fsSL https://get.docker.com/ | sudo sh    # 설치 스크립트 다운로드 및 설치
-sudo usermod -a -G docker $USER    # sudo 없이 명령어를 실행하기 위해 현재 접속 중인 사용자 ($USER)에게 권한 주기
-sudo usermod -a -G docker psyoblade   # 혹은 임의의 사용자 (psyoblade) 에게 권한 주기 - 다시 로그인 해야 적용됩니다
-
-# sudo 없이 docker 명령이 실행이 가능한 지 테스트 합니다
-docker info
-
-# docker info 실행이 되지 않는다면 docker.sock 파일의 권한 때문일 수 있습니다
-sudo chmod 666 /var/run/docker.sock
-docker --version
-
-# 반드시 별도로 경로를 지정하고 다운로드 받아야 1.20 이상 버전이 설치됩니다
-sudo curl -L "https://github.com/docker/compose/releases/download/1.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-docker-compose --version
-
-# 기타 도구를 설치합니다
-sudo apt-get install tree
-
-```
-
-### 코드 클론 및 환경설정
-> 알파인 및 우분투 이미지를 통해 도커 컨테이너가 어떻게 동작하는지 이해하고, 기본 명령어를 통해 컨테이너 생성 및 삭제를 수행합니다
-```bash
-mkdir work
-cd work
-git clone https://github.com/psyoblade/data-engineer-intermediate-training.git
-cd data-engineer-intermediate-training/basic
-```
-
-### 도커 이미지 크기 비교
+* 알파인 리눅스 vs. 우분투 컨테이너 이미지 크기 비교
 ```bash
 docker pull alpine
 docker pull ubuntu
 docker image ls
 ```
 
-### 간단한 명령어 실습
+### 3-7-2. 알파인 리눅스 명령어 실습
+
+* 알파인 리눅스 환경이 아니지만 해당 리눅스 처럼 실행해보기
 ```bash
 docker run alpine top
 docker run alpine uname -a
 docker run alpine cat /etc/issue
 ```
+> 개별 명령어는 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 
-### bash 가 없기 때문에 /bin/sh 을 통해 --interactive --tty 를 생성해봅니다
+
+<details><summary>[실습] 위의 세번의 명령어 실행으로 생성된 컨테이너는 어떻게 삭제할까요?</summary>
+
+* 전체 컨테이너 목록(-a 옵션으로 중지된 컨테이너까지 확인) 가운데 alpine 을 포함한 목록의 컨테이너 아이디를 찾아 모두 종료합니다
 ```bash
-docker run -it alpine /bin/sh
+docker rm -f `docker ps -a | grep alpine | awk '{ print $1 }'`
 ```
 
-### vim 도 없기 때문에 패키지 도구인 apk 및 apk add/del 를 통해 vim 을 설치 및 제거합니다
+* 사용하지 않는 컨테이너 정리 명령어 (-f, --force)
 ```bash
-# apk { add, del, search, info, update, upgrade } 등의 명령어를 사용할 수 있습니다
-$ apk update # 를 통해
-$ apk add vim
-$ apk del vim
+dodcker container prune -f
 ```
 
-### 각종 기본 도커 명령어 실습
+</details>
+<br>
+
+
+### 3-7-3. 알파인 리눅스에서 패키지 설치
+
+> 리눅스 배포판마다 패키지 관리자가 다르기 때문에 참고로 실습합니다
+
+
+* bash 가 없기 때문에 /bin/sh 을 통해 --interactive --tty 를 생성해봅니다
 ```bash
-docker inspect {CONTAINER_NAME}
-docker image prune
-docker stats {CONTAINER_NAME}
+docker run --rm -it alpine /bin/sh
+```
+> --rm 명령으로 종료와 동시에 가비지 컨테이너를 삭제하는 습관을 들이면 좋습니다
+
+* vim 도 없기 때문에 패키지 도구인 apk 및 apk add/del 를 통해 vim 을 설치 및 제거합니다
+  - apk { add, del, search, info, update, upgrade } 등의 명령어를 사용할 수 있습니다
+```bash
+apk update
+apk add vim
+apk del vim
+```
+<br>
+
+
+### 3-7-4. [메모리 설정을 변경한 상태 확인](https://docs.docker.com/config/containers/start-containers-automatically)
+
+* 컨테이너의 리소스를 제한하는 것도 가능합니다
+  - 기본적으로 도커 기동 시에 로컬 도커가 사용할 수 있는 리소스의 최대치를 사용할 수 있습니다
+  - 이번 예제에서는 도커를 실행하고 상태를 확인하기 위해 백그라운드 실행(-dit)을 합니다
+```bash
+docker run --name ubuntu_500m -dit -m 500m ubuntu
 ```
 
-### [메모리 설정을 변경한 상태 확인](https://docs.docker.com/config/containers/start-containers-automatically)
+* 제약을 두고 띄운 컨테이너의 상태를 확인합니다
 ```bash
-docker run -it -m 500m ubuntu
-docker run -it --restart=on-failure:3 -m 500m ubuntu
-docker run -it --restart=always -m 500m ubuntu
-docker stats {CONTAINER_NAME}
-docker container prune
+docker ps -f name=ubuntu_500m
+# docker stats <CONTAINER ID>
+```
+> <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
+
+
+<details><summary>[실습] 메모리 제약을 주지 않고 해당 컨테이너의 상태를 확인해 보세요</summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```bash
+docker run --name ubuntu_unlimited -dit ubuntu
+docker stats `docker ps | grep ubuntu_unlimited | awk '{ print $1 }'`
 ```
 
-### 도커 컨테이너 사용 후 삭제 여부
+</details>
+
+<details><summary>[실습] 바로 위의 실습 정답을 활용해서 ubuntu 문자열이 포함된 모든 컨테이너를 종료해 보세요</summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
 ```bash
-docker run -it ubuntu /bin/bash
-docker run --rm -it ubuntu /bin/bash
+docker rm -f `docker ps | grep ubuntu | awk '{ print $1 }'`
 ```
 
+</details>
+<br>
 
-## 1 도커 컨테이너 다운로드 및 실행
-> MySQL 기본 이미지를 베이스로 나만의 이미지를 생성합니다
 
-### [MySQL 데이터베이스 기동](https://hub.docker.com/_/mysql)
+### 3-8. MySQL 로컬 장비에 설치하지 않고 사용하기
+
+> 호스트 장비에 MySQL 설치하지 않고 사용해보기
+
+
+#### 3-8-1. [MySQL 데이터베이스 기동](https://hub.docker.com/_/mysql)
+
+* 아래와 같이 도커 명령어를 통해 MySQL 서버를 기동합니다
 ```bash
-$> docker run --name mysql 
+docker run --name mysql 
     -e MYSQL_ROOT_PASSWORD=rootpass \
     -e MYSQL_DATABASE=testdb \
     -e MYSQL_USER=user \
     -e MYSQL_PASSWORD=pass \
     -d mysql
-$> docker exec -it mysql mysql -u user -p
+```
+
+* 별도의 터미널에서 해당 서버로 접속합니다
+```bash
+docker exec -it mysql mysql -uuser -ppass
+```
 
 mysql> use testdb;
 mysql> create table foo (id int, name varchar(300));
