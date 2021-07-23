@@ -658,42 +658,104 @@ docker rm -f `docker ps | grep ubuntu | awk '{ print $1 }'`
 
 * 아래와 같이 도커 명령어를 통해 MySQL 서버를 기동합니다
 ```bash
-docker run --name mysql \
-    -e MYSQL_ROOT_PASSWORD=rootpass \
-    -e MYSQL_DATABASE=testdb \
-    -e MYSQL_USER=user \
-    -e MYSQL_PASSWORD=pass \
-    -d mysql
+docker run --name mysql-volatile \
+  -p 3306:3306 \
+  -e MYSQL_ROOT_PASSWORD=rootpass \
+  -e MYSQL_DATABASE=testdb \
+  -e MYSQL_USER=user \
+  -e MYSQL_PASSWORD=pass \
+  -d mysql
 ```
 
-* 별도의 터미널에서 해당 서버로 접속합니다
+* 서버가 기동되면 해당 서버로 접속합니다
+  - 너무 빨리 접속하면 서버가 기동되기전이라 접속이 실패할 수 있습니다
 ```bash
-docker exec -it mysql mysql -uuser -ppass
+docker exec -it mysql-volatile mysql -uuser -ppass
 ```
 
-mysql> use testdb;
-mysql> create table foo (id int, name varchar(300));
-mysql> insert into foo values (1, 'my name');
-mysql> select * from foo;
+* 테스트 디비에 접속하여 테이블을 생성해봅니다
+```sql
+# mysql>
+use testdb;
+create table foo (id int, name varchar(300));
+insert into foo values (1, 'my name');
+select * from foo;
 ```
+> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 명령으로 빠져나옵니다
 
-### 볼륨을 추가하여 저장소 관리하기 
-* 아래와 같이 호스트의 현재 경로 혹은 절대경로를 넣으면 호스트와 쉐어할 수 있습니다
+* 컨테이너를 강제로 종료하고, 볼륨을 확인해 봅니다
 ```bash
-$> docker run --name mysql 
-    -e MYSQL_ALLOW_EMPTY_PASSWORD=yes 
-    -e MYSQL_DATABASE=testdb 
-    -e MYSQL_USER=user 
-    -e MYSQL_PASSWORD=pass 
-    -v ./data:/var/lib/mysql 
-    -d mysql
+docker rm -f mysql-volatile
+docker volume ls
+```
+<details><summary>[실습] mysql-volatile 컨테이너를 다시 생성하고 테이블을 확인해 보세요</summary>
 
-$> docker exec -it mysql mysql -u user -p
-mysql> use testdb;
-mysql> create table foo (id int, name varchar(300));
-mysql> insert into foo values (1, 'my name');
-mysql> select * from foo;
+> 테이블이 존재하지 않는다면 정답입니다. 볼륨을 마운트하지 않은 상태에서 생성된 MySQL 데이터베이스는 컨테이너의 임시 볼륨 저장소에 저장되므로, 컨테이너가 종료되면 더이상 사용할 수 없습니다
 
+</details>
+<br>
+
+
+#### 3-8-2. 볼륨을 추가하여 저장소 관리하기 
+
+> 이번에는 별도의 볼륨을 생성하여, 컨테이너가 예기치 않게 종료되었다가 다시 생성되더라도, 데이터를 보존할 수 있게 볼륨을 생성합니다. 
+
+* 아래와 같이 볼륨의 이름만 명시하여 마운트하는 것을 [Volume Mount](https://docs.docker.com/storage/volumes/) 방식이라고 합니다
+  - `docker volume ls` 명령을 통해 생성된 볼륨을 확인할 수 있습니다
+  - 이렇게 생성된 별도의 격리된 볼륨으로 관리되며 컨테이너가 종료되더라도 유지됩니다
+```bash
+docker run --name mysql-persist \
+  -p 3307:3306 \
+  -e MYSQL_ROOT_PASSWORD=rootpass \
+  -e MYSQL_DATABASE=testdb \
+  -e MYSQL_USER=user \
+  -e MYSQL_PASSWORD=pass \
+  -v mysql-volume:/var/lib/mysql \
+  -d mysql
+
+sleep 5
+docker exec -it mysql-persist mysql --port=3307 -uuser -ppass
+```
+
+<details><summary>[실습] mysql-persist 컨테이너를 강제 종료하고, 동일한 설정으로 다시 생성하여 테이블이 존재하는지 확인해 보세요</summary>
+
+> 테이블이 존재하고 데이터가 있다면 정답입니다
+
+```sql
+# mysql>
+use testdb;
+create table foo (id int, name varchar(300));
+insert into foo values (1, 'my name');
+select * from foo;
+```
+
+```bash
+# terminal
+docker rm -f mysql-persist
+docker run --name mysql-persist \
+  -p 3307:3306 \
+  -e MYSQL_ROOT_PASSWORD=rootpass \
+  -e MYSQL_DATABASE=testdb \
+  -e MYSQL_USER=user \
+  -e MYSQL_PASSWORD=pass \
+  -v mysql-volume:/var/lib/mysql \
+  -d mysql
+
+sleep 5
+docker exec -it mysql-persist --port=3307 mysql -uuser -ppass
+```
+
+```sql
+# mysql>
+use testdb;
+select * from foo;
+```
+
+</details>
+<br>
+
+
+* 생성된 볼륨을 확인하고 기존의 서버를 강제로 종료시킵니다
 $> docker volume ls
 
 $> docker run --name mysql 
