@@ -774,7 +774,7 @@ docker run --name mysql-bind \
   -e MYSQL_DATABASE=testdb \
   -e MYSQL_USER=user \
   -e MYSQL_PASSWORD=pass \
-  -v mysql/bind:/var/lib/mysql \
+  -v ./mysql/bind:/var/lib/mysql \
   -d mysql
 
 sleep 5
