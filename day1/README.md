@@ -1671,7 +1671,6 @@ rsync -av . /tmp/backup
 </details>
 <br>
 
-
 ### 5-5. 운영 도구
 
 * top, htop
@@ -1691,6 +1690,23 @@ rsync -av . /tmp/backup
 ## 6. Hadoop 커맨드라인 명령어 실습
 
 > 모든 Hadoop Filesystem 명령어는 hdfs 명령어를 사용해야만 분산저장소에 읽고, 쓰는 작업이 가능합니다
+
+### 실습을 위한 환경을 확인합니다
+
+* 하둡 명령어 실습을 위해서 컨테이너를 기동시키고, 하둡 네임노드 컨테이너에 접속합니다
+
+```bash
+# terminal
+cd /home/ubuntu/work/data-engineer-basic-training/day1
+docker-compose pull
+docker-compose up -d
+```
+```bash
+# terminal 
+docker-compose exec namenode bash
+```
+<br>
+
 
 ### 6-1. 파일/디렉토리 관리
 
@@ -1713,7 +1729,11 @@ hdfs dfs -ls /user
   - <kbd>-ignoreCrc</kbd> : CRC 체크를 하지 않습니다
 ```bash
 # -text [-ignoreCrc] <src>
-hdfs dfs -text /
+rm -rf helloworld*
+echo "hello world" > helloworld
+gzip helloworld
+hdfs dfs -put helloworld.gz /tmp/
+hdfs dfs -text /tmp/helloworld.gz
 ```
 <br>
 
@@ -1721,15 +1741,24 @@ hdfs dfs -text /
   - <kbd>-ignoreCrc</kbd> : CRC 체크를 하지 않습니다
 ```bash
 # -cat [-ignoreCrc] <src>
-hdfs dfs -cat /tmp
+rm -rf helloworld*
+echo "hello world" > helloworld
+hdfs dfs -put helloworld /tmp/
+hdfs dfs -cat /tmp/helloworld
 ```
 <br>
 
 #### 6-2-3. appendToFile : 소스 데이터를 읽어서 타겟 데이터 파일에 append 하며, 존재하지 않는 파일의 경우 생성됩니다
 ```bash
 # -appendToFile <localsrc> ... <dst>
-hdfs dfs -appendToFile 
+echo "hello lgde" > appended
+hdfs dfs -appendToFile appended /tmp/helloworld
 ```
+> 참고로 append 옵션은 설정상 적용되지 않을 수 있으며, 아래의 2가지 설정이 되어 있어야 동작합니다
+| 키 | 값 | 설명 |
+| --- | --- | --- |
+| dfs.client.block.write.replace-datanode-on-failure.enable | true | If there is a datanode/network failure in the write pipeline, DFSClient will try to remove the failed datanode from the pipeline and then continue writing with the remaining datanodes. As a result, the number of datanodes in the pipeline is decreased. The feature is to add new datanodes to the pipeline. This is a site-wide property to enable/disable the feature. When the cluster size is extremely small, e.g. 3 nodes or less, cluster administrators may want to set the policy to NEVER in the default configuration file or disable this feature. Otherwise, users may experience an unusually high rate of pipeline failures since it is impossible to find new datanodes for replacement. See also dfs.client.block.write.replace-datanode-on-failure.policy |
+| dfs.client.block.write.replace-datanode-on-failure.policy	 | DEFAULT | This property is used only if the value of dfs.client.block.write.replace-datanode-on-failure.enable is true. ALWAYS: always add a new datanode when an existing datanode is removed. NEVER: never add a new datanode. DEFAULT: Let r be the replication number. Let n be the number of existing datanodes. Add a new datanode only if r is greater than or equal to 3 and either (1) floor(r/2) is greater than or equal to n; or (2) r is greater than n and the block is hflushed/appended.|
 <br>
 
 
