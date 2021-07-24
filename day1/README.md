@@ -123,18 +123,24 @@ source ~/.bashrc  # .bashrc 내용을 현재 세션에 다시 로딩합니다
 touch README.md
 git add README.md
 ```
+<br>
+
 
 #### 2-2-3. reset : 스테이징 된 파일을 언스테이징 합니다
 ```bash
 # git reset [file]
 git reset README.md
 ```
+<br>
+
 
 #### 2-2-4. status : 현재 경로의 스테이징 상태를 보여줍니다
 ```bash
 # git status (-s, --short)
 git status -s
 ```
+<br>
+
 
 #### 2-2-5. diff : 스테이징 된 파일에 따라 발생하는 이전 상태와 차이점을 보여줍니다
 ```bash
@@ -143,12 +149,34 @@ echo "hello world" > README.md
 git diff
 git status -s
 ```
+<br>
+
 
 #### 2-2-6. commit : 스테이징(add) 된 내역을 스냅샷으로 저장합니다
   - 스테이징 된 내역이 없다면 커밋되지 않습니다
 ```bash
 # git commit -m "descriptive message"
-git commit -m "[수정] 초기화 완료"
+git commit -am "[수정] README 추가"
+git status -sb
+```
+<br>
+
+
+* 아래와 같은 경고 메시지는 현재 clone 한 원격지 레포지토리에 로그인이 되지 않았다는 의미이므로 신경쓰지 않으셔도 됩니다
+```bash
+Committer: Ubuntu <ubuntu@vm001.m0f4rvh4gmxe1gyfukcq2hpioc.syx.internal.cloudapp.net>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 1 insertion(+)
 ```
 
 > 수정된 파일은 " M" 으로 표현되고, 스테이징된 파일은  "M " 으로 표현되며, 커밋된 파일은 status 에서 보이지 않습니다.
@@ -164,27 +192,54 @@ git commit -m "[수정] 초기화 완료"
 ```bash
 # git branch (-r, --remotes | -a, --all)
 git branch -a
-
+```
+```bash
 # git branch [create-branch]
 git branch lgde/2021
-
+```
+```bash
 # git branch (-d, --delete) [delete-branch]
 git branch -d lgde/2021
 ```
+<br>
+
 
 #### 2-3-2. checkout : 해당 브랜치로 이동합니다
   - 존재하는 브랜치로만 체크아웃이 됩니다 (-b 옵션을 주면 생성하면서 이동합니다)
+  - 이미 존재하는 경우에는 -b 옵션을 쓰면 오류가 발생합니다
 ```bash
 # git checkout (-b) [branch-name]
 git checkout -b lgde/2021
 ```
+<br>
+
 
 #### 2-3-3. merge : 대상 브랜치와 병합합니다. **대상 브랜치는 영향이 없고, 현재 브랜치가 변경**됩니다.
+  - 병합을 실습하기 위해 master 브랜치에서 수정후 커밋 합니다
+  - 아까 생성했던 lgde/2021 브랜치에서 수정내역을 확인 후 병합합니다
   - 변경하고자 하는 브랜치를 먼저 체크아웃하는 습관을 가지시면 좋습니다
+```bash
+git checkout master
+echo "modified" >> README.md
+cat README.md
+git commit -am "[수정]"
+```
+```bash
+git checkout lgde/2021
+cat README.md
+```
 ```bash
 # git merge [merge-branch]
 git merge master
+cat README.md
+git commit -am "[병합]"
 ```
+```bash
+# master 브랜치로 돌아옵니다
+git checkout master
+```
+<br>
+
 
 #### 2-3-4. log : 커밋 메시지를 브랜치 히스토리 별로 확인할 수 있습니다
 ```bash
@@ -200,11 +255,21 @@ git log
 # git rm [file]
 git rm README.md
 ```
+  - 삭제한(commit 이전) 파일을 되돌립니다
+```bash
+git checkout HEAD README.md
+```
+<br>
+
 
 #### 2-4-2. mv : 파일 혹은 경로를 새로운 경로로 이동합니다
 ```bash
 # git mv [source-path] [target-path]
-git mv REAMDE.md tmp
+git mv REAMDE.md NOREADME.md
+```
+  - 현재 경로의 수정 사항을 되돌립니다
+```bash
+git checkout HEAD .
 ```
 <br>
 
@@ -248,11 +313,18 @@ tmp/
   - git log 명령을 통해 확인된 commit 해시 값으로 해당 시점으로 돌릴 수 있습니다
   - git reflog 명령을 통해 모든 이력을 확인할 수 있고, reset 을 undo 할 수 있습니다
 ```bash
+git log
+```
+```bash
 # git reset --hard [commit]
-git reset --hard 7e5e3e54e400228cbdb12ab00b13c4af22305a0d
-
+# git reset --hard 7e5e3e54e400228cbdb12ab00b13c4af22305a0d
+```
+```bash
+git reflog
+```
+```bash
 # git reflog (show master)
-git reset 'HEAD@{1}'
+# git reset 'HEAD@{1}'
 ```
 <br>
 
@@ -262,20 +334,42 @@ git reset 'HEAD@{1}'
 #### 2-8-1. stash : 현재 수정내역을 커밋하기는 애매하지만, 다른 브랜치로 체크아웃 하고 싶을 때 임시로 수정 내역 전체를 저장합니다
 ```bash
 # 임시로 저장
+echo "test modify" >> README.md
 git stash
-
+cat README.md
+```
+```bash
+git checkout lgde/2021
+echo "lgde/2021" >> cat README.md
+git commit -am "[개발]"
+```
+```bash
+git checkout master
+cat README.md
+```
+```bash
 # 임시 저장 리스트
 git stash list
-
+```
+```bash
 # 가장 마지막에 저장한 것을 복원
 git stash pop
-
+cat README.md
+git commit -am "[완료]"
+```
+```bash
+git checkout lgde/2021
+cat README.md
+```
+```bash
 # 가장 마지막에 저장된 것을 삭제
 git stash drop
-
+```
+```bash
 # 혹은 stash 값을 바로 사용
 git stash apply stash@{0}
-
+```
+```bash
 # 내역을 보고 싶다면
 git stash show stash@{1}
 ```
@@ -289,6 +383,7 @@ git stash show stash@{1}
 <details><summary>[실습] LGDE.txt 파일생성 후에 스테이징 후에 상태를 확인하세요 </summary>
 
 ```bash
+git checkout master
 touch LGDE.txt
 git add LGDE.txt
 git status
@@ -330,6 +425,21 @@ ls -al
 
 </details>
 
+#### 2-9-3. 브랜치가 꼬여서 난감할 때
+
+> 복잡한 작업을 하다보면 꼬여서 곤란한 경우가 있는데 이 때에 아예 처음으로 돌리고 싶다면 clone 시점으로 reset 하시는 편이 좋습니다
+
+```bash
+cd /home/ubuntu/work/helloworld
+git reflog | grep clone
+```
+```bash
+# clone 한 시점의 HEAD 번호로 리셋 후, 일부 수정된 사항은 checkout 하시면 정리가 됩니다
+# git reset HEAD@{25}
+# git checkout -- .
+```
+<br>
+
 
 ### 2-10. 자주 사용하는 깃 명령어
 
@@ -352,17 +462,16 @@ ls -al
 
 > 컨테이너 관리를 위한 도커 명령어를 실습합니다
 
-
-* 먼저 실습을 위한 예제 프로젝트를 가져옵니다
+* 실습을 위해 기존 프로젝트를 삭제 후 다시 클론합니다
 
 ```bash
 # terminal
-mkdir -p /home/ubuntu/work
 cd /home/ubuntu/work
+rm -rf /home/ubuntu/work/helloworld
 git clone https://github.com/psyoblade/helloworld.git
+cd /home/ubuntu/work/helloworld
 ```
 <br>
-
 
 ### 3-1. 컨테이너 생성관리
 
@@ -370,33 +479,49 @@ git clone https://github.com/psyoblade/helloworld.git
 
 #### 3-1-1. create : 컨테이너를 생성합니다 
   - <kbd>--name <container_name></kbd> : 컨테이너 이름을 직접 지정합니다 (지정하지 않으면 임의의 이름이 명명됩니다)
-  - 로컬에 이미지가 없다면 다운로드(pull) 후 컨테이너를 생성까지만 합니다
+  - 로컬에 이미지가 없다면 다운로드(pull) 후 컨테이너를 생성까지만 합니다 (반드시 -it 옵션이 필요합니다)
   - 생성된 컨테이너는 실행 중이 아니라면 `docker ps -a` 실행으로만 확인이 가능합니다
 ```bash
 # docker create <image>:<tag>
-docker create -name ubuntu ubuntu:18.04
+docker create -it ubuntu:18.04
 ```
+<br>
 
 #### 3-1-2. start : 생성된 컨테이너를 기동합니다
   - 예제의 `busy_herschel` 는 자동으로 생성된 컨테이너 이름입니다
 ```bash
-# docker start <container_name> 
-docker start busy_herschel
+# 아래 명령으로 현재 생성된 컨테이너의 이름을 확인합니다
+docker ps -a
+
+# CONTAINER ID   IMAGE          COMMAND   CREATED         STATUS    PORTS     NAMES
+# e8f66e162fdd   ubuntu:18.04   "bash"    2 seconds ago   Created             sad_mayer
 ```
+```bash
+# docker start <container_name> 
+# docker start busy_herschel
+```
+```bash
+# 터미널에 접속하여 우분투 버전을 확인합니다
+docker exec -it busy_herschel bash
+cat /etc/issue
+```
+<br>
 
 #### 3-1-3. stop : 컨테이너를 잠시 중지시킵니다
   - 해당 컨테이너가 삭제되는 것이 아니라 잠시 실행만 멈추게 됩니다
 ```bash
 # docker stop <container_name>
-docker stop busy_herschel
+# docker stop busy_herschel
 ```
+<br>
 
 #### 3-1-4. rm : 중단된 컨테이너를 삭제합니다
   - <kbd>-f, --force</kbd> : 실행 중인 컨테이너도 강제로 종료합니다 (실행 중인 컨테이너는 삭제되지 않습니다)
 ```bash
 # docker rm <container_name>
-docker rm busy_herschel
+# docker rm busy_herschel
 ```
+<br>
 
 #### 3-1-5. run : 컨테이너의 생성과 시작을 같이 합니다 (create + start)
   - <kbd>--rm</kbd> : 종료 시에 컨테이너까지 같이 삭제합니다
@@ -407,6 +532,12 @@ docker rm busy_herschel
 # docker run <options> <image>:<tag>
 docker run --rm --name ubuntu -dit ubuntu:20.04
 ```
+```bash
+# 터미널에 접속하여 우분투 버전을 확인합니다
+docker exec -it ubuntu bash
+cat /etc/issue
+```
+<br>
 
 #### 3-1-6. kill : 컨테이너를 종료합니다
 ```bash
@@ -414,7 +545,6 @@ docker run --rm --name ubuntu -dit ubuntu:20.04
 docker kill ubuntu
 ```
 <br>
-
 
 ### 3-2. 컨테이너 모니터링
 
@@ -428,13 +558,17 @@ docker ps
   - <kbd>-f</kbd> : 로그를 지속적으로 tailing 합니다
 ```bash
 # docker logs <container_name>
-docker logs -f mysql
+docker run --rm --name nginx -dit nginx
 ```
+```bash
+docker logs -f nginx
+```
+<br>
 
 #### 3-2-3. top : 컨테이너에 떠 있는 프로세스를 확인합니다
 ```bash
 # docker top <container_name> <ps options>
-docker ps ubuntu
+docker top nginx
 ```
 <br>
 
@@ -445,16 +579,15 @@ docker ps ubuntu
 ```bash
 # docker cp <container_name>:<path> <host_path> and vice-versa
 touch README.md
-docker cp ./README.md ubuntu:/home/ubuntu/
+docker cp ./helloworld.sh ubuntu:/tmp
 ```
 
 #### 3-3-2. exec : 컨테이너 내부에 명령을 실행합니다 
 ```bash
 # docker exec <container_name> <args>
-docker exec ubuntu echo 'hello world'
+docker exec ubuntu /tmp/helloworld.sh
 ```
 <br>
-
 
 ### 3-4. 컨테이너 이미지 생성관리
 
@@ -462,23 +595,45 @@ docker exec ubuntu echo 'hello world'
 ```bash
 docker images
 ```
+<br>
 
 #### 3-4-2. commit : 현재 컨테이너를 별도의 이미지로 저장합니다 
+
+* 현재 helloworld.sh 가 복사된 컨테이너를 ubuntu:hello 로 저장해봅니다
 ```bash
-# docker commit <container_name>:<tag>
-docker commit ubuntu:latest
+# docker commit <container_name> <repository>:<tag>
+docker commit ubuntu ubuntu:hello
 ```
 
 #### 3-4-3. rmi : 해당 이미지를 삭제합니다
+
+* 이전에 ubuntu:20.04 기반의 컨테이너를 종료하고, 이미지도 삭제합니다
 ```bash
-docker rmi ubuntu:latest
+docker rm -f ubuntu
+docker rmi ubuntu:20.04
 ```
+```bash
+# ubuntu:hello 가 남아있는지 확인합니다
+docker image ls | grep ubuntu
+```
+<br>
+
+<details><summary>[실습] ubuntu:hello 이미지를 이용하여 helloworld.sh 을 실행하세요</summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```bash
+docker run --rm ubuntu:hello /tmp/helloworld.sh
+# hello world
+```
+
+</details>
 <br>
 
 
 ### 3-5. 컨테이너 이미지 전송관리
 
-> 본 명령은 dockerhub.com 과 같은 docker registry 계정이 있어야 실습이 가능합니다
+> 본 명령은 dockerhub.com 과 같은 docker registry 계정이 있어야 실습이 가능하므로 실습에서는 제외합니다
 
 #### 3-5-1. pull : 대상 이미지를 레포지토리에서 로컬로 다운로드합니다
 ```bash
@@ -831,6 +986,15 @@ docker exec -it mysql-bind mysql --port=3308 -uuser -ppass
 
 > 도커 컴포즈는 **도커의 명령어들을 반복적으로 수행되지 않도록 yml 파일로 저장해두고 활용**하기 위해 구성되었고, *여러개의 컴포넌트를 동시에 기동하여, 하나의 네트워크에서 동작하도록 구성*한 것이 특징입니다. 내부 서비스들 간에는 컨테이너 이름으로 통신할 수 있어 테스트 환경을 구성하기에 용이합니다. 
 <br>
+
+* 실습을 위한 기본 환경을 가져옵니다
+
+```bash
+# terminal
+cd /home/ubuntu/work
+git clone https://github.com/psyoblade/data-engineer-basic-training.git
+cd /home/ubuntu/work/data-engineer-basic-training
+```
 
 ### 4-1. 컨테이너 관리
 
@@ -1468,15 +1632,6 @@ rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/hom
 ## 6. Hadoop 커맨드라인 명령어 실습
 
 > 모든 Hadoop Filesystem 명령어는 hdfs 명령어를 사용해야만 분산저장소에 읽고, 쓰는 작업이 가능합니다
-
-* 실습을 위한 기본 환경을 가져옵니다
-
-```bash
-# terminal
-cd /home/ubuntu/work
-git clone https://github.com/psyoblade/data-engineer-basic-training.git
-cd /home/ubuntu/work/data-engineer-basic-training
-```
 
 ### 6-1. 파일/디렉토리 관리
 
