@@ -21,7 +21,7 @@
 ### 1-1. 최신 소스를 내려 받습니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training
+cd /home/ubuntu/work/data-engineer-${course}-training
 git pull
 ```
 <br>
@@ -47,7 +47,7 @@ docker rm -f `docker ps -aq`
 ### 1-3. 실습을 위한 이미지를 내려받고 컨테이너를 기동합니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2
+cd /home/ubuntu/work/data-engineer-${course}-training/day2
 
 docker-compose pull
 docker-compose up -d
@@ -209,6 +209,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 
 ```bash
 # terminal
+cd /home/ubuntu/work/data-engineer-basic-training/day2/
 docker-compose exec mysql mysql -usqoop -psqoop
 ```
 ```sql
@@ -223,7 +224,8 @@ CREATE TABLE student (
   , gender VARCHAR(10)
   , PRIMARY KEY (no)
 );
-
+```
+```sql
 DESC student;
 ```
 * 아래와 같이 나오면 정답입니다
@@ -276,6 +278,8 @@ INSERT INTO student (name, email, age, gender) VALUES
 ,('김휘비','Kim.Hwibi@lgde.com',38,'남')
 ,('박재문','Park.Jaemoon@lgde.com',49,'남')
 ,('우소은','Woo.Soeun@lgde.com',30,'여');
+```
+```sql
 SELECT * FROM student;
 ```
 * 아래와 같이 나오면 정답입니다
@@ -345,11 +349,6 @@ ask cat /home/sqoop/target/student/part-m-00000
 
 <details><summary>[실습] 앞서 생성된 학생(student) 테이블을 탭으로 구분된 포맷으로 로컬 `/home/sqoop/target/student_tab` 경로에 저장하세요 </summary>
 
-* 컨테이너에 접속되어 있지 않다면 접속합니다
-```bash
-# terminal
-docker-compose exec mysql mysql -usqoop -psqoop
-```
 * 스쿱 명령어로 테이블을 수집합니다
 ```bash
 # docker
@@ -357,10 +356,10 @@ ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/test
   --username sqoop --password sqoop --table student --target-dir /home/sqoop/target/student_tab \
   --fields-terminated-by '\t'
 ```
-* 생성된 파일이 파케이로 저장되었는지 확인합니다
-```
+* 생성된 파일이 텍스트파일로 저장되었는지 확인합니다
+```bash
 # docker
-ls /home/sqoop/target/student_tab
+head /home/sqoop/target/student_tab/part-m-00000
 ```
 
 </details>
@@ -373,11 +372,6 @@ ls /home/sqoop/target/student_tab
 
 <details><summary>[실습] 앞서 생성된 학생(student) 테이블을 파케이 포맷으로 로컬 `/home/sqoop/target/student_parquet` 경로에 저장하세요 </summary>
 
-* 컨테이너에 접속되어 있지 않다면 접속합니다
-```bash
-# terminal
-docker-compose exec mysql mysql -usqoop -psqoop
-```
 * 스쿱 명령어로 테이블을 수집합니다
 ```bash
 # docker
@@ -424,11 +418,6 @@ hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
 
 <details><summary>[실습] 같은 방식으로 해당 파케이 파일의 상위(head) 3개문서, 스키마(schema), 메타(meta) 출력을 해보세요 </summary>
 
-* 컨테이너에 접속되어 있지 않다면 접속합니다
-```bash
-# terminal
-docker-compose exec mysql mysql -usqoop -psqoop
-```
 * 상위 3개 문서 반환
 ```
 # docker
@@ -475,6 +464,9 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 hadoop fs -ls /user/sqoop/target/seoul_popular_trip
 ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
+
+#### 2-4-2. 번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+<br>
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
 
@@ -995,7 +987,7 @@ ask sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --username 
 ### 5-2. 컨테이너 정리
 * 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day2
+cd /home/ubuntu/work/data-engineer-${course}-training/day2
 docker-compose down
 ```
 

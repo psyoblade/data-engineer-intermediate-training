@@ -27,7 +27,7 @@
 ### 1-1. 최신 소스를 내려 받습니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training
+cd /home/ubuntu/work/data-engineer-${course}-training
 git pull
 ```
 <br>
@@ -53,12 +53,12 @@ docker rm -f `docker ps -aq`
 
 ### 1-3. 이번 실습은 예제 별로 다른 컨테이너를 사용합니다
 
-> `cd /home/ubuntu/work/data-engineer-intermediate-training/day3/`<kbd>ex1</kbd> 와 같이 마지막 경로가 다른 점에 유의 하시기 바랍니다
+> `cd /home/ubuntu/work/data-engineer-${course}-training/day3/`<kbd>ex1</kbd> 와 같이 마지막 경로가 다른 점에 유의 하시기 바랍니다
 
 * 1번 실습의 경로는 <kbd>ex1</kbd>이므로 아래와 같습니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex1
 ```
 
 [목차로 돌아가기](#3일차-트레저데이터-플루언트디-파일-수집)
@@ -79,7 +79,7 @@ cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
 
 ### 2-1. 도커 컨테이너 기동
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex1
 docker compose pull
 docker compose up -d
 ```
@@ -235,10 +235,10 @@ curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
 > 이전 실습에서 기동된 컨테이너를 종료 후, 기동합니다.
 
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex1
 docker compose down
 
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex2
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex2
 docker compose pull
 docker compose up -d
 ```
@@ -414,10 +414,10 @@ root@7d33f313cc13:~#
 > 이전 실습에서 기동된 컨테이너를 종료 후, 기동합니다.
 
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex2
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex2
 docker compose down
 
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex3
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex3
 docker compose pull
 docker compose up -d
 ```
@@ -658,10 +658,10 @@ root@2cf7c79e8367:~# for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -
 > 이전 실습에서 기동된 컨테이너를 종료 후, 기동합니다.
 
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex3
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex3
 docker compose down
 
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex4
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex4
 docker compose pull
 docker compose up -d
 ```
@@ -844,10 +844,10 @@ done
 > 이전 실습에서 기동된 컨테이너를 종료 후, 기동합니다.
 
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex4
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex4
 docker compose down
 
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex5
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex5
 docker compose pull
 docker compose up -d
 ```
@@ -1112,7 +1112,7 @@ networks:
 ## 7. 도커 컴포즈를 통한 로그 전송 구성
 ### 1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex6
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex6
 docker compose up -d
 docker ps
 ```
@@ -1200,14 +1200,14 @@ docker ps -a
 ## 7. 멀티 프로세스를 통한 성능 향상
 ### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex7
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 mkdir source
 ./startup.sh
 ```
 ### 2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
 * 첫 번째 프로세스가 파일로 받은 입력을 표준 출력으로 내보내는 프로세스입니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex7
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 for x in $(seq 1 1000); do echo "{\"hello\":\"world\"}" >> source/start.log; done
 ```
 * 두 번째 프로세스는 HTTP 로 입력 받은 내용을 표준 출력으로 내보내는 프로세스입니다
@@ -1271,7 +1271,7 @@ docker ps -a
 ## 8. 멀티 프로세스를 통해 하나의 위치에 저장
 ### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex8
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex8
 mkdir source
 ./startup.sh
 ```
@@ -1371,7 +1371,7 @@ docker ps -a
 ## 9. 전송되는 데이터를 분산 저장소에 저장
 ### 1. 서비스를 기동합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex9
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex9
 ./startup.sh
 ```
 ### 2. 별도의 터미널에서 모든 서비스(fluentd, namenode, datanode)가 떠 있는지 확인합니다
