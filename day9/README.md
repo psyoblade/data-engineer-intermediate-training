@@ -50,11 +50,12 @@ docker rm -f `docker ps -aq`
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day9
-docker compose up -d
-docker compose ps
-echo "sleep 5 seconds"
-sleep 5
-docker compose exec sqoop bash
+docker-compose up -d
+docker-compose ps
+
+echo "각종 서버가 기동 되는데에 시간이 좀 걸립니다... 10초 후에 접속합니다"
+sleep 10
+docker-compose exec sqoop bash
 ```
 
 > 아래와 같은 메시지가 출력되고 모든 컨테이너가 종료되면 정상입니다
@@ -204,7 +205,11 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$databas
 ```bash
 # docker
 tree /tmp/target/user
+```
+```bash
 tree /tmp/target/purchase
+```
+```bash
 find /tmp/target -name "*.parquet"
 ```
 #### 2-7-2. 출력된 파일 경로를 복사하여 경로르 변수명에 할당합니다
@@ -268,6 +273,7 @@ p_amount = 2500000
 *  <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 모든 파일이 모두 수집되었다면 테이블 수집에 성공한 것입니다
 ```bash
 # terminal
+cd /home/ubuntu/work/data-engineer-basic-training/day9
 find notebooks -name '*.parquet'
 ```
 <br>
@@ -284,14 +290,14 @@ find notebooks -name '*.parquet'
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day9
-docker compose up -d
-docker compose ps
+docker-compose up -d
+docker-compose ps
 ```
 
 #### 3-1-2. 플루언트디 컨테이너에 접속합니다
 ```bash
 # docker
-docker compose exec fluentd bash
+docker-compose exec fluentd bash
 ```
 
 #### 3-1-3. 이전 작업내역을 모두 초기화 하고 다시 수집해야 한다면 아래와 같이 정리합니다
@@ -379,7 +385,8 @@ ask fluentd -c /etc/fluentd/fluent.tail
 #### 3-2-1. 새로운 `원격 터미널`을 접속합니다
 ```bash
 # terminal
-docker compose exec fluentd bash
+cd /home/ubuntu/work/data-engineer-basic-training/day9
+docker-compose exec fluentd bash
 ```
 
 #### 3-2-2. 실제 로그가 쌓이는 것 처럼 access.csv 파일에 임의의 로그를 redirect 하여 로그를 append 합니다
@@ -392,6 +399,8 @@ cat /etc/fluentd/access.20201025.csv >> /tmp/source/access.csv
 ```bash
 # docker
 tree -L 2 /tmp/target
+```
+```bash
 find /tmp/target -name '*.json' | head
 ```
 
@@ -399,6 +408,8 @@ find /tmp/target -name '*.json' | head
 ```bash
 # docker
 cat `find /tmp/target/access/20201025 -name '*.json'` | wc -l
+```
+```bash
 wc -l /tmp/source/access.csv
 ```
 
@@ -430,7 +441,7 @@ find notebooks -name '*.json'
 #### 4-1-1. 노트북 기동 및 확인
 ```bash
 # terminal
-docker compose logs notebook | grep 8888
+docker-compose logs notebook | grep 8888
 ```
 > 출력된  URL을 복사하여 `127.0.0.1:8888` 대신 개인 `<hostname>.aiffelbiz.co.kr:8888` 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
 
@@ -978,7 +989,7 @@ dimension.printSchema()
 ### 8-2. 컨테이너 종료
 
 ```python
-docker compose down
+docker-compose down
 ```
 
 > 아래와 같은 메시지가 출력되고 모든 컨테이너가 종료되면 정상입니다
