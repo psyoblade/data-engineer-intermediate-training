@@ -987,31 +987,32 @@ docker exec -it mysql-bind mysql --port=3308 -uuser -ppass
 > 도커 컴포즈는 **도커의 명령어들을 반복적으로 수행되지 않도록 yml 파일로 저장해두고 활용**하기 위해 구성되었고, *여러개의 컴포넌트를 동시에 기동하여, 하나의 네트워크에서 동작하도록 구성*한 것이 특징입니다. 내부 서비스들 간에는 컨테이너 이름으로 통신할 수 있어 테스트 환경을 구성하기에 용이합니다. 
 <br>
 
-* 실습을 위한 기본 환경을 가져옵니다
+### 실습을 위한 기본 환경을 가져옵니다
 
 ```bash
 # terminal
 cd /home/ubuntu/work
 git clone https://github.com/psyoblade/data-engineer-basic-training.git
-cd /home/ubuntu/work/data-engineer-basic-training
+cd /home/ubuntu/work/data-engineer-basic-training/day1
 ```
+<br>
 
 ### 4-1. 컨테이너 관리
 
 > 도커 컴포즈는 **컨테이너를 기동하고 작업의 실행, 종료 등의 명령어**를 주로 다룬다는 것을 알 수 있습니다. 아래에 명시한 커맨드 외에도 도커 수준의 명령어들(pull, create, start, stop, rm)이 존재하지만 잘 사용되지 않으며 일부 deprecated 되어 자주 사용하는 명령어 들로만 소개해 드립니다
 
-* up : `docker-compose.yml` 파일을 이용하여 컨테이너를 이미지 다운로드(pull), 생성(create) 및 시작(start) 시킵니다
+#### 4-1-1. up : `docker-compose.yml` 파일을 이용하여 컨테이너를 이미지 다운로드(pull), 생성(create) 및 시작(start) 시킵니다
   - <kbd>-f <filename></kbd> : 별도 yml 파일을 통해 기동시킵니다 (default: `-f docker-compose.yml`)
   - <kbd>-d, --detach <filename></kbd> : 서비스들을 백그라운드 모드에서 수행합니다
   - <kbd>-e, --env `KEY=VAL`</kbd> : 환경변수를 전달합니다
   - <kbd>--scale <service>=<num></kbd> : 특정 서비스를 복제하여 기동합니다 (`container_name` 충돌나지 않도록 주의)
 ```bash
 # docker-compose up <options> <services>
-docker-compose up -d ubuntu
 docker-compose up -d
 ```
+<br>
 
-* down : 컨테이너를 종료 시킵니다
+#### 4-1-2. down : 컨테이너를 종료 시킵니다
   - <kbd>-t, --timeout <int> <filename></kbd> : 셧다운 타임아웃을 지정하여 무한정 대기(SIGTERM)하지 않고 종료(SIGKILL)합니다 (default: 10초)
 ```bash
 # docker-compose down <options> <services>
@@ -1031,6 +1032,7 @@ docker-compose down
 # docker compose exec [options] [-e KEY=VAL...] [--] SERVICE COMMAND [ARGS...]
 docker-compose exec ubuntu echo hello world
 ```
+<br>
 
 #### 4-2-2. logs : 컨테이너의 로그를 출력합니다
   - <kbd>-f, --follow</kbd> : 출력로그를 이어서 tailing 합니다
@@ -1038,6 +1040,7 @@ docker-compose exec ubuntu echo hello world
 # terminal
 docker-compose logs -f ubuntu
 ```
+<br>
 
 #### 4-2-3. pull : 컨테이너의 모든 이미지를 다운로드 받습니다
   - <kbd>-q, --quiet</kbd> : 다운로드 메시지를 출력하지 않습니다 
@@ -1045,6 +1048,7 @@ docker-compose logs -f ubuntu
 # terminal
 docker-compose pull
 ```
+<br>
 
 #### 4-2-4. ps : 컨테이너 들의 상태를 확인합니다
   - <kbd>-a, --all</kbd> : 모든 서비스의 프로세스를 확인합니다
@@ -1052,11 +1056,13 @@ docker-compose pull
 # terminal
 docker-compose ps -a
 ```
+<br>
 
 #### 4-2-5. top : 컨테이너 내부에 실행되고 있는 프로세스를 출력합니다
 ```bash
 # docker-compose top <services>
-docker-compose top ubuntu
+docker-compose top mysql
+docker-compose top namenode
 ```
 <br>
 
@@ -1065,22 +1071,32 @@ docker-compose top ubuntu
 
 #### 4-3-1. 도커 컴포즈를 통해서 커맨드라인 옵션을 설정을 통해 수행할 수 있습니다
 
+```bash
+# mysql: 이 등장하는 이후로 20줄을 출력
+cat docker-compose.yml | grep -ia20 'mysql:' docker-compose.yml
+```
 ```yaml
-# cat docker-compose.yml
-version: "3"
-
-services:
+# docker-compose.yml
   mysql:
     container_name: mysql
-    image: mysql
+    image: psyoblade/data-engineer-mysql:1.1
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
+      MYSQL_USER: sqoop
+      MYSQL_PASSWORD: sqoop
+    ports:
+      - '3306:3306'
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 1s
+      retries: 3
     volumes:
-      - mysql_default:/var/lib/mysql
+      - ./mysql/etc:/etc/mysql/conf.d
 ```
 
 
@@ -1291,10 +1307,12 @@ services:
 > 리눅스 터미널 환경에서 활용할 수 있는 CLI 도구들을 소개하고 실습합니다. 대부분의 **오픈소스 인프라 및 서비스는 리눅스 서버 환경**에서 운영되며, 장애 혹은 서비스 모니터링 환경에서 디버깅의 가장 기본이 되는 것이 리눅스 커맨드라인 도구들이며, 독립적인 도구들로 하나의 실행파일로 가성비가 가장 높은 효과적인 도구들이기도 합니다
 
 
-* 환경 구성 및 예제 데이터 다운로드
-```
-cd work/
+### 환경 구성 및 예제 데이터 다운로드
+```bash
+# terminal
+cd /home/ubuntu/work
 git clone https://github.com/psyoblade/linux-for-dummies
+cd /home/ubuntu/work/linux-for-dummies
 ```
 
 ### 5-1. 수집 및 적재
@@ -1373,13 +1391,16 @@ tail -n 30 data/apache-access.log
 ```
 > 로그의 마지막 30라인만 출력합니다
 
-```bash
-```
-
 <details><summary>[실습] noexists.log 로그가 없어도 계속 tail 하고 해당 파일에 로그가 추가되면 계속 tailing 하는 명령을 수행하세요 </summary>
 
 ```bash
-$ tail -F data/notexist.log
+tail -F data/notexist.log
+```
+```bash
+# 별도의 터미널에서 아래와 같이 파일생성 후 append 합니다
+cd /home/ubuntu/work/linux-for-dummies
+touch data/notexist.log
+echo "hello world" >> data/notexist.log
 ```
 
 </details>
@@ -1420,6 +1441,8 @@ wc -w data/apache-access.log
 ```bash
 # nl [OPTION] ... [FILE] ...
 nl -b data/apache-access.log          # 로그를 라인 수와 함께 출력합니다
+```
+```bash
 nl -s ',<tab>' data/apache-access.log # 000123,<line> 와 같이 구분자를 넣어 출력합니다
 ```
 
@@ -1446,7 +1469,7 @@ nl -n rz data/apache-access.log
   - <kbd>-t, --field-separator=SEP</kbd> : 구분자에 의해 컬럼을 구분
   - <kbd>-u, --unique</kbd> : 동일한 라인이 여러개 등장하는 경우 첫 번째 라인만 출력합니다
 
-* 데이터 컬럼 -> 1:국가, 2:확진자, 3:사망자
+* 컬럼에 대한 정보는 데이터 컬럼 -> 1:국가, 2:확진자, 3:사망자
 ```bash
 # sort [OPTION] ... [FILE] ...
 cat data/corona.body.tsv | sed 's/,//g' | cut --output-delimiter=',' -f1,2,3 | sort -t, -k3nr | head     # 사망자 톱 10
@@ -1455,11 +1478,41 @@ cat data/corona.body.tsv | sed 's/,//g' | cut --output-delimiter=',' -f1,2,3 | s
 <details><summary>[실습] 확진자 톱 10을 구하세요 </summary>
 
 ```bash
-cat data/corona.body.tsv | sed 's/,//g' | cut --output-delimiter=',' -f1,2,3 | sort -t, -k2nr | head     # 확진자 톱 10
+cat data/corona.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-delimiter=',' -f1,2,3 | sort -t, -k2nr | head     # 확진자 톱 10
 ```
 
 </details>
 <br>
+
+#### 최신 데이터를 통한 실습 
+
+> 최근에 업데이트(2021.07.24) 된 코로나 정보를 업데이트한 파일을 `data/corona.2021.body.tsv` 에 저장되어 있습니다. 하지만 몇 가지 변경 사항이 있는데 그러한 내용을 고려하여 결과를 출력해 주세요
+
+* 요구사항
+  - 이번에는 제일 처음 컬럼에 번호가 있어 컬럼의 순서가 다르며 `data/corona.2021.header.tsv` 파일을 통해 확인할 수 있습니다
+  - 데이터 값 가운데 `N/A` 으로 명시된 값들을 `0` 으로 변경하여 처리할 수 있도록 해주세요
+
+<details><summary>[실습] 사망자/확진자 톱 10을 구하세요 </summary>
+
+* 출력 컬럼 기준이 1:국가,2:확진자,3:사망자,4:완치 (-f2,3,4,5) 이므로 사망자(3), 확진자(2)
+```bash
+# 사망자 많은 순서
+cat data/corona.2021.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-delimiter=',' -f2,3,4,5 | sort -t, -k3nr | head
+```
+```bash
+# 확진자 많은 순서
+cat data/corona.2021.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-delimiter=',' -f2,3,4,5 | sort -t, -k2nr | head
+```
+
+</details>
+<br>
+
+```
+
+cat corona.20210724.tsv | sed 's/,//g' | cut --output-delimiter=',' -f2,3,4 | sort -t, -k3nr | head
+sed 's/N\/A/0.0/g'
+```
+
 
 
 #### 5-3-4. uniq : 유일한 값을 추출합니다
