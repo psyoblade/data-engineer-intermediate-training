@@ -208,6 +208,7 @@ After doing this, you may fix the identity used for this commit with:
 <br>
 
 
+
 ### 2-3. 브랜치
 
 #### 2-3-1. branch : 로컬(-r:리모트, -a:전체) 브랜치 목록을 출력, 생성, 삭제 작업을 수행합니다
@@ -262,11 +263,13 @@ git checkout master
 ```
 <br>
 
+
 #### 2-3-4. log : 커밋 메시지를 브랜치 히스토리 별로 확인할 수 있습니다
 ```bash
 git log
 ```
 <br>
+
 
 #### 2-3-5. 변경 상태 확인하기
 
@@ -329,6 +332,7 @@ git reflog | grep clone
 # git checkout -- .
 ```
 <br>
+
 
 #### 2-3-8. 자주 사용하는 깃 명령어
 
@@ -479,6 +483,7 @@ git stash show stash@{1}
 <br>
 
 
+
 ## 3. Docker 명령어 실습
 
 > 컨테이너 관리를 위한 도커 명령어를 실습합니다
@@ -530,6 +535,7 @@ cat /etc/issue
 ```
 <br>
 
+
 #### 3-1-3. stop : 컨테이너를 잠시 중지시킵니다
   - 해당 컨테이너가 삭제되는 것이 아니라 잠시 실행만 멈추게 됩니다
 ```bash
@@ -538,6 +544,7 @@ cat /etc/issue
 ```
 <br>
 
+
 #### 3-1-4. rm : 중단된 컨테이너를 삭제합니다
   - <kbd>-f, --force</kbd> : 실행 중인 컨테이너도 강제로 종료합니다 (실행 중인 컨테이너는 삭제되지 않습니다)
 ```bash
@@ -545,6 +552,7 @@ cat /etc/issue
 # docker rm busy_herschel
 ```
 <br>
+
 
 #### 3-1-5. run : 컨테이너의 생성과 시작을 같이 합니다 (create + start)
   - <kbd>--rm</kbd> : 종료 시에 컨테이너까지 같이 삭제합니다
@@ -562,12 +570,14 @@ cat /etc/issue
 ```
 <br>
 
+
 #### 3-1-6. kill : 컨테이너를 종료합니다
 ```bash
 # docker kill <container_name>
 docker kill ubuntu
 ```
 <br>
+
 
 ### 3-2. 컨테이너 모니터링
 
@@ -588,12 +598,14 @@ docker logs -f nginx
 ```
 <br>
 
+
 #### 3-2-3. top : 컨테이너에 떠 있는 프로세스를 확인합니다
 ```bash
 # docker top <container_name> <ps options>
 docker top nginx
 ```
 <br>
+
 
 
 ### 3-3. 컨테이너 상호작용
@@ -622,6 +634,7 @@ docker exec ubuntu /tmp/helloworld.sh
 docker images
 ```
 <br>
+
 
 #### 3-4-2. commit : 현재 컨테이너를 별도의 이미지로 저장합니다 
 
@@ -1958,7 +1971,6 @@ hdfs dfs -rmdir hdfs:///user/root/foo
 # -touchz <path> ...
 hdfs dfs -touchz  /user/root/zero_size_file
 ```
-<br>
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
@@ -2038,7 +2050,6 @@ hdfs dfs -du -s /
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
 <br>
-
 <br>
 
 
