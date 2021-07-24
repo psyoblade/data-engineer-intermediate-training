@@ -80,8 +80,8 @@ cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex1
 ### 2-1. 도커 컨테이너 기동
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex1
-docker compose pull
-docker compose up -d
+docker-compose pull
+docker-compose up -d
 ```
 <br>
 
@@ -90,7 +90,7 @@ docker compose up -d
 
 > 기본 설정은 /etc/fluentd/fluent.conf 파일을 바라보는데 예제 환경에서는 `docker-compose.yml` 설정에서 해당 위치에 ex1/fluent.conf 파일을 마운트해 두었기 때문에 컨테이너 환경 내에서 바로 실행을 해도 잘 동작합니다. 별도로 `fluentd -c /etc/fluentd/fluent.conf` 로 실행해도 동일하게 동작합니다
 
-#### 2-2-1 도커 컴포즈 파일 구성 `docker compose.yml`
+#### 2-2-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
 ```yml
 version: "3"
@@ -134,7 +134,7 @@ networks:
 #### 2-3-1. 에이전트 기동을 위해 컨테이너로 접속 후, 에이전트를 기동합니다
 ```bash
 # terminal
-docker compose exec fluentd bash
+docker-compose exec fluentd bash
 ```
 ```bash
 # docker
@@ -178,7 +178,7 @@ fluentd
   - 클라우드 터미널에 curl 설치가 되어있지 않을 수도 있으므로 도커 컨테이너에 접속합니다
 ```bash
 # terminal
-docker compose exec fluentd bash
+docker-compose exec fluentd bash
 ```
 ```bash
 # docker
@@ -236,16 +236,16 @@ curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
 
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex1
-docker compose down
+docker-compose down
 
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex2
-docker compose pull
-docker compose up -d
+docker-compose pull
+docker-compose up -d
 ```
 <br>
 
 
-#### 3-1-1 도커 컴포즈 파일 구성 `docker compose.yml`
+#### 3-1-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
 ```yml
 version: "3"
@@ -337,7 +337,7 @@ networks:
 
 ```bash
 # terminal
-docker compose exec fluentd bash
+docker-compose exec fluentd bash
 ```
 ```bash
 # docker
@@ -358,7 +358,8 @@ fluentd
 
 ```bash
 # terminal
-docker compose exec fluentd bash
+cd /home/ubuntu/work/data-engineer-basic-training/day2/ex2
+docker-compose exec fluentd bash
 ```
 ```bash
 # docker
@@ -415,16 +416,16 @@ root@7d33f313cc13:~#
 
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex2
-docker compose down
+docker-compose down
 
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex3
-docker compose pull
-docker compose up -d
+docker-compose pull
+docker-compose up -d
 ```
 <br>
 
 
-#### 4-1-1 도커 컴포즈 파일 구성 `docker compose.yml`
+#### 4-1-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
 ```yml
 version: "3"
@@ -556,7 +557,7 @@ fr.close()
 
 ```bash
 # terminal
-docker compose exec fluentd bash
+docker-compose exec fluentd bash
 ```
 ```bash
 # docker
@@ -575,7 +576,7 @@ fluentd
 
 ```bash
 # terminal
-docker compose exec fluentd bash
+docker-compose exec fluentd bash
 ```
 ```bash
 python flush_logs.py
@@ -659,16 +660,16 @@ root@2cf7c79e8367:~# for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -
 
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex3
-docker compose down
+docker-compose down
 
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex4
-docker compose pull
-docker compose up -d
+docker-compose pull
+docker-compose up -d
 ```
 <br>
 
 
-#### 5-1-1 도커 컴포즈 파일 구성 `docker compose.yml`
+#### 5-1-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
 ```yml
 version: "3"
@@ -747,7 +748,7 @@ networks:
 
 ```bash
 # terminal
-docker compose exec fluentd bash
+docker-compose exec fluentd bash
 ```
 ```bash
 # docker
@@ -763,7 +764,7 @@ fluentd
 * 별도로 컨테이너에 접속하여 예제로 현재 시간을 넣고 로그를 출력합니다
 ```bash
 # terminal
-docker compose exec fluentd bash
+docker-compose exec fluentd bash
 ```
 <br>
 
@@ -845,16 +846,16 @@ done
 
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex4
-docker compose down
+docker-compose down
 
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex5
-docker compose pull
-docker compose up -d
+docker-compose pull
+docker-compose up -d
 ```
 <br>
 
 
-#### 6-1-1 도커 컴포즈 파일 구성 `docker compose.yml`
+#### 6-1-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
 ```yml
 version: '3'
@@ -962,16 +963,16 @@ done
 
 ```bash
 # terminal
-docker compose up -d
+docker-compose up -d
 ```
 ```bash
-docker compose logs -f ubuntu
+docker-compose logs -f ubuntu
 ```
 > 애플리케이션에서 로그가 잘 전송되고 있는지 확인합니다
 <br>
 
 ```bash
-docker compose logs -f fluentd
+docker-compose logs -f fluentd
 ```
 > 플루언트디로 전송되어 출력이 되는지 확인합니다
 
@@ -1113,7 +1114,7 @@ networks:
 ### 1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex6
-docker compose up -d
+docker-compose up -d
 docker ps
 ```
 ### 2. 키바나를 통해 엘라스틱 서치를 구성합니다
@@ -1128,7 +1129,7 @@ docker ps
   * 2. 다시 Kibana 에서 Refresh 버튼을 누르면 접속 로그가 전송됨을 확인
 
 ### 3. Fluentd 구성 파일을 분석합니다
-* docker compose.yml
+* docker-compose.yml
 ```yml
 version: "3"
 services:
@@ -1192,7 +1193,7 @@ services:
 ```
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
-docker compose down
+docker-compose down
 docker ps -a
 ```
 
@@ -1363,7 +1364,7 @@ docker rm -f $container_name
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
 Ctrl+C
-docker compose down
+docker-compose down
 docker ps -a
 ```
 
@@ -1431,7 +1432,7 @@ volumes:
 ```
 * start container
 ```bash
-docker compose up -d
+docker-compose up -d
 ```
 * generate logs with progress.sh
 ```bash
@@ -1448,7 +1449,7 @@ done
 ### 4. 기동된 Fluentd 를 종료합니다
 ```bash
 Ctrl+C
-docker compose down
+docker-compose down
 docker ps -a
 ```
 

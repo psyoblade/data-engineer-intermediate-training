@@ -465,7 +465,7 @@ hadoop fs -ls /user/sqoop/target/seoul_popular_trip
 ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
 
-#### 2-4-2. 번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+#### 2-4-2. 예제 실습이 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 <br>
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
@@ -502,7 +502,8 @@ CREATE TABLE testdb.seoul_popular_exp (
   , tel VARCHAR(20)
   , tag VARCHAR(500)
 ) CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
-
+```
+```sql
 show tables;
 ```
 <br>
@@ -523,10 +524,13 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 <br>
 
 ![RM](images/RM.png)
-* 오류 확인은 리소스매니저 (http://`<cloud-public-ip>`:8088) 사이트에서 할 수 있습니다
+* 오류 확인은 리소스매니저 (`http://vm<student-id>.aiffelbiz.co.kr:8088/`) 사이트에서 할 수 있습니다
   * `application_id` 링크를 클릭하고 logs 경로를 클릭하면 http://9e48393c5f39:8042/ 와 같이 docker-container 아이로 redirect 됩니다
   * 해당 문자열을 자신의 클라우드 장비의 IP 혹은 DNS 주소로 변경하면 됩니다
   * 해당 로그 페이지에서 "syslog : Total file length is 49301 bytes." 링크를 클릭하고 "here" 링크를 클릭하면 전체 로그를 한 번에 확인할 수 있습니다
+* 포트가 변경되어 접근이 불가능한 경우는 아래와 같이 직접 확인할 수 있습니다
+  * `http://vm<student-id>.aiffelbiz.co.kr:8088/logs/userlogs/`
+  * 해당 디렉토리 내의 stdout 로그를 확인하면 오류를 확인할 수 있습니다
 <br>
 
 
@@ -602,7 +606,8 @@ CREATE TABLE testdb.seoul_popular_stg (
   , tel VARCHAR(20)
   , tag VARCHAR(500)
 ) CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
-
+```
+```sql
 show tables;
 ```
 <br>
@@ -612,6 +617,7 @@ show tables;
 * 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 TRUNCATE 는 수작업으로 수행되어야만 합니다
 
 ```bash
+# docker
 sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   -e "TRUNCATE seoul_popular_exp"
 
@@ -650,6 +656,15 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 ```
 
 </details>
+
+#### 3-3-4. 테이블 수집 실습이 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+
+* 테이블 수집 관련 컨테이너를 종료합니다
+
+```bash
+cd /home/ubuntu/work/data-engineer-${course}-training/day2
+docker-compose down
+```
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
 
