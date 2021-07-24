@@ -1,6 +1,6 @@
 # 1일차. 데이터 엔지니어링 기본
 
-> 전체 과정에서 사용하는 기본적인 명령어 혹은 서비스(git, docker, linux, hdfs, sql) 등에 대해 실습하고 사용법을 익힙니다
+> 전체 과정에서 사용하는 기본적인 명령어 혹은 서비스(git, docker, docker-compose, linux, hdfs, sql) 등에 대해 실습하고 사용법을 익힙니다.
 
 - 목차
   * [1. 클라우드 장비에 접속](#1-클라우드-장비에-접속)
@@ -10,6 +10,7 @@
   * [5. Linux 커맨드라인 명령어 실습](#5-Linux-커맨드라인-명령어-실습)
   * [6. Hadoop 커맨드라인 명령어 실습](#6-Hadoop-커맨드라인-명령어-실습)
   * [7. SQL 기본 실습](#7-SQL-기본-실습)
+  * [8. 참고 자료](#8-참고-자료)
 <br>
 
 
@@ -43,31 +44,20 @@ git version 2.17.1
 ```
 
 </details>
-<br>
-
-
-#### 1-3. 실습을 위한 예제 프로젝트를 가져옵니다
-
-> 아래에서 학습할 예정이지만, 원격지에 저장된 프로젝트를 로컬로 다운로드 하는 작업이 git clone 입니다
-
-```bash
-# terminal
-mkdir -p /home/ubuntu/work
-cd /home/ubuntu/work
-git clone https://github.com/psyoblade/data-engineer-basic-training.git
-git clone https://github.com/psyoblade/helloworld.git
-```
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
+<br>
 <br>
 
 
 ## 2. Git 명령어 실습
 
-> [Git Cheat-sheet](https://education.github.com/git-cheat-sheet-education.pdf) 를 참고하여 작성 되었습니다
+> 코드 및 리소스 형상관리를 위한 git 명령어를 실습합니다
 
 ### 2-1. 초기화
-* init : 현재 디렉토리를 Git 레포지토리로 초기화 하고, 로컬 레포지토리로 관리됩니다
+
+#### 2-1-1. init : 현재 디렉토리를 Git 레포지토리로 초기화 하고, 로컬 레포지토리로 관리됩니다
   - `.git` 경로가 생성되고, 하위에 index 및 object 들이 존재합니다
 ```bash
 # git init
@@ -75,7 +65,12 @@ mkdir -p /home/ubuntu/work/git
 cd /home/ubuntu/work/git
 git init
 ```
-* clone : 원격 저장소의 내용을 로컬 저장소에 다운로드 합니다
+  - tree 명령어로 `.git` 내부가 어떻게 구성되어 있는지 확인합니다
+```bash
+tree .git
+```
+
+#### 2-1-2 clone : 원격 저장소의 내용을 로컬 저장소에 다운로드 합니다
   - target directory 를 지정하지 않으면 프로젝트이름(`test`)이 자동으로 생성됩니다
 ```bash
 # git clone [uri]
@@ -103,7 +98,10 @@ git clone https://github.com/psyoblade/helloworld.git
 <br>
 
 
-#### 2-1-1. 기본 환경 구성
+
+### 2-2. 스테이징
+
+#### 2-2-1. 기본 환경 구성
 
 > 기본 실습 환경 구성 및 단축 명령어를 등록합니다 
 
@@ -117,34 +115,36 @@ source ~/.bashrc  # .bashrc 내용을 현재 세션에 다시 로딩합니다
 <br>
 
 
-### 2-2. 스테이징
-* status : 현재 경로의 스테이징 상태를 보여줍니다
-```bash
-# git status (-s, --short)
-git status -s
-```
-
-* add : 저장 대상 파일(들)을 인덱스에 스테이징 합니다
+#### 2-2-2. add : 저장 대상 파일(들)을 인덱스에 스테이징 합니다
   - 빈 디렉토리는 추가되지 않으며, 하나라도 파일이 존재해야 추가됩니다
   - 모든 Unstage 된 파일을 추가하는 옵션(-A)은 주의해서 사용해야 하며 .gitignore 파일을 잘 활용합니다
 ```bash
 # git add (-A, --all) [file]
+touch README.md
 git add README.md
 ```
 
-* reset : 스테이징 된 파일을 언스테이징 합니다
+#### 2-2-3. reset : 스테이징 된 파일을 언스테이징 합니다
 ```bash
 # git reset [file]
 git reset README.md
 ```
 
-* diff : 스테이징 된 파일에 따라 발생하는 이전 상태와 차이점을 보여줍니다
+#### 2-2-4. status : 현재 경로의 스테이징 상태를 보여줍니다
 ```bash
-# git diff (--name-only)
-git diff
+# git status (-s, --short)
+git status -s
 ```
 
-* commit : 스테이징(add) 된 내역을 스냅샷으로 저장합니다
+#### 2-2-5. diff : 스테이징 된 파일에 따라 발생하는 이전 상태와 차이점을 보여줍니다
+```bash
+# git diff (--name-only)
+echo "hello world" > README.md
+git diff
+git status -s
+```
+
+#### 2-2-6. commit : 스테이징(add) 된 내역을 스냅샷으로 저장합니다
   - 스테이징 된 내역이 없다면 커밋되지 않습니다
 ```bash
 # git commit -m "descriptive message"
@@ -160,7 +160,7 @@ git commit -m "[수정] 초기화 완료"
 
 ### 2-3. 브랜치
 
-* branch : 로컬(-r:리모트, -a:전체) 브랜치 목록을 출력, 생성, 삭제 작업을 수행합니다
+#### 2-3-1. branch : 로컬(-r:리모트, -a:전체) 브랜치 목록을 출력, 생성, 삭제 작업을 수행합니다
 ```bash
 # git branch (-r, --remotes | -a, --all)
 git branch -a
@@ -172,21 +172,21 @@ git branch lgde/2021
 git branch -d lgde/2021
 ```
 
-* checkout : 해당 브랜치로 이동합니다
+#### 2-3-2. checkout : 해당 브랜치로 이동합니다
   - 존재하는 브랜치로만 체크아웃이 됩니다 (-b 옵션을 주면 생성하면서 이동합니다)
 ```bash
 # git checkout (-b) [branch-name]
 git checkout -b lgde/2021
 ```
 
-* merge : 대상 브랜치와 병합합니다. **대상 브랜치는 영향이 없고, 현재 브랜치가 변경**됩니다.
+#### 2-3-3. merge : 대상 브랜치와 병합합니다. **대상 브랜치는 영향이 없고, 현재 브랜치가 변경**됩니다.
   - 변경하고자 하는 브랜치를 먼저 체크아웃하는 습관을 가지시면 좋습니다
 ```bash
 # git merge [merge-branch]
 git merge master
 ```
 
-* log : 커밋 메시지를 브랜치 히스토리 별로 확인할 수 있습니다
+#### 2-3-4. log : 커밋 메시지를 브랜치 히스토리 별로 확인할 수 있습니다
 ```bash
 git log
 ```
@@ -195,13 +195,13 @@ git log
 
 ### 2-4. 경로 관리
 
-* rm : 커밋된 파일을 삭제합니다
+#### 2-4-1. rm : 커밋된 파일을 삭제합니다
 ```bash
 # git rm [file]
 git rm README.md
 ```
 
-* mv : 파일 혹은 경로를 새로운 경로로 이동합니다
+#### 2-4-2. mv : 파일 혹은 경로를 새로운 경로로 이동합니다
 ```bash
 # git mv [source-path] [target-path]
 git mv REAMDE.md tmp
@@ -213,7 +213,7 @@ git mv REAMDE.md tmp
 
 > 깃으로 관리되지 않는 파일 혹은 경로를 패턴을 통해 관리합니다 - [gitignore.io](https://www.toptal.com/developers/gitignore)
 
-* .gitignore : 해당 파일을 생성하고 내부 파일을 아래와 같이 관리합니다
+#### 2-5-1. .gitignore : 해당 파일을 생성하고 내부 파일을 아래와 같이 관리합니다
 ```bash
 # cat .gitignore
 logs/
@@ -226,13 +226,15 @@ tmp/
 ### 2-6. 저장소 관리
 
 > 원격 저장소와 동기화 하는 방법이며, pull, push 는 항상 conflict 에 유의해야 하며, 로컬 저장소에서 merge 및 conflict 해결하는 습관을 들여야만 합니다
+**원격 저장소(github.com)의 계정이 필요하므로 실습에서는 제외하도록 하겠습니다**
 
-* pull : 원격 저장소에서 변경된 내역을 로컬 저장소에 반영합니다
+
+#### 2-6-1. pull : 원격 저장소에서 변경된 내역을 로컬 저장소에 반영합니다
 ```bash
 # git pull (--dry-run)
 ```
 
-* push : 로컬 저장소의 커밋된 내역을 원격 저장소에 반영합니다
+#### 2-6.2. push : 로컬 저장소의 커밋된 내역을 원격 저장소에 반영합니다
   - 원격 저장소에 브랜치가 존재하지 않는 경우에 업스트림 옵션(--set-upstream origin lgde/2021)을 활용합니다
 ```bash
 # git push (--set-upstream <remote> <branch>)
@@ -241,7 +243,8 @@ tmp/
 
 
 ### 2-7. 이력 관리
-* reset : 스테이징된 모든 내역을 제거 혹은 제거된 내역을 롤백합니다
+
+#### 2-7-1. reset : 스테이징된 모든 내역을 제거 혹은 제거된 내역을 롤백합니다
   - git log 명령을 통해 확인된 commit 해시 값으로 해당 시점으로 돌릴 수 있습니다
   - git reflog 명령을 통해 모든 이력을 확인할 수 있고, reset 을 undo 할 수 있습니다
 ```bash
@@ -256,7 +259,7 @@ git reset 'HEAD@{1}'
 
 ### 2-8. 임시 저장
 
-* stash : 현재 수정내역을 커밋하기는 애매하지만, 다른 브랜치로 체크아웃 하고 싶을 때 임시로 수정 내역 전체를 저장합니다
+#### 2-8-1. stash : 현재 수정내역을 커밋하기는 애매하지만, 다른 브랜치로 체크아웃 하고 싶을 때 임시로 수정 내역 전체를 저장합니다
 ```bash
 # 임시로 저장
 git stash
@@ -279,20 +282,9 @@ git stash show stash@{1}
 <br>
 
 
-### 2-9. 깃 명령어 `톱 6`
+### 2-9. 활용 사례 실습
 
-> 가장 많이 사용하는 명령어 입니다
-
-```bash
-git clone
-git status -sb                    # 브랜치 + 상태
-git commit -am "[수정] 메시지"    # 스테이징 + 커밋
-git pull
-git push
-git checkout -- .                 # 수정한 내역 버리고 마지막 커밋 시점으로 롤백
-```
-
-#### 2-9-1. 파일생성 및 스테이징
+#### 2-9-1. 변경 상태 확인하기
 
 <details><summary>[실습] LGDE.txt 파일생성 후에 스테이징 후에 상태를 확인하세요 </summary>
 
@@ -338,13 +330,39 @@ ls -al
 
 </details>
 
+
+### 2-10. 자주 사용하는 깃 명령어
+
+> 제가 가장 많이 사용하는 명령어 입니다
+
+* `git clone`                      : 프로젝트 가져오기
+* `git status -sb`                 : 브랜치 + 상태
+* `git commit -am "[수정] 메시지"` : 스테이징 + 커밋
+* `git pull`                       : 작업 시작시에 가장 먼저 해야 하는 명령어
+* `git push`                       : 작업이 완료되면 푸시
+* `git checkout -- .`              : 수정한 내역 버리고 마지막 커밋 시점으로 롤백
+
+
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+<br>
 <br>
 
 
 ## 3. Docker 명령어 실습
 
-> [Docker Cheat Sheet](https://dockerlabs.collabnix.com/docker/cheatsheet/)를 참고하여 작성 되었습니다
+> 컨테이너 관리를 위한 도커 명령어를 실습합니다
+
+
+* 먼저 실습을 위한 예제 프로젝트를 가져옵니다
+
+```bash
+# terminal
+mkdir -p /home/ubuntu/work
+cd /home/ubuntu/work
+git clone https://github.com/psyoblade/helloworld.git
+```
+<br>
+
 
 ### 3-1. 컨테이너 생성관리
 
@@ -806,11 +824,12 @@ docker exec -it mysql-bind mysql --port=3308 -uuser -ppass
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 <br>
+<br>
 
 
 ## 4. 도커 컴포즈 명령어 실습
 
-> [docker-compose cheatsheet](https://devhints.io/docker-compose) 와 [Cheatsheet](https://buildvirtual.net/docker-compose-cheat-sheet/)를 참고하여 작성 되었습니다. 도커 컴포즈는 **도커의 명령어들을 반복적으로 수행되지 않도록 yml 파일로 저장해두고 활용**하기 위해 구성되었고, *여러개의 컴포넌트를 동시에 기동하여, 하나의 네트워크에서 동작하도록 구성*한 것이 특징입니다. 내부 서비스들 간에는 컨테이너 이름으로 통신할 수 있어 테스트 환경을 구성하기에 용이합니다. 
+> 도커 컴포즈는 **도커의 명령어들을 반복적으로 수행되지 않도록 yml 파일로 저장해두고 활용**하기 위해 구성되었고, *여러개의 컴포넌트를 동시에 기동하여, 하나의 네트워크에서 동작하도록 구성*한 것이 특징입니다. 내부 서비스들 간에는 컨테이너 이름으로 통신할 수 있어 테스트 환경을 구성하기에 용이합니다. 
 <br>
 
 ### 4-1. 컨테이너 관리
@@ -1099,6 +1118,7 @@ services:
       - 8183:80
 ```
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+<br>
 <br>
 
 
@@ -1442,14 +1462,21 @@ rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/hom
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 <br>
+<br>
 
 
 ## 6. Hadoop 커맨드라인 명령어 실습
 
-> [Hadoop HDFS Commands Cheatsheet](https://images.linoxide.com/hadoop-hdfs-commands-cheatsheet.pdf)를 참고 하였습니다
+> 모든 Hadoop Filesystem 명령어는 hdfs 명령어를 사용해야만 분산저장소에 읽고, 쓰는 작업이 가능합니다
 
-* 모든 Hadoop Filesystem 명령어는 hdfs 명령어를 사용합니다
+* 실습을 위한 기본 환경을 가져옵니다
 
+```bash
+# terminal
+cd /home/ubuntu/work
+git clone https://github.com/psyoblade/data-engineer-basic-training.git
+cd /home/ubuntu/work/data-engineer-basic-training
+```
 
 ### 6-1. 파일/디렉토리 관리
 
@@ -1633,6 +1660,7 @@ du -sh /*
 ```
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 <br>
+<br>
 
 
 ## 7. SQL 기본 실습
@@ -1777,4 +1805,13 @@ drop database foo;
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 <br>
+<br>
+
+
+## 8. 참고 자료
+* [Git Cheatsheet](https://education.github.com/git-cheat-sheet-education.pdf)
+* [Docker Cheatsheet](https://dockerlabs.collabnix.com/docker/cheatsheet/)
+* [Docker Compose Cheatsheet](https://devhints.io/docker-compose)
+* [Compose Cheatsheet](https://buildvirtual.net/docker-compose-cheat-sheet/)
+* [Hadoop Commands Cheatsheet](https://images.linoxide.com/hadoop-hdfs-commands-cheatsheet.pdf)
 
