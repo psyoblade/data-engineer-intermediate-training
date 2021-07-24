@@ -1029,7 +1029,7 @@ docker-compose down
   - <kbd>-u, --user <string></kbd> : 이용자를 지정합니다
   - <kbd>-w, --workdir <string></kbd> : 워킹 디렉토리를 지정합니다
 ```bash
-# docker compose exec [options] [-e KEY=VAL...] [--] SERVICE COMMAND [ARGS...]
+# docker-compose exec [options] [-e KEY=VAL...] [--] SERVICE COMMAND [ARGS...]
 docker-compose exec ubuntu echo hello world
 ```
 <br>
@@ -1950,6 +1950,7 @@ hdfs dfs -df /
 hdfs dfs -du -s /
 # 18  /
 ```
+> <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
 
 </details>
 
@@ -1965,7 +1966,7 @@ hdfs dfs -du -s /
 
 ```bash
 # terminal
-docker compose exec mysql mysql -uroot -proot
+docker-compose exec mysql mysql -uroot -proot
 ```
 * sqoop 유저가 해당 데이터베이스를 사용할 수 있도록 권한 부여를 합니다
 ```sql
@@ -1980,7 +1981,7 @@ GRANT ALL ON foo.* TO 'sqoop'@'%';
 ### 7-2. 테이블 확인 및 SQL 실습
 ```bash
 # terminal
-docker compose exec mysql mysql -usqoop -psqoop
+docker-compose exec mysql mysql -usqoop -psqoop
 ```
 <br>
 
@@ -2015,7 +2016,8 @@ CREATE TABLE table2 (
 CREATE TABLE foo (
     foo INT
 );
-
+```
+```sql
 SHOW TABLES;
 ```
 <br>
@@ -2025,7 +2027,8 @@ SHOW TABLES;
 ```sql
 # mysql>
 ALTER TABLE foo ADD COLUMN ( bar VARCHAR(10) );
-
+```
+```sql
 DESC foo;
 ```
 <br>
@@ -2035,7 +2038,8 @@ DESC foo;
 ```sql
 # mysql>
 DROP TABLE foo;
-
+```
+```sql
 SHOW TABLES;
 ```
 <br>
@@ -2056,7 +2060,8 @@ INSERT INTO table2 VALUES ( 2, 'two' ), ( 3, 'three' );
 # mysql>
 SELECT col1, col2
 FROM table1;
-
+```
+```sql
 SELECT col2
 FROM table2
 WHERE col2 = 'two';
@@ -2068,7 +2073,8 @@ WHERE col2 = 'two';
 ```sql
 # mysql>
 UPDATE table1 SET col1 = 100 WHERE col1 = 1;
-
+```
+```sql
 SELECT col1, col2 FROM table1;
 ```
 <br>
@@ -2091,11 +2097,14 @@ DELETE FROM table2;
 
 ```bash
 # terminal
-docker compose exec mysql mysql -uroot -proot
+docker-compose exec mysql mysql -uroot -proot
 ```
 ```sql
 # mysql>
 drop database foo;
+```
+```sql
+show databases;
 ```
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
 
