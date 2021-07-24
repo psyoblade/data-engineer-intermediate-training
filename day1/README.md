@@ -17,6 +17,8 @@
     - [5-1. Linux 기본 명령어](#Linux-기본-명령어)
     - [5-2. Linux 고급 명령어](#Linux-고급-명령어)
   * [6. Hadoop 커맨드라인 명령어 실습](#6-Hadoop-커맨드라인-명령어-실습)
+    - [6-1. Hadoop 기본 명령어](#Hadoop-기본-명령어)
+    - [6-2. Hadoop 고급 명령어](#Hadoop-고급-명령어)
   * [7. SQL 기본 실습](#7-SQL-기본-실습)
   * [8. 참고 자료](#8-참고-자료)
 <br>
@@ -1771,6 +1773,7 @@ docker-compose exec namenode bash
 ```
 <br>
 
+### Hadoop 기본 명령어
 
 ### 6-1. 파일/디렉토리 관리
 
@@ -1801,6 +1804,7 @@ hdfs dfs -text /tmp/helloworld.gz
 ```
 <br>
 
+
 #### 6-2-2. cat : 텍스트 파일(plain)을 읽어서 출력합니다
   - <kbd>-ignoreCrc</kbd> : CRC 체크를 하지 않습니다
 ```bash
@@ -1811,6 +1815,7 @@ hdfs dfs -put helloworld /tmp/
 hdfs dfs -cat /tmp/helloworld
 ```
 <br>
+
 
 #### 6-2-3. appendToFile : 소스 데이터를 읽어서 타겟 데이터 파일에 append 하며, 존재하지 않는 파일의 경우 생성됩니다
 ```bash
@@ -1853,6 +1858,7 @@ ls -al *.txt
 ```
 <br>
 
+
 #### 6-3-3. get : 분산 저장소로부터 파일을 가져옵니다 
   - <kbd>-p</kbd> : 소유자 및 변경시간을 유지합니다 (preserve)
   - <kbd>-ignoreCrc</kbd> : CRC 체크를 하지 않습니다
@@ -1866,6 +1872,7 @@ cat ./uploaded.txt
 ```
 <br>
 
+
 #### 6-3-4. getmerge : 디렉토리의 모든 파일을 하나로 묶어서 가져옵니다
   - <kbd>-nl</kbd> : 매 파일의 마지막에 줄바꿈 문자를 넣습니다
 ```bash
@@ -1877,11 +1884,12 @@ cat ./manyfiles
 ```
 <br>
 
+
 #### 6-3-5. copyToLocal : get 과 동일합니다
 ```bash
 # -copyToLocal [-f] [-p] [-l] <localsrc> ... <dst>
-```
 hdfs dfs -copyToLocal /tmp/uploaded.txt ./uploaded.txt
+```
 <br>
 
 
@@ -1910,6 +1918,7 @@ hdfs dfs -mv hdfs:///tmp/uploaded.* /user/root
 
 <br>
 
+
 #### 6-4-3. rm : 지정한 패턴에 매칭되는 모든 파일을 삭제합니다
   - <kbd>-f</kbd> : 파일이 존재하지 않아도 에러 메시지를 출력하지 않습니다
   - <kbd>-r|-R</kbd> : 하위 디렉토리까지 삭제합니다 (dfs -rmr 과 동일)
@@ -1924,6 +1933,7 @@ hdfs dfs -ls hdfs:///tmp
 ```
 <br>
 
+
 #### 6-4-4. mkdir : 디렉토리를 생성합니다
   - <kbd>-p</kbd> : 중간경로가 없어도 생성합니다
 ```bash
@@ -1932,6 +1942,7 @@ hdfs -mkdir -p /create/also/mid/path
 hdfs dfs -mkdir -p hdfs:///user/root/foo
 ```
 <br>
+
 
 #### 6-4-5. rmdir : 디렉토리를 삭제합니다
   - <kbd>--ignore-fail-on-non-empty</kbd> : 와일드카드 삭제 시에 파일을 가진 디렉토리가 존재해도 오류를 출력하지 않습니다
@@ -1943,13 +1954,14 @@ hdfs dfs -rmdir hdfs:///user/root/foo
 <br>
 
 #### 6-4-6. touchz : 파일 크기가 0인 파일을 생성합니다
-  - <kbd></kbd> :
 ```bash
 # -touchz <path> ...
 hdfs dfs -touchz  /user/root/zero_size_file
 ```
 <br>
 
+
+### Hadoop 고급 명령어
 
 ### 6-5. 파일 권한 관리
 
@@ -1962,6 +1974,7 @@ hdfs dfs -touchz  /user/root/zero_size_file
 hdfs dfs -chmod 777 /user/root/zero_size_file
 ```
 <br>
+
 
 #### 6-5-2. chown : 파일의 오너/그룹을 변경합니다
   - <kbd>-R</kbd> : 하위 경로의 파일도 동일하게 적용합니다
@@ -2018,10 +2031,12 @@ hdfs dfs -du -s /
 
 </details>
 
-
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
+
 <br>
+
 
 
 ## 7. SQL 기본 실습
