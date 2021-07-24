@@ -2,46 +2,62 @@
 
 > 아파치 스파크를 통해 다양한 변환 예제를 실습합니다. 이번 장에서 사용하는 외부 오픈 포트는 4040, 4041, 8888 입니다
 
-## 스파크 실습을 위한 도커 컨테이너를 기동합니다
-* 최신 소스를 내려 받습니다
+
+## 1. 최신버전 업데이트 테이블
+
+> 원격 터미널에 접속하여 관련 코드를 최신 버전으로 내려받고, 과거에 실행된 컨테이너가 없는지 확인하고 종료합니다
+
+### 1-1. 최신 소스를 내려 받습니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training
+# terminal
+cd /home/ubuntu/work/data-engineer-${course}-training
 git pull
 ```
-* 스파크 워크스페이스로 이동하여 도커를 기동합니다
+<br>
+
+### 1-2. 실습을 위한 이미지를 내려받고 컨테이너를 기동합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day3
+# terminal
+cd /home/ubuntu/work/data-engineer-${course}-training/day4
+docker-compose pull
 docker-compose up -d
-docker-compose logs -f notebook
 ```
-* 출력되는 로그 가운데 마지막에 URL 이 출력되는데 해당 URL에서 127.0.0.1 값을 student#.lgebigdata.com 으로 변경하여 접속합니다
+<br>
+
+### 1-3. 스파크 실습을 위해 노트북 페이지에 접속합니다
+* logs 출력에 localhost:8888 페이지를 크롬 브라우저에서 오픈합니다
+```bash
+# terminal
+docker-compose ps
+
+sleep 5
+docker-compose logs notebook
+```
+> `http://127.0.0.1:8888/?token=87e758a1fac70558a6c4b4c5dd499d420654c509654c6b01` 이러한 형식의 URL 에서 `127.0.0.1` 을 자신의 호스트 이름(`vm<number>.aiffelbiz.co.kr`)으로 변경하여 접속합니다
+<br>
   * http://student#.lgebigdata.com:8888/?token=d508d3a860cbc00c1095b078f9f7bd755a3b3f95f715692e
   * 접속하면 jupyter notebook lab 이 열리고 work 폴더가 보이면 정상 기동 된 것입니다
   * 이제 마우스로 work 폴더를 클릭하고 해당 경로 안에서 노트북 페이지를 생성합니다
+<br>
 
-* 목차
-  * 스파크 기본 명령어 이해
-    * [1. 스파크 기본 명령어 이해](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_1.html)
-    * [2. 기본 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_2.html)
-    * [3. 데이터 타입 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_3.html)
-    * [4. 조인 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_4.html)
-    * [5. 집계 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_5.html)
-    * [6. 스파크 JDBC to MySQL](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_6.html)
-    * [7. 스파크 JDBC to MongoDB](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_7.html)
-  * 스파크 고급 명령어 이해
-    * [1. Repartition vs. Coalesce Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_1.html)
-    * [2. Skewness Problem Resolutions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_2.html)
-    * [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_3.html)
-    * [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_4.html)
-    * [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_5.html)
-  * 파이썬 첫걸음 (외부 문서링크) - Python 3.x 기준
-    * [1. 파이썬 기초문법 1부](https://blog.myungseokang.dev/posts/python-basic-grammar1/)
-    * [2. 파이썬 기초문법 2부](https://blog.myungseokang.dev/posts/python-basic-grammar2/)
-    * [3. 코딩을 몰라도 쉽게 만드는 데이터수집기 만들기](https://book.coalastudy.com/data_crawling/)
-  * 파이썬 분석 첫걸음 (외부 문서링킁)
-    * [1. Pandas 기초](https://doorbw.tistory.com/172)
-    * [2. Numpy 기초](https://doorbw.tistory.com/171)
-    * [3. Plotly 기초](https://dailyheumsi.tistory.com/118)
+
+## 2. 데이터 변환 기본
+### [1. 스파크 기본 명령어 이해](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day4_pyspark_tutorial_1.html)
+### [2. 기본 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day4_pyspark_tutorial_2.html)
+### [3. 데이터 타입 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day4_pyspark_tutorial_3.html)
+### [4. 조인 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day4_pyspark_tutorial_4.html)
+### [5. 집계 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day4_pyspark_tutorial_5.html)
+### [6. 스파크 JDBC to MySQL](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day4_pyspark_tutorial_6.html)
+### [7. 스파크 JDBC to MongoDB](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day4_pyspark_tutorial_7.html)
+<br>
+
+## 3. 데이터 변환 고급
+### [1. Repartition vs. Coalesce Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_1.html)
+### [2. Skewness Problem Resolutions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_2.html)
+### [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_3.html)
+### [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_4.html)
+### [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_5.html)
+<br>
 
 
 
@@ -78,3 +94,15 @@ docker-compose logs -f notebook
   * M/R 작업이 완료되고난 경우 병렬처리의 수에 따라 그대로 저장되는 경우가 대부분이므로 반드시 Coerce 를 통해 파일 수를 줄여야 합니다
   * Coerce 의 경우 이전 단계의 Reduce 작업의 수에 영향을 미칠 수 있으므로 유의해서 사용해야 합니다
   * Coerce 가 어려운 상황이라면 Repartitioning 을 통해 Shuffle 이 일어나더라도 더 나은 성능과 결과물을 만들 수 있습니다
+
+
+## 참고 자료
+* 파이썬 첫걸음 (외부 문서링크) - Python 3.x 기준
+  - [1. 파이썬 기초문법 1부](https://blog.myungseokang.dev/posts/python-basic-grammar1/)
+  - [2. 파이썬 기초문법 2부](https://blog.myungseokang.dev/posts/python-basic-grammar2/)
+  - [3. 코딩을 몰라도 쉽게 만드는 데이터수집기 만들기](https://book.coalastudy.com/data_crawling/)
+* 파이썬 분석 첫걸음 (외부 문서링킁)
+  - [1. Pandas 기초](https://doorbw.tistory.com/172)
+  - [2. Numpy 기초](https://doorbw.tistory.com/171)
+  - [3. Plotly 기초](https://dailyheumsi.tistory.com/118)
+
