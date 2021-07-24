@@ -203,8 +203,6 @@ After doing this, you may fix the identity used for this commit with:
 
 ![git.1](images/git.1.png)
 
-[목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
-
 <br>
 
 
@@ -344,6 +342,9 @@ git reflog | grep clone
 * `git pull`                       : 작업 시작시에 가장 먼저 해야 하는 명령어
 * `git push`                       : 작업이 완료되면 푸시
 * `git checkout -- .`              : 수정한 내역 버리고 마지막 커밋 시점으로 롤백
+
+[목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
 
 
@@ -479,6 +480,7 @@ git stash show stash@{1}
 <br>
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
 <br>
 
@@ -604,6 +606,7 @@ docker logs -f nginx
 # docker top <container_name> <ps options>
 docker top nginx
 ```
+
 <br>
 
 
@@ -622,6 +625,9 @@ docker cp ./helloworld.sh ubuntu:/tmp
 # docker exec <container_name> <args>
 docker exec ubuntu /tmp/helloworld.sh
 ```
+
+[목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
 
 
@@ -1017,6 +1023,7 @@ docker exec -it mysql-bind mysql --port=3308 -uuser -ppass
 > 이번 예제는 경로만 다를 뿐 동일하므로 실습은 각자 해보시기 바랍니다
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
 <br>
 
@@ -1105,6 +1112,9 @@ docker-compose ps -a
 docker-compose top mysql
 docker-compose top namenode
 ```
+
+[목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
 
 
@@ -2203,6 +2213,7 @@ show databases;
 > <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나옵니다
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
 <br>
 
