@@ -62,6 +62,8 @@ git version 2.17.1
   - 개발 과정에서 다양한 방법으로 개발해보고, 버리거나 혹은 적용하는 상황에 Branch 를 활용한 개발이 용이
   - 클라이언트 장비의 오류나 다양한 장애 상황에서도 주기적으로 동기화된 코드의 안전성 보장
 
+### Git 기본 명령어
+
 ### 2-1. 초기화
 
 #### 2-1-1. init : 현재 디렉토리를 Git 레포지토리로 초기화 하고, 로컬 레포지토리로 관리됩니다
@@ -252,8 +254,85 @@ git checkout master
 ```bash
 git log
 ```
+
+#### 2-3-5. 변경 상태 확인하기
+
+<details><summary>[실습] LGDE.txt 파일생성 후에 스테이징 후에 상태를 확인하세요 </summary>
+
+```bash
+git checkout master
+touch LGDE.txt
+git add LGDE.txt
+git status
+```
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```text
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+  	new file:   LGDE.txt
+```
+
+</details>
 <br>
 
+
+#### 2-3-6. 실수로 삭제된 파일을 복구하기
+
+```bash
+cd /home/ubuntu/work/helloworld
+rm *
+ls -al
+```
+
+<details><summary>[실습] 모든 코드를 원래 상태로 복구해 보세요</summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```bash
+git checkout -- .
+git statusb -sb
+ls -al
+```
+
+</details>
+
+#### 2-3-7. 브랜치가 꼬여서 난감할 때
+
+> 복잡한 작업을 하다보면 꼬여서 곤란한 경우가 있는데 이 때에 아예 처음으로 돌리고 싶다면 clone 시점으로 reset 하시는 편이 좋습니다
+
+```bash
+cd /home/ubuntu/work/helloworld
+git reflog | grep clone
+```
+```bash
+# clone 한 시점의 HEAD 번호로 리셋 후, 일부 수정된 사항은 checkout 하시면 정리가 됩니다
+# git reset HEAD@{25}
+# git checkout -- .
+```
+<br>
+
+
+### 2-3-8. 자주 사용하는 깃 명령어
+
+> 제가 가장 많이 사용하는 명령어 입니다
+
+* `git clone`                      : 프로젝트 가져오기
+* `git status -sb`                 : 브랜치 + 상태
+* `git commit -am "[수정] 메시지"` : 스테이징 + 커밋
+* `git pull`                       : 작업 시작시에 가장 먼저 해야 하는 명령어
+* `git push`                       : 작업이 완료되면 푸시
+* `git checkout -- .`              : 수정한 내역 버리고 마지막 커밋 시점으로 롤백
+
+<br>
+
+
+### Git 고급 명령어
 
 ### 2-4. 경로 관리
 
@@ -382,82 +461,6 @@ git stash show stash@{1}
 ```
 <br>
 
-
-### 2-9. 활용 사례 실습
-
-#### 2-9-1. 변경 상태 확인하기
-
-<details><summary>[실습] LGDE.txt 파일생성 후에 스테이징 후에 상태를 확인하세요 </summary>
-
-```bash
-git checkout master
-touch LGDE.txt
-git add LGDE.txt
-git status
-```
-
-> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
-
-```text
-On branch master
-Your branch is up to date with 'origin/master'.
-
-Changes to be committed:
-  (use "git reset HEAD <file>..." to unstage)
-
-  	new file:   LGDE.txt
-```
-
-</details>
-<br>
-
-
-#### 2-9-2. 실수로 삭제된 파일을 복구하기
-
-```bash
-cd /home/ubuntu/work/helloworld
-rm *
-ls -al
-```
-
-<details><summary>[실습] 모든 코드를 원래 상태로 복구해 보세요</summary>
-
-> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
-
-```bash
-git checkout -- .
-git statusb -sb
-ls -al
-```
-
-</details>
-
-#### 2-9-3. 브랜치가 꼬여서 난감할 때
-
-> 복잡한 작업을 하다보면 꼬여서 곤란한 경우가 있는데 이 때에 아예 처음으로 돌리고 싶다면 clone 시점으로 reset 하시는 편이 좋습니다
-
-```bash
-cd /home/ubuntu/work/helloworld
-git reflog | grep clone
-```
-```bash
-# clone 한 시점의 HEAD 번호로 리셋 후, 일부 수정된 사항은 checkout 하시면 정리가 됩니다
-# git reset HEAD@{25}
-# git checkout -- .
-```
-<br>
-
-
-### 2-10. 자주 사용하는 깃 명령어
-
-> 제가 가장 많이 사용하는 명령어 입니다
-
-* `git clone`                      : 프로젝트 가져오기
-* `git status -sb`                 : 브랜치 + 상태
-* `git commit -am "[수정] 메시지"` : 스테이징 + 커밋
-* `git pull`                       : 작업 시작시에 가장 먼저 해야 하는 명령어
-* `git push`                       : 작업이 완료되면 푸시
-* `git checkout -- .`              : 수정한 내역 버리고 마지막 커밋 시점으로 롤백
 
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
