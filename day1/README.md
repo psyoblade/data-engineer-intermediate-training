@@ -1320,6 +1320,7 @@ cd /home/ubuntu/work/linux-for-dummies
 * wget
 * curl
 * w3m / lynx
+<br>
 
 
 ### 5-2. 출력 및 확인
@@ -1330,6 +1331,7 @@ cd /home/ubuntu/work/linux-for-dummies
 # cat [OPTION] ... [FILE] ... 
 cat -n helloworld.py
 ```
+<br>
 
 #### 5-2-2. more : 텍스트 파일의 일부를 지속적으로 출력
 
@@ -1356,7 +1358,6 @@ more +/Exception -10 data/hadoop-hdfs-secondarynamenode.log
 </details>
 <br>
 
-
 #### 5-2-3. head : 텍스트 파일의 처음부터 일부를 출력
 
   - <kbd>-c, --bytes=[-]NUM</kbd> : 첫 번째 NUM bytes 크기 만큼 출력하되, NUM 이 음수인 경우는 마지막 NUM bytes 를 제외한 전체를 출력합니다
@@ -1376,7 +1377,6 @@ head -n 30 data/apache-access.log
 
 </details>
 <br>
-
 
 #### 5-2-4. tail : 텍스트 파일의 마지막부터 일부를 출력
 
@@ -1406,7 +1406,6 @@ echo "hello world" >> data/notexist.log
 </details>
 <br>
 
-
 ### 5-3. 계산 및 정렬
 
 #### 5-3-1. wc : 텍스트 파일의 단어의 수를 계산합니다
@@ -1431,7 +1430,6 @@ wc -w data/apache-access.log
 </details>
 <br>
 
-
 #### 5-3-2. nl : 라인 수를 계산합니다
 
   - <kbd>-b, --body-numbering=STYLE</kbd> : 라인 수를 출력합니다
@@ -1454,7 +1452,6 @@ nl -n rz data/apache-access.log
 
 </details>
 <br>
-
 
 #### 5-3-3. sort : 데이터를 정렬합니다
 
@@ -1507,7 +1504,6 @@ cat data/corona.2021.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output
 </details>
 <br>
 
-
 #### 5-3-4. uniq : 유일한 값을 추출합니다
 
   - <kbd>-c, --count</kbd> : 중복 횟수와 라인을 같이 출력 합니다
@@ -1519,16 +1515,7 @@ cat data/corona.2021.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output
 # uniq [OPTION] ... [INPUT [OUTPUT]] ...
 cat /etc/passwd | cut -d: -f4 | sort | uniq -d    # 패스워드 파일에서 중복 그룹만 출력합니다
 ```
-
-<details><summary>[실습] 패스워드 파일에서 로그인 쉘 가운데 톱 3을 출력하세요</summary>
-
-```bash
-cat /etc/passwd | cut -d: -f6 | sort | uniq -c | sort -nr | head -3
-```
-
-</details>
 <br>
-
 
 ### 5-4. 변환 및 기타
 
@@ -1545,13 +1532,24 @@ cat /etc/passwd | cut -d: -f6 | sort | uniq -c | sort -nr | head -3
   - <kbd>--output-delimiter=STRING</kbd> : 출력시에 사용할 구분자를 지정합니다
 ```bash
 # cut OPTION ... [FILE] ...
-
-$ cut -f 2 cut_txt    # 탭으로 구분된 라인들의 2번째 컬럼만 출력합니다
-$ cut -f1- --output-delimiter=',' cut_text    # 탭으로 구분된 라인을 콤마로 구분된 라인으로 변경하여 출력합니다
-$ ls -al | cut -b -10 --complement    # ls -al 결과의 앞 10바이트를 제외한 나머지 컬럼 들만 출력합니다
+# cut -f 2 cut_txt    												# 탭으로 구분된 라인들의 2번째 컬럼만 출력합니다
+# cut -f1- --output-delimiter=',' cut_text    # 탭으로 구분된 라인을 콤마로 구분된 라인으로 변경하여 출력합니다
+ls -al | cut -b -10 --complement    					# ls -al 결과의 앞 10바이트를 제외한 나머지 컬럼 들만 출력합니다
 ```
-<br>
 
+##### /etc/passwd 파일구성
+
+* `root:x:0:0:root:/root:/bin/bash`
+  - 계정명 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
+
+<details><summary>[실습] 패스워드 파일에서 로그인 쉘 가운데 가장 빈도가 높은 3개를 찾아보세요</summary>
+
+```bash
+cat /etc/passwd | cut -d: -f7 | sort | uniq -c | sort -nr | head -3
+```
+
+</details>
+<br>
 
 #### 5-4-2. tr : 데이터를 변환하여 출력합니다
 
@@ -1579,7 +1577,6 @@ head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
 </details>
 <br>
 
-
 #### 5-4-3. sed : 반환 데이터를 정규실에 맞추어 변경 및 출력합니다
 
   - <kbd>-n, --quiet, --silent</kbd> : 패턴에 만족하는 기본 출력을 하지 않습니다
@@ -1593,19 +1590,18 @@ head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
 
 ```bash
 # sed [OPTION] ... {script-only-if-no-other-script} [FILE]
-sed -n '3,5p' /etc/passwd                   # 패스워드 파일의 3~5번째 줄을 출력합니다
-sed 's/before/after/g' -i\.bak sed_text     # 파일의 before 를 after 로 모두 치환하고 원본 파일을 .bak 파일로 저장합니다
+# sed 's/before/after/g' -i\.bak sed_text     # 파일의 before 를 after 로 모두 치환하고 원본 파일을 .bak 파일로 저장합니다
+sed -n '3,5p' /etc/passwd                     # 패스워드 파일의 3~5번째 줄을 출력합니다
 ```
 
-<details><summary>[실습] 패스워드 파일(/etc/passwd)에서 첫 번째 단어가 bin 으로 시작하는 라인을 출력합니다</summary>
+<details><summary>[실습] 패스워드 파일(/etc/passwd)을 읽어서 ubuntu 계정을 찾고, kubundu 로 변경하세요</summary>
 
 ```bash
-sed '/^bin/p' /etc/passwd
+sed 's/ubuntu/kubuntu/g' /etc/passwd
 ```
 
 </details>
 <br>
-
 
 #### 5-4-4. awk : 데이터를 변환하여 출력합니다
 
@@ -1622,10 +1618,16 @@ sed '/^bin/p' /etc/passwd
 
 ```bash
 # awk [-W OPTION] [-F VALUE] [-v VAR=VALUE] [--] 'PATTERN { ACTION }' [FILE ...]
-awk '/1200/ { print $0 }' /etc/passwd                                 # 패스워드 파일의 root 문자가 존재하는 라인을 출력합니다
-awk '{$7 = $1 * $3 ; print $3, $1, "*", $2, "=", $1 * $2}' address    # 주소록에서 1번 숫자와 2번 숫자의 곱과 3번째 컬럼을 출력합니다
-awk -F: '{ print NR, $1 }' /etc/passwd                                #  패스워드 파일을 읽어서 레코드 수와 아이디를 출력합니다
+# awk '{$7 = $1 * $3 ; print $3, $1, "*", $2, "=", $1 * $2}' address  # 주소록에서 1번 숫자와 2번 숫자의 곱과 3번째 컬럼을 출력합니다
+awk -F: '{ print NR, $1 }' /etc/passwd                                # 패스워드 파일을 읽어서 레코드 수와 아이디를 출력합니다
+awk '/root/ { print $0 }' /etc/passwd                                 # 패스워드 파일의 root 문자가 존재하는 라인을 출력합니다
 ```
+<br>
+
+##### /etc/passwd 파일구성
+
+* `root:x:0:0:root:/root:/bin/bash`
+  - 계정명 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
 
 <details><summary>[실습] /etc 경로에 존재하는 파일의 user 와 group 의 유일한(uniq) 값만 출력하세요</summary>
 
@@ -1635,7 +1637,6 @@ ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
 
 </details>
 <br>
-
 
 #### 5-4-5. rsync : 소스경로와 타겟 경로를 동기화 합니다
 
@@ -1653,10 +1654,22 @@ ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
 
 ```bash
 # rsync [OPTION ...] SRC ... [DEST]
-apt-get install ssh rsync                               # 기본 패키지에 포함되어 있지 않으므로 ssh 및 rsync 는 별도로 설치되어야 합니다
-rsync -av ./data ubuntu@hostname:/home/ubuntu/archive   # 같은 네트워크의 원격지 ubuntu 계정의 archive 경로에 현재 data 경로 전체를 백업합니다
-rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/home/ubuntu/data .    # EC2 장비의 data 경로를 로컬에 복사합니다
+# apt-get install ssh rsync                               # 기본 패키지에 포함되어 있지 않으므로 ssh 및 rsync 는 별도로 설치되어야 합니다
+# rsync -av ./data ubuntu@hostname:/home/ubuntu/archive   # 같은 네트워크의 원격지 ubuntu 계정의 archive 경로에 현재 data 경로 전체를 백업합니다
+# rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/home/ubuntu/data .    # EC2 장비의 data 경로를 로컬에 복사합니다
 ```
+
+<details><summary>[실습] /tmp/backup 경로를 생성하고 linux-for-dummies 폴더 전체를 백업하세요 </summary>
+
+```bash
+cd /home/ubuntu/work/linux-for-dummies
+pwd
+mkdir -p /tmp/backup
+rsync -av . /tmp/backup
+```
+
+</details>
+<br>
 
 
 ### 5-5. 운영 도구
@@ -2015,4 +2028,5 @@ drop database foo;
 * [Docker Compose Cheatsheet](https://devhints.io/docker-compose)
 * [Compose Cheatsheet](https://buildvirtual.net/docker-compose-cheat-sheet/)
 * [Hadoop Commands Cheatsheet](https://images.linoxide.com/hadoop-hdfs-commands-cheatsheet.pdf)
+* [Linux Password](https://www.cyberciti.biz/faq/understanding-etcpasswd-file-format/)
 
