@@ -1,19 +1,21 @@
-# 8일차. 데이터 적재 서비스 실습 - Hive 
+# 8일차. 아파치 하이브 데이터 적재
+
 > 아파치 하이브를 통해 다양한 데이터 웨어하우스 예제를 실습합니다
 
 - 목차
   * [1. 최신버전 업데이트](#1-최신버전-업데이트)
   * [2. 하이브 기본명령어 가이드](#2-하이브-기본-명령어-가이드)
-    * [2-1. 하이브 데이터베이스 DDL 가이드](#2-1-하이브-데이터베이스-DDL-가이드)
-    * [2-2. 하이브 테이블 DDL 가이드](#2-2-하이브-테이블-DDL-가이드)
-    * [2-3. 하이브 DML 가이드](#2-3-하이브-DML-가이드)
-    * [2-4. 하이브 외부 저장소 테이블](#2-4-하이브-외부-저장소-테이블)
+    - [2-1. 하이브 데이터베이스 DDL 가이드](#2-1-하이브-데이터베이스-DDL-가이드)
+    - [2-2. 하이브 테이블 DDL 가이드](#2-2-하이브-테이블-DDL-가이드)
+    - [2-3. 하이브 DML 가이드](#2-3-하이브-DML-가이드)
+    - [2-4. 하이브 외부 저장소 테이블](#2-4-하이브-외부-저장소-테이블)
   * [3. 하이브 트러블슈팅 가이드](#3-하이브-트러블슈팅-가이드)
-    * [3-1. 파티셔닝을 통한 성능 개선](#3-1-파티셔닝을-통한-성능-개선)
-    * [3-2. 파일포맷 변경을 통한 성능 개선](#3-2-파일포맷-변경을-통한-성능-개선)
-    * [3-3. 비정규화를 통한 성능 개선](#3-3-비정규화를-통한-성능-개선)
-    * [3-4. 글로벌 정렬 회피를 통한 성능 개선](#3-4-글로벌-정렬-회피를-통한-성능-개선)
-    * [3-5. 버킷팅을 통한 성능 개선](#3-5-버킷팅을-통한-성능-개선)
+    - [3-1. 파티셔닝을 통한 성능 개선](#3-1-파티셔닝을-통한-성능-개선)
+    - [3-2. 파일포맷 변경을 통한 성능 개선](#3-2-파일포맷-변경을-통한-성능-개선)
+    - [3-3. 비정규화를 통한 성능 개선](#3-3-비정규화를-통한-성능-개선)
+    - [3-4. 글로벌 정렬 회피를 통한 성능 개선](#3-4-글로벌-정렬-회피를-통한-성능-개선)
+    - [3-5. 버킷팅을 통한 성능 개선](#3-5-버킷팅을-통한-성능-개선)
+  * [4 참고 자료](#참고 자료)
 
 <br>
 
@@ -27,6 +29,7 @@
 cd /home/ubuntu/work/data-engineer-intermediate-training
 git pull
 ```
+<br>
 
 ### 1-2. 현재 기동되어 있는 도커 컨테이너를 확인하고, 종료합니다
 
@@ -86,6 +89,8 @@ docker compose exec hive-serverbash
 # docker
 beeline
 ```
+<br>
+
 
 * beeline 프롬프트가 뜨면 Hive Server 에 접속하기 위해 대상 서버로 connect 명령을 수행합니다
 ```bash
@@ -100,7 +105,12 @@ Connected to: Apache Hive (version 2.3.2)
 Driver: Hive JDBC (version 2.3.2)
 Transaction isolation: TRANSACTION_REPEATABLE_READ
 ```
+
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
 <br>
+<br>
+
 
 
 ## 2 하이브 기본 명령어 가이드 
@@ -204,6 +214,8 @@ show databases;
 create database if not exists testdb comment 'test database' 
 location '/user/hive/warehouse/testdb' with dbproperties ('createdBy' = 'psyoblade');
 ```
+<br>
+
 * 이미 생성된 데이터베이스는 ALTER 명령어로 수정이 가능합니다
 ```sql
 alter database testdb set dbproperties ('createdfor'='park.suhyuk');
@@ -228,10 +240,16 @@ describe database extended testdb;
 # beeline> 
 alter database testdb set owner role admin;
 ```
+<br>
+
 * 수정된 OWNER 정보를 확인합니다 
 ```sql
 describe database extended testdb;
 ```
+
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
 <br>
 
 
@@ -303,6 +321,8 @@ describe database extended testdb;
       | INPUTFORMAT input_format_classname OUTPUTFORMAT output_format_classname
 */
 ```
+<br>
+
 
 * 실습을 위한 고객 테이블 (employee)을 생성합니다
 ```sql
@@ -331,6 +351,8 @@ create table if not exists employee (
 # beeline> 
 show tables;
 ```
+<br>
+
 * 부분일치 하는 테이블 목록을 조회합니다
   - like 연산자와 유사하게 동작합니다
 ```sql
@@ -476,6 +498,10 @@ select count(1) from renamed_emp;
 > 결과가 0으로 나오면 정답입니다
 
 </details>
+
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
 <br>
 
 
@@ -511,6 +537,8 @@ create table imdb_movies (
   , metascore int
 ) row format delimited fields terminated by '\t';
 ```
+<br>
+
 * 생성된 테이블에 로컬에 존재하는 파일을 업로드합니다
 ```sql
 load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
@@ -541,6 +569,8 @@ hadoop fs -ls /user/hive/warehouse/testdb/
     [LIMIT [offset,] rows]
 */
 ```
+<br>
+
 * 테이블에 저장된 레코드를 SQL 구문을 통해서 조회합니다
   - SELECT : 출력하고자 하는 컬럼을 선택 
   - GROUP BY : 집계 연산을 위한 컬럼을 선택
@@ -578,6 +608,8 @@ select rank, genre, title from imdb_movies order by rank asc limit 10;
 # beeline> 
 create table if not exists imdb_title (title string);
 ```
+<br>
+
 * INSERT ... FROM 구문을 이용하여 `imdb_movies` 테이블로부터 제목만 읽어와서 저장합니다
 ```sql
 insert into table imdb_title select title from imdb_movies limit 5;
@@ -605,6 +637,8 @@ select title from imdb_title;
     INSERT OVERWRITE TABLE tablename1 [PARTITION (partcol1=val1, ..) [IF NOT EXISTS]] select_statement FROM from_statement;
 */
 ```
+<br>
+
 * 제목만 가진 테이블에 OVERWRITE 키워드로 입력합니다
 ```sql
 # beeline> 
@@ -612,6 +646,8 @@ create table if not exists imdb_title (title string);
 insert overwrite table imdb_title select description from imdb_movies;
 select title from imdb_title limit 5;
 ```
+<br>
+
 
 * 임의의 데이터를 직접 입력합니다 - INSERT VALUES
 ```sql
@@ -625,6 +661,8 @@ select title from imdb_title limit 5;
 # beeline> 
 insert into imdb_title values ('1 my first hive table record'), ('2 my second records'), ('3 third records');
 ```
+<br>
+
 * like 연산을 이용하여 특정 레코드만 가져옵니다
 ```sql
 select title from imdb_title where title like '%record%';
@@ -663,6 +701,8 @@ set hive.txn.manager=org.apache.hadoop.hive.ql.lockmgr.DbTxnManager;
 set hive.compactor.initiator.on=true;
 set hive.compactor.worker.threads=1;
 ```
+<br>
+
 * 해당 테이블에 2개의 레코드를 아래와 같이 입력합니다
 ```sql
 insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk'), (3, 'lgde course');
@@ -778,6 +818,10 @@ select * from imdb_recover;
 ```
 
 </details>
+
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
 <br>
 
 
@@ -794,6 +838,8 @@ select * from imdb_recover;
 # terminal
 docker-compose exec hive-server bash
 ```
+<br>
+
 * 원본 파일의 스키마를 확인 및 파일을 하둡 클러스터에 업로드합니다
 ```
 hadoop jar /tmp/source/parquet-tools-1.8.1.jar schema file:///tmp/source/user/20201025/2e3738ff-5e2b-4bec-bdf4-278fe21daa3b.parquet
@@ -807,6 +853,8 @@ message purchase_20201025 {
   optional int32 p_amount;
 }
 ```
+<br>
+
 * 경로 확인 및 생성
 ```bash
 hadoop fs -mkdir -p /user/lgde/purchase/dt=20201025
@@ -829,7 +877,8 @@ beeline
 create database if not exists testdb comment 'test database' 
   location '/user/lgde/warehouse/testdb'
   with dbproperties ('createdBy' = 'lgde');
-
+```
+```sql
 use testdb;
 
 create external table if not exists purchase (
@@ -842,10 +891,13 @@ create external table if not exists purchase (
 row format delimited 
 stored as parquet 
 location 'hdfs:///user/lgde/purchase';
-
+```
+```sql
 alter table purchase add if not exists partition (dt = '20201025') location 'hdfs:///user/lgde/purchase/dt=20201025';
 alter table purchase add if not exists partition (dt = '20201026') location 'hdfs:///user/lgde/purchase/dt=20201026';
 ```
+<br>
+
 
 * 생성된 하이브 테이블을 조회합니다
 ```sql
@@ -853,6 +905,8 @@ alter table purchase add if not exists partition (dt = '20201026') location 'hdf
 show partitions purchase;
 select * from purchase where dt = '20201025';
 ```
+<br>
+
 * 일자별 빈도를 조회합니다
 ```sql
 # beeline>
@@ -887,6 +941,8 @@ message user_20201025 {
   optional int32 u_signup;
 }
 ```
+<br>
+
 
 * 하이브 명령 수행을 위해 beeline 을 실행합니다
 ```bash
@@ -910,16 +966,21 @@ create external table if not exists `user` (
 row format delimited 
 stored as parquet 
 location 'hdfs:///user/lgde/user';
-
+```
+```sql
 alter table `user` add if not exists partition (dt = '20201025') location 'hdfs:///user/lgde/user/dt=20201025';
 alter table `user` add if not exists partition (dt = '20201026') location 'hdfs:///user/lgde/user/dt=20201026';
 ```
+<br>
+
 * 생성된 결과를 확인합니다
 ```sql
 # beeline>
 select * from `user` where dt = '20201025';
 select dt, count(1) as cnt from `user` group by dt;
 ```
+<br>
+
 
 ### 2-4-3. Parquet 포맷과 Hive 테이블 데이터 타입
 | Parquet | Hive | Description |
@@ -929,6 +990,11 @@ select dt, count(1) as cnt from `user` group by dt;
 | float | float | 실수형 |
 | double | double | 실수형 |
 | binary | string | 문자열 |
+<br>
+
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
 <br>
 
 
@@ -972,6 +1038,8 @@ use testdb;
 | Votes | 투표 |
 | Revenue | 매출 |
 | Metascrore | 메타스코어 |
+
+<br>
 
 * 실습을 위해 `imdb_movies` 테이블을 생성합니다
 ```sql
@@ -1057,6 +1125,8 @@ select title, cast(revenue as float) as rev from imdb_movies where year = '2015'
   - partitioned by (year string) : 경로별로 나뉘어 저장한다는 것을 선언
   - dynamic.partition=true : 데이터 값에 따라 동적으로 저장함을 지정
   - dynamic.partition.mode=nonsstrict : strict 로 지정하는 경우 실수로 overwrite 를 막기 위해 저장시에 반드시 1개 이상의 파티션을 명시해야만 수행되는 엄격한 옵션
+<br>
+
 ```sql
 # beeline> 
 drop table if exists imdb_partitioned;
@@ -1078,6 +1148,8 @@ create table imdb_partitioned (
 set hive.exec.dynamic.partition=true;
 set hive.exec.dynamic.partition.mode=nonstrict;
 ```
+<br>
+
 * 기존 테이블로부터 데이터를 가져와서 동적으로 파티셔닝하여 저장합니다
 ```sql
 insert overwrite table imdb_partitioned partition (year) 
@@ -1088,6 +1160,8 @@ insert overwrite table imdb_partitioned partition (year)
 ```sql
 select year, count(1) as cnt from imdb_partitioned group by year;
 ```
+<br>
+
 * Explain 명령을 통해서 2가지 테이블 조회 시의 차이점을 비교합니다
   - explain 명령은 실제 조회작업을 수행하지 않고 어떻게 수행할 계획을 출력하는 옵션입니다
 ```sql
@@ -1095,6 +1169,8 @@ select year, count(1) as cnt from imdb_partitioned group by year;
 explain select year, count(1) as cnt from imdb_movies group by year;
 explain select year, count(1) as cnt from imdb_partitioned group by year;
 ```
+<br>
+
 * **일반 테이블과, 파티셔닝 테이블의 성능을 비교합니다**
 ```bash
 # terminal
@@ -1103,6 +1179,10 @@ vimdiff agg.imdb_movies.out agg.imdb_partitioned.out
 ```
 * 관련 링크
   * [Hive Language Manul DML](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-DynamicPartitionInserts)
+
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
 <br>
 
 
@@ -1123,6 +1203,8 @@ create table imdb_parquet row format delimited stored
 
 select year, count(1) as cnt from imdb_parquet group by year;
 ```
+<br>
+
 
 * **파티셔닝 테이블과 파케이 포맷 테이블의 성능을 비교합니다**
 ```bash
@@ -1145,7 +1227,6 @@ explain select year, count(1) as cnt from imdb_partitioned group by year;
 explain select year, count(1) as cnt from imdb_parquet group by year;
 #  Statistics: Num rows: 1000 Data size: 12000 Basic stats: COMPLETE Column stats: NONE
 ```
-
 <br>
 
 
@@ -1166,12 +1247,18 @@ explain select rank, title, metascore from imdb_parquet_sorted order by metascor
 explain select rank, title, metascore from imdb_parquet_small order by metascore desc limit 10;
 # Statistics: Num rows: 1000 Data size: 4000 Basic stats: COMPLETE Column stats: NONE
 ```
+<br>
+
 
 * **필요한 컬럼만 유지하는 경우에도 성능개선의 효과가 있는지 비교합니다**
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day8/ex2
 vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 ```
+
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
 <br>
 
 
@@ -1186,6 +1273,10 @@ vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 * OLAP 성 데이터 분석 조회는 Join 대신 모든 필드를 하나의 테이블에 다 가진 Superset 테이블이 더 효과적입니다
 
 ![star-schema](images/star-schema.jpg)
+
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
 <br>
 
 
@@ -1208,6 +1299,8 @@ cd /opt/hive/examples/files
 cat emp.txt | sort | uniq > emp.uniq.txt
 cat emp.uniq.txt
 ```
+<br>
+
 * 최종 결과 파일은 다음과 같습니다
 ```sql
 /**
@@ -1226,6 +1319,8 @@ Steinberg|33|3
 beeline jdbc:hive2://localhost:10000 scott tiger
 use testdb;
 ```
+<br>
+
 
 * 직원(employee) 테이블을 생성합니다, 데이터를 로딩합니다
 ```sql
@@ -1237,9 +1332,12 @@ create table employee (
   , dept_id int
   , seq int
 ) row format delimited fields terminated by '|';
-
+```
+```sql
 load data local inpath '/opt/hive/examples/files/emp.uniq.txt' into table employee;
 ```
+<br>
+
 
 * 부서 테이블 정보
   - 테이블 이름 : department
@@ -1473,6 +1571,11 @@ select * from (
 +------------+------------+--------+---------+
 ```
 
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
+<br>
+
 
 ### 3-5 버킷팅을 통한 성능 개선
 
@@ -1504,6 +1607,8 @@ fields terminated by ',' stored as parquet;
 set hive.exec.dynamic.partition=true;
 set hive.exec.dynamic.partition.mode=nonstrict;
 ```
+<br>
+
 
 * 프로그래밍을 하면 더  좋지만, 현재는 수작업으로 직접 넣어주겠습니다 
 ```
@@ -1551,6 +1656,8 @@ insert overwrite table imdb_parquet_bucketed partition(year='2016')
     select rank, title, genre, description, director, actors, runtime, rating, votes, revenue, metascore 
     from imdb_movies where year = '2016';
 ```
+<br>
+
 
 * 생성된 파케이 테이블이 정상적으로 버킷이 생성되었는지 확인합니다
 ```sql
@@ -1582,6 +1689,11 @@ explain select rank, metascore, title from imdb_parquet_bucketed where year = '2
 # Statistics: Num rows: 44 Data size: 484 Basic stats: COMPLETE Column stats: NONE
 ```
 
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
+<br>
+
 
 * 참고 자료
   * [Hive Language Manual DDL](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
@@ -1590,3 +1702,8 @@ explain select rank, metascore, title from imdb_parquet_bucketed where year = '2
   * [Top 7 Hive DML Commands](https://data-flair.training/blogs/hive-dml-commands/)
   * [IMDB data from 2006 to 2016](https://www.kaggle.com/PromptCloudHQ/imdb-data)
   * [Hive update, delete ERROR](https://community.cloudera.com/t5/Support-Questions/Hive-update-delete-and-insert-ERROR-in-cdh-5-4-2/td-p/29485)
+
+
+[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+
+<br>
