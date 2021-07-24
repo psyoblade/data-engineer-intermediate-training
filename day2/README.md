@@ -1,14 +1,18 @@
-# 2일차. 아파치 스쿱을 통한 테이블 수집 실습 - Apache Sqoop
+# 2일차. 아파치 스쿱 테이블 수집
 > 아파치 스쿱을 통해 다양한 수집 예제를 실습합니다
 
-
 - 목차
-  * [1. 최신버전 업데이트](#1-최신버전-업데이트)
-  * [2. 테이블 임포트 실습](#2-테이블-임포트-실습)
-  * [3. 테이블 익스포트 실습](#3-테이블-익스포트-실습)
-  * [4. 아파치 스쿱 성능 튜닝](#4-아파치-스쿱-성능-튜닝)
-  * [5. 아파치 스쿱 유틸리티](#5-아파치-스쿱-유틸리티)
+  * [1. 테이블 수집 기본](#테이블-수집-기본)
+    - [1-1. 최신버전 업데이트 테이블](#1-최신버전-업데이트-테이블)
+    - [1-2. 테이블 임포트 실습](#2-테이블-임포트-실습)
+    - [1-3. 테이블 익스포트 실습](#3-테이블-익스포트-실습)
+  * [2. 테이블 수집 고급](#테이블-수집-고급)
+    - [2-1. 아파치 스쿱 성능 튜닝](#4-아파치-스쿱-성능-튜닝)
+    - [2-2. 아파치 스쿱 유틸리티](#5-아파치-스쿱-유틸리티)
+<br>
 
+
+## 테이블 수집 기본
 
 ## 1. 최신버전 업데이트
 > 원격 터미널에 접속하여 관련 코드를 최신 버전으로 내려받고, 과거에 실행된 컨테이너가 없는지 확인하고 종료합니다
@@ -19,6 +23,7 @@
 cd /home/ubuntu/work/data-engineer-intermediate-training
 git pull
 ```
+<br>
 
 ### 1-2. 현재 기동되어 있는 도커 컨테이너를 확인하고, 종료합니다
 
@@ -27,6 +32,7 @@ git pull
 # terminal
 docker ps -a
 ```
+<br>
 
 #### 1-2-2. 기동된 컨테이너가 있다면 강제 종료합니다
 ```bash
@@ -46,6 +52,10 @@ docker compose pull
 docker compose up -d
 docker compose ps
 ```
+
+[목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
+
+<br>
 <br>
 
 
@@ -69,12 +79,14 @@ while true; do
     esac
 done
 ```
+<br>
 
 #### 2-1-1. 스쿱 명령어 실습을 위해 컨테이너에 접속합니다
 ```bash
 # terminal
 docker compose exec sqoop bash
 ```
+<br>
 
 * 간단한 출력 명령을 수행합니다
 ```bash
@@ -98,12 +110,14 @@ ask echo hello world
 # docker
 sqoop list-databases --connect jdbc:mysql://mysql:3306 --username sqoop --password sqoop
 ```
+<br>
 
 * 테이블 목록을 조회합니다
 ```bash
 # docker
 sqoop list-tables --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop
 ```
+<br>
 
 * 테이블 정보 및 조회를 합니다
 ```bash
@@ -148,6 +162,7 @@ foo "DESCRIBE user_20201025"
 ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
     -e "SELECT u.*, p.* FROM user_20201025 u JOIN purchase_20201025 p ON (u.u_id = p.p_uid) LIMIT 10"
 ```
+<br>
 
 * 테이블 생성 예제
 ```sql
@@ -155,6 +170,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
     -e "CREATE TABLE tbl_salary (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(30), salary INT, PRIMARY KEY (id))"
 ```
+<br>
 
 * 데이터 입력 예제
 ```sql
@@ -162,6 +178,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
     -e "INSERT INTO tbl_salary (name, salary) VALUES ('suhyuk', 10000)"
 ```
+<br>
 
 * 데이터 조회 예제
 ```sql
@@ -308,6 +325,7 @@ SELECT * FROM student;
 ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/testdb \
   --username sqoop --password sqoop --table student --target-dir /home/sqoop/target/student
 ```
+<br>
 
 * 로컬 저장소에 제대로 수집이 되었는지 확인합니다
 ```bash
@@ -385,6 +403,7 @@ ask ls -d1 /home/sqoop/target/student_parquet/*
 # docker
 filename=`ls -d1 /home/sqoop/target/student_parquet/*`
 ```
+<br>
 
 * 파케이 포맷으로 저장된 테이블을 출력합니다 
   - 파케이 포맷의 파일은 바이너리 포맷이라 cat 혹은 vi 등으로 내용을 확인할 수 없습니다
@@ -393,6 +412,7 @@ filename=`ls -d1 /home/sqoop/target/student_parquet/*`
 # docker
 hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
 ```
+<br>
 
 * 파케이 포맷 도구를 이용하여 사용가능한 기능
   - <kbd>head -n 5</kbd> : 상위 5개의 문서를 출력합니다 (default: 5)
@@ -446,6 +466,7 @@ ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
 ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_trip
 ```
+<br>
 
 * 원격 하둡 저장소에 제대로 수집이 되었는지 확인합니다
 ```bash
@@ -453,6 +474,10 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 hadoop fs -ls /user/sqoop/target/seoul_popular_trip
 ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
+
+[목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
+
+<br>
 <br>
 
 
@@ -502,6 +527,7 @@ show tables;
 ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_trip
 ```
+<br>
 
 ![RM](images/RM.png)
 * 오류 확인은 리소스매니저 (http://`<cloud-public-ip>`:8088) 사이트에서 할 수 있습니다
@@ -523,6 +549,8 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_exp \
   --fields-terminated-by '\t' --delete-target-dir 
 ```
+<br>
+
 ```bash
 # docker
 ask hadoop fs -cat /user/sqoop/target/seoul_popular_exp/part-m-00000 | more
@@ -533,8 +561,8 @@ ask hadoop fs -cat /user/sqoop/target/seoul_popular_exp/part-m-00000 | more
 > 출력 결과가 아래와 같다면 성공입니다
 
 ```text
-0	281	통인시장	110-043 서울 종로구 통인동 10-3 	03036 서울 종로구 자하문로15길 18 	02-722-0911	엽전도시락,종로통인시장,통인시장닭꼬치,런닝맨,엽전시장,통인시장데이트,효자베이커리,통인시장, 1박2일,기름떡볶이
-0	345	타르틴	140-863 서울 용산구 이태원동 119-15 	04350 서울 용산구 이태원로23길 4 (이태원동) 	02-3785-3400	타르틴,이태원디저트카페,파이,런닝맨,파이맛집,이태원맛집, 유재석,식신로드,타르트맛집
+0    281    통인시장    110-043 서울 종로구 통인동 10-3     03036 서울 종로구 자하문로15길 18     02-722-0911    엽전도시락,종로통인시장,통인시장닭꼬치,런닝맨,엽전시장,통인시장데이트,효자베이커리,통인시장, 1박2일,기름떡볶이
+0    345    타르틴    140-863 서울 용산구 이태원동 119-15     04350 서울 용산구 이태원로23길 4 (이태원동)     02-3785-3400    타르틴,이태원디저트카페,파이,런닝맨,파이맛집,이태원맛집, 유재석,식신로드,타르트맛집
 ```
 
 </details>
@@ -567,7 +595,9 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 > 적재 시에 도중에 일부 컬럼 때문에 실패하는 경우 대상 테이블에 일부 데이터만 적재되어 사용되는 경우가 있는데 이러한 경우를 회피하기 위해 스테이징 테이블을 사용할 수 있습니다. 즉, 한 번 테스트로 적재를 해보는 개념으로 이해하시면 됩니다
 
 * 스테이징 테이블은 원본 테이블을 그대로 두고 별도의 스테이징 테이블에 적재 후 완전 export 가 성공하면 원본 테이블을 clear 후 적재합니다
-* 아래와 같이 임시 스테이징 테이블을 동일한 스키마로 생성하고 익스포트를 수행합니다
+
+#### 3-3-1. 아래와 같이 임시 스테이징 테이블을 동일한 스키마로 생성하고 익스포트를 수행합니다
+
 ```sql
 # mysql>
 CREATE TABLE testdb.seoul_popular_stg (
@@ -582,9 +612,12 @@ CREATE TABLE testdb.seoul_popular_stg (
 
 show tables;
 ```
+<br>
+
+#### 3-3-2. 수행 시에 맵 갯수를 4개로 늘려서 테스트 해보겠습니다
 
 * 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 TRUNCATE 는 수작업으로 수행되어야만 합니다
-  - 수행 시에 맵 갯수를 4개로 늘려서 테스트 해보겠습니다
+
 ```bash
 sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   -e "TRUNCATE seoul_popular_exp"
@@ -593,7 +626,9 @@ ask sqoop export -m 4 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_exp \
   --fields-terminated-by '\t' --staging-table seoul_popular_stg --clear-staging-table
 ```
-* 적재 과정에서 stg 및 exp 테이블을 조회해 보면 상태를 확인할 수 있습니다
+
+#### 3-3-3. 적재 과정에서 stg 및 exp 테이블을 조회해 보면 상태를 확인할 수 있습니다
+
 ```sql
 # docker
 cmd "SELECT COUNT(1) FROM seoul_popular_stg"
@@ -622,6 +657,10 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 ```
 
 </details>
+
+[목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
+
+<br>
 <br>
 
 
@@ -737,7 +776,6 @@ hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
 -rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=0/_SUCCESS
 -rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=10000/_SUCCESS
 -rw-r--r--   1 root supergroup          0 2021-07-17 12:23 /user/sqoop/target/seoul_popular_partition/part=20000/_SUCCESS
-
 ```
 
 </details>
@@ -833,11 +871,11 @@ hadoop fs -cat /user/sqoop/target/inc_table/part-m-00000
 
 
 #### 4-3-3. 테이블에 증분 데이터를 추가합니다
+
 ```bash
 # docker
 cmd "INSERT INTO inc_table (name, salary) VALUES ('psyoblade', 20000)"
 ```
-
 <br>
 
 
@@ -850,6 +888,7 @@ ask sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --pas
   -m 1 --table inc_table --incremental append --check-column id \
   --last-value ${last_value} --target-dir /user/sqoop/target/inc_table
 ```
+<br>
 
 * 수집 이후에 하둡 명령어로 파티션 파일이 잘 생성되었는지 확인합니다
 ```
@@ -883,17 +922,20 @@ hadoop fs -ls /user/sqoop/target/inc_table
 * <kbd>--fetch-size <n></kbd> : 데이터베이스로부터 한 번에 가져오는 레코드의 수를 말합니다 (default=1000)
   - 데이터의 크기에 따라서 조정할 수 있으며 데이터 레코드의 크기에 따라서 50,000 이상 수치 까지 조정할 수 있습니다
   - SQLServer 의 경우 한 번에 패치해 올 수 있는 용량이 제한되어 있으므로, Database 에 따라 조정하면서 튜닝합니다
+<br>
 
 #### 4-4-2. 배치 옵션
 
 * <kbd>--batch</kbd> : 데이터베이스에 저장시에 한 번에 대량의 데이터를 Export 할 수 있는 Values 구문과 유사하게 동작합니다
   - export 명령에서만 동작하며, export 시에는 반드시 명시하는 것이 좋습니다
+<br>
 
 #### 4-4-3. 압축 옵션
 
 * <kbd>--compress, -z</kbd> : 압축하여 저장합니다. 기본은 gzip 압축이며, snappy 등의 코덱을 지정할 수 있습니다
   - import 명령에만 동작하며, 저장 시에 압축 코덱을 활용하여 저장할 수 있습니다
   - <kbd>--compression-codec snappy</kbd> : 추가 압축을 위한 외부 jar 는 같이 배포 되어야 합니다
+<br>
 
 #### 4-4-4. 필요한 컬럼만 선택
 
@@ -901,11 +943,13 @@ hadoop fs -ls /user/sqoop/target/inc_table
   - 필요 없이 많은 데이터를 수집하는 것은 네트워크 I/O 및 저장소 공간만 더 차지하게 됩니다
 * <kbd>--query statement</kbd> : 전체 쿼리문을 지정하여 수집할 수도 있습니다.
   - 가장 일반적으로 많이 취하는 방법이며, 테이블 스키마 변경 시에도 대응이 가능하여 전체 수집 보다 운영에 용이합니다
+<br>
 
 #### 4-4-5. 다이렉트 방식 수집
 
 * <kbd>--direct</kbd> : 모든 데이터베이스가 지원하는 것은 아니지만, MySQL 과 같이 mysqldump 등의 도구를 직접 활용할 수 있도록 지원합니다
   - import 명령에만 동작하며, MySQL 데이터베이스를 사용하는 경우 추천할 수 있는 옵션입니다
+<br>
 
 #### 4-4-6. 조인을 통한 최적화
 
@@ -913,6 +957,10 @@ hadoop fs -ls /user/sqoop/target/inc_table
   - 스테이징을 다 해서, 다시 *분산환경에서 Join 을 하는 것은 충분히 큰 비용이고, 필요 없는 작업일 수*도 있기 때문입니다
   - 최대한 필요한 데이터만 최소화 하여 저장하여 활용하는 것을 첫 번째 단계로 보아도 좋습니다
 
+
+[목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
+
+<br>
 <br>
 
 
@@ -923,13 +971,14 @@ hadoop fs -ls /user/sqoop/target/inc_table
 
 > 데이터베이스에 존재하는 모든 테이블을 순차적으로 백업하는 기능입니다. 자주 사용되지는 않지만, 전체 데이터 백업 시에 참고해볼 만한 도구입니다
 
-* 모든 테이블 수집을 위한 데이터베이스(testdb) 경로를 하나 생성합니다
+#### 5-1-1. 모든 테이블 수집을 위한 데이터베이스(testdb) 경로를 하나 생성합니다
 ```bash
 # docker
 hadoop fs -mkdir /user/sqoop/target/testdb
 ```
+<br>
 
-* 생성된 경로를 루트로 하위로 모든 테이블을 수집합니다
+#### 5-1-2. 생성된 경로를 루트로 하위로 모든 테이블을 수집합니다
   - 반드시 --autoreset-to-one-mapper 를 지정해 주어야 primary key 가 없는 경우에도 -m 1 으로 수집이 됩니다
 ```bash
 # docker
@@ -946,3 +995,7 @@ cd /home/ubuntu/work/data-engineer-intermediate-training/day2
 docker compose down
 ```
 
+
+[목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
+
+<br>
