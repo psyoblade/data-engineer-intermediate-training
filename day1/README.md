@@ -8,7 +8,11 @@
     - [2-1. Git 기본 명령어](#Git-기본-명령어)
     - [2-2. Git 고급 명령어](#Git-고급-명령어)
   * [3. Docker 명령어 실습](#3-Docker-명령어-실습)
+    - [3-1. Docker 기본 명령어](#Docker-기본-명령어)
+    - [3-2. Docker 고급 명령어](#Docker-고급-명령어)
   * [4. Docker Compose 명령어 실습](#4-Docker-Compose-명령어-실습)
+    - [4-1. Docker Compose 기본 명령어](#Docker-Compose-기본-명령어)
+    - [4-2. Docker Compose 고급 명령어](#Docker-Compose-고급-명령어)
   * [5. Linux 커맨드라인 명령어 실습](#5-Linux-커맨드라인-명령어-실습)
   * [6. Hadoop 커맨드라인 명령어 실습](#6-Hadoop-커맨드라인-명령어-실습)
   * [7. SQL 기본 실습](#7-SQL-기본-실습)
@@ -63,6 +67,7 @@ git version 2.17.1
   - 회사 혹은 메인 레포지토리와 항상 연결되기 어렵거나 인터넷 연결이 되지 않는 상황에도 개발에 용이
   - 개발 과정에서 다양한 방법으로 개발해보고, 버리거나 혹은 적용하는 상황에 Branch 를 활용한 개발이 용이
   - 클라이언트 장비의 오류나 다양한 장애 상황에서도 주기적으로 동기화된 코드의 안전성 보장
+<br>
 
 ### Git 기본 명령어
 
@@ -194,6 +199,8 @@ After doing this, you may fix the identity used for this commit with:
 
 ![git.1](images/git.1.png)
 
+[목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
 
 
@@ -251,11 +258,11 @@ git checkout master
 ```
 <br>
 
-
 #### 2-3-4. log : 커밋 메시지를 브랜치 히스토리 별로 확인할 수 있습니다
 ```bash
 git log
 ```
+<br>
 
 #### 2-3-5. 변경 상태 확인하기
 
@@ -319,10 +326,9 @@ git reflog | grep clone
 ```
 <br>
 
+#### 2-3-8. 자주 사용하는 깃 명령어
 
-### 2-3-8. 자주 사용하는 깃 명령어
-
-> 제가 가장 많이 사용하는 명령어 입니다
+> 여기의 명령어만 이해하고 있어도 기본 과정에서 불편함은 없습니다. 복구하기 어려운 상황이 생기면 *경로를 제거하고 다시 clone 받*으시면 됩니다. :-)
 
 * `git clone`                      : 프로젝트 가져오기
 * `git status -sb`                 : 브랜치 + 상태
@@ -330,7 +336,6 @@ git reflog | grep clone
 * `git pull`                       : 작업 시작시에 가장 먼저 해야 하는 명령어
 * `git push`                       : 작업이 완료되면 푸시
 * `git checkout -- .`              : 수정한 내역 버리고 마지막 커밋 시점으로 롤백
-
 <br>
 
 
@@ -386,6 +391,8 @@ tmp/
 ```bash
 # git pull (--dry-run)
 ```
+<br>
+
 
 #### 2-6.2. push : 로컬 저장소의 커밋된 내역을 원격 저장소에 반영합니다
   - 원격 저장소에 브랜치가 존재하지 않는 경우에 업스트림 옵션(--set-upstream origin lgde/2021)을 활용합니다
@@ -463,8 +470,6 @@ git stash show stash@{1}
 ```
 <br>
 
-
-
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 <br>
 <br>
@@ -484,6 +489,8 @@ git clone https://github.com/psyoblade/helloworld.git
 cd /home/ubuntu/work/helloworld
 ```
 <br>
+
+### Docker 기본 명령어
 
 ### 3-1. 컨테이너 생성관리
 
@@ -600,6 +607,9 @@ docker cp ./helloworld.sh ubuntu:/tmp
 docker exec ubuntu /tmp/helloworld.sh
 ```
 <br>
+
+
+### Docker 고급 명령어
 
 ### 3-4. 컨테이너 이미지 생성관리
 
@@ -1009,6 +1019,8 @@ cd /home/ubuntu/work/data-engineer-basic-training/day1
 ```
 <br>
 
+### Docker Compose 기본 명령어
+
 ### 4-1. 컨테이너 관리
 
 > 도커 컴포즈는 **컨테이너를 기동하고 작업의 실행, 종료 등의 명령어**를 주로 다룬다는 것을 알 수 있습니다. 아래에 명시한 커맨드 외에도 도커 수준의 명령어들(pull, create, start, stop, rm)이 존재하지만 잘 사용되지 않으며 일부 deprecated 되어 자주 사용하는 명령어 들로만 소개해 드립니다
@@ -1079,6 +1091,10 @@ docker-compose top namenode
 <br>
 
 
+### Docker Compose 고급 명령어
+
+> 도커 컴포즈 파일이 어떻게 구성되어 있는지 이해하고, 직접 수정 및 작성할 수 있습니다
+
 ### 4-3. 컴포즈 파일을 통한 실습
 
 #### 4-3-1. 도커 컴포즈를 통해서 커맨드라인 옵션을 설정을 통해 수행할 수 있습니다
@@ -1110,6 +1126,7 @@ cat docker-compose.yml | grep -ia20 'mysql:' docker-compose.yml
     volumes:
       - ./mysql/etc:/etc/mysql/conf.d
 ```
+<br>
 
 
 ### 4-4. 외부 볼륨을 통한 환경설정
@@ -1133,6 +1150,8 @@ collation-server=utf8_general_ci
 [mysql]
 default-character-set=utf8
 ```
+<br>
+
 
 #### 4-4-2. MySQL 설정파일 사용
 
@@ -1156,6 +1175,8 @@ services:
       - ./custom:/etc/myslq/conf.d
       - mysql_utf8:/etc/myslq/conf.d
 ```
+<br>
+
 
 ### 4-5. 초기화 파일을 적용한  MySQL 도커 이미지 생성
 
@@ -1177,6 +1198,8 @@ LOCK TABLES `seoul_popular_trip` WRITE;
 INSERT INTO `seoul_popular_trip` VALUES (0,25931,'통인가게 ','110-300 서울 종로구 관훈동 16 ','03148 서울 종로구 인사동길 32 (관훈동) ','02-733-4867','오래된가게,고미술,통인정신,통인가게,공예샵,현대공예');
 UNLOCK TABLES;
 ```
+<br>
+
 
 #### 4-5-2. 도커파일을 생성합니다
 
@@ -1192,12 +1215,16 @@ EXPOSE 3306
 
 CMD ["mysqld"]
 ```
+<br>
+
 
 #### 4-5-3. 로컬에서 도커 이미지를 빌드합니다
 
 ```bash
 docker build -t local/mysql:5.7 .
 ```
+<br>
+
 
 #### 4-5-4. 빌드된 이미지로 다시 테스트
 
@@ -1267,6 +1294,8 @@ services:
 ```
 > [phpMyAdmin](http://localhost:8183/index.php) 사이트에 접속하여 mysql/user/pass 로 접속합니다
 
+<br>
+
 
 ### 4-7. MySQL 이 정상적으로 로딩된 이후에 접속하도록 설정합니다
 
@@ -1309,7 +1338,9 @@ services:
     ports:
       - 8183:80
 ```
+
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
 <br>
 
