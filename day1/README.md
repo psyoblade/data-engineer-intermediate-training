@@ -1755,10 +1755,12 @@ echo "hello lgde" > appended
 hdfs dfs -appendToFile appended /tmp/helloworld
 ```
 > 참고로 append 옵션은 설정상 적용되지 않을 수 있으며, 아래의 2가지 설정이 되어 있어야 동작합니다
+
 | 키 | 값 | 설명 |
 | --- | --- | --- |
 | dfs.client.block.write.replace-datanode-on-failure.enable | true | If there is a datanode/network failure in the write pipeline, DFSClient will try to remove the failed datanode from the pipeline and then continue writing with the remaining datanodes. As a result, the number of datanodes in the pipeline is decreased. The feature is to add new datanodes to the pipeline. This is a site-wide property to enable/disable the feature. When the cluster size is extremely small, e.g. 3 nodes or less, cluster administrators may want to set the policy to NEVER in the default configuration file or disable this feature. Otherwise, users may experience an unusually high rate of pipeline failures since it is impossible to find new datanodes for replacement. See also dfs.client.block.write.replace-datanode-on-failure.policy |
 | dfs.client.block.write.replace-datanode-on-failure.policy	 | DEFAULT | This property is used only if the value of dfs.client.block.write.replace-datanode-on-failure.enable is true. ALWAYS: always add a new datanode when an existing datanode is removed. NEVER: never add a new datanode. DEFAULT: Let r be the replication number. Let n be the number of existing datanodes. Add a new datanode only if r is greater than or equal to 3 and either (1) floor(r/2) is greater than or equal to n; or (2) r is greater than n and the block is hflushed/appended.|
+
 <br>
 
 
@@ -2058,4 +2060,5 @@ drop database foo;
 * [Compose Cheatsheet](https://buildvirtual.net/docker-compose-cheat-sheet/)
 * [Hadoop Commands Cheatsheet](https://images.linoxide.com/hadoop-hdfs-commands-cheatsheet.pdf)
 * [Linux Password](https://www.cyberciti.biz/faq/understanding-etcpasswd-file-format/)
+* [Hadoop Append](https://community.cloudera.com/t5/Support-Questions/Where-can-I-set-dfs-client-block-write-replace-datanode-on/td-p/2529)
 
