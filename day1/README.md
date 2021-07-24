@@ -1486,7 +1486,7 @@ cat data/corona.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-deli
 
 #### 최신 데이터를 통한 실습 
 
-> 최근에 업데이트(2021.07.24) 된 코로나 정보를 업데이트한 파일을 `data/corona.2021.body.tsv` 에 저장되어 있습니다. 하지만 몇 가지 변경 사항이 있는데 그러한 내용을 고려하여 결과를 출력해 주세요
+> 최근에 업데이트(2021.07.24) 된 [코로나 정보를 업데이트](https://coronaboard.kr/)한 파일을 `data/corona.2021.body.tsv` 에 저장되어 있습니다. 하지만 몇 가지 변경 사항이 있는데 그러한 내용을 고려하여 결과를 출력해 주세요
 
 * 요구사항
   - 이번에는 제일 처음 컬럼에 번호가 있어 컬럼의 순서가 다르며 `data/corona.2021.header.tsv` 파일을 통해 확인할 수 있습니다
@@ -1506,13 +1506,6 @@ cat data/corona.2021.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output
 
 </details>
 <br>
-
-```
-
-cat corona.20210724.tsv | sed 's/,//g' | cut --output-delimiter=',' -f2,3,4 | sort -t, -k3nr | head
-sed 's/N\/A/0.0/g'
-```
-
 
 
 #### 5-3-4. uniq : 유일한 값을 추출합니다
