@@ -1,19 +1,22 @@
-# 2일차. 플루언트디를 통한 파일 데이터 수집 - Fluentd
-> 플루언트디를 통해 다양한 수집 예제를 실습합니다
-> 이번 장에서 사용하는 외부 오픈 포트는 22, 80, 5601, 8080, 9880, 50070 입니다
+# 2일차. 트레저데이터 플루언트디 파일 수집
 
+> 플루언트디를 통해 다양한 수집 예제를 실습합니다 이번 장에서 사용하는 외부 오픈 포트는 22, 80, 5601, 8080, 9880, 50070 입니다
 
 - 목차
-  * [1. 최신버전 업데이트](#1-최신버전-업데이트)
-  * [2. 플루언트디를 웹서버처럼 사용하기](#2-플루언트디를-웹서버처럼-사용하기)
-  * [3. 수신된 로그를 로컬에 저장하는 예제](#3-수신된-로그를-로컬에-저장하는-예제)
-  * [4. 서버에 남는 로그를 지속적으로 모니터링하기](#4-서버에-남는-로그를-지속적으로-모니터링하기)
-  * [5. 데이터 변환 플러그인을 통한 시간 변경 예제](#5-데이터-변환-플러그인을-통한-시간-변경-예제)
-  * [6. 컨테이너 환경에서의 로그 전송](#6-컨테이너-환경에서의-로그-전송)
-  * [7. 도커 컴포즈를 통한 로그 전송 구성](#7-도커-컴포즈를-통한-로그-전송-구성)
-  * [8. 멀티 프로세스를 통한 성능 향상](#8-멀티-프로세스를-통한-성능-향상)
-  * [9. 멀티 프로세스를 통해 하나의 위치에 저장](#9-멀티-프로세스를-통해-하나의-위치에-저장)
-  * [10. 전송되는 데이터를 분산 저장소에 저장](#10-전송되는-데이터를-분산-저장소에-저장)
+  * [1. 파일 수집 기본](#파일-수집-기본)
+    - [1-1. 최신버전 업데이트](#1-최신버전-업데이트)
+    - [1-2. 플루언트디를 웹서버처럼 사용하기](#2-플루언트디를-웹서버처럼-사용하기)
+    - [1-3. 수신된 로그를 로컬에 저장하는 예제](#3-수신된-로그를-로컬에-저장하는-예제)
+    - [1-4. 서버에 남는 로그를 지속적으로 모니터링하기](#4-서버에-남는-로그를-지속적으로-모니터링하기)
+  * [2. 파일 수집 고급](#파일-수집-고급)
+    - [2-1. 데이터 변환 플러그인을 통한 시간 변경 예제](#5-데이터-변환-플러그인을-통한-시간-변경-예제)
+    - [2-2. 컨테이너 환경에서의 로그 전송](#6-컨테이너-환경에서의-로그-전송)
+    - [2-3. 도커 컴포즈를 통한 로그 전송 구성](#7-도커-컴포즈를-통한-로그-전송-구성)
+    - [2-4. 멀티 프로세스를 통한 성능 향상](#8-멀티-프로세스를-통한-성능-향상)
+    - [2-5. 멀티 프로세스를 통해 하나의 위치에 저장](#9-멀티-프로세스를-통해-하나의-위치에-저장)
+    - [2-6. 전송되는 데이터를 분산 저장소에 저장](#10-전송되는-데이터를-분산-저장소에-저장)
+
+<br>
 
 
 ## 1. 최신버전 업데이트
@@ -25,6 +28,7 @@
 cd /home/ubuntu/work/data-engineer-intermediate-training
 git pull
 ```
+<br>
 
 ### 1-2. 현재 기동되어 있는 도커 컨테이너를 확인하고, 종료합니다
 
@@ -33,6 +37,8 @@ git pull
 # terminal
 docker ps -a
 ```
+<br>
+
 
 #### 1-2-2. 기동된 컨테이너가 있다면 강제 종료합니다
 ```bash
@@ -52,6 +58,10 @@ docker rm -f `docker ps -aq`
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
 ```
+
+[목차로 돌아가기](#2일차-트레저데이터-플루언트디-파일-수집)
+
+<br>
 <br>
 
 
@@ -71,6 +81,8 @@ cd /home/ubuntu/work/data-engineer-intermediate-training/day3/ex1
 docker compose pull
 docker compose up -d
 ```
+<br>
+
 
 ### 2-2. 도커 및 플루언트디 설정파일 확인
 
@@ -197,7 +209,12 @@ curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
 
 > 컨테이너가 종료된 터미널의 프롬프트(도커의 경우 root@2a50c30293829 형식)를 통해 확인할 수 있습니다
 
+
+[목차로 돌아가기](#2일차-트레저데이터-플루언트디-파일-수집)
+
 <br>
+<br>
+
 
 
 ## 3. 수신된 로그를 로컬에 저장하는 예제
@@ -208,6 +225,8 @@ curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
 * 발생된 로그(이벤트)를 로컬 저장소에 임의의 경로에 저장합니다
 
 ![ex2](images/ex2.png)
+<br>
+
 
 ### 3-1. 이전 컨테이너 종료 및 컨테이너 기동
 
@@ -247,6 +266,8 @@ networks:
     name: default_network
 ```
 > 저장되는 로그를 호스트 장비의 볼륨에 마운트하여 컨테이너가 종료되는 경우에도 유지될 수 있도록 구성합니다
+<br>
+
 
 #### 3-1-2 플루언트디 파일 구성 `fluent.conf`
 ```xml
@@ -328,6 +349,8 @@ fluentd
 2021-07-18 11:52:25.081705098 +0000 lgde.debug: {"debug":"hello-world"}
 2021-07-18 11:52:25.081710640 +0000 lgde.debug: {"debug":"hello-world"}
 ```
+<br>
+
 
 #### 3-2-2. 별도의 터미널에서 생성되는 로그 파일을 확인합니다
 
@@ -369,6 +392,10 @@ root@7d33f313cc13:~#
 
 #### 3-3-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 
+
+[목차로 돌아가기](#2일차-트레저데이터-플루언트디-파일-수집)
+
+<br>
 <br>
 
 
@@ -419,6 +446,8 @@ networks:
     name: default_network
 ```
 > 아파치 웹서버의 로그가 생성될 source 경로와 수집된 로그가 저장될 target 경로를 호스트 경로에 마운트 되었습니다.
+<br>
+
 
 
 #### 4-1-2 플루언트디 파일 구성 `fluent.conf`
@@ -471,6 +500,7 @@ networks:
 * 매치 플러그인 설정
   - 즉각적인 확인을 위해 최대한 자주 플러시 하도록 설정 했습니다
 <br>
+
 
 #### 4-1-3. 아파치 로그 생성기 (`flush_logs.py`) 코드를 분석합니다
 
@@ -531,6 +561,8 @@ docker compose exec fluentd bash
 fluentd
 ```
 > 플루언트디의 경우 기동 시에 오류가 없었다면 정상적으로 기동 되었다고 보시면 됩니다
+<br>
+
 
 
 #### 4-2-2. 시스템 로그를 임의로 생성
@@ -546,6 +578,8 @@ docker compose exec fluentd bash
 ```bash
 python flush_logs.py
 ```
+<br>
+
 ```
 for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -L 2 /fluentd/target; sleep 10; done
 ```
@@ -603,6 +637,10 @@ root@2cf7c79e8367:~# for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -
 
 #### 4-3-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 
+
+[목차로 돌아가기](#2일차-트레저데이터-플루언트디-파일-수집)
+
+<br>
 <br>
 
 
@@ -649,6 +687,8 @@ networks:
 
 ```
 > 시간 정보를 담은 JSON 을 전송할 포트를 8080 으로 정했습니다  
+<br>
+
 
 #### 5-1-2 플루언트디 파일 구성 `fluent.conf`
 
@@ -693,6 +733,8 @@ networks:
   - lgde 태그를 통해 전송되는 로그에 대해서 '2021-07-18 22:28:00' 포맷으로 변환합니다
   - `filtered_logtime` 컬럼이 추가됩니다
   - 출력 포맷 또한 JSON 이며 현재 시간을 기준으로 출력됩니다
+<br>
+
 
 
 ### 5-2. 에이전트 기동 및 확인
@@ -707,6 +749,8 @@ docker compose exec fluentd bash
 # docker
 fluentd
 ```
+<br>
+
 
 #### 5-2-2. 컨테이너에 접속하여 시간을 포함한 JSON 을 POST 로 전송합니다
 
@@ -717,10 +761,14 @@ fluentd
 # terminal
 docker compose exec fluentd bash
 ```
-```
+<br>
+
+```bash
 # docker
 curl -X POST -d '{ "column1":"1", "column2":"hello-world", "logtime": 1593379470 }' http://localhost:8080/lgde
 ```
+<br>
+
 
 #### 5-2-3. 1시간 단위로 시간을 늘려가며 전송하는 테스트를 해봅니다
 
@@ -730,9 +778,9 @@ curl -X POST -d '{ "column1":"1", "column2":"hello-world", "logtime": 1593379470
 
 ```bash
 for x in $(seq 1626479572 3600 1726479572); do \
-	curl -X POST -d "{ \"column1\":\"1\", \"column2\":\"hello-world\", \"logtime\": \"$x\" }" \
-	http://localhost:8080/lgde; \
-	sleep 1; \
+    curl -X POST -d "{ \"column1\":\"1\", \"column2\":\"hello-world\", \"logtime\": \"$x\" }" \
+    http://localhost:8080/lgde; \
+    sleep 1; \
 done
 ```
 
@@ -767,6 +815,10 @@ done
 
 #### 5-3-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 
+
+[목차로 돌아가기](#2일차-트레저데이터-플루언트디-파일-수집)
+
+<br>
 <br>
 
 
@@ -778,7 +830,9 @@ done
 * 해당 컨테이너 기동 시에 플루언트디로 전송설정을 합니다
 * 설정된 로그 수집기(fluent.conf)를 통해 로그를 출력합니다
 * 하나의 애플리케이션과 전송 에이전트가 하나의 셋트로 배포됩니다
-  - **결구 다른 수집기(aggregator)로 전송하여 전체 로그를 집계**하게 됩니다
+  - **결국 다른 수집기(aggregator)로 전송하여 전체 로그를 집계**하게 됩니다
+<br>
+
 
 
 ### 6-1. 이전 컨테이너 종료 및 컨테이너 기동
@@ -839,6 +893,8 @@ networks:
 * fortune 명령을 1000회 반복하는 `fortune_teller.sh` 을 기동
 * logging 설정을 통해 docker.fortune 태그를 생성하여 전송합니다
 * fluentd 에이전트 또한 entrypoint 통해 같이 수행 되어야 합니다
+<br>
+
 
 
 #### 6-1-2 플루언트디 파일 구성 `fluent.conf`
@@ -875,6 +931,8 @@ networks:
 * 필터 플러그인 설정
   - docker 로 시작하는 태그를 모두 필터하고, JSON 포맷만 전달합니다
   - dokcer 로 시작하는 태그 이벤트를 필터하여 docker.{} 에 해당하는 레코드를 추가합니다
+<br>
+
 
 
 #### 6-1-3 포츈텔러 파일 구성 `fortune_teller.sh`
@@ -906,6 +964,8 @@ docker compose up -d
 docker compose logs -f ubuntu
 ```
 > 애플리케이션에서 로그가 잘 전송되고 있는지 확인합니다
+<br>
+
 ```bash
 docker compose logs -f fluentd
 ```
@@ -944,13 +1004,13 @@ fluentd  | 2021-07-18 17:03:11.177728881 +0000 docker.fortune: {"container_id":"
 
 | Markup | Description |
 | --- | --- |
-| {{.ID}} | 	The first 12 characters of the container ID. |
-| {{.FullID}} | 	The full container ID. |
-| {{.Name}} | 	The container name. |
-| {{.ImageID}} | 	The first 12 characters of the container’s image ID. |
-| {{.ImageFullID}} | 	The container’s full image ID. |
-| {{.ImageName}} | 	The name of the image used by the container. |
-| {{.DaemonName}} | 	The name of the docker program (docker). |
+| {{.ID}} | The first 12 characters of the container ID. |
+| {{.FullID}} | The full container ID. |
+| {{.Name}} | The container name. |
+| {{.ImageID}} | The first 12 characters of the container’s image ID. |
+| {{.ImageFullID}} | The container’s full image ID. |
+| {{.ImageName}} | The name of the image used by the container. |
+| {{.DaemonName}} | The name of the docker program (docker). |
 
 
 <details><summary>[실습] 컨테이너 이름을 web 으로 tag 를 `docker.{{.Name}}}`로 출력하는 `docker-compose.yml`을 작성하세요 </summary>
@@ -1035,6 +1095,15 @@ networks:
 
 
 <details><summary>[ 작성 중입니다 ]</summary>
+
+[목차로 돌아가기](#2일차-트레저데이터-플루언트디-파일-수집)
+
+<br>
+<br>
+
+
+
+
 
 ## 7. 도커 컴포즈를 통한 로그 전송 구성
 ### 1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
