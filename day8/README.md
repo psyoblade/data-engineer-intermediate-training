@@ -1695,7 +1695,7 @@ explain select rank, metascore, title from imdb_parquet_bucketed where year = '2
 <br>
 
 
-* 참고 자료
+### 참고 자료
   * [Hive Language Manual DDL](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
   * [Hive Language Manual DML](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML)
   * [Top 7 Hive DDL Commands](https://data-flair.training/blogs/hive-ddl-commands/)
