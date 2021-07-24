@@ -576,6 +576,7 @@ fluentd
 
 ```bash
 # terminal
+cd /home/ubuntu/work/data-engineer-basic-training/day2/ex3
 docker-compose exec fluentd bash
 ```
 ```bash
@@ -640,6 +641,13 @@ root@2cf7c79e8367:~# for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -
 
 #### 4-3-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 
+
+### 4-4. 컨테이너 정리
+* 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
+```bash
+cd /home/ubuntu/work/data-engineer-${course}-training/day2/ex3
+docker-compose down
+```
 
 [목차로 돌아가기](#3일차-트레저데이터-플루언트디-파일-수집)
 
