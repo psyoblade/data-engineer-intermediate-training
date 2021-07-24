@@ -49,9 +49,9 @@ docker rm -f `docker ps -aq`
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2
 
-docker compose pull
-docker compose up -d
-docker compose ps
+docker-compose pull
+docker-compose up -d
+docker-compose ps
 ```
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
@@ -85,7 +85,7 @@ done
 #### 2-1-1. 스쿱 명령어 실습을 위해 컨테이너에 접속합니다
 ```bash
 # terminal
-docker compose exec sqoop bash
+docker-compose exec sqoop bash
 ```
 <br>
 
@@ -209,7 +209,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 
 ```bash
 # terminal
-docker compose exec mysql mysql -usqoop -psqoop
+docker-compose exec mysql mysql -usqoop -psqoop
 ```
 ```sql
 # mysql>
@@ -348,7 +348,7 @@ ask cat /home/sqoop/target/student/part-m-00000
 * 컨테이너에 접속되어 있지 않다면 접속합니다
 ```bash
 # terminal
-docker compose exec mysql mysql -usqoop -psqoop
+docker-compose exec mysql mysql -usqoop -psqoop
 ```
 * 스쿱 명령어로 테이블을 수집합니다
 ```bash
@@ -376,7 +376,7 @@ ls /home/sqoop/target/student_tab
 * 컨테이너에 접속되어 있지 않다면 접속합니다
 ```bash
 # terminal
-docker compose exec mysql mysql -usqoop -psqoop
+docker-compose exec mysql mysql -usqoop -psqoop
 ```
 * 스쿱 명령어로 테이블을 수집합니다
 ```bash
@@ -427,7 +427,7 @@ hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
 * 컨테이너에 접속되어 있지 않다면 접속합니다
 ```bash
 # terminal
-docker compose exec mysql mysql -usqoop -psqoop
+docker-compose exec mysql mysql -usqoop -psqoop
 ```
 * 상위 3개 문서 반환
 ```
@@ -493,7 +493,7 @@ ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 
 ```bash
 # terminal
-docker compose exec mysql mysql -usqoop -psqoop
+docker-compose exec mysql mysql -usqoop -psqoop
 ```
 * 테스트 적재를 위한 테이블을 생성합니다
 ```sql
@@ -996,7 +996,7 @@ ask sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --username 
 * 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2
-docker compose down
+docker-compose down
 ```
 
 
