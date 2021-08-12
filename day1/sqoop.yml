@@ -3,7 +3,7 @@ version: "3"
 services:
   mysql:
     container_name: mysql
-    image: psyoblade/data-engineer-intermediate-day1-mysql:1.1
+    image: psyoblade/data-engineer-mysql:1.1
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -23,11 +23,12 @@ services:
       - ./mysql/etc:/etc/mysql/conf.d
   sqoop:
     container_name: sqoop
-    image: psyoblade/data-engineer-intermediate-day1-sqoop:1.0
+    image: psyoblade/data-engineer-sqoop:1.1
     tty: true
     environment:
       LANG: ko_KR.UTF-8
     ports:
+      - '8042:8042'
       - '8088:8088'
       - '10020:10020'
       - '19888:19888'

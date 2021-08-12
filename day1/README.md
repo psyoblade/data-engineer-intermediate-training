@@ -143,6 +143,7 @@ git config --global user.email $email
 ```
 <br>
 
+
 #### 2-2-2. add : 저장 대상 파일(들)을 인덱스에 스테이징 합니다
   - 빈 디렉토리는 추가되지 않으며, 하나라도 파일이 존재해야 추가됩니다
   - 모든 Unstage 된 파일을 추가하는 옵션(-A)은 주의해서 사용해야 하며 .gitignore 파일을 잘 활용합니다
@@ -202,6 +203,7 @@ git status -s
 ![git.1](images/git.1.png)
 
 <br>
+
 
 
 ### 2-3. 브랜치
@@ -311,7 +313,7 @@ ls -al
   - `--` : 이 키워드 이후에 나오는 항목을 파일명으로 인식합니다
 ```bash
 git checkout -- .
-git statusb -sb
+git status -sb
 ls -al
 ```
 <br>
@@ -582,7 +584,7 @@ cat /etc/issue
 #### 3-1-6. kill : 컨테이너를 종료합니다
 ```bash
 # docker kill <container_name>
-docker kill ubuntu
+docker kill ubuntu20
 ```
 <br>
 
@@ -1045,7 +1047,7 @@ docker exec -it mysql-bind mysql --port=3308 -uuser -ppass
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
 <br>
-<br>
+
 
 
 ## 4. Docker Compose 명령어 실습
@@ -1397,7 +1399,7 @@ services:
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
 <br>
-<br>
+
 
 
 ## 5. Linux 커맨드라인 명령어 실습
@@ -1415,11 +1417,12 @@ cd /home/ubuntu/work/linux-for-dummies
 
 ### Linux 기본 명령어
 
-### 5-1. 수집 및 적재
+### 5-1. 수집 및 탐색
 
-* wget
-* curl
-* w3m / lynx
+> 수집 및 탐색을 위한 다양한 도구([wget](https://www.gnu.org/software/wget/), [w3m](http://w3m.sourceforge.net/), [lynx](https://invisible-island.net/lynx/))들이 많지만, 하나로 통일해서 사용하는 것이 혼란을 줄일 수 있어, 가장 널리 사용되는 curl 에 대해서만 학습합니다
+
+#### 5-1-1. curl : URL 을 통해 데이터를 송수신 하는 명령어
+
 <br>
 
 
@@ -1836,6 +1839,7 @@ docker-compose exec namenode bash
 
 ```bash
 # -ls [-d] [-h] [-R] [<path> ...]
+hdfs dfs -mkdir /user
 hdfs dfs -ls /user
 ```
 <br>
@@ -1852,6 +1856,7 @@ echo "hello world" > helloworld
 gzip helloworld
 ```
 ```bash
+hdfs dfs -mkdir /tmp
 hdfs dfs -put helloworld.gz /tmp/
 hdfs dfs -text /tmp/helloworld.gz
 ```
@@ -1999,7 +2004,7 @@ hdfs dfs -ls hdfs:///tmp
   - <kbd>-p</kbd> : 중간경로가 없어도 생성합니다
 ```bash
 # -mkdir [-p] <path>
-hdfs -mkdir -p /create/also/mid/path
+hdfs dfs -mkdir -p /create/also/mid/path
 hdfs dfs -ls hdfs:///user/root
 ```
 ```bash
