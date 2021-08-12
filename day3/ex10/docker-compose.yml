@@ -1,25 +1,24 @@
 version: "3"
 services:
   mysql:
-    image: psyoblade/data-engineer-intermediate-day1-mysql
     container_name: mysql
+    image: psyoblade/data-engineer-mysql:1.1
     restart: always
     environment:
-      # MYSQL_ROOT_PASSWORD: pass
-      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
+      MYSQL_USER: sqoop
+      MYSQL_PASSWORD: sqoop
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 3s
       timeout: 1s
       retries: 3
     volumes:
-      - ./mysql/custom:/etc/mysql/conf.d
+      - ./mysql/etc:/etc/mysql/conf.d
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd:1.0
+    image: psyoblade/data-engineer-fluentd:2.1
     user: root
     restart: always
     depends_on:
@@ -28,5 +27,5 @@ services:
     ports:
       - 9880:9880
     volumes:
-      - ./fluent.conf:/fluentd/etc/fluent.conf
+      - ./fluent.conf:/etc/fluentd/fluent.conf
       - ./target:/fluentd/target

@@ -41,7 +41,6 @@ docker ps -a
 ```
 <br>
 
-
 #### 1-2-2. 기동된 컨테이너가 있다면 강제 종료합니다
 ```bash
 # terminal 
@@ -1091,23 +1090,6 @@ networks:
 
 #### 6-3-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>ctrl</samp>+<samp>d</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 
-<br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<details><summary>[ 작성 중입니다 ]</summary>
 
 [목차로 돌아가기](#3일차-트레저데이터-플루언트디-파일-수집)
 
@@ -1116,16 +1098,21 @@ networks:
 
 
 
-
-
 ## 7. 도커 컴포즈를 통한 로그 전송 구성
-### 1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
+
+### 7-1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
 ```bash
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex5
+docker-compose down
+
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex6
+docker-compose pull
 docker-compose up -d
 docker ps
 ```
-### 2. 키바나를 통해 엘라스틱 서치를 구성합니다
+
+### 7-2. 키바나를 통해 엘라스틱 서치를 구성합니다
+
 * 키바나 사이트에 접속하여 색인을 생성
   * 1. http://student{id}.lgebigdata.com:5601 사이트에 접속 (모든 컴포넌트 기동에 약 3~5분 정도 소요됨)
   * 2. Explorer on my Own 선택 후, 좌측 "Discover" 메뉴 선택
@@ -1136,8 +1123,7 @@ docker ps
   * 1. http://student{id}.lgebigdata.com 사이트에 접속하면 It works! 가 뜨면 정상
   * 2. 다시 Kibana 에서 Refresh 버튼을 누르면 접속 로그가 전송됨을 확인
 
-### 3. Fluentd 구성 파일을 분석합니다
-* docker-compose.yml
+### 7-3. Fluentd 구성 파일 `docker-compose.yml`
 ```yml
 version: "3"
 services:
@@ -1199,21 +1185,34 @@ services:
     ports:
       - 5601:5601
 ```
-### 4. 기동된 Fluentd 를 종료합니다
+
+### 7-4. 에이전트 및 컨테이너 종료
+
+#### 7-4-1. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>ctrl</samp>+<samp>c</samp></kbd> 명령으로 종료합니다
+
+#### 7-4-2. 1번 예제 실습이 모두 종료되었으므로 <kbd><samp>ctrl</samp>+<samp>d</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
+
+
+[목차로 돌아가기](#3일차-트레저데이터-플루언트디-파일-수집)
+
+<br>
+<br>
+
+
+
+## 8. 멀티 프로세스를 통한 성능 향상
+
+### 8-1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
 ```bash
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex6
 docker-compose down
-docker ps -a
-```
 
-
-## 7. 멀티 프로세스를 통한 성능 향상
-### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
-```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 mkdir source
 ./startup.sh
 ```
-### 2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
+
+### 8-2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
 * 첫 번째 프로세스가 파일로 받은 입력을 표준 출력으로 내보내는 프로세스입니다
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
@@ -1223,8 +1222,9 @@ for x in $(seq 1 1000); do echo "{\"hello\":\"world\"}" >> source/start.log; don
 ```bash
 curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
 ```
-### 3. Fluentd 구성 파일을 분석합니다
-* fluent.conf
+
+### 8-3. Fluentd 구성 파일
+* `fluentd.conf`
 ```conf
 <system>
     workers 2
@@ -1255,7 +1255,7 @@ curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
     </match>
 </worker>
 ```
-* startup.sh
+* `startup.sh`
 ```bash
 #!/bin/bash
 export PROJECT_HOME=`pwd`
@@ -1263,33 +1263,49 @@ name="multi-process"
 echo "docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd"
 docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd
 ```
-* shutdown.sh
+* `shutdown.sh`
 ```bash
 #!/bin/bash
 name="multi-process"
 container_name=`docker ps -a --filter name=$name | grep -v 'CONTAINER' | awk '{ print $1 }'`
 docker rm -f $container_name
 ```
-### 4. 기동된 Fluentd 를 종료합니다
+
+### 8-4. 기동된 Fluentd 를 종료합니다
 ```bash
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 ./shutdown.sh
 docker ps -a
 ```
 
+[목차로 돌아가기](#3일차-트레저데이터-플루언트디-파일-수집)
 
-## 8. 멀티 프로세스를 통해 하나의 위치에 저장
-### 1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
+<br>
+<br>
+
+
+
+## 9. 멀티 프로세스를 통해 하나의 위치에 저장
+
+### 9-1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
 ```bash
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
+docker-compose down
+
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex8
 mkdir source
 ./startup.sh
 ```
-### 2. 별도의 터미널에서 아래의 명령으로 멀티 프로세스를 통해 하나의 위치에 저장되는 것을 확인합니다
+
+### 9-2. 별도의 터미널에서 아래의 명령
+* 멀티 프로세스를 통해 하나의 쿼리로 읽어오도록 저장되는 것을 확인합니다
+
 ```bash
 tree target
 ```
-### 3. Fluentd 구성 파일을 분석합니다
-* fuent.conf
+
+### 9-3. Fluentd 구성 파일을 분석합니다
+* `fuent.conf`
 ```conf
 <system>
     workers 2
@@ -1338,7 +1354,7 @@ tree target
     </match>
 </worker>
 ```
-* startup.sh
+* `startup.sh`
 ```bash
 #!/bin/bash
 export PROJECT_HOME=`pwd`
@@ -1346,7 +1362,7 @@ name="multi-process-ex"
 echo "docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd"
 docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd
 ```
-* progress.sh
+* `progress.sh`
 ```bash
 #!/bin/bash
 max=60
@@ -1378,16 +1394,19 @@ docker ps -a
 
 
 ## 9. 전송되는 데이터를 분산 저장소에 저장
-### 1. 서비스를 기동합니다
+
+### 9-1. 서비스를 기동합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex9
 ./startup.sh
 ```
-### 2. 별도의 터미널에서 모든 서비스(fluentd, namenode, datanode)가 떠 있는지 확인합니다
+
+### 9-2. 별도의 터미널에서 모든 서비스(fluentd, namenode, datanode)가 떠 있는지 확인합니다
 ```bash
 docker ps
 ```
-### 3. HTTP 로 전송하고 해당 데이터가 하둡에 저장되는지 확인합니다
+
+### 9-3. HTTP 로 전송하고 해당 데이터가 하둡에 저장되는지 확인합니다
   * http://student#.lgebigdata.com:50070/explorer.html 에 접속하여 확인합니다
   * 혹은 namenode 에 설치된 hadoop client 로 확인 합니다
   * WARN: 현재 노드수가 1개밖에 없어서 Replication 오류가 나고 있습니다. 
@@ -1395,8 +1414,9 @@ docker ps
 ./progress.sh
 docker exec -it namenode hadoop fs -ls /user/fluent/webhdfs/
 ```
-### 4. Fluentd 구성 파일을 분석합니다
-* fluent.conf
+
+### 9-4. Fluentd 구성 파일을 분석합니다
+* `fluent.conf`
 ```conf
 version: '2'
 services:
@@ -1438,7 +1458,8 @@ volumes:
   namenode:
   datanode:
 ```
-* start container
+* `start container`
+
 ```bash
 docker-compose up -d
 ```
@@ -1454,7 +1475,7 @@ for number in $(seq 0 $max); do
     dot="$dot."
 done
 ```
-### 4. 기동된 Fluentd 를 종료합니다
+### 9-5. 기동된 Fluentd 를 종료합니다
 ```bash
 Ctrl+C
 docker-compose down

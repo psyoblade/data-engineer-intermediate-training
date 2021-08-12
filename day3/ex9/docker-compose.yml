@@ -1,4 +1,5 @@
-version: '2' 
+version: "3"
+
 services:
   namenode:
     container_name: namenode
@@ -24,7 +25,7 @@ services:
       - 50075:50075
   fluentd:
     container_name: fluentd
-    image: psyoblade/data-engineer-intermediate-day2-fluentd
+    image: psyoblade/data-engineer-fluentd:2.1
     depends_on: 
       - namenode
       - datanode
@@ -33,7 +34,8 @@ services:
       - 9880:9880
     tty: true
     volumes:
-      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
+      - ./fluentd/fluent.conf:/etc/fluentd/fluent.conf
+
 volumes:
   namenode:
   datanode:
