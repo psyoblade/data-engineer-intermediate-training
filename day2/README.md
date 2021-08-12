@@ -205,7 +205,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 | age | INT | 30 | 나이 |
 | gender | VARCHAR(10) | 남 |
 
-<details><summary>[실습] 위에서 명시한 student 테이블을 sqoop eval 명령어를 통해 testdb 에 생성하세요 </summary>
+<details><summary>[실습] 위에서 명시한 student 테이블을 mysql 서버에 접속하여 명령어를 통해 testdb 에 생성하세요 </summary>
 
 ```bash
 # terminal
@@ -261,7 +261,7 @@ DESC student;
 ,('우소은','Woo.Soeun@lgde.com',30,'여')
 ```
 
-<details><summary>[실습] sqoop eval 명령어를 통해 student 테이블에 입력하세요 </summary>
+<details><summary>[실습] mysql 서버에 접속하여 insert into ... values 명령을 통해 student 테이블에 입력하세요 </summary>
 
 ```sql
 # mysql>
@@ -419,17 +419,17 @@ hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
 <details><summary>[실습] 같은 방식으로 해당 파케이 파일의 상위(head) 3개문서, 스키마(schema), 메타(meta) 출력을 해보세요 </summary>
 
 * 상위 3개 문서 반환
-```
+```bash
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head -n 3 file://${filename}
 ```
 * 스키마 출력 
-```
+```bash
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 ```
 * 메타정보 출력
-```
+```bash
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
 ```
