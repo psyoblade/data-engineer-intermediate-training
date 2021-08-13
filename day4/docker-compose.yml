@@ -1,11 +1,37 @@
-version: '3'
+version: "3"
 
 services:
+  mysql:
+    container_name: mysql
+    image: psyoblade/data-engineer-mysql:1.1
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: sqoop
+      MYSQL_PASSWORD: sqoop
+    ports:
+      - '3306:3306'
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 1s
+      retries: 3
+    volumes:
+      - ./mysql/etc:/etc/mysql/conf.d
+  mongo:
+    image: mongo:4.4.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
   notebook:
     container_name: notebook
     user: root
     privileged: true
-    image: psyoblade/data-engineer-intermediate-day3-notebook:1.0
+    image: psyoblade/data-engineer-notebook:1.4
     restart: always
     depends_on:
       - mysql
@@ -21,25 +47,8 @@ services:
       - "4040:4040"
       - "4041:4041"
       - "8888:8888"
-  mysql:
-    image: psyoblade/data-engineer-intermediate-day1-mysql
-    container_name: mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 3s
-      timeout: 1s
-      retries: 3
-    volumes:
-      - ./mysql/custom:/etc/mysql/conf.d
-  mongo:
-    image: mongo:4.4.0
-    container_name: mongodb
-    restart: always
-    ports:
-      - "27017:27017"
+
+networks:
+  default:
+    name: default_network
+

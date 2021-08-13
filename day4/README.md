@@ -35,10 +35,6 @@ docker-compose logs notebook
 ```
 > `http://127.0.0.1:8888/?token=87e758a1fac70558a6c4b4c5dd499d420654c509654c6b01` 이러한 형식의 URL 에서 `127.0.0.1` 을 자신의 호스트 이름(`vm<number>.aiffelbiz.co.kr`)으로 변경하여 접속합니다
 <br>
-  * http://student#.lgebigdata.com:8888/?token=d508d3a860cbc00c1095b078f9f7bd755a3b3f95f715692e
-  * 접속하면 jupyter notebook lab 이 열리고 work 폴더가 보이면 정상 기동 된 것입니다
-  * 이제 마우스로 work 폴더를 클릭하고 해당 경로 안에서 노트북 페이지를 생성합니다
-<br>
 
 
 ## 2. 데이터 변환 기본
