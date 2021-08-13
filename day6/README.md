@@ -18,7 +18,7 @@ git pull
 ### 1-2. 실습을 위한 이미지를 내려받고 컨테이너를 기동합니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-${course}-training/day5
+cd /home/ubuntu/work/data-engineer-${course}-training/day4
 docker-compose pull
 docker-compose up -d
 ```
