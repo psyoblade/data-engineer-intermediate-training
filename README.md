@@ -10,7 +10,7 @@
         
 ## [4일차. 아파치 스파크 데이터 변환 기본](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day4/README.md)
         
-## [5일차. 아파치 스파크 데이터 변환 고급](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day5/README.md)
+## [5일차. 아파치 스파크 데이터 변환 고급](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day4/README.md)
 
 ## [6일차. 아파치 스파크 데이터 변환 심화](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day6/README.md)
 
