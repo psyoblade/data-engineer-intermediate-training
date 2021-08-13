@@ -38,21 +38,21 @@ docker-compose logs notebook
 
 
 ## 2. 데이터 변환 기본
-### [1. 스파크 기본 명령어 이해](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-1-basic.html)
-### [2. 기본 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-2-operators.html)
-### [3. 데이터 타입 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-3-data-types.html)
-### [4. 조인 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-4-join.html)
-### [5. 집계 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-5-aggregation.html)
-### [6. 스파크 JDBC to MySQL](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-6-jdbc-mysql.html)
-### [7. 스파크 JDBC to MongoDB](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-7-jdbc-mongodb.html)
+### [1. 아파치 스파크 기본](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-1-basic.html)
+### [2. 아파치 스파크 연산자](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-2-operators.html)
+### [3. 아파치 스파크 데이타입](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-3-data-types.html)
+### [4. 아파치 스파크 조인](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-4-join.html)
+### [5. 아파치 스파크 집계](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-5-aggregation.html)
+### [6. 아파치 스파크 JDBC to MySQL](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-6-jdbc-mysql.html)
+### [7. 아파치 스파크 JDBC to MongoDB](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-core-7-jdbc-mongodb.html)
 <br>
 
 ## 3. 데이터 변환 고급
-### [1. Repartition vs. Coalesce Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_1.html)
-### [2. Skewness Problem Resolutions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_2.html)
-### [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_3.html)
-### [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_4.html)
-### [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/day5_pyspark_troubleshoot_5.html)
+### [1. Repartition vs. Coalesce Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-troubleshoot-1-repartition.html)
+### [2. Skewness Problem Resolutions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-troubleshoot-2-skewness.html)
+### [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-troubleshoot-3-cache.html)
+### [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-troubleshoot-4-partition.html)
+### [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/html/lgde-spark-troubleshoot-5-bucket.html)
 <br>
 
 
