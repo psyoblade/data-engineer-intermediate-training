@@ -91,7 +91,7 @@ docker-compose up -d
 
 #### 2-2-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
-```yml
+```yaml
 version: "3"
 
 services:
@@ -246,7 +246,7 @@ docker-compose up -d
 
 #### 3-1-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
-```yml
+```yaml
 version: "3"
 
 services:
@@ -426,7 +426,7 @@ docker-compose up -d
 
 #### 4-1-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
-```yml
+```yaml
 version: "3"
 
 services:
@@ -678,7 +678,7 @@ docker-compose up -d
 
 #### 5-1-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
-```yml
+```yaml
 version: "3"
 
 services:
@@ -864,7 +864,7 @@ docker-compose up -d
 
 #### 6-1-1 도커 컴포즈 파일 구성 `docker-compose.yml`
 
-```yml
+```yaml
 version: '3'
 
 services:
@@ -1029,7 +1029,7 @@ fluentd  | 2021-07-18 17:03:11.177728881 +0000 docker.fortune: {"container_id":"
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
-```yml
+```yaml
 version: '3'
 
 services:
@@ -1101,7 +1101,9 @@ networks:
 ## 7. 도커 컴포즈를 통한 로그 전송 구성
 
 ### 7-1. 도커 로그 수집 컨테이너를 기동하고, web, kibana, elasticsearch 모두 떠 있는지 확인합니다
+
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex5
 docker-compose down
 
@@ -1124,7 +1126,8 @@ docker ps
   * 2. 다시 Kibana 에서 Refresh 버튼을 누르면 접속 로그가 전송됨을 확인
 
 ### 7-3. Fluentd 구성 파일 `docker-compose.yml`
-```yml
+
+```yaml
 version: "3"
 services:
   web:
@@ -1203,7 +1206,9 @@ services:
 ## 8. 멀티 프로세스를 통한 성능 향상
 
 ### 8-1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
+
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex6
 docker-compose down
 
@@ -1214,8 +1219,10 @@ mkdir source
 <br>
 
 ### 8-2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
+
 * 첫 번째 프로세스가 파일로 받은 입력을 표준 출력으로 내보내는 프로세스입니다
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 for x in $(seq 1 1000); do echo "{\"hello\":\"world\"}" >> source/start.log; done
 ```
@@ -1227,7 +1234,7 @@ curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
 
 ### 8-3. Fluentd 구성 파일
 * `fluentd.conf`
-```conf
+```yaml
 <system>
     workers 2
     root_dir /fluentd/log
@@ -1277,7 +1284,9 @@ docker rm -f $container_name
 <br>
 
 ### 8-4. 기동된 Fluentd 를 종료합니다
+
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 ./shutdown.sh
 docker ps -a
@@ -1294,6 +1303,7 @@ docker ps -a
 
 ### 9-1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 docker-compose down
 
@@ -1307,13 +1317,15 @@ mkdir source
 * 멀티 프로세스를 통해 하나의 쿼리로 읽어오도록 저장되는 것을 확인합니다
 
 ```bash
+# terminal
 tree target
 ```
 <br>
 
 ### 9-3. Fluentd 구성 파일을 분석합니다
+
 * `fuent.conf`
-```conf
+```yaml
 <system>
     workers 2
     root_dir /fluentd/log
@@ -1388,7 +1400,7 @@ done
 tree
 ```
 
-* shutdown.sh
+* `shutdown.sh`
 ```bash
 #!/bin/bash
 name="multi-process-ex"
@@ -1399,6 +1411,7 @@ docker rm -f $container_name
 
 ### 9-4. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 ```bash
+# terminal
 docker-compose down
 docker ps -a
 ```
@@ -1414,13 +1427,16 @@ docker ps -a
 
 ### 10-1. 서비스를 기동합니다
 ```bash
+# terminal
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex9
 ./startup.sh
 ```
 <br>
 
 ### 10-2. 별도의 터미널에서 모든 서비스(fluentd, namenode, datanode)가 떠 있는지 확인합니다
+
 ```bash
+# terminal
 docker ps
 ```
 <br>
@@ -1436,8 +1452,9 @@ docker exec -it namenode hadoop fs -ls /user/fluent/webhdfs/
 <br>
 
 ### 10-4. Fluentd 구성 파일을 분석합니다
+
 * `fluent.conf`
-```conf
+```yaml
 version: '2'
 services:
   namenode:
@@ -1481,10 +1498,11 @@ volumes:
 
 * `start container`
 ```bash
+# terminal
 docker-compose up -d
 ```
 
-* generate logs with progress.sh
+* `progress.sh` : 테스트를 위한 로그를 전송합니다
 ```bash
 #!/bin/bash
 max=60
@@ -1499,6 +1517,7 @@ done
 
 ### 10-5. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 ```bash
+# terminal
 docker-compose down
 docker ps -a
 ```
@@ -1506,3 +1525,7 @@ docker ps -a
 </details>
 <br>
 
+[목차로 돌아가기](#3일차-트레저데이터-플루언트디-파일-수집)
+
+<br>
+<br>
