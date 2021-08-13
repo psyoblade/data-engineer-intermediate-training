@@ -38,11 +38,11 @@ docker-compose logs notebook
 
 
 ## 2. 데이터 변환 고급
-### [1. Repartition vs. Coalesce Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day5/notebooks/lgde-spark-troubleshoot-1-repartition.html)
-### [2. Skewness Problem Resolutions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day5/notebooks/lgde-spark-troubleshoot-2-skewness.html)
-### [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day5/notebooks/lgde-spark-troubleshoot-3-cache.html)
-### [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day5/notebooks/lgde-spark-troubleshoot-4-partition.html)
-### [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day5/notebooks/lgde-spark-troubleshoot-5-bucket.html)
+### [1. Repartition vs. Coalesce Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day6/notebooks/lgde-spark-troubleshoot-1-repartition.html)
+### [2. Skewness Problem Resolutions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day6/notebooks/lgde-spark-troubleshoot-2-skewness.html)
+### [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day6/notebooks/lgde-spark-troubleshoot-3-cache.html)
+### [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day6/notebooks/lgde-spark-troubleshoot-4-partition.html)
+### [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day6/notebooks/lgde-spark-troubleshoot-5-bucket.html)
 <br>
 
 
