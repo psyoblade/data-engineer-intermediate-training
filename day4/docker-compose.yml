@@ -31,7 +31,7 @@ services:
     container_name: notebook
     user: root
     privileged: true
-    image: psyoblade/data-engineer-notebook:1.5
+    image: psyoblade/data-engineer-notebook:1.6
     restart: always
     depends_on:
       - mysql
@@ -75,6 +75,11 @@ services:
       KAFKA_CREATE_TOPICS: "events:1:1"
     volumes:
      - /var/run/docker.sock:/var/run/docker.sock
+  cassandra:
+    container_name: cassandra
+    image: psyoblade/data-engineer-cassandra:1.0
+    ports:
+     - "7000:7000"
 
 networks:
   default:
