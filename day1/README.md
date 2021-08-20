@@ -2,6 +2,9 @@
 
 > 전체 과정에서 사용하는 기본적인 명령어 혹은 서비스(git, docker, docker-compose, linux, hdfs, sql) 등에 대해 실습하고 사용법을 익힙니다.
 
+- 범례
+  * :green_book: : 기본, :blue_book: : 중급
+
 - 목차
   * [1. 클라우드 장비에 접속](#1-클라우드-장비에-접속)
   * [2. Git 명령어 실습](#2-Git-명령어-실습)
@@ -99,7 +102,7 @@ git clone https://github.com/psyoblade/test.git
 ls -al test/*
 ```
 
-<details><summary>[실습] 터미널에 접속하여 /home/ubuntu/work 경로 아래에 https://github.com/psyoblade/helloworld.git 을 clone 하세요 </summary>
+<details><summary> :green_book: 1. [기본] 터미널에 접속하여 /home/ubuntu/work 경로 아래에 https://github.com/psyoblade/helloworld.git 을 clone 하세요 </summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -277,7 +280,7 @@ git log
 
 #### 2-3-5. 변경 상태 확인하기
 
-<details><summary>[실습] LGDE.txt 파일생성 후에 스테이징(add) 후에 상태를 확인하세요 </summary>
+<details><summary> :green_book: 2. [기본] LGDE.txt 파일생성 후에 스테이징(add) 후에 상태를 확인하세요 </summary>
 
 ```bash
 git checkout master
@@ -685,7 +688,7 @@ docker image ls | grep ubuntu
 ```
 <br>
 
-<details><summary>[실습] ubuntu:hello 이미지를 이용하여 helloworld.sh 을 실행하세요</summary>
+<details><summary> :green_book: 3. [기본] ubuntu:hello 이미지를 이용하여 helloworld.sh 을 실행하세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -773,7 +776,7 @@ CMD ["/bin/bash"]
 docker build -t ubuntu:local .
 ```
 
-<details><summary>[실습] 출력 결과 확인</summary>
+<details><summary> :green_book: 4. [기본] 출력 결과 확인</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -824,7 +827,7 @@ docker run alpine cat /etc/issue
 > 개별 명령어는 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 
 
-<details><summary>[실습] 위의 세번의 명령어 실행으로 생성된 컨테이너는 어떻게 삭제할까요?</summary>
+<details><summary> :blue_book: 5. [중급] 위의 세번의 명령어 실행으로 생성된 컨테이너는 어떻게 삭제할까요?</summary>
 
 * 전체 컨테이너 목록(-a 옵션으로 중지된 컨테이너까지 확인) 가운데 alpine 을 포함한 목록의 컨테이너 아이디를 찾아 모두 종료합니다
 ```bash
@@ -877,7 +880,7 @@ docker ps -f name=ubuntu_500m
 > <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 
 
-<details><summary>[실습] 메모리 제약을 주지 않고 해당 컨테이너의 상태를 확인해 보세요</summary>
+<details><summary> :blue_book: 6. [중급] 메모리 제약을 주지 않고 해당 컨테이너의 상태를 확인해 보세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -888,7 +891,7 @@ docker stats `docker ps | grep ubuntu_unlimited | awk '{ print $1 }'`
 
 </details>
 
-<details><summary>[실습] 바로 위의 실습 정답을 활용해서 ubuntu 문자열이 포함된 모든 컨테이너를 종료해 보세요</summary>
+<details><summary> :blue_book: 7. [중급] 바로 위의 실습 정답을 활용해서 ubuntu 문자열이 포함된 모든 컨테이너를 종료해 보세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -942,7 +945,7 @@ docker rm -f mysql-volatile
 docker volume ls
 ```
 
-<details><summary>[실습] mysql-volatile 컨테이너를 다시 생성하고 테이블을 확인해 보세요</summary>
+<details><summary> :blue_book: 8. [중급] mysql-volatile 컨테이너를 다시 생성하고 테이블을 확인해 보세요</summary>
 
 > 테이블이 존재하지 않는다면 정답입니다.
 
@@ -982,7 +985,7 @@ docker exec -it mysql-persist mysql --port=3307 -uuser -ppass
 
 #### 3-9-2. 볼륨 확인 실습
 
-<details><summary>[실습] mysql-persist 컨테이너를 강제 종료하고, 동일한 설정으로 다시 생성하여 테이블이 존재하는지 확인해 보세요</summary>
+<details><summary> :blue_book: 9. [중급] mysql-persist 컨테이너를 강제 종료하고, 동일한 설정으로 다시 생성하여 테이블이 존재하는지 확인해 보세요</summary>
 
 > 테이블이 존재하고 데이터가 있다면 정답입니다
 
@@ -1186,6 +1189,31 @@ cat docker-compose.yml | grep -ia20 'mysql:' docker-compose.yml
 <br>
 
 
+#### 4-3-2. 도커 컴포즈 파일(`docker-compose.yml`)을 직접 생성 합니다
+
+> 컴포즈 실습을 위한 경로를 생성합니다
+
+```bash
+# terminal
+mkdir -p /home/ubuntu/work/compose-training
+cd /home/ubuntu/work/compose-training
+for dir in `echo "custom init"`; do mkdir -p $dir; done
+```
+
+* 터미널에서 `cat` 명령으로 파일 생성하기
+  - 아래와 같이 `cat > path/filename` 명령 후에 클립보드 내용을 붙여넣거나, 타이핑 후에 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 빠져나오면 vim 편집기 없이도 파일을 생성할 수 있는 간편한 방법입니다
+```bash
+# terminal
+mkdir -p /home/ubuntu/work/compose-training/foo
+cat > foo/bar.txt
+data engineer training intermediate course
+hello world
+```
+
+<br>
+
+
+
 ### 4-4. 외부 볼륨을 통한 환경설정
 
 > 외부 볼륨을 통한 환경설정 제공 및 설정을 실습합니다
@@ -1229,8 +1257,8 @@ services:
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     volumes:
-      - ./custom:/etc/myslq/conf.d
-      - mysql_utf8:/etc/myslq/conf.d
+      - ./custom:/etc/mysql/conf.d
+      - mysql_utf8:/var/lib/mysql
 ```
 <br>
 
@@ -1450,7 +1478,7 @@ more -5 data/apache-access.log
 ```
 > more 명령어는 <kbd>Q</kbd> 키를 통해서 빠져나올 수 있습니다
 
-<details><summary>[실습] data/hadoop-hdfs-secondarynamenode.log 파일에서 exception 문자열이 발견된 위치부터 10줄씩 출력하세요 </summary>
+<details><summary> :green_book: 10. [기본] data/hadoop-hdfs-secondarynamenode.log 파일에서 exception 문자열이 발견된 위치부터 10줄씩 출력하세요 </summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -1472,7 +1500,7 @@ head -c 1K data/apache-access.log > 1k.log
 ```
 > 로그의 처음부터 1024 bytes 만큼 읽어서 파일을 생성합니다
 
-<details><summary>[실습] data/apache-access.log 로그의 첫 번째 30라인만 출력하세요</summary>
+<details><summary> :green_book: 11. [기본] data/apache-access.log 로그의 첫 번째 30라인만 출력하세요</summary>
 
 ```bash
 head -n 30 data/apache-access.log
@@ -1494,7 +1522,7 @@ tail -n 30 data/apache-access.log
 ```
 > 로그의 마지막 30라인만 출력합니다
 
-<details><summary>[실습] noexists.log 로그가 없어도 계속 tail 하고 해당 파일에 로그가 추가되면 계속 tailing 하는 명령을 수행하세요 </summary>
+<details><summary> :green_book: 12. [기본] noexists.log 로그가 없어도 계속 tail 하고 해당 파일에 로그가 추가되면 계속 tailing 하는 명령을 수행하세요 </summary>
 
 ```bash
 tail -F data/notexist.log
@@ -1519,10 +1547,10 @@ echo "hello world" >> data/notexist.log
 
 #### 5-3-1. wc : 텍스트 파일의 단어의 수를 계산합니다
 
-  - <kbd>-c, --bytes</kbd> :
-  - <kbd>-m, --chars</kbd> :
-  - <kbd>-l, --lines</kbd> :
-  - <kbd>-w, --words</kbd> :
+  - <kbd>-c, --bytes</kbd> : 파일의 바이트 수를 출력합니다
+  - <kbd>-m, --chars</kbd> : 파일의 문자열의 수를 출력합니다
+  - <kbd>-l, --lines</kbd> : 파일의 라인 수를 출력합니다
+  - <kbd>-w, --words</kbd> : 파일의 워드의 수를 출력합니다
 ```bash
 # wc [OPTION] ... [FILE] ...
 wc -l data/apache-access.log
@@ -1530,7 +1558,7 @@ wc -l data/*
 ```
 > 개별 파일의 라인수와 전체 라인수를 출력합니다
 
-<details><summary>[실습] data/apache-access.log 로그에 포함된 단어의 수를 출력하세요</summary>
+<details><summary> :green_book: 13. [기본] data/apache-access.log 로그에 포함된 단어의 수를 출력하세요</summary>
 
 ```bash
 wc -w data/apache-access.log
@@ -1554,7 +1582,7 @@ nl -b data/apache-access.log          # 로그를 라인 수와 함께 출력합
 nl -s ',<tab>' data/apache-access.log # 000123,<line> 와 같이 구분자를 넣어 출력합니다
 ```
 
-<details><summary>[실습] data/apache-access.log '000123' 과 같이 0을 패딩 후 출력하세요</summary>
+<details><summary> :blue_book: 14. [중급] data/apache-access.log '000123' 과 같이 0을 패딩 후 출력하세요</summary>
 
 ```bash
 nl -n rz data/apache-access.log
@@ -1583,7 +1611,7 @@ nl -n rz data/apache-access.log
 cat data/corona.body.tsv | sed 's/,//g' | cut --output-delimiter=',' -f1,2,3 | sort -t, -k3nr | head     # 사망자 톱 10
 ```
 
-<details><summary>[실습] 확진자 톱 10을 구하세요 </summary>
+<details><summary> :blue_book: 15. [중급] 확진자 톱 10을 구하세요 </summary>
 
 ```bash
 cat data/corona.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-delimiter=',' -f1,2,3 | sort -t, -k2nr | head     # 확진자 톱 10
@@ -1601,7 +1629,7 @@ cat data/corona.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-deli
   - 이번에는 제일 처음 컬럼에 번호가 있어 컬럼의 순서가 다르며 `data/corona.2021.header.tsv` 파일을 통해 확인할 수 있습니다
   - 데이터 값 가운데 `N/A` 으로 명시된 값들을 `0` 으로 변경하여 처리할 수 있도록 해주세요
 
-<details><summary>[실습] 사망자/확진자 톱 10을 구하세요 </summary>
+<details><summary> :blue_book: 16. [중급] 사망자/확진자 톱 10을 구하세요 </summary>
 
 * 출력 컬럼 기준이 1:국가,2:확진자,3:사망자,4:완치 (-f2,3,4,5) 이므로 사망자(3), 확진자(2)
 ```bash
@@ -1656,7 +1684,7 @@ ls -al | cut -b -10 --complement    					# ls -al 결과의 앞 10바이트를 �
 * `root:x:0:0:root:/root:/bin/bash`
   - 계정명 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
 
-<details><summary>[실습] 패스워드 파일에서 로그인 쉘 가운데 가장 빈도가 높은 3개를 찾아보세요</summary>
+<details><summary> :blue_book: 17. [중급] 패스워드 파일에서 로그인 쉘 가운데 가장 빈도가 높은 3개를 찾아보세요</summary>
 
 ```bash
 cat /etc/passwd | cut -d: -f7 | sort | uniq -c | sort -nr | head -3
@@ -1675,7 +1703,7 @@ cat /etc/passwd | cut -d: -f7 | sort | uniq -c | sort -nr | head -3
     - `[:alpha:]` : 알파벳
     - `[:blank:]` : 공백
     - `[:space:]` : 공백 + 줄바꿈
-    - `[:lower:]` / [:upper:] : 소문자 / 대문자
+    - `[:lower:]` / `[:upper:]` : 소문자 / 대문자
 
 ```bash
 # tr [OPTION] ... SET1 [SET2]
@@ -1683,7 +1711,7 @@ head /etc/passwd | tr ':' ' '   # 패스워드 파일의 구분자 콜론을 공
 ls -al | tr -d [:space:]        # ls -al 결과의 한 줄의 문자열로 출력합니다
 ```
 
-<details><summary>[실습] 패스워드 파일의 계정 이름만 대문자로 출력하세요</summary>
+<details><summary> :blue_book: 18. [중급] 패스워드 파일의 계정 이름만 대문자로 출력하세요</summary>
 
 ```bash
 head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
@@ -1710,7 +1738,7 @@ head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
 sed -n '3,5p' /etc/passwd                     # 패스워드 파일의 3~5번째 줄을 출력합니다
 ```
 
-<details><summary>[실습] 패스워드 파일(/etc/passwd)을 읽어서 ubuntu 계정을 찾고, kubundu 로 변경하세요</summary>
+<details><summary> :blue_book: 19. [중급] 패스워드 파일(/etc/passwd)을 읽어서 ubuntu 계정을 찾고, kubundu 로 변경하세요</summary>
 
 ```bash
 sed 's/ubuntu/kubuntu/g' /etc/passwd
@@ -1747,7 +1775,7 @@ awk '/root/ { print $0 }' /etc/passwd                                 # 패스�
 * `root:x:0:0:root:/root:/bin/bash`
   - 계정명 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
 
-<details><summary>[실습] /etc 경로에 존재하는 파일의 user 와 group 의 유일한(uniq) 값만 출력하세요</summary>
+<details><summary> :blue_book: 20. [중급] /etc 경로에 존재하는 파일의 user 와 group 의 유일한(uniq) 값만 출력하세요</summary>
 
 ```bash
 ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
@@ -1777,7 +1805,7 @@ ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
 # rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/home/ubuntu/data .    # EC2 장비의 data 경로를 로컬에 복사합니다
 ```
 
-<details><summary>[실습] /tmp/backup 경로를 생성하고 linux-for-dummies 폴더 전체를 백업하세요 </summary>
+<details><summary> :blue_book: 21. [중급] /tmp/backup 경로를 생성하고 linux-for-dummies 폴더 전체를 백업하세요 </summary>
 
 ```bash
 cd /home/ubuntu/work/linux-for-dummies
@@ -2085,7 +2113,7 @@ hdfs dfs -df /
 hdfs dfs -du -s -h /
 ```
 
-<details><summary>[실습] /tmp 경로에 임의의 파일 uploaded.txt 파일을 업로드하고 df 및 du 명령을 실행해 보세요</summary>
+<details><summary> :blue_book: 22. [기본] /tmp 경로에 임의의 파일 uploaded.txt 파일을 업로드하고 df 및 du 명령을 실행해 보세요</summary>
 
 ```bash
 # docker
