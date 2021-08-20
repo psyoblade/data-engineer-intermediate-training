@@ -45,7 +45,7 @@ docker-compose logs notebook
 ### [4. Spark Streaming External](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-stream/lgde-spark-stream-4-external.html)
 ### [5. Spark Streaming Aggregation](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-stream/lgde-spark-stream-5-aggregation.html)
 ### [6. Spark Streaming Join](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-stream/lgde-spark-stream-6-join.html)
-### [7. Spark Streaming Others](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-stream/lgde-spark-stream-7-others.html)
+### [7. Spark Streaming Questions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-stream/lgde-spark-stream-7-questions.html)
 
 <br>
 
