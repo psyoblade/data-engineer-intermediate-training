@@ -1449,7 +1449,26 @@ cd /home/ubuntu/work/linux-for-dummies
 
 > 수집 및 탐색을 위한 다양한 도구([wget](https://www.gnu.org/software/wget/), [w3m](http://w3m.sourceforge.net/), [lynx](https://invisible-island.net/lynx/))들이 많지만, 하나로 통일해서 사용하는 것이 혼란을 줄일 수 있어, 가장 널리 사용되는 curl 에 대해서만 학습합니다
 
-#### 5-1-1. curl : URL 을 통해 데이터를 송수신 하는 명령어
+#### 5-1-1. [curl](https://linuxize.com/post/curl-command-examples/) : URL 을 통해 데이터를 송수신 하는 명령어
+
+  - <kbd>-O</kbd> : 원본 파일명을 그대로 다운로드
+  - <kbd>-o</kbd> : 다운로드 파일명을 직접 지정
+  - <kbd>-I</kbd> : 헤더를 받아옴 (ex_ --http2)
+  - <kbd>-A</kbd> : 유저 에이전트를 지정 (ex_ "Mozilla/5.0...")
+  - <kbd>-u</kbd> : FTP 서버에 접속하여 다운로드 (ex_ ftp://ftp.example.com)
+  - <kbd>-b</kbd> : 쿠키를 전달함 (ex_ oraclelicense=a)
+  - <kbd>-U, --proxy-user</kbd> : 프록시 유저를 지정함
+  - <kbd>-x</kbd> : 프록시 서버를 이용함
+
+```bash
+# curl [OPTIONS] [URL...]
+curl -o vue-v2.6.10.js https://cdn.jsdelivr.net/npm/vue/dist/vue.js
+curl -I --http2 https://www.ubuntu.com/
+curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0" https://getfedora.org/
+curl -T newfile.tar.gz -u FTP_USERNAME:FTP_PASSWORD ftp://ftp.example.com/
+curl -L -b "oraclelicense=a" -O http://download.oracle.com/otn-pub/java/jdk/10.0.2+13/19aef61b38124481863b1413dce1855f/jdk-10.0.2_linux-x64_bin.rpm
+curl -U username:password -x 192.168.44.1:8888 http://linux.com/
+```
 
 <br>
 
