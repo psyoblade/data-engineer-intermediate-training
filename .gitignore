@@ -1,4 +1,5 @@
 # Custom
+backup/
 .template
 .DS_Store
 __pycache__/
