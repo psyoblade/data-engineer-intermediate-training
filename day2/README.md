@@ -523,16 +523,6 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 ```
 <br>
 
-![RM](images/RM.png)
-* 오류 확인은 리소스매니저 (`http://vm<student-id>.aiffelbiz.co.kr:8088/`) 사이트에서 할 수 있습니다
-  * `application_id` 링크를 클릭하고 logs 경로를 클릭하면 http://9e48393c5f39:8042/ 와 같이 docker-container 아이로 redirect 됩니다
-  * 해당 문자열을 자신의 클라우드 장비의 IP 혹은 DNS 주소로 변경하면 됩니다
-  * 해당 로그 페이지에서 "syslog : Total file length is 49301 bytes." 링크를 클릭하고 "here" 링크를 클릭하면 전체 로그를 한 번에 확인할 수 있습니다
-* 포트가 변경되어 접근이 불가능한 경우는 아래와 같이 직접 확인할 수 있습니다
-  * `http://vm<student-id>.aiffelbiz.co.kr:8088/logs/userlogs/`
-  * 해당 디렉토리 내의 stdout 로그를 확인하면 오류를 확인할 수 있습니다
-<br>
-
 
 #### 3-2-2. 탭구분자로 테이블 재수집
 
