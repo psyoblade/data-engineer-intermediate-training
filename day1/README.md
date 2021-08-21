@@ -1991,8 +1991,6 @@ ps -eo pid,lstart,cmd
   - <kbd>-mmin [minutes]</kbd> : 지정된 시간 이내에 수정된 파일 찾기
   - <kbd>-amin [minutes]</kbd> : 지정된 시간 이내에 접근된 파일 찾기
   - <kbd>-size [size]</kbd> : 지정된 파일 크기의 파일 찾기 (ex_ -size +50M -size -100M, 50~100MB 파일)
-  - <kbd></kbd> : 
-  - <kbd></kbd> : 
 
 <br>
 
@@ -2011,79 +2009,181 @@ find / -type -f -size +100M -exec rm -f {} \;
 <br>
 
 
-#### 5-5-4. df : desc
+#### 5-5-4. [df](https://man7.org/linux/man-pages/man1/df.1p.html) : 비어있는 디스크의 공간을 확인
 
-> explain
+> 현재 마운트된 모든 파일시스템의 디스크 여유 공간을 확인합니다 - [df command in linux](https://www.geeksforgeeks.org/df-command-in-linux-with-examples/)
 
-  - <kbd>-o</kbd> : 
+  - <kbd>-h</kbd> : 읽기 쉬운 포맷으로 출력 (ex_ 1.4G)
+  - <kbd>-i</kbd> : 디스크 블록 대신 inode 정보를 출력
+  - <kbd>-l</kbd> : 로컬 디스크 블록만 출력
+  - <kbd>-T, --print-type</kbd> : 디스크의 타입을 출력
+  - <kbd>--total</kbd> : 전체 디스크의 공간의 합을 같이 출력
 
 ```bash
-# 
-
+# terminal
+# df [OPTION]...[FILE]...
+df -h
+df -i
+df -T
+df --total
 ```
 
 <br>
 
-#### 5-5-5. du : desc
 
-> explain
+#### 5-5-5. [du](https://man7.org/linux/man-pages/man1/du.1p.html) : 디스크의 사용 공간을 확인
 
-  - <kbd>-o</kbd> : 
+> 현재 사용하고 있는 디스크의 양을 확인합니다 - [du command in linux](https://www.linuxfordevices.com/tutorials/linux/du-command-in-linux)
+
+  - <kbd>-d [depth]</kbd> : 하위 경로의 깊이를 지정 (-d 0는 -s 와 동일한 효과)
+  - <kbd>-h</kbd> : 읽기 쉬운 포맷으로 출력 (ex_ 1.4G)
+  - <kbd>-s</kbd> : 디렉토리 별 사용량을 모두 더해서 출력
+  - <kbd>-S</kbd> : 하위 디렉토리 사용량을 *제외하고* 출력
+  - <kbd>--exclude [pattern]</kbd> : 패턴에 해당하는 파일은 제외하고 계산
 
 ```bash
-# 
-
+# terminal
+# du [OPTIONS] [FILE or DIRECTORY NAME]
+du -sh .
+du -d 1 --exclude=wordpress /root
 ```
 <br>
 
-#### 5-5-6. sar : desc
 
-> explain
+#### 5-5-6. [sar](https://linuxhint.com/sar_linux_tutorial/) : 시스템 활동 리포트 (System Activity Report)
 
-  - <kbd>-o</kbd> : 
+> 별도로 설치해야 하는 도구이며 `sudo apt install sysstat` 통해 사용할 수 있습니다 - [sar example](https://www.thegeekstuff.com/2011/03/sar-examples/)
+
+  - <kbd>-b</kbd> : 모든 I/O 관련된 상태를 확인
+  - <kbd>-d</kbd> : 디스크의 상태를 확인
+  - <kbd>-n</kbd> : 네트워크 상태를 확인
+  - <kbd>-r</kbd> : 메모리 상태를 확인
+  - <kbd>-u ALL</kbd> : CPU 상태를 확인
+  - <kbd>-w</kbd> : 컨텍스트 스위칭 상태를 확인
+  - <kbd>-B</kbd> : 페이징 상태를 확인
+  - <kbd>-S</kbd> : 스왑 상태를 확인
 
 ```bash
-# 
-
+# sar [options] [interval] [times]
+sar -b 1 5
+sar -n 1 5
+sar -r 1 5
+sar -S 1 5
 ```
 
 <br>
 
-#### 5-5-7. iostat : desc
 
-> explain
+#### 5-5-7. [iostat](https://man7.org/linux/man-pages/man1/iostat.1.html) : I/O 통계 정보 확인 도구
 
-  - <kbd>-o</kbd> : 
+> 별도로 설치해야 하는 도구이며 `sudo apt install sysstat` 통해 사용할 수 있습니다 - [iostat example](https://www.geeksforgeeks.org/iostat-command-in-linux-with-examples/) 현재 통계정보를 요약된 화면에서 출력해주기 때문에 최근 상태를 좀 더 직관적으로 이해할 수 있습니다
+
+  - <kbd>-x</kbd> : 좀 더 상세한 리포트 출력
+  - <kbd>-c</kbd> : CPU 통계 출력
+  - <kbd>-d</kbd> : 장치 통계 출력
+  - <kbd>-k [interval] [times]</kbd> : 인터벌과 횟수를 지정하여 측정
+  - <kbd>-p</kbd> : 디스크 통계 출력
+  - <kbd></kbd> :
+
+<br>
+
+* `iostat - first` 통계 설명 
+
+| 키 | 값 | 설명 |
+| --- | --- | --- |
+| %user | 이용자 수준의 CPU 사용율 | |
+| %nice | nice priority 를 적용한 이용자 레벨의 CPU 사용 | |
+| %system | 시스템(kernel) 수준의 CPU 사용율 | |
+| %iowait | 디스크 I/O 에 의해 CPU 가 대기하는 비율 | |
+| %steal | 다른 가상 프로세스를 Hypervisor 에의해 지원되어 가상의 CPU 대기 시간 | |
+| %idle | CPU 가 idle 상태인 시간 비율 | |
+
+* `iostat - second` 통계 설명 
+
+| 키 | 값 | 설명 |
+| --- | --- | --- |
+| Device | 장치나 파티션 정보 | |
+| tps | 초당 장치에서 발생하는 전송 횟수 | tps 가 높을 수록 프로세서가 바쁘다는 의미 | 
+| Blk\_read/s | 초당 장치에서 읽는 블록(kb, mb)의 양을 말합니다 | |
+| Blk\_wrtn/s | 초당 장치에서 쓰는 블록(kb, mb)의 양을 말합니다 | |
+| Blk\_read | 총 읽은 블록의 수 | |
+| Blk\_wrtn | 총 쓴 블록의 수 | |
+
+<br>
+
+* `iostat` 은 아래의 경로에 있는 파일을 참고하여 통계 리포트를 생성합니다
+  - /proc/stat : 시스템 통계 
+  - /proc/uptime : 시스템 uptime
+  - /proc/diskstats : 디스크 통계 
+  - /sys : 블록 장치들의 통계 
+  - /proc/self/mountstats : 네트워크 파일 시스템의 통계
+  - /dev/disk : 로컬 디스크 장치의 정보
 
 ```bash
-# 
-
+# terminal
+# iostat [options]
+iostat -k 1 5
 ```
 <br>
 
-#### 5-5-8. netstat : desc
 
-> explain
+#### 5-5-8. [netstat](http://www.skrenta.com/rt/man/netstat.8.html) : 네트워크 통계를 출력합니다
 
-  - <kbd>-o</kbd> : 
+> 현재 장비에 연결된 접속 혹은 서버의 소켓 상태를 확인할 수 있습니다 - [netstat example](https://geekflare.com/netstat/)
 
+  - <kbd>-a, --all</kbd> : 모든 소켓을 출력 (default: connected)
+  - <kbd>-i, --interfaces</kbd> : 네트워크 인터페이스를 출력
+  - <kbd>-l, --listening</kbd> : Listening 중인 모든 서버 소켓 출력
+  - <kbd>-n, --numeric</kbd> : 호스트 이름을 해석하지 않습니다
+  - <kbd>-p, --programs</kbd> : 실행 프로그램의 이름과 PID를 출력
+  - <kbd>-r, --route</kbd> : 라우팅 테이블을 확인합니다
+  - <kbd>-s, --statistics</kbd> : 네트워크 통계를 출력
+  - <kbd>-t, --tcp</kbd> : TCP 연결
+  - <kbd>-u, --udp</kbd> : UDP 연결
+
+* TCP/UDP 로 연결되 모든 소켓 가운데, ESTABLISHED 된 연결만 출력
 ```bash
-# 
-
+# terminal
+# netstat [options]
+netstat -natu | grep ESTABLISHED
 ```
+
+* 현재 LISTEN 중인 소켓 서버를 출력
+```bash
+netstat -na | grep LISTEN
+```
+* 특정 애플리케이션의 PID(1234) 기준으로 사용중인 포트를 확인
+```bash
+netstat -nalp | grep 1234
+```
+
 <br>
 
-#### 5-5-9. telnet : 
 
-> explain
+#### 5-5-9. 원격지 장비의 포트 오픈 여부 확인하는 방법 5가지
 
-  - <kbd>-o</kbd> : 
+> [5 ways to check if a Port is open on a remote Linux PC](https://www.fosslinux.com/35730/5-ways-to-check-if-a-port-is-open-on-a-remote-linux-pc.htm)
 
+  - <kbd>nc -zvw10 [ip] [port]</kbd> : `[netcat]` 통한 ip:port 으로 UDP 패킷 전송 netcat
+    - `z` : zero i/o mode
+    - `v` : verbose
+    - `w10` : timeout 10secs
+  - <kbd>nmap [ip] -p [port]</kbd> : `[network mapper]` 통한 ip:port 으로 IP 패킷 이용한 접근
+  - <kbd>telnet [ip] [port]</kbd> : `[telnet]` 통한 ip:port 로 TCP/IP 네트워크 기반으로 접근
+  - <kbd>echo > /dev/[protocol]/[ip]/[port]</kbd> : 명령어 설치가 어렵거나 없는 경우 손쉽게 사용할 수 있는 명령입니다
+    - `echo > /dev/tcp/127.0.0.1/80 && echo "Port is open"`
+    - `echo > /dev/udp/127.0.0.1/80 && echo "Port is open"`
+  - <kbd> netstat -tuplen</kbd> : `[netstat]` 통한 열려있는 ip/port 정보를 출력합니다
+
+* 원격 장비의 포트 오픈여부를 확인하는 명령어
 ```bash
-# 
-
+# terminal
+nc -zvw10 192.168.0.1 80 
+nmap 192.168.0.1 -p 80
+telnet 192.168.0.1 80
+echo > /dev/tcp/192.168.0.1/80 && echo "port is opened"
+netstat -tuplen
 ```
-
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
