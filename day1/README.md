@@ -1957,6 +1957,7 @@ top -p 1234 -H -c -u root
 * 로그인 유저의 모든 프로세스를 출력하고, 명령어 전체를 출력하여 vi 편집기로 여는 명령
 ```bash
 # terminal
+# ps [options]
 ps -aufxww | vi -
 ```
 
@@ -1971,7 +1972,46 @@ ps -eo pid,lstart,cmd
 <br>
 
 
-#### 5-5-1. command : desc
+#### 5-5-3. [find](https://man7.org/linux/man-pages/man1/find.1.html) : 파일을 찾는 명령어
+
+> 이름 혹은 상태를 조건으로 원하는 파일을 찾는 명령입니다 - [35 practical examples of linux find command](https://www.tecmint.com/35-practical-examples-of-linux-find-command/)
+
+  - <kbd>-name [expression]</kbd> : 파일명을 기준으로 찾기
+  - <kbd>-iname [expression]</kbd> : 대소문자 구분없이 찾기
+  - <kbd>-type d</kbd> : 디렉토리 타입만 찾기
+  - <kbd>-type f</kbd> : 파일 타입만 찾기
+  - <kbd>-perm [expression]</kbd> : 퍼미션에 해당하는 파일 찾기 (ex_ `find . -perm 777`)
+  - <kbd>-exec [command] {} \;</kbd> : 찾아낸 파일에 대해 명령어 적용하기 (ex_ `find . -name "*.mp3" -exec rm -f {} \;`)
+  - <kbd>-empty</kbd> : 빈 파일/디렉토리 찾기
+  - <kbd>-user [username]</kbd> : 특정 유저 권한의 파일 찾기
+  - <kbd>-ctime [days]</kbd> : 지정된 일자 이내에 변경된 파일 찾기 (change = {owner, mod} ex_ `chmod, chown`)
+  - <kbd>-mtime [days]</kbd> : 지정된 일자 이내에 수정된 파일 찾기 (modified = {write, append}, ex_ `vi`)
+  - <kbd>-atime [days]</kbd> : 지정된 일자 이내에 접근된 파일 찾기 (access = {read, view}, ex_ `cat, more`)
+  - <kbd>-cmin [minutes]</kbd> : 지정된 시간 이내에 변경된 파일 찾기
+  - <kbd>-mmin [minutes]</kbd> : 지정된 시간 이내에 수정된 파일 찾기
+  - <kbd>-amin [minutes]</kbd> : 지정된 시간 이내에 접근된 파일 찾기
+  - <kbd>-size [size]</kbd> : 지정된 파일 크기의 파일 찾기 (ex_ -size +50M -size -100M, 50~100MB 파일)
+  - <kbd></kbd> : 
+  - <kbd></kbd> : 
+
+<br>
+
+```bash
+# terminal
+# find [-H] [-L] [-P] [-D debugopts] [-Olevel] [starting-point...] [expression]
+find . -name name_generator.py
+find /root -name .profile
+find / -type d -perm 777 -print -exec chmod 755 {} \;
+find . -name "*.mp3" -exec rm -f {} \;
+find /tmp -type f -empty
+find /tmp -type d -empty
+find / -user root -name "*.txt"
+find / -type -f -size +100M -exec rm -f {} \;
+```
+<br>
+
+
+#### 5-5-4. df : desc
 
 > explain
 
@@ -1982,14 +2022,68 @@ ps -eo pid,lstart,cmd
 
 ```
 
-* top, htop
-* ps
-* find
-* df, du
-* sar
-* iostat
-* netstat
-* telnet, ping
+<br>
+
+#### 5-5-5. du : desc
+
+> explain
+
+  - <kbd>-o</kbd> : 
+
+```bash
+# 
+
+```
+<br>
+
+#### 5-5-6. sar : desc
+
+> explain
+
+  - <kbd>-o</kbd> : 
+
+```bash
+# 
+
+```
+
+<br>
+
+#### 5-5-7. iostat : desc
+
+> explain
+
+  - <kbd>-o</kbd> : 
+
+```bash
+# 
+
+```
+<br>
+
+#### 5-5-8. netstat : desc
+
+> explain
+
+  - <kbd>-o</kbd> : 
+
+```bash
+# 
+
+```
+<br>
+
+#### 5-5-9. telnet : 
+
+> explain
+
+  - <kbd>-o</kbd> : 
+
+```bash
+# 
+
+```
+
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
