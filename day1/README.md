@@ -1845,7 +1845,7 @@ rsync -av . /tmp/backup
 
 > `ps` 명령과는 다르게 interactive 한 인터페이스를 가지며, 프로세스를 모니터링 및 관리할 수 있으며 <kbd>q</kbd> 입력으로 종료할 수 있습니다
 
-![top](images/top1.png)
+![top](images/top.png)
 
   - <kbd>up</kbd> : 장비가 기동된 시간
   - <kbd>users</kbd> : 접속한 활성화 이용자 (tty)
