@@ -1839,6 +1839,149 @@ rsync -av . /tmp/backup
 
 ### 5-5. 운영 도구
 
+> 프로세스 및 리소스 확인을 위한 명령어(top, htop, ps)
+
+#### 5-5-1. [top](https://www.booleanworld.com/guide-linux-top-command/) : 리눅스 시스템의 프로세스와 리소스의 사용량을 확인하는 명령어
+
+> `ps` 명령과는 다르게 interactive 한 인터페이스를 가지며, 프로세스를 모니터링 및 관리할 수 있으며 <kbd>q</kbd> 입력으로 종료할 수 있습니다
+
+![top](images/top1.png)
+
+  - <kbd>up</kbd> : 장비가 기동된 시간
+  - <kbd>users</kbd> : 접속한 활성화 이용자 (tty)
+  - <kbd>load average</kbd> : 1, 5, 15 분간의 평균 부하(load)를 말합니다
+    - `load` 는 시스템이 수행하는 계산작업의 양을 측정하는 기준
+    - 1 core 장비의 load average 가 0.4 는 40%를 1.0 이라면 100%를 2.12 는 수행 가능한 처리량 보다 112% 더 많은 작업을 수행하고 있다고 말할 수 있습니다
+  - <kbd>tasks</kbd> : 전체 프로세스의 수(total)와 다양한 상태의 프로세스의 수를 나타냅니다 (running, sleeping, stopped, zombie)
+  - <kbd>cpu(s)</kbd> : CPU 의 상태
+    - 동작상태(`us`:userspace, `sy`:kernelspace, `ni`: nicer to other processes, `id`: idle status, `wa`: I/O wait time)별 프로세스 정보
+    - 인터럽트(즉각적인 주의가 필요한 이벤트) 상태(`hi`:hardware-interrupt, `si`:software-interrupt)별 프로세스 정보
+    - 가상화 환경에서 다른 VM 에 CPU가 사용되고 있어, 수행하지 못하여 손실된 시간을 (`st`: steal) 표현합니다
+  - <kbd>memory</kbd> : 메모리 (Mem/Swap) 상태, 디스크 버퍼와 캐시(buff/cache) 상태
+
+<br>
+
+* 목록 키워드 설명 
+
+| 키 | 값 | 설명 |
+| --- | --- | --- |
+| PID | 프로세스 ID | 프로세스를 유일한 양수인 정수 |
+| USER | 프로세스를 기동한 이용자 이름 | su(substitute user)를 통한 접근도 실제 이용자를 표현합니다 |
+| PR and NI | NI 는 프로세스의 "nice" 값을 말하고, PR 은 스케줄링 우선순위를 말합니다 | nice 값이 우선순위에 영향을 줍니다 |
+| VIRT | 프로세스에 의해 사용되는 총 메모리의 양 | disk swap 을 포함한 메모리 양, Virtual Memory Usage |
+| RES | 실제로 사용하는 메모리의 양 | Resident Memory Usage |
+| SHR | 다른 프로세스와 공유하고 있는 메모리의 양 | Shared Memory Usage |
+| %MEM | 총 메모리에서 차지하고 있는 비중을 말합니다 | - |
+| S | 프로세스의 상태를 한 문자로 표현합니다 | Running, Sleeping, Stopped, Zombie |
+| TIME+ | 해당 작업에 의해 사용된 총 CPU 시간을 말합니다 | CPU 시간으로 정확히 100분의 1초입니다 |
+| COMMAND | 실행 프로세스의 이름 | - | 
+
+<br>
+
+* 단축키 설명 (대소문자 구분)
+
+| 단축키 | 값 | 설명 |
+| --- | --- | --- |
+| 1 | 모든 CPU 를 출력 합니다 | - |
+| d | 출력 지연시간을 조정합니다 | 기본은 3초 |
+| f | 출력 컬럼을 선택합니다 | 스페이스바로 선택하고 `q`로 나오면 적용됩니다 |
+| i | 대기중(idle) 프로세스 출력을 토글합니다 | - |
+| k | 프로세스 종료 | PID 를 입력을 통해 SIGTERM(15) 을 보내며, SIGKILL(9)전송도 가능합니다 |
+| o | 조건 입력으로 필터 | PID=0, USER=root, VIRT>30000 등의 포맷으로 입력하고, 필터 제거는 `=`키를 사용합니다 | 
+| t | 화면 출력 방식을 변경합니다 | - |
+| M | 메모리 사용량 기준 정렬 | - |
+| N | process ID 기준 정렬 | - |
+| P | CPU 사용량 기준 정렬 | - |
+| R | 정렬 순서 변경 | - |
+| T | running time 기준 정렬 | - |
+| V | 트리 형태로 표현 | bash -> run.sh -> python -> sleep |
+
+<br>
+
+* 입력 옵션 기능
+
+| 명령어 | 값 | 설명 |
+| --- | --- | --- |
+| top -c | 실행 명령의 전체 경로를 표현 | - |
+| top -p <pid> | 특정 프로세스만 표현 | - |
+| top -u root | 특정 이용자의 프로세스만 표현 | - |
+| top -H | 스레드까지 표현 | - |
+
+<br>
+
+* root 이용자가 수행한 프로세스 PID 1234 의 프로세스 전체 명령어와 스레드까지 출력
+```bash
+# terminal
+top -p 1234 -H -c -u root
+```
+<br>
+
+
+#### 5-5-2. [ps](https://man7.org/linux/man-pages/man1/ps.1.html) : 현재 수행중인 프로세스의 상태를 출력하는 명령어
+
+> 실행 중인 프로세스의 상태를 출력합니다
+
+  - <kbd>-e, -A</kbd> : 실행 중인 모든 프로세스를 확인
+  - <kbd>-a</kbd> : 터미널을 제외한 프로세스만 출력
+  - <kbd>-f</kbd> : 모든 포맷을 출력 (UID PID PPID ... CMD)
+  - <kbd>-o</kbd> : 출력 컬럼을 지정
+  - <kbd>-p</kbd> : PID 로 필터하여 출력 (ex_ `ps -fp 1234`)
+  - <kbd>-u</kbd> : 특정 이용자 이름으로 출력, 입력하지 않으면 현재 이용자 (ex_ `ps -u root`)
+  - <kbd>-ww</kbd> : 프로세스 실행 명령이 잘리지 않고 모두 출력됩니다
+  - <kbd>-x</kbd> : 현재 tty 와 연관되지 않은 모든 프로세스까지도 출력 (터미널이 끊어져도 보이는 데몬 프로세스 등)
+  - <kbd>-C</kbd> : 프로세스 이름으로 PID 찾기 (ex_ `ps -C run.sh`)
+  - <kbd>-L</kbd> : 쓰레드 까지 출력 (ex_ `ps -p 1234 -L`)
+  - <kbd>-T</kbd> : 터미널과 관련있는 프로세스만 출력
+  - <kbd>--forest</kbd> : 명령어 계층을 트리 형태로 출력 (ex_ `ps -f --forest`)
+  - <kbd>au, aux</kbd> : BSD 포맷으로 출력 (USER PID ... COMMAND)
+
+* 목록 키워드 설명 
+
+| 키 | 값 | 설명 |
+| --- | --- | --- |
+| PID | 프로세스 ID | 프로세스를 유일한 양수인 정수 |
+| PPID | 부모 프로세스 ID | 프로세스를 유일한 양수인 정수 |
+| %CPU | CPU 사용 비율 추정치 | - |
+| %MEM | MEM 사용 비율 추정치 | - |
+| STIME | 프로세스가 시작된 시간 혹은 날짜 | - |
+| VSZ | K단위 또는 페이지 단위 가상 메모리 사용량 | - |
+| RSS | 실제 메모리 사용량 | - |
+| TTY | 터미널의 접속 TTY 정보 | who, write, tty |
+| S, STAT | 터미널의 상태 코드 | - |
+| TIME | 프로세스가 실행된 이후 지나간 시간 | |
+| COMMAND | 실행 프로세스의 이름 | - | 
+
+* [tty](https://www.howtogeek.com/428174/what-is-a-tty-on-linux-and-how-to-use-the-tty-command/)는 `teletypewriter` 의 약자로써 원격지의 장비에 메시지를 보내는 `teleprinters` 에서 시작했으며, 발전하여 다양한 문자과 부호까지 전송이 가능하게 되었으며, 현대 리눅스에서는 모든 접속된 터미널 윈도우와 `pseudo-teletypes(pts)`를 가지게 되며 하나의 장치로 인식되어 `/dev/pts/0`와 같은 파일로 존재하게 되며 `tty`명령으로 확인할 수 있습니다
+  - `multiplexer` 가 master 역할이며 pts 들은 slave 가 됩니다 (master: `/dev/ptmx`)
+
+* 로그인 유저의 모든 프로세스를 출력하고, 명령어 전체를 출력하여 vi 편집기로 여는 명령
+```bash
+# terminal
+ps -aufxww | vi -
+```
+
+<br>
+
+* 프로세스가 시작된 정확한 시간을 확인하는 명령
+```bash
+# terminal
+ps -eo pid,lstart,cmd
+```
+
+<br>
+
+
+#### 5-5-1. command : desc
+
+> explain
+
+  - <kbd>-o</kbd> : 
+
+```bash
+# 
+
+```
+
 * top, htop
 * ps
 * find
