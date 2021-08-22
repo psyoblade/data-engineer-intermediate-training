@@ -15097,10 +15097,6 @@ activityQuery.stop()
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 아래에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
-<span class="o">!</span> rm -rf /home/jovyan/work/lgde-spark-stream/tmp/activity_count
-<span class="n">activityQuery</span> <span class="o">=</span> <span class="n">activityTrigger</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<span class="n">activityQuery</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">(</span><span class="mi">80</span><span class="p">)</span>
-<span class="n">activityQuery</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 </pre></div>
 
      </div>
@@ -15185,49 +15181,6 @@ customQuery.stop()
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 아래에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
-<span class="n">customSchema</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">StructType</span><span class="p">()</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;Arrival_Time&quot;</span><span class="p">,</span> <span class="n">LongType</span><span class="p">()))</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;Creation_Time&quot;</span><span class="p">,</span> <span class="n">LongType</span><span class="p">()))</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;Device&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">()))</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;Index&quot;</span><span class="p">,</span> <span class="n">LongType</span><span class="p">()))</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;Model&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">()))</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;User&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">()))</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;gt&quot;</span><span class="p">,</span> <span class="n">StringType</span><span class="p">()))</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">DoubleType</span><span class="p">()))</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">DoubleType</span><span class="p">()))</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">StructField</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="n">DoubleType</span><span class="p">()))</span>
-<span class="p">)</span>
-<span class="n">activityPath</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">work_data</span><span class="si">}</span><span class="s2">/activity-data&quot;</span>
-<span class="n">customReader</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">spark</span>
-    <span class="o">.</span><span class="n">readStream</span>
-    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">schema</span><span class="p">(</span><span class="n">customSchema</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;maxFilesPerTrigger&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">activityPath</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">customCounter</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">customReader</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;gt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-<span class="p">)</span>
-<span class="n">queryName</span> <span class="o">=</span> <span class="s2">&quot;custom_count&quot;</span>
-<span class="n">customWriter</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">customCounter</span>
-    <span class="o">.</span><span class="n">writeStream</span>
-    <span class="o">.</span><span class="n">queryName</span><span class="p">(</span><span class="n">queryName</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;console&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">outputMode</span><span class="p">(</span><span class="s2">&quot;update&quot;</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">checkpointLocation</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">work_dir</span><span class="si">}</span><span class="s2">/tmp/</span><span class="si">{</span><span class="n">queryName</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="o">!</span>rm -rf <span class="nv">$checkpointLocation</span>
-<span class="n">customTrigger</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">customWriter</span>
-    <span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="n">processingTime</span><span class="o">=</span><span class="s2">&quot;1 second&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;checkpointLocation&quot;</span><span class="p">,</span> <span class="n">checkpointLocation</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">customQuery</span> <span class="o">=</span> <span class="n">customTrigger</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<span class="n">customQuery</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">customQuery</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 </pre></div>
 
      </div>
@@ -15253,10 +15206,14 @@ customQuery.stop()
 
 ```python
 # 아래에 실습 코드를 작성하고 실행하세요 (Shift+Enter)
+
 ! rm -rf /home/jovyan/work/lgde-spark-stream/tmp/activity_count
 activityQuery = activityWriter.start()
 activityQuery.awaitTermination(180)
 activityQuery.stop()
+
+# docker
+# $ cp /home/jovyan/work/data/activity-data/part-00000-tid-730451297822678341-1dda7027-2071-4d73-a0e2-7fb6a91e1d1f-0-c000.json /home/jovyan/work/data/activity-data/appended-1.json
 
 # 80초 이후 카운트가 수렴되었을 때에 json 파일 추가 시에 아래와 같이 카운트 수가 증가합니다
 notebook     | -------------------------------------------
@@ -15283,13 +15240,7 @@ notebook     | +----------+-------+
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[38]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span> rm -rf /home/jovyan/work/lgde-spark-stream/tmp/activity_count
-<span class="n">activityQuery</span> <span class="o">=</span> <span class="n">activityWriter</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<span class="n">activityQuery</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">(</span><span class="mi">180</span><span class="p">)</span>
-<span class="n">activityQuery</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-
-<span class="c1"># docker</span>
-<span class="c1"># $ cp /home/jovyan/work/data/activity-data/part-00000-tid-730451297822678341-1dda7027-2071-4d73-a0e2-7fb6a91e1d1f-0-c000.json /home/jovyan/work/data/activity-data/appended-1.json</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 아래에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
 </pre></div>
 
      </div>
@@ -15317,7 +15268,8 @@ notebook     | +----------+-------+
 # 아래에 실습 코드를 작성하고 실행하세요 (Shift+Enter)
 !cp "$work_data/activity-data/part-00000-tid-730451297822678341-1dda7027-2071-4d73-a0e2-7fb6a91e1d1f-0-c000.json" "$work_data/activity-data/appended-2.json"
 activityQuery = activityWriter.start()
-activityQuery.awaitTermination(10)
+activityStatus = activityQuery.status
+activityQuery.awaitTermination(10) # 노트북 특성상, 대기하면 다음 실행을 할 수 없으므로 10초만 수행하고 종료합니다
 activityQuery.stop()
 
 # 애플리케이션이 재기동 되었을 때에 추가된 json 파일 크기만큼 아래와 같이 카운트 수가 증가합니다
@@ -15345,12 +15297,7 @@ notebook     | +----------+-------+
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[32]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 기동</span>
-<span class="o">!</span>cp <span class="s2">&quot;</span><span class="nv">$work_data</span><span class="s2">/activity-data/part-00000-tid-730451297822678341-1dda7027-2071-4d73-a0e2-7fb6a91e1d1f-0-c000.json&quot;</span> <span class="s2">&quot;</span><span class="nv">$work_data</span><span class="s2">/activity-data/appended-2.json&quot;</span>
-<span class="n">activityQuery</span> <span class="o">=</span> <span class="n">activityWriter</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-<span class="n">activityStatus</span> <span class="o">=</span> <span class="n">activityQuery</span><span class="o">.</span><span class="n">status</span>
-<span class="n">activityQuery</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># 노트북 특성상, 대기하면 다음 실행을 할 수 없으므로 10초만 수행하고 종료합니다</span>
-<span class="n">activityQuery</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 아래에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
 </pre></div>
 
      </div>
