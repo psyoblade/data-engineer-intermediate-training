@@ -3,7 +3,7 @@
 <head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>lgde-spark-stream-7-others</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>lgde-spark-stream-7-questions</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 
 
@@ -14049,172 +14049,24 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="%EC%8A%A4%ED%8C%8C%ED%81%AC-%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D-%EC%8B%A4%EC%8A%B5-7%EA%B5%90%EC%8B%9C-:-%EC%B0%B8%EA%B3%A0%ED%95%A0-%EC%82%AC%ED%95%AD">&#49828;&#54028;&#53356; &#49828;&#53944;&#47532;&#48141; &#49892;&#49845; 7&#44368;&#49884; : &#52280;&#44256;&#54624; &#49324;&#54637;<a class="anchor-link" href="#%EC%8A%A4%ED%8C%8C%ED%81%AC-%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D-%EC%8B%A4%EC%8A%B5-7%EA%B5%90%EC%8B%9C-:-%EC%B0%B8%EA%B3%A0%ED%95%A0-%EC%82%AC%ED%95%AD">&#182;</a></h1><blockquote><p>파일, 카프카 등의 외부 소스로부터 데이터를 읽고, 카산드라 혹은 MySQL 등의 외부 저장소에 저장하는 실습을 합니다</p>
+<h1 id="%EC%8A%A4%ED%8C%8C%ED%81%AC-%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D-%EC%8B%A4%EC%8A%B5-7%EA%B5%90%EC%8B%9C-:-%EC%B0%B8%EA%B3%A0%ED%95%A0-%EC%82%AC%ED%95%AD">&#49828;&#54028;&#53356; &#49828;&#53944;&#47532;&#48141; &#49892;&#49845; 7&#44368;&#49884; : &#52280;&#44256;&#54624; &#49324;&#54637;<a class="anchor-link" href="#%EC%8A%A4%ED%8C%8C%ED%81%AC-%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D-%EC%8B%A4%EC%8A%B5-7%EA%B5%90%EC%8B%9C-:-%EC%B0%B8%EA%B3%A0%ED%95%A0-%EC%82%AC%ED%95%AD">&#182;</a></h1><blockquote><p>성능 튜니에 대한 기본적인 가이드와 스트리밍 애플리케이션에서 사용되는 용어를 정리합니다</p>
 </blockquote>
-<h2 id="%ED%95%99%EC%8A%B5-%EB%AA%A9%ED%91%9C">&#54617;&#49845; &#47785;&#54364;<a class="anchor-link" href="#%ED%95%99%EC%8A%B5-%EB%AA%A9%ED%91%9C">&#182;</a></h2><ul>
-<li><code>File</code>에 저장된 데이터를 처리합니다<ul>
-<li>로컬 JSON 파일을 직접 생성 및 수정을 통해 스트리밍 데이터를 생성합니다</li>
-</ul>
-</li>
-<li><code>Kafka</code>에 저장된 스트리밍 데이터를 처리합니다<ul>
-<li>카프카 메시지 프로듀서를 통해서 카프카에 스트림 데이터를 생성합니다</li>
-</ul>
-</li>
-<li><code>Cassandra</code>에 스트림 데이터를 저장합니다<ul>
-<li>로컬 JSON 파일을 읽어서 처리하는 애플리케이션을 구현합니다</li>
-<li>직접 연동이 어렵기 때문에 foreachBatch 메소드를 통해 카산드라에 저장합니다</li>
-</ul>
-</li>
-<li><code>MySQL</code>에 스트림 데이터를 저장합니다<ul>
-<li>로컬 JSON 파일을 읽어서 처리하는 애플리케이션을 구현합니다</li>
-<li>레코드 단위의 트랜잭션 지원을 위해 foreach 메소드를 통해 MySQL에 저장합니다</li>
-</ul>
-</li>
-</ul>
-<h2 id="%EB%AA%A9%EC%B0%A8">&#47785;&#52264;<a class="anchor-link" href="#%EB%AA%A9%EC%B0%A8">&#182;</a></h2><ul>
-<li><a href="#1.-File-소스-스트리밍-실습">1. File 소스 스트리밍 실습</a></li>
-<li><a href="#2.-Kafka-소스-스트리밍-실습">2. Kafka 소스 스트리밍 실습</a></li>
-<li><a href="#3.-Cassandra-싱크-스트리밍-실습">3. Cassandra 싱크 스트리밍 실습</a></li>
-<li><a href="#4.-MySQL-싱크-스트리밍-실습">4. MySQL 싱크 스트리밍 실습</a></li>
-</ul>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">pyspark.sql.types</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">display_pretty</span><span class="p">,</span> <span class="n">clear_output</span><span class="p">,</span> <span class="n">JSON</span>
-
-<span class="n">spark</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">SparkSession</span>
-    <span class="o">.</span><span class="n">builder</span>
-    <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.session.timeZone&quot;</span><span class="p">,</span> <span class="s2">&quot;Asia/Seoul&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
-<span class="p">)</span>
-
-<span class="c1"># 노트북에서 테이블 형태로 데이터 프레임 출력을 위한 설정을 합니다</span>
-<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="c1"># display enabled</span>
-<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.truncate&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># display output columns size</span>
-
-<span class="c1"># 공통 데이터 위치</span>
-<span class="n">home_jovyan</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan&quot;</span>
-<span class="n">work_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_jovyan</span><span class="si">}</span><span class="s2">/work/data&quot;</span>
-<span class="n">work_dir</span><span class="o">=!</span>pwd
-<span class="n">work_dir</span> <span class="o">=</span> <span class="n">work_dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="c1"># 로컬 환경 최적화</span>
-<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># the number of partitions to use when shuffling data for joins or aggregations.</span>
-<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.forceDeleteTempCheckpointLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
-
-<span class="c1"># 현재 기동된 스파크 애플리케이션의 포트를 확인하기 위해 스파크 정보를 출력합니다</span>
-<span class="n">spark</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>21/08/16 13:52:28 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
-Setting default log level to &#34;WARN&#34;.
-To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-
-            <div>
-                <p><b>SparkSession - in-memory</b></p>
-                
-        <div>
-            <p><b>SparkContext</b></p>
-
-            <p><a href="http://139f17160307:4040">Spark UI</a></p>
-
-            <dl>
-              <dt>Version</dt>
-                <dd><code>v3.1.2</code></dd>
-              <dt>Master</dt>
-                <dd><code>local[*]</code></dd>
-              <dt>AppName</dt>
-                <dd><code>pyspark-shell</code></dd>
-            </dl>
-        </div>
-        
-            </div>
-        
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 스트림 테이블을 주기적으로 조회하는 함수 (name: 이름, sql: Spark SQL, iterations: 반복횟수, sleep_secs: 인터벌)</span>
-<span class="k">def</span> <span class="nf">displayStream</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">sql</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">sleep_secs</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
-        <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>              <span class="c1"># 출력 Cell 을 지웁니다</span>
-        <span class="n">display</span><span class="p">(</span><span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;] Iteration: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;, Query: &#39;</span><span class="o">+</span><span class="n">sql</span><span class="p">)</span>
-        <span class="n">display</span><span class="p">(</span><span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="n">sql</span><span class="p">))</span>              <span class="c1"># Spark SQL 을 수행합니다</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="n">sleep_secs</span><span class="p">)</span>                    <span class="c1"># sleep_secs 초 만큼 대기합니다</span>
-        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-
-<span class="c1"># 스트림 쿼리의 상태를 주기적으로 조회하는 함수 (name: 이름, query: Streaming Query, iterations: 반복횟수, sleep_secs: 인터벌)</span>
-<span class="k">def</span> <span class="nf">displayStatus</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">iterations</span><span class="p">,</span> <span class="n">sleep_secs</span><span class="p">):</span>
-    <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iterations</span><span class="p">):</span>
-        <span class="n">clear_output</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>      <span class="c1"># Output Cell 의 내용을 지웁니다</span>
-        <span class="n">display</span><span class="p">(</span><span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;] Iteration: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s1">&#39;, Status: &#39;</span><span class="o">+</span><span class="n">query</span><span class="o">.</span><span class="n">status</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">])</span>
-        <span class="n">display</span><span class="p">(</span><span class="n">query</span><span class="o">.</span><span class="n">lastProgress</span><span class="p">)</span>  <span class="c1"># 마지막 수행된 쿼리의 상태를 출력합니다</span>
-        <span class="n">sleep</span><span class="p">(</span><span class="n">sleep_secs</span><span class="p">)</span>            <span class="c1"># 지정된 시간(초)을 대기합니다</span>
-        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="10-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0---Performance-Tuning">10 &#49457;&#45733; &#44060;&#49440; - Performance Tuning<a class="anchor-link" href="#10-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0---Performance-Tuning">&#182;</a></h2><blockquote><p>배치 작업과 다르게 '마이크로 배치' 잡들은 비교적 작은 볼륨의 데이터를 다루기 때문에, 살짝 다른 튜닝 접근을 하고 있습니다.</p>
+<h2 id="%EB%AA%A9%EC%B0%A8">&#47785;&#52264;<a class="anchor-link" href="#%EB%AA%A9%EC%B0%A8">&#182;</a></h2><ul>
+<li><a href="#1.-성능-개선-방향">1. 성능 개선 방향</a></li>
+<li><a href="#2.-자주-사용되는-용어">2. 자주 사용되는 용어</a></li>
+<li><a href="#3.-예상되는-질문들">3. 예상되는 질문들</a></li>
+</ul>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="1.-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0-%EB%B0%A9%ED%96%A5">1. &#49457;&#45733; &#44060;&#49440; &#48169;&#54693;<a class="anchor-link" href="#1.-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0-%EB%B0%A9%ED%96%A5">&#182;</a></h2><blockquote><p>배치 작업과 다르게 '마이크로 배치' 잡들은 비교적 작은 볼륨의 데이터를 다루기 때문에, 살짝 다른 튜닝 접근을 하고 있습니다.</p>
 </blockquote>
 <ul>
 <li><p>클러스터 리소스 프로비저닝 - Cluster resource provisioning</p>
@@ -14270,34 +14122,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="References">References<a class="anchor-link" href="#References">&#182;</a></h3><ul>
-<li><a href="https://spark.apache.org/docs/latest/streaming-programming-guide.html">Streaming Programming Guide</a></li>
-<li><a href="https://spark.apache.org/docs/latest/configuration.html#spark-sql">Spark Runtime Configuration Guide</a></li>
-<li>5-2. <a href="https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#creating-streaming-dataframes-and-streaming-datasets">Structured Streaming Programming Guide</a></li>
-<li>5-2. <a href="https://docs.confluent.io/clients-confluent-kafka-python/current/overview.html">Apache Kafka Client</a><ul>
-<li><a href="https://github.com/dpkp/kafka-python/blob/master/example.py">Kafka python on github</a></li>
-<li><a href="https://needjarvis.tistory.com/607">Kafka Producer &amp; Consumer</a></li>
-</ul>
-</li>
-<li>5-2. <a href="https://cassandra.apache.org/doc/latest/cql/dml.html">Cassandar Data Manipulation</a><ul>
-<li><a href="https://www.linkedin.com/pulse/creating-cassandra-keyspace-table-docker-start-up-amon-peter/">Creating Cassandra keyspace &amp; table on docker start up</a></li>
-</ul>
-</li>
-<li>5-2. <a href="https://dev.mysql.com/doc/connector-python/en/connector-python-examples.html">MySQL JDBC Connection Example</a></li>
-<li><a href="https://www.lesstif.com/system-admin/unix-linux-kill-12943674.html">Linux Kill</a></li>
-<li><a href="https://timestamp.online/article/how-to-get-current-timestamp-in-python">Python Current Timestamp</a></li>
-<li><a href="https://mentha2.tistory.com/65">NetCat on Windows</a></li>
-<li><a href="https://epicarts.tistory.com/43">NetCat on Ubuntu</a></li>
-<li><a href="https://visualvm.github.io/download.html">VisualVM</a></li>
-<li><a href="https://argus-sec.com/monitoring-spark-prometheus/">Monitoring spark w/ prometheus</a></li>
-<li><a href="https://www.datadoghq.com/dg/monitor/docker-benefits/">Dynamic Docker Monitoriong</a></li>
-</ul>
-
-</div>
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="11.-%EC%9E%90%EC%A3%BC-%EC%82%AC%EC%9A%A9%EB%90%98%EB%8A%94-%EC%9A%A9%EC%96%B4">11. &#51088;&#51452; &#49324;&#50857;&#46104;&#45716; &#50857;&#50612;<a class="anchor-link" href="#11.-%EC%9E%90%EC%A3%BC-%EC%82%AC%EC%9A%A9%EB%90%98%EB%8A%94-%EC%9A%A9%EC%96%B4">&#182;</a></h2><ul>
+<h2 id="2.-%EC%9E%90%EC%A3%BC-%EC%82%AC%EC%9A%A9%EB%90%98%EB%8A%94-%EC%9A%A9%EC%96%B4">2. &#51088;&#51452; &#49324;&#50857;&#46104;&#45716; &#50857;&#50612;<a class="anchor-link" href="#2.-%EC%9E%90%EC%A3%BC-%EC%82%AC%EC%9A%A9%EB%90%98%EB%8A%94-%EC%9A%A9%EC%96%B4">&#182;</a></h2><ul>
 <li>Structured API 란?<ul>
 <li>일반적인 함수 혹은 메소드 형식의 API 와 다르게, 데이터프레임을 통하여 다양한 메소드를 연결하여 활용할 수 있는 구조를 가졌기 때문에 구조화된 API 라고 말할 수 있습니다</li>
 </ul>
@@ -14394,7 +14219,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="12.-%EC%98%88%EC%83%81%EB%90%98%EB%8A%94-%EC%A7%88%EB%AC%B8%EB%93%A4">12. &#50696;&#49345;&#46104;&#45716; &#51656;&#47928;&#46308;<a class="anchor-link" href="#12.-%EC%98%88%EC%83%81%EB%90%98%EB%8A%94-%EC%A7%88%EB%AC%B8%EB%93%A4">&#182;</a></h2><ul>
+<h2 id="3.-%EC%98%88%EC%83%81%EB%90%98%EB%8A%94-%EC%A7%88%EB%AC%B8%EB%93%A4">3. &#50696;&#49345;&#46104;&#45716; &#51656;&#47928;&#46308;<a class="anchor-link" href="#3.-%EC%98%88%EC%83%81%EB%90%98%EB%8A%94-%EC%A7%88%EB%AC%B8%EB%93%A4">&#182;</a></h2><ul>
 <li><p>스트리밍의 경우 explain 명령을 통해 '로지컬 플랜' 혹은 '최적화된 플랜'을 확인할 수 없나요?</p>
 <ul>
 <li>스트리밍 쿼리에 대해 아래와 같이 explain 함수를 통해 확인할 수 있습니다<div class="highlight"><pre><span></span><span class="n">query</span><span class="o">.</span><span class="n">processAllAvailable</span><span class="p">()</span>
@@ -14465,43 +14290,32 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
 </ul>
 </li>
 </ul>
-<blockquote><p>중요한 질문</p>
-</blockquote>
-<ul>
-<li><p>스트리밍 윈도우 워터마크 동작방식이 이벤트타임 시간을 기준으로 상대적인 시간인지, 마지막 시간 이후의 절대적 시간인지?</p>
-</li>
-<li><p>수행할 수 있는 Executor 수를 임의로 지정할 수 있는지?</p>
-</li>
-<li><p>dynamic allocation 방식이 streaming 은 더 유용한 것이 아닌지?</p>
-</li>
-<li><p>상태를 backend storage 에 저장하게 되는지 여기는 어디인지? hdfs? local disk?</p>
-</li>
-<li><p>파일을 통한 스트리밍 읽을 때에는 추가된 내용에 대해서는 왜 처리가 안되는지, 그리고 한 번에 모든 데이터가 처리되는지?</p>
-</li>
-<li><p>지연된다고 하더라도 집계에 포함되는 경우도 있다고 하는데 언제 이러한 현상이 발생하는가? 위에서 만든 생성자 예제와 비슷한 상황인가?</p>
-</li>
+
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="References">References<a class="anchor-link" href="#References">&#182;</a></h3><ul>
+<li><a href="https://spark.apache.org/docs/latest/streaming-programming-guide.html">Streaming Programming Guide</a></li>
+<li><a href="https://spark.apache.org/docs/latest/configuration.html#spark-sql">Spark Runtime Configuration Guide</a></li>
+<li>5-2. <a href="https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#creating-streaming-dataframes-and-streaming-datasets">Structured Streaming Programming Guide</a></li>
+<li>5-2. <a href="https://docs.confluent.io/clients-confluent-kafka-python/current/overview.html">Apache Kafka Client</a><ul>
+<li><a href="https://github.com/dpkp/kafka-python/blob/master/example.py">Kafka python on github</a></li>
+<li><a href="https://needjarvis.tistory.com/607">Kafka Producer &amp; Consumer</a></li>
 </ul>
-<blockquote><p>기타 질문</p>
-</blockquote>
-<ul>
-<li><p>스트리밍 처리를 통한 화면 출력이 즉각적으로 출력되지 않고 몇 초 간의 딜레이가 있는데 왜 그런지, 어떻게 바로 출력할 수 있는지?</p>
 </li>
-<li><p>스트리밍 모니터링을 위해서 awaitTermination 호출이 진행되고 있는 동안에는 상태를 확인할 수 없는데 어떻게 모니터링하면 좋은가?</p>
+<li>5-2. <a href="https://cassandra.apache.org/doc/latest/cql/dml.html">Cassandar Data Manipulation</a><ul>
+<li><a href="https://www.linkedin.com/pulse/creating-cassandra-keyspace-table-docker-start-up-amon-peter/">Creating Cassandra keyspace &amp; table on docker start up</a></li>
+</ul>
 </li>
-<li><p>스트리밍 모니터링을 JMX 통한 매트릭 조회는 불가능한가요?</p>
-</li>
-<li><p>입력은 TSV 가 되는데 출력은 왜 TSV 로 할 수 없는가?</p>
-</li>
-<li><p>카프카 연동 시에 다양한 옵션에 대한 설명과 예제는 없나요?</p>
-</li>
-<li><p>옵션을 주지 않으면 텀블링 윈도우인가? 구별은 어떻게 하는가</p>
-</li>
-<li><p>스트리밍 결과가 지연된 데이터 출력 때문에 시간 순으로 보이지 않는데 어떻게 정렬할 수 있나요?</p>
-</li>
-<li><p>스트리밍 조인 시에 '스트리밍 쿼리'를 재시작 하지 않고 반영할 수 있는 정적 데이터 소스에는 어떤 것들이 있나요?</p>
-</li>
-<li><p>하나의 스파크 컨텍스트에서 여러개의 쿼리를 어떻게 수행할 수 있나요?</p>
-</li>
+<li>5-2. <a href="https://dev.mysql.com/doc/connector-python/en/connector-python-examples.html">MySQL JDBC Connection Example</a></li>
+<li><a href="https://www.lesstif.com/system-admin/unix-linux-kill-12943674.html">Linux Kill</a></li>
+<li><a href="https://timestamp.online/article/how-to-get-current-timestamp-in-python">Python Current Timestamp</a></li>
+<li><a href="https://mentha2.tistory.com/65">NetCat on Windows</a></li>
+<li><a href="https://epicarts.tistory.com/43">NetCat on Ubuntu</a></li>
+<li><a href="https://visualvm.github.io/download.html">VisualVM</a></li>
+<li><a href="https://argus-sec.com/monitoring-spark-prometheus/">Monitoring spark w/ prometheus</a></li>
+<li><a href="https://www.datadoghq.com/dg/monitor/docker-benefits/">Dynamic Docker Monitoriong</a></li>
 </ul>
 
 </div>

@@ -14053,10 +14053,10 @@ a.anchor-link {
 </blockquote>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14078,11 +14078,75 @@ a.anchor-link {
 <span class="c1"># 공통 데이터 위치</span>
 <span class="n">home_jovyan</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan&quot;</span>
 <span class="n">work_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_jovyan</span><span class="si">}</span><span class="s2">/work/data&quot;</span>
+<span class="n">work_dir</span><span class="o">=!</span>pwd
+<span class="n">work_dir</span> <span class="o">=</span> <span class="n">work_dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># 로컬 환경 최적화</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># the number of partitions to use when shuffling data for joins or aggregations.</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.forceDeleteTempCheckpointLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">spark</span>
 </pre></div>
 
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 09:10:02 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to &#34;WARN&#34;.
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+
+            <div>
+                <p><b>SparkSession - in-memory</b></p>
+                
+        <div>
+            <p><b>SparkContext</b></p>
+
+            <p><a href="http://36066668d2b9:4040">Spark UI</a></p>
+
+            <dl>
+              <dt>Version</dt>
+                <dd><code>v3.1.2</code></dd>
+              <dt>Master</dt>
+                <dd><code>local[*]</code></dd>
+              <dt>AppName</dt>
+                <dd><code>pyspark-shell</code></dd>
+            </dl>
+        </div>
+        
+            </div>
+        
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -14104,7 +14168,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 파이스파크 내에서는 sparkContext 를 통해서 해당 정보를 가져올 수 있습니다</span>
@@ -14132,15 +14196,19 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>(&#39;spark.app.id&#39;, &#39;local-1619576347079&#39;)
+<pre>(&#39;spark.app.id&#39;, &#39;local-1629537003980&#39;)
 (&#39;spark.app.name&#39;, &#39;pyspark-shell&#39;)
-(&#39;spark.driver.host&#39;, &#39;ddd9c0cd39a3&#39;)
-(&#39;spark.driver.port&#39;, &#39;42483&#39;)
+(&#39;spark.app.startTime&#39;, &#39;1629537002952&#39;)
+(&#39;spark.driver.extraJavaOptions&#39;, &#39;-Dio.netty.tryReflectionSetAccessible=true&#39;)
+(&#39;spark.driver.host&#39;, &#39;36066668d2b9&#39;)
+(&#39;spark.driver.port&#39;, &#39;36767&#39;)
+(&#39;spark.executor.extraJavaOptions&#39;, &#39;-Dio.netty.tryReflectionSetAccessible=true&#39;)
 (&#39;spark.executor.id&#39;, &#39;driver&#39;)
 (&#39;spark.master&#39;, &#39;local[*]&#39;)
 (&#39;spark.rdd.compress&#39;, &#39;True&#39;)
 (&#39;spark.serializer.objectStreamReset&#39;, &#39;100&#39;)
 (&#39;spark.sql.session.timeZone&#39;, &#39;Asia/Seoul&#39;)
+(&#39;spark.sql.warehouse.dir&#39;, &#39;file:/home/jovyan/work/lgde-spark-core/spark-warehouse/&#39;)
 (&#39;spark.submit.deployMode&#39;, &#39;client&#39;)
 (&#39;spark.submit.pyFiles&#39;, &#39;&#39;)
 (&#39;spark.ui.showConsoleProgress&#39;, &#39;true&#39;)
@@ -14155,7 +14223,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># SparkSQL의 경우 내부적으로 사용되는 설정값이 다르기 때문에 더 많은 정보가 출력됩니다</span>
@@ -14210,7 +14278,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 스파크 기본 설정 spark.sql.shuffle.partitions 값을 확인하고, 프로그램 상에서 변경 후 테스트 합니다</span>
@@ -14238,7 +14306,7 @@ only showing top 5 rows
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>200 5
+<pre>5 5
 </pre>
 </div>
 </div>
@@ -14340,7 +14408,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">numDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
@@ -14360,7 +14428,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[5]:</div>
 
 
 
@@ -14397,7 +14465,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 반복적으로 수행하는 경우 노트북 프로그램의 캐싱될 수 있기 때문에, 매번 다른 프로그램 수행을 위해서 랜덤 시드숫자를 매번 더해줍니다.</span>
@@ -14429,9 +14497,42 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>seed number is 18
-3.8046398162841797
+<pre>seed number is 46
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 0:&gt;                                                          (0 + 3) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>3.911931276321411
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14442,7 +14543,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -14467,7 +14568,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>0.1505875587463379
+<pre>0.13873028755187988
 </pre>
 </div>
 </div>
@@ -14490,7 +14591,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 반복적으로 수행하는 경우 노트북 프로그램의 캐싱될 수 있기 때문에, 매번 다른 프로그램 수행을 위해서 랜덤 시드숫자를 매번 더해줍니다.</span>
@@ -14523,9 +14624,42 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>seed number is 37
-2.6302409172058105
+<pre>seed number is 57
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 4:&gt;                                                          (0 + 3) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>1.837291955947876
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14536,7 +14670,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -14561,7 +14695,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>0.19655108451843262
+<pre>0.16534972190856934
 </pre>
 </div>
 </div>
@@ -14573,7 +14707,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 반복적으로 수행하는 경우 노트북 프로그램의 캐싱될 수 있기 때문에, 매번 다른 프로그램 수행을 위해서 랜덤 시드숫자를 매번 더해줍니다.</span>
@@ -14606,9 +14740,42 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>seed number is 39
-2.4470584392547607
+<pre>seed number is 25
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 8:&gt;                                                          (0 + 3) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>1.994640827178955
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14619,7 +14786,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
@@ -14644,7 +14811,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>0.02222752571105957
+<pre>0.014763832092285156
 </pre>
 </div>
 </div>
@@ -14749,7 +14916,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14789,11 +14956,11 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 +------+--------+
 |  name|category|
 +------+--------+
-|   Cat|     Fat|
-|   Dog|     Fat|
 |  Lion|   Beast|
 | Tiger|   Beast|
 |Monkey|  Animal|
+|   Cat|     Fat|
+|   Dog|     Fat|
 +------+--------+
 
 </pre>
@@ -14807,7 +14974,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">animal</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">broadcast</span><span class="p">(</span><span class="n">category</span><span class="p">),</span> <span class="n">animal</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">category</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;left_outer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;category&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -14859,7 +15026,7 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">animal</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="n">animal</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">category</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="s2">&quot;left_outer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="s2">&quot;simple&quot;</span><span class="p">)</span>
@@ -14884,14 +15051,14 @@ spark.dynamicAllocation.executorIdleTimeout 2min</code></pre>
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
-SortMergeJoin [type#282L], [id#295L], LeftOuter
-:- *(2) Sort [type#282L ASC NULLS FIRST], false, 0
-:  +- Exchange hashpartitioning(type#282L, 200), true, [id=#277]
-:     +- *(1) Scan ExistingRDD[name#281,type#282L]
-+- *(4) Sort [id#295L ASC NULLS FIRST], false, 0
-   +- Exchange hashpartitioning(id#295L, 200), true, [id=#282]
-      +- *(3) Filter isnotnull(id#295L)
-         +- *(3) Scan ExistingRDD[category#294,id#295L]
+SortMergeJoin [type#330L], [id#343L], LeftOuter
+:- *(2) Sort [type#330L ASC NULLS FIRST], false, 0
+:  +- Exchange hashpartitioning(type#330L, 5), ENSURE_REQUIREMENTS, [id=#277]
+:     +- *(1) Scan ExistingRDD[name#329,type#330L]
++- *(4) Sort [id#343L ASC NULLS FIRST], false, 0
+   +- Exchange hashpartitioning(id#343L, 5), ENSURE_REQUIREMENTS, [id=#282]
+      +- *(3) Filter isnotnull(id#343L)
+         +- *(3) Scan ExistingRDD[category#342,id#343L]
 
 
 == Physical Plan ==
@@ -14903,24 +15070,24 @@ SortMergeJoin [type#282L], [id#295L], LeftOuter
 
 
 (1) Scan ExistingRDD [codegen id : 2]
-Output [2]: [name#281, type#282L]
-Arguments: [name#281, type#282L], MapPartitionsRDD[65] at applySchemaToPythonRDD at NativeMethodAccessorImpl.java:0, ExistingRDD, UnknownPartitioning(0)
+Output [2]: [name#329, type#330L]
+Arguments: [name#329, type#330L], MapPartitionsRDD[68] at applySchemaToPythonRDD at NativeMethodAccessorImpl.java:0, ExistingRDD, UnknownPartitioning(0)
 
 (2) Scan ExistingRDD [codegen id : 1]
-Output [2]: [category#294, id#295L]
-Arguments: [category#294, id#295L], MapPartitionsRDD[72] at applySchemaToPythonRDD at NativeMethodAccessorImpl.java:0, ExistingRDD, UnknownPartitioning(0)
+Output [2]: [category#342, id#343L]
+Arguments: [category#342, id#343L], MapPartitionsRDD[75] at applySchemaToPythonRDD at NativeMethodAccessorImpl.java:0, ExistingRDD, UnknownPartitioning(0)
 
 (3) Filter [codegen id : 1]
-Input [2]: [category#294, id#295L]
-Condition : isnotnull(id#295L)
+Input [2]: [category#342, id#343L]
+Condition : isnotnull(id#343L)
 
 (4) BroadcastExchange
-Input [2]: [category#294, id#295L]
-Arguments: HashedRelationBroadcastMode(List(input[1, bigint, false])), [id=#305]
+Input [2]: [category#342, id#343L]
+Arguments: HashedRelationBroadcastMode(List(input[1, bigint, false]),false), [id=#305]
 
 (5) BroadcastHashJoin [codegen id : 2]
-Left keys [1]: [type#282L]
-Right keys [1]: [id#295L]
+Left keys [1]: [type#330L]
+Right keys [1]: [id#343L]
 Join condition: None
 
 
@@ -14960,7 +15127,7 @@ Join condition: None
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.autoBroadcastJoinThreashold&quot;</span><span class="p">,</span> <span class="s2">&quot;10485760b&quot;</span><span class="p">)</span> <span class="c1"># default value</span>
@@ -14975,7 +15142,7 @@ Join condition: None
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">states</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;AZ&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;CO&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;TX&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">),</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;MI&quot;</span><span class="p">)],</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;state&quot;</span><span class="p">])</span>
@@ -15033,7 +15200,7 @@ Join condition: None
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">random</span>
@@ -15070,30 +15237,30 @@ Join condition: None
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>+--------------+--------+--------+-------+-----+-----+----+---------+------------------------+----------+
-|transaction_id|quantity|users_id|amount |state|items|uid |login    |email                   |user_state|
-+--------------+--------+--------+-------+-----+-----+----+---------+------------------------+----------+
-|8590          |8590    |964     |17180.0|AZ   |SKU-5|964 |user_964 |user_964@databricks.com |TX        |
-|4464          |4464    |1677    |8928.0 |NY   |SKU-2|1677|user_1677|user_1677@databricks.com|CO        |
-|9042          |9042    |1677    |18084.0|CO   |SKU-1|1677|user_1677|user_1677@databricks.com|CO        |
-|5549          |5549    |1697    |11098.0|MI   |SKU-5|1697|user_1697|user_1697@databricks.com|CO        |
-|7950          |7950    |1806    |15900.0|MI   |SKU-3|1806|user_1806|user_1806@databricks.com|MI        |
-|2924          |2924    |2040    |5848.0 |CA   |SKU-1|2040|user_2040|user_2040@databricks.com|TX        |
-|8071          |8071    |2040    |16142.0|CA   |SKU-3|2040|user_2040|user_2040@databricks.com|TX        |
-|4897          |4897    |2250    |9794.0 |TX   |SKU-3|2250|user_2250|user_2250@databricks.com|NY        |
-|429           |429     |2453    |858.0  |CO   |SKU-5|2453|user_2453|user_2453@databricks.com|CA        |
-|8226          |8226    |2453    |16452.0|TX   |SKU-1|2453|user_2453|user_2453@databricks.com|CA        |
-|64            |64      |2529    |128.0  |TX   |SKU-0|2529|user_2529|user_2529@databricks.com|TX        |
-|3499          |3499    |2529    |6998.0 |TX   |SKU-3|2529|user_2529|user_2529@databricks.com|TX        |
-|6458          |6458    |2529    |12916.0|CO   |SKU-2|2529|user_2529|user_2529@databricks.com|TX        |
-|1617          |1617    |2927    |3234.0 |TX   |SKU-5|2927|user_2927|user_2927@databricks.com|CA        |
-|6750          |6750    |2927    |13500.0|TX   |SKU-2|2927|user_2927|user_2927@databricks.com|CA        |
-|4110          |4110    |5385    |8220.0 |CA   |SKU-5|5385|user_5385|user_5385@databricks.com|CA        |
-|7004          |7004    |5385    |14008.0|CO   |SKU-1|5385|user_5385|user_5385@databricks.com|CA        |
-|2376          |2376    |5409    |4752.0 |NY   |SKU-5|5409|user_5409|user_5409@databricks.com|CO        |
-|3346          |3346    |5556    |6692.0 |NY   |SKU-3|5556|user_5556|user_5556@databricks.com|NY        |
-|4109          |4109    |5556    |8218.0 |CO   |SKU-1|5556|user_5556|user_5556@databricks.com|NY        |
-+--------------+--------+--------+-------+-----+-----+----+---------+------------------------+----------+
+<pre>+--------------+--------+--------+-------+-----+-----+---+-------+----------------------+----------+
+|transaction_id|quantity|users_id|amount |state|items|uid|login  |email                 |user_state|
++--------------+--------+--------+-------+-----+-----+---+-------+----------------------+----------+
+|3582          |3582    |0       |7164.0 |MI   |SKU-0|0  |user_0 |user_0@databricks.com |CA        |
+|4135          |4135    |4       |8270.0 |CA   |SKU-5|4  |user_4 |user_4@databricks.com |CO        |
+|541           |541     |16      |1082.0 |AZ   |SKU-5|16 |user_16|user_16@databricks.com|CO        |
+|5919          |5919    |18      |11838.0|CA   |SKU-5|18 |user_18|user_18@databricks.com|CO        |
+|241           |241     |20      |482.0  |MI   |SKU-3|20 |user_20|user_20@databricks.com|CO        |
+|5188          |5188    |26      |10376.0|NY   |SKU-3|26 |user_26|user_26@databricks.com|MI        |
+|2971          |2971    |29      |5942.0 |CA   |SKU-4|29 |user_29|user_29@databricks.com|TX        |
+|5728          |5728    |29      |11456.0|MI   |SKU-4|29 |user_29|user_29@databricks.com|TX        |
+|6176          |6176    |29      |12352.0|TX   |SKU-0|29 |user_29|user_29@databricks.com|TX        |
+|5981          |5981    |32      |11962.0|CA   |SKU-4|32 |user_32|user_32@databricks.com|TX        |
+|744           |744     |36      |1488.0 |CA   |SKU-0|36 |user_36|user_36@databricks.com|CO        |
+|494           |494     |40      |988.0  |TX   |SKU-4|40 |user_40|user_40@databricks.com|MI        |
+|1207          |1207    |40      |2414.0 |AZ   |SKU-1|40 |user_40|user_40@databricks.com|MI        |
+|2537          |2537    |43      |5074.0 |AZ   |SKU-5|43 |user_43|user_43@databricks.com|CA        |
+|1423          |1423    |47      |2846.0 |CA   |SKU-1|47 |user_47|user_47@databricks.com|CO        |
+|8706          |8706    |53      |17412.0|TX   |SKU-0|53 |user_53|user_53@databricks.com|CO        |
+|9413          |9413    |53      |18826.0|MI   |SKU-0|53 |user_53|user_53@databricks.com|CO        |
+|2630          |2630    |61      |5260.0 |MI   |SKU-2|61 |user_61|user_61@databricks.com|CO        |
+|7284          |7284    |64      |14568.0|MI   |SKU-2|64 |user_64|user_64@databricks.com|AZ        |
+|1010          |1010    |68      |2020.0 |NY   |SKU-1|68 |user_68|user_68@databricks.com|TX        |
++--------------+--------+--------+-------+-----+-----+---+-------+----------------------+----------+
 only showing top 20 rows
 
 </pre>
@@ -15107,7 +15274,7 @@ only showing top 20 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">usersOrdersDF</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="s2">&quot;formatted&quot;</span><span class="p">)</span>
@@ -15143,40 +15310,40 @@ only showing top 20 rows
 
 
 (1) Scan ExistingRDD [codegen id : 1]
-Output [6]: [transaction_id#406L, quantity#407L, users_id#408L, amount#409, state#410, items#411]
-Arguments: [transaction_id#406L, quantity#407L, users_id#408L, amount#409, state#410, items#411], MapPartitionsRDD[123] at applySchemaToPythonRDD at NativeMethodAccessorImpl.java:0, ExistingRDD, UnknownPartitioning(0)
+Output [6]: [transaction_id#438L, quantity#439L, users_id#440L, amount#441, state#442, items#443]
+Arguments: [transaction_id#438L, quantity#439L, users_id#440L, amount#441, state#442, items#443], MapPartitionsRDD[126] at applySchemaToPythonRDD at NativeMethodAccessorImpl.java:0, ExistingRDD, UnknownPartitioning(0)
 
 (2) Filter [codegen id : 1]
-Input [6]: [transaction_id#406L, quantity#407L, users_id#408L, amount#409, state#410, items#411]
-Condition : isnotnull(users_id#408L)
+Input [6]: [transaction_id#438L, quantity#439L, users_id#440L, amount#441, state#442, items#443]
+Condition : isnotnull(users_id#440L)
 
 (3) Exchange
-Input [6]: [transaction_id#406L, quantity#407L, users_id#408L, amount#409, state#410, items#411]
-Arguments: hashpartitioning(users_id#408L, 200), true, [id=#417]
+Input [6]: [transaction_id#438L, quantity#439L, users_id#440L, amount#441, state#442, items#443]
+Arguments: hashpartitioning(users_id#440L, 5), ENSURE_REQUIREMENTS, [id=#417]
 
 (4) Sort [codegen id : 2]
-Input [6]: [transaction_id#406L, quantity#407L, users_id#408L, amount#409, state#410, items#411]
-Arguments: [users_id#408L ASC NULLS FIRST], false, 0
+Input [6]: [transaction_id#438L, quantity#439L, users_id#440L, amount#441, state#442, items#443]
+Arguments: [users_id#440L ASC NULLS FIRST], false, 0
 
 (5) Scan ExistingRDD [codegen id : 3]
-Output [4]: [uid#396L, login#397, email#398, user_state#399]
-Arguments: [uid#396L, login#397, email#398, user_state#399], MapPartitionsRDD[112] at applySchemaToPythonRDD at NativeMethodAccessorImpl.java:0, ExistingRDD, UnknownPartitioning(0)
+Output [4]: [uid#428L, login#429, email#430, user_state#431]
+Arguments: [uid#428L, login#429, email#430, user_state#431], MapPartitionsRDD[115] at applySchemaToPythonRDD at NativeMethodAccessorImpl.java:0, ExistingRDD, UnknownPartitioning(0)
 
 (6) Filter [codegen id : 3]
-Input [4]: [uid#396L, login#397, email#398, user_state#399]
-Condition : isnotnull(uid#396L)
+Input [4]: [uid#428L, login#429, email#430, user_state#431]
+Condition : isnotnull(uid#428L)
 
 (7) Exchange
-Input [4]: [uid#396L, login#397, email#398, user_state#399]
-Arguments: hashpartitioning(uid#396L, 200), true, [id=#423]
+Input [4]: [uid#428L, login#429, email#430, user_state#431]
+Arguments: hashpartitioning(uid#428L, 5), ENSURE_REQUIREMENTS, [id=#423]
 
 (8) Sort [codegen id : 4]
-Input [4]: [uid#396L, login#397, email#398, user_state#399]
-Arguments: [uid#396L ASC NULLS FIRST], false, 0
+Input [4]: [uid#428L, login#429, email#430, user_state#431]
+Arguments: [uid#428L ASC NULLS FIRST], false, 0
 
 (9) SortMergeJoin [codegen id : 5]
-Left keys [1]: [users_id#408L]
-Right keys [1]: [uid#396L]
+Left keys [1]: [users_id#440L]
+Right keys [1]: [uid#428L]
 Join condition: None
 
 
@@ -15197,10 +15364,10 @@ Join condition: None
 <img src="images/join_bucket.png" alt="join_bucket"></p>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[27]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># spark.conf.set(&quot;spark.sql.legacy.allowCreatingManagedTableUsingNonemptyLocation&quot;,&quot;true&quot;)</span>
@@ -15238,10 +15405,30 @@ Join condition: None
 </div>
 </div>
 
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[28]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">joinUsersOrdersBucketDF</span> <span class="o">=</span> <span class="n">ordersBucketDF</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">usersBucketDF</span><span class="p">,</span> <span class="n">ordersBucketDF</span><span class="o">.</span><span class="n">users_id</span> <span class="o">==</span> <span class="n">usersBucketDF</span><span class="o">.</span><span class="n">uid</span><span class="p">)</span>
@@ -15268,26 +15455,26 @@ Join condition: None
 <pre>+--------------+--------+--------+-------+-----+-----+---+--------+-----------------------+----------+
 |transaction_id|quantity|users_id|amount |state|items|uid|login   |email                  |user_state|
 +--------------+--------+--------+-------+-----+-----+---+--------+-----------------------+----------+
-|4959          |4959    |2       |9918.0 |AZ   |SKU-4|2  |user_2  |user_2@databricks.com  |CA        |
-|1458          |1458    |2       |2916.0 |NY   |SKU-3|2  |user_2  |user_2@databricks.com  |CA        |
-|3986          |3986    |12      |7972.0 |CA   |SKU-5|12 |user_12 |user_12@databricks.com |AZ        |
-|9767          |9767    |28      |19534.0|CA   |SKU-1|28 |user_28 |user_28@databricks.com |TX        |
-|4833          |4833    |29      |9666.0 |MI   |SKU-1|29 |user_29 |user_29@databricks.com |CO        |
-|4368          |4368    |30      |8736.0 |CO   |SKU-2|30 |user_30 |user_30@databricks.com |NY        |
-|8507          |8507    |42      |17014.0|CO   |SKU-1|42 |user_42 |user_42@databricks.com |AZ        |
-|1132          |1132    |42      |2264.0 |AZ   |SKU-5|42 |user_42 |user_42@databricks.com |AZ        |
-|6506          |6506    |48      |13012.0|MI   |SKU-3|48 |user_48 |user_48@databricks.com |MI        |
-|5795          |5795    |48      |11590.0|TX   |SKU-1|48 |user_48 |user_48@databricks.com |MI        |
-|5228          |5228    |48      |10456.0|AZ   |SKU-5|48 |user_48 |user_48@databricks.com |MI        |
-|3683          |3683    |88      |7366.0 |CO   |SKU-1|88 |user_88 |user_88@databricks.com |CO        |
-|6931          |6931    |151     |13862.0|MI   |SKU-1|151|user_151|user_151@databricks.com|CO        |
-|1501          |1501    |151     |3002.0 |CO   |SKU-3|151|user_151|user_151@databricks.com|CO        |
-|5659          |5659    |156     |11318.0|CO   |SKU-5|156|user_156|user_156@databricks.com|AZ        |
-|9322          |9322    |171     |18644.0|AZ   |SKU-1|171|user_171|user_171@databricks.com|CO        |
-|4620          |4620    |171     |9240.0 |MI   |SKU-1|171|user_171|user_171@databricks.com|CO        |
-|9308          |9308    |201     |18616.0|AZ   |SKU-1|201|user_201|user_201@databricks.com|NY        |
-|2870          |2870    |208     |5740.0 |NY   |SKU-1|208|user_208|user_208@databricks.com|CA        |
-|9175          |9175    |210     |18350.0|MI   |SKU-4|210|user_210|user_210@databricks.com|TX        |
+|4774          |4774    |2       |9548.0 |MI   |SKU-2|2  |user_2  |user_2@databricks.com  |CO        |
+|4417          |4417    |12      |8834.0 |TX   |SKU-4|12 |user_12 |user_12@databricks.com |TX        |
+|3673          |3673    |26      |7346.0 |CA   |SKU-4|26 |user_26 |user_26@databricks.com |CA        |
+|149           |149     |28      |298.0  |AZ   |SKU-0|28 |user_28 |user_28@databricks.com |AZ        |
+|8754          |8754    |42      |17508.0|CO   |SKU-3|42 |user_42 |user_42@databricks.com |CO        |
+|4794          |4794    |48      |9588.0 |CO   |SKU-2|48 |user_48 |user_48@databricks.com |AZ        |
+|1556          |1556    |48      |3112.0 |TX   |SKU-5|48 |user_48 |user_48@databricks.com |AZ        |
+|3972          |3972    |67      |7944.0 |TX   |SKU-0|67 |user_67 |user_67@databricks.com |CO        |
+|8104          |8104    |73      |16208.0|AZ   |SKU-1|73 |user_73 |user_73@databricks.com |CA        |
+|5598          |5598    |88      |11196.0|AZ   |SKU-0|88 |user_88 |user_88@databricks.com |CA        |
+|6380          |6380    |91      |12760.0|AZ   |SKU-1|91 |user_91 |user_91@databricks.com |TX        |
+|4639          |4639    |91      |9278.0 |MI   |SKU-4|91 |user_91 |user_91@databricks.com |TX        |
+|8877          |8877    |93      |17754.0|MI   |SKU-1|93 |user_93 |user_93@databricks.com |CA        |
+|7928          |7928    |93      |15856.0|TX   |SKU-1|93 |user_93 |user_93@databricks.com |CA        |
+|7452          |7452    |93      |14904.0|CA   |SKU-3|93 |user_93 |user_93@databricks.com |CA        |
+|1153          |1153    |151     |2306.0 |MI   |SKU-5|151|user_151|user_151@databricks.com|MI        |
+|8380          |8380    |152     |16760.0|MI   |SKU-3|152|user_152|user_152@databricks.com|MI        |
+|5062          |5062    |152     |10124.0|CO   |SKU-5|152|user_152|user_152@databricks.com|MI        |
+|8813          |8813    |156     |17626.0|AZ   |SKU-4|156|user_156|user_156@databricks.com|AZ        |
+|3043          |3043    |156     |6086.0 |NY   |SKU-3|156|user_156|user_156@databricks.com|AZ        |
 +--------------+--------+--------+-------+-----+-----+---+--------+-----------------------+----------+
 only showing top 20 rows
 

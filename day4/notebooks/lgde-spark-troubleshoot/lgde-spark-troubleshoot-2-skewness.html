@@ -14074,7 +14074,7 @@ a.anchor-link {
 </ul>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
@@ -14091,14 +14091,83 @@ a.anchor-link {
     <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.session.timeZone&quot;</span><span class="p">,</span> <span class="s2">&quot;Asia/Seoul&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 <span class="p">)</span>
+
 <span class="c1"># 노트북에서 테이블 형태로 데이터 프레임 출력을 위한 설정을 합니다</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="c1"># display enabled</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.truncate&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># display output columns size</span>
+
+<span class="c1"># 공통 데이터 위치</span>
+<span class="n">home_jovyan</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan&quot;</span>
+<span class="n">work_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_jovyan</span><span class="si">}</span><span class="s2">/work/data&quot;</span>
+<span class="n">work_dir</span><span class="o">=!</span>pwd
+<span class="n">work_dir</span> <span class="o">=</span> <span class="n">work_dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># 로컬 환경 최적화</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># the number of partitions to use when shuffling data for joins or aggregations.</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.forceDeleteTempCheckpointLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">spark</span>
 </pre></div>
 
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 13:08:05 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to &#34;WARN&#34;.
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+
+            <div>
+                <p><b>SparkSession - in-memory</b></p>
+                
+        <div>
+            <p><b>SparkContext</b></p>
+
+            <p><a href="http://0cadd86ac43f:4040">Spark UI</a></p>
+
+            <dl>
+              <dt>Version</dt>
+                <dd><code>v3.1.2</code></dd>
+              <dt>Master</dt>
+                <dd><code>local[*]</code></dd>
+              <dt>AppName</dt>
+                <dd><code>pyspark-shell</code></dd>
+            </dl>
+        </div>
+        
+            </div>
+        
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -14192,7 +14261,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">s1</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">parquet</span><span class="p">(</span><span class="s2">&quot;source/s1&quot;</span><span class="p">)</span>
@@ -14212,6 +14281,17 @@ a.anchor-link {
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
 
 <div class="jp-OutputArea-child">
 
@@ -14368,19 +14448,17 @@ only showing top 10 rows
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
 *(3) HashAggregate(keys=[registration#6], functions=[avg(sale_price#17)])
-+- Exchange hashpartitioning(registration#6, 200), true, [id=#144]
++- Exchange hashpartitioning(registration#6, 5), ENSURE_REQUIREMENTS, [id=#144]
    +- *(2) HashAggregate(keys=[registration#6], functions=[partial_avg(sale_price#17)])
       +- *(2) Project [registration#6, sale_price#17]
-         +- *(2) BroadcastHashJoin [make#7, model#8], [make#14, model#15], Inner, BuildLeft, (cast(CheckOverflow((promote_precision(cast(engine_size#16 as decimal(38,17))) - promote_precision(cast(engine_size#9 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1)
-            :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true], input[2, string, true])), [id=#134]
-            :  +- *(1) Project [registration#6, make#7, model#8, engine_size#9]
-            :     +- *(1) Filter (isnotnull(make#7) AND isnotnull(model#8))
-            :        +- *(1) ColumnarToRow
-            :           +- FileScan parquet [registration#6,make#7,model#8,engine_size#9] Batched: true, DataFilters: [isnotnull(make#7), isnotnull(model#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-            +- *(2) Project [make#14, model#15, engine_size#16, sale_price#17]
-               +- *(2) Filter (isnotnull(make#14) AND isnotnull(model#15))
-                  +- *(2) ColumnarToRow
-                     +- FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, DataFilters: [isnotnull(make#14), isnotnull(model#15)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+         +- *(2) BroadcastHashJoin [make#7, model#8], [make#14, model#15], Inner, BuildLeft, (cast(CheckOverflow((promote_precision(cast(engine_size#16 as decimal(38,17))) - promote_precision(cast(engine_size#9 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1), false
+            :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, false], input[2, string, false]),false), [id=#135]
+            :  +- *(1) Filter (isnotnull(make#7) AND isnotnull(model#8))
+            :     +- *(1) ColumnarToRow
+            :        +- FileScan parquet [registration#6,make#7,model#8,engine_size#9] Batched: true, DataFilters: [isnotnull(make#7), isnotnull(model#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+            +- *(2) Filter (isnotnull(make#14) AND isnotnull(model#15))
+               +- *(2) ColumnarToRow
+                  +- FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, DataFilters: [isnotnull(make#14), isnotnull(model#15)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 
 
 </pre>
@@ -14516,40 +14594,71 @@ only showing top 3 rows
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
 *(3) HashAggregate(keys=[registration#6], functions=[avg(sale_price#17)])
-+- Exchange hashpartitioning(registration#6, 200), true, [id=#272]
++- Exchange hashpartitioning(registration#6, 5), ENSURE_REQUIREMENTS, [id=#272]
    +- *(2) HashAggregate(keys=[registration#6], functions=[partial_avg(sale_price#17)])
       +- *(2) Project [registration#6, sale_price#17]
-         +- *(2) BroadcastHashJoin [make#7, model#8], [make#14, model#15], Inner, BuildLeft, (cast(CheckOverflow((promote_precision(cast(engine_size#16 as decimal(38,17))) - promote_precision(cast(engine_size#9 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1)
-            :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true], input[2, string, true])), [id=#262]
-            :  +- *(1) Project [registration#6, make#7, model#8, engine_size#9]
-            :     +- *(1) Filter (isnotnull(make#7) AND isnotnull(model#8))
-            :        +- *(1) ColumnarToRow
-            :           +- FileScan parquet [registration#6,make#7,model#8,engine_size#9] Batched: true, DataFilters: [isnotnull(make#7), isnotnull(model#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-            +- *(2) Project [make#14, model#15, engine_size#16, sale_price#17]
-               +- *(2) Filter (isnotnull(make#14) AND isnotnull(model#15))
-                  +- *(2) ColumnarToRow
-                     +- FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, DataFilters: [isnotnull(make#14), isnotnull(model#15)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+         +- *(2) BroadcastHashJoin [make#7, model#8], [make#14, model#15], Inner, BuildLeft, (cast(CheckOverflow((promote_precision(cast(engine_size#16 as decimal(38,17))) - promote_precision(cast(engine_size#9 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1), false
+            :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, false], input[2, string, false]),false), [id=#263]
+            :  +- *(1) Filter (isnotnull(make#7) AND isnotnull(model#8))
+            :     +- *(1) ColumnarToRow
+            :        +- FileScan parquet [registration#6,make#7,model#8,engine_size#9] Batched: true, DataFilters: [isnotnull(make#7), isnotnull(model#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+            +- *(2) Filter (isnotnull(make#14) AND isnotnull(model#15))
+               +- *(2) ColumnarToRow
+                  +- FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, DataFilters: [isnotnull(make#14), isnotnull(model#15)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 
 
-+------------+------------------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 13:======================================&gt;                   (2 + 1) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+------------+------------------+
 |registration|   avg(sale_price)|
 +------------+------------------+
-|     ALcFxhR| 3022.568145376804|
-|     GXRKoPB| 2987.987181738367|
-|     FDicymS| 2979.525787965616|
-|     OxAQjdj| 2974.113934596959|
-|     JxDGxYo| 2980.301324503311|
-|     kKWnV2J|3008.4574344699604|
-|     ixFdKY8| 2999.611658456486|
-|     AOLIu7i|3011.1674161896976|
-|     60GrroE| 2999.611658456486|
-|     ZhdXcm3|2991.8207713688653|
+|     iXXrlpz|2977.1369648060972|
+|     3LIElNn|2977.1369648060972|
+|     HZJtAcH| 3022.568145376804|
+|     cYzmEAU|2977.1369648060972|
+|     n22OxDp| 2987.987181738367|
+|     PTwNpKh| 2987.987181738367|
+|     O7ydunD| 2985.096955128205|
+|     qo0NBCn| 2987.987181738367|
+|     Fwsi8dg| 2986.729458388375|
+|     wiFO8E9|2978.1062155782847|
 +------------+------------------+
 only showing top 10 rows
 
-CPU times: user 19.4 ms, sys: 6.15 ms, total: 25.6 ms
-Wall time: 1min 20s
+CPU times: user 18.5 ms, sys: 8.4 ms, total: 26.9 ms
+Wall time: 44.2 s
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14596,50 +14705,88 @@ Wall time: 1min 20s
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
 *(6) HashAggregate(keys=[registration#6], functions=[avg(sale_price#17)])
-+- Exchange hashpartitioning(registration#6, 200), true, [id=#430]
++- Exchange hashpartitioning(registration#6, 5), ENSURE_REQUIREMENTS, [id=#431]
    +- *(5) HashAggregate(keys=[registration#6], functions=[partial_avg(sale_price#17)])
       +- *(5) Project [registration#6, sale_price#17]
          +- *(5) SortMergeJoin [make#7, model#8], [make#14, model#15], Inner, (cast(CheckOverflow((promote_precision(cast(engine_size#16 as decimal(38,17))) - promote_precision(cast(engine_size#9 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1)
             :- *(2) Sort [make#7 ASC NULLS FIRST, model#8 ASC NULLS FIRST], false, 0
-            :  +- Exchange hashpartitioning(make#7, model#8, 200), true, [id=#411]
-            :     +- *(1) Project [registration#6, make#7, model#8, engine_size#9]
-            :        +- *(1) Filter (isnotnull(make#7) AND isnotnull(model#8))
-            :           +- *(1) ColumnarToRow
-            :              +- FileScan parquet [registration#6,make#7,model#8,engine_size#9] Batched: true, DataFilters: [isnotnull(make#7), isnotnull(model#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+            :  +- Exchange hashpartitioning(make#7, model#8, 5), ENSURE_REQUIREMENTS, [id=#413]
+            :     +- *(1) Filter (isnotnull(make#7) AND isnotnull(model#8))
+            :        +- *(1) ColumnarToRow
+            :           +- FileScan parquet [registration#6,make#7,model#8,engine_size#9] Batched: true, DataFilters: [isnotnull(make#7), isnotnull(model#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
             +- *(4) Sort [make#14 ASC NULLS FIRST, model#15 ASC NULLS FIRST], false, 0
-               +- Exchange hashpartitioning(make#14, model#15, 200), true, [id=#421]
-                  +- *(3) Project [make#14, model#15, engine_size#16, sale_price#17]
-                     +- *(3) Filter (isnotnull(make#14) AND isnotnull(model#15))
-                        +- *(3) ColumnarToRow
-                           +- FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, DataFilters: [isnotnull(make#14), isnotnull(model#15)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+               +- Exchange hashpartitioning(make#14, model#15, 5), ENSURE_REQUIREMENTS, [id=#422]
+                  +- *(3) Filter (isnotnull(make#14) AND isnotnull(model#15))
+                     +- *(3) ColumnarToRow
+                        +- FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, DataFilters: [isnotnull(make#14), isnotnull(model#15)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 
 
-+------------+------------------+
-|registration|   avg(sale_price)|
-+------------+------------------+
-|     Q8GO2EU| 2977.881762228701|
-|     6yn3Vke|2993.3496869602764|
-|     FWPfoGh|2993.3496869602764|
-|     bUhDTXQ|2998.1522468868434|
-|     AXlbNWj|2995.7316161100016|
-|     VYvy491|2991.8207713688653|
-|     qgL3CRq| 2977.881762228701|
-|     O3vO6em|2986.3140002436944|
-|     s1zJoU3|2993.3496869602764|
-|     beenpZ6|2984.3086874154264|
-+------------+------------------+
-only showing top 10 rows
-
-CPU times: user 22.1 ms, sys: 10.5 ms, total: 32.5 ms
-Wall time: 1min 41s
 </pre>
 </div>
 </div>
 
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 17:==============================================&gt;           (4 + 1) / 5]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+------------+------------------+
+|registration|   avg(sale_price)|
++------------+------------------+
+|     VAXwDvW|2949.7984683595323|
+|     oOwbLbj| 2940.165147453083|
+|     atj0cou| 2957.128184713376|
+|     UPDkPxK| 2957.128184713376|
+|     10MC6Fc| 2972.469609724888|
+|     JgYTNw4|3000.4284736481864|
+|     STRW2oL|2949.7984683595323|
+|     EQ1DjHV| 2957.128184713376|
+|     J1QgrWA| 2957.128184713376|
+|     qFiJQxM| 2972.469609724888|
++------------+------------------+
+only showing top 10 rows
+
+CPU times: user 56.9 ms, sys: 29.2 ms, total: 86.1 ms
+Wall time: 1min 32s
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
 </div>
 
 </div>
 
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><img src="images/spark-2-tasks.png" alt="spark2">
+<img src="images/spark-2-skewness.png" alt="spark2"></p>
+
+</div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
@@ -14708,7 +14855,7 @@ Wall time: 1min 41s
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -14740,45 +14887,77 @@ Wall time: 1min 41s
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
-*(6) HashAggregate(keys=[registration#6], functions=[avg(sale_price#17)])
-+- Exchange hashpartitioning(registration#6, 200), true, [id=#632]
-   +- *(5) HashAggregate(keys=[registration#6], functions=[partial_avg(sale_price#17)])
-      +- *(5) Project [registration#6, sale_price#17]
-         +- *(5) SortMergeJoin [make#7, model#8, cast(skew_key#276 as bigint)], [make#14, model#15, skew_key#282L], Inner, (cast(CheckOverflow((promote_precision(cast(engine_size#16 as decimal(38,17))) - promote_precision(cast(engine_size#9 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1)
-            :- *(2) Sort [make#7 ASC NULLS FIRST, model#8 ASC NULLS FIRST, cast(skew_key#276 as bigint) ASC NULLS FIRST], false, 0
-            :  +- Exchange hashpartitioning(make#7, model#8, cast(skew_key#276 as bigint), 200), true, [id=#613]
-            :     +- Generate explode([0,1,2]), [registration#6, make#7, model#8, engine_size#9], false, [skew_key#276]
-            :        +- *(1) Project [registration#6, make#7, model#8, engine_size#9]
-            :           +- *(1) Filter (isnotnull(make#7) AND isnotnull(model#8))
-            :              +- *(1) ColumnarToRow
-            :                 +- FileScan parquet [registration#6,make#7,model#8,engine_size#9] Batched: true, DataFilters: [isnotnull(make#7), isnotnull(model#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-            +- *(4) Sort [make#14 ASC NULLS FIRST, model#15 ASC NULLS FIRST, skew_key#282L ASC NULLS FIRST], false, 0
-               +- Exchange hashpartitioning(make#14, model#15, skew_key#282L, 200), true, [id=#623]
-                  +- *(3) Filter ((isnotnull(model#15) AND isnotnull(make#14)) AND isnotnull(skew_key#282L))
-                     +- *(3) Project [make#14, model#15, engine_size#16, sale_price#17, (monotonically_increasing_id() % 3) AS skew_key#282L]
+*(6) HashAggregate(keys=[registration#0], functions=[avg(sale_price#11)])
++- Exchange hashpartitioning(registration#0, 5), ENSURE_REQUIREMENTS, [id=#894]
+   +- *(5) HashAggregate(keys=[registration#0], functions=[partial_avg(sale_price#11)])
+      +- *(5) Project [registration#0, sale_price#11]
+         +- *(5) SortMergeJoin [make#1, model#2, cast(skew_key#170 as bigint)], [make#8, model#9, skew_key#176L], Inner, (cast(CheckOverflow((promote_precision(cast(engine_size#10 as decimal(38,17))) - promote_precision(cast(engine_size#3 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1)
+            :- *(2) Sort [make#1 ASC NULLS FIRST, model#2 ASC NULLS FIRST, cast(skew_key#170 as bigint) ASC NULLS FIRST], false, 0
+            :  +- Exchange hashpartitioning(make#1, model#2, cast(skew_key#170 as bigint), 5), ENSURE_REQUIREMENTS, [id=#875]
+            :     +- Generate explode([0,1,2]), [registration#0, make#1, model#2, engine_size#3], false, [skew_key#170]
+            :        +- *(1) Filter (isnotnull(make#1) AND isnotnull(model#2))
+            :           +- *(1) ColumnarToRow
+            :              +- FileScan parquet [registration#0,make#1,model#2,engine_size#3] Batched: true, DataFilters: [isnotnull(make#1), isnotnull(model#2)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+            +- *(4) Sort [make#8 ASC NULLS FIRST, model#9 ASC NULLS FIRST, skew_key#176L ASC NULLS FIRST], false, 0
+               +- Exchange hashpartitioning(make#8, model#9, skew_key#176L, 5), ENSURE_REQUIREMENTS, [id=#885]
+                  +- *(3) Filter ((isnotnull(make#8) AND isnotnull(model#9)) AND isnotnull(skew_key#176L))
+                     +- *(3) Project [make#8, model#9, engine_size#10, sale_price#11, (monotonically_increasing_id() % 3) AS skew_key#176L]
                         +- *(3) ColumnarToRow
-                           +- FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+                           +- FileScan parquet [make#8,model#9,engine_size#10,sale_price#11] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 
 
-+------------+------------------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 30:==================================&gt;                       (3 + 2) / 5]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+------------+------------------+
 |registration|   avg(sale_price)|
 +------------+------------------+
-|     0AB64Pl|3037.4286995515695|
-|     GXRKoPB| 2987.987181738367|
-|     ALcFxhR| 3022.568145376804|
-|     JxDGxYo| 2980.301324503311|
-|     60GrroE| 2999.611658456486|
-|     AOLIu7i|3011.1674161896976|
-|     ixFdKY8| 2999.611658456486|
-|     kKWnV2J|3008.4574344699604|
-|     gx1Mzic| 2985.991675522494|
-|     1oc9DHa|2949.7984683595323|
+|     mK5LtWT| 3022.568145376804|
+|     W3sj1FD| 2986.729458388375|
+|     f0ohMxn|2977.1369648060972|
+|     Cn2bGX8| 2985.096955128205|
+|     I7cJySY| 3022.568145376804|
+|     uq0hBYu|2977.1369648060972|
+|     mOe4qzJ|2983.3983024206223|
+|     71LjoLT| 2985.096955128205|
+|     tKWT46N|2977.1369648060972|
+|     fRg72LG| 2986.729458388375|
 +------------+------------------+
 only showing top 10 rows
 
-CPU times: user 12.2 ms, sys: 7.77 ms, total: 20 ms
-Wall time: 42.7 s
+CPU times: user 21.6 ms, sys: 8.55 ms, total: 30.2 ms
+Wall time: 41.4 s
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14789,7 +14968,7 @@ Wall time: 42.7 s
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -14821,50 +15000,390 @@ Wall time: 42.7 s
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
-*(6) HashAggregate(keys=[registration#6], functions=[avg(sale_price#17)])
-+- Exchange hashpartitioning(registration#6, 200), true, [id=#822]
-   +- *(5) HashAggregate(keys=[registration#6], functions=[partial_avg(sale_price#17)])
-      +- *(5) Project [registration#6, sale_price#17]
-         +- *(5) SortMergeJoin [make#7, model#8, cast(skew_key#346 as bigint)], [make#14, model#15, skew_key#352L], Inner, (cast(CheckOverflow((promote_precision(cast(engine_size#16 as decimal(38,17))) - promote_precision(cast(engine_size#9 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1)
-            :- *(2) Sort [make#7 ASC NULLS FIRST, model#8 ASC NULLS FIRST, cast(skew_key#346 as bigint) ASC NULLS FIRST], false, 0
-            :  +- Exchange hashpartitioning(make#7, model#8, cast(skew_key#346 as bigint), 200), true, [id=#803]
-            :     +- Generate explode([0,1,2,3]), [registration#6, make#7, model#8, engine_size#9], false, [skew_key#346]
-            :        +- *(1) Project [registration#6, make#7, model#8, engine_size#9]
-            :           +- *(1) Filter (isnotnull(make#7) AND isnotnull(model#8))
-            :              +- *(1) ColumnarToRow
-            :                 +- FileScan parquet [registration#6,make#7,model#8,engine_size#9] Batched: true, DataFilters: [isnotnull(make#7), isnotnull(model#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-            +- *(4) Sort [make#14 ASC NULLS FIRST, model#15 ASC NULLS FIRST, skew_key#352L ASC NULLS FIRST], false, 0
-               +- Exchange hashpartitioning(make#14, model#15, skew_key#352L, 200), true, [id=#813]
-                  +- *(3) Filter ((isnotnull(model#15) AND isnotnull(make#14)) AND isnotnull(skew_key#352L))
-                     +- *(3) Project [make#14, model#15, engine_size#16, sale_price#17, (monotonically_increasing_id() % 4) AS skew_key#352L]
+*(6) HashAggregate(keys=[registration#0], functions=[avg(sale_price#11)])
++- Exchange hashpartitioning(registration#0, 5), ENSURE_REQUIREMENTS, [id=#1091]
+   +- *(5) HashAggregate(keys=[registration#0], functions=[partial_avg(sale_price#11)])
+      +- *(5) Project [registration#0, sale_price#11]
+         +- *(5) SortMergeJoin [make#1, model#2, cast(skew_key#230 as bigint)], [make#8, model#9, skew_key#236L], Inner, (cast(CheckOverflow((promote_precision(cast(engine_size#10 as decimal(38,17))) - promote_precision(cast(engine_size#3 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1)
+            :- *(2) Sort [make#1 ASC NULLS FIRST, model#2 ASC NULLS FIRST, cast(skew_key#230 as bigint) ASC NULLS FIRST], false, 0
+            :  +- Exchange hashpartitioning(make#1, model#2, cast(skew_key#230 as bigint), 5), ENSURE_REQUIREMENTS, [id=#1072]
+            :     +- Generate explode([0,1,2,3]), [registration#0, make#1, model#2, engine_size#3], false, [skew_key#230]
+            :        +- *(1) Filter (isnotnull(make#1) AND isnotnull(model#2))
+            :           +- *(1) ColumnarToRow
+            :              +- FileScan parquet [registration#0,make#1,model#2,engine_size#3] Batched: true, DataFilters: [isnotnull(make#1), isnotnull(model#2)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+            +- *(4) Sort [make#8 ASC NULLS FIRST, model#9 ASC NULLS FIRST, skew_key#236L ASC NULLS FIRST], false, 0
+               +- Exchange hashpartitioning(make#8, model#9, skew_key#236L, 5), ENSURE_REQUIREMENTS, [id=#1082]
+                  +- *(3) Filter ((isnotnull(make#8) AND isnotnull(model#9)) AND isnotnull(skew_key#236L))
+                     +- *(3) Project [make#8, model#9, engine_size#10, sale_price#11, (monotonically_increasing_id() % 4) AS skew_key#236L]
                         +- *(3) ColumnarToRow
-                           +- FileScan parquet [make#14,model#15,engine_size#16,sale_price#17] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+                           +- FileScan parquet [make#8,model#9,engine_size#10,sale_price#11] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 
 
-+------------+------------------+
-|registration|   avg(sale_price)|
-+------------+------------------+
-|     0AB64Pl|3037.4286995515695|
-|     GXRKoPB| 2987.987181738367|
-|     ALcFxhR| 3022.568145376804|
-|     JxDGxYo| 2980.301324503311|
-|     Q8GO2EU| 2977.881762228701|
-|     6yn3Vke|2993.3496869602764|
-|     FWPfoGh|2993.3496869602764|
-|     bUhDTXQ|2998.1522468868434|
-|     AXlbNWj|2995.7316161100016|
-|     VYvy491|2991.8207713688653|
-+------------+------------------+
-only showing top 10 rows
-
-CPU times: user 11.1 ms, sys: 11.1 ms, total: 22.2 ms
-Wall time: 54.3 s
 </pre>
 </div>
 </div>
 
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 34:==============================================&gt;           (4 + 1) / 5]</pre>
+</div>
 </div>
 
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+------------+------------------+
+|registration|   avg(sale_price)|
++------------+------------------+
+|     mK5LtWT| 3022.568145376804|
+|     W3sj1FD| 2986.729458388375|
+|     f0ohMxn|2977.1369648060972|
+|     Cn2bGX8| 2985.096955128205|
+|     I7cJySY| 3022.568145376804|
+|     uq0hBYu|2977.1369648060972|
+|     mOe4qzJ|2983.3983024206223|
+|     71LjoLT| 2985.096955128205|
+|     tKWT46N|2977.1369648060972|
+|     fRg72LG| 2986.729458388375|
++------------+------------------+
+only showing top 10 rows
+
+CPU times: user 24.3 ms, sys: 8.36 ms, total: 32.6 ms
+Wall time: 51.5 s
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.adaptive.enabled&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.adaptive.skewJoin.enabled&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.adaptive.skewJoin.skewedPartitionFactor&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.adaptive.skewJoin.skewedPartitionThresholdInBytes&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="o">*</span><span class="mi">1024</span><span class="p">)</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.adaptive.advisoryPartitionSizeInBytes&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="o">*</span><span class="mi">1024</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.autoBroadcastJoinThreshold&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">cond</span> <span class="o">=</span> <span class="p">[</span><span class="n">s1</span><span class="o">.</span><span class="n">make</span> <span class="o">==</span> <span class="n">s2</span><span class="o">.</span><span class="n">make</span><span class="p">,</span> <span class="n">s1</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="n">s2</span><span class="o">.</span><span class="n">model</span><span class="p">]</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="n">cond</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">s2</span><span class="o">.</span><span class="n">engine_size</span> <span class="o">-</span> <span class="n">s1</span><span class="o">.</span><span class="n">engine_size</span> <span class="o">&lt;=</span> <span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;registration&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">avg</span><span class="p">(</span><span class="s2">&quot;sale_price&quot;</span><span class="p">))</span>
+<span class="n">res</span><span class="o">.</span><span class="n">explain</span><span class="p">()</span>
+<span class="n">res</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- HashAggregate(keys=[registration#0], functions=[avg(sale_price#11)])
+   +- Exchange hashpartitioning(registration#0, 5), ENSURE_REQUIREMENTS, [id=#382]
+      +- HashAggregate(keys=[registration#0], functions=[partial_avg(sale_price#11)])
+         +- Project [registration#0, sale_price#11]
+            +- SortMergeJoin [make#1, model#2], [make#8, model#9], Inner, (cast(CheckOverflow((promote_precision(cast(engine_size#10 as decimal(38,17))) - promote_precision(cast(engine_size#3 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1)
+               :- Sort [make#1 ASC NULLS FIRST, model#2 ASC NULLS FIRST], false, 0
+               :  +- Exchange hashpartitioning(make#1, model#2, 5), ENSURE_REQUIREMENTS, [id=#374]
+               :     +- Filter (isnotnull(make#1) AND isnotnull(model#2))
+               :        +- FileScan parquet [registration#0,make#1,model#2,engine_size#3] Batched: true, DataFilters: [isnotnull(make#1), isnotnull(model#2)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+               +- Sort [make#8 ASC NULLS FIRST, model#9 ASC NULLS FIRST], false, 0
+                  +- Exchange hashpartitioning(make#8, model#9, 5), ENSURE_REQUIREMENTS, [id=#375]
+                     +- Filter (isnotnull(make#8) AND isnotnull(model#9))
+                        +- FileScan parquet [make#8,model#9,engine_size#10,sale_price#11] Batched: true, DataFilters: [isnotnull(make#8), isnotnull(model#9)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+
+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 19:=====================================================&gt;  (20 + 1) / 21]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+------------+------------------+
+|registration|   avg(sale_price)|
++------------+------------------+
+|     VAXwDvW|2949.7984683595323|
+|     oOwbLbj| 2940.165147453083|
+|     atj0cou| 2957.128184713376|
+|     UPDkPxK| 2957.128184713376|
+|     10MC6Fc| 2972.469609724888|
+|     JgYTNw4|3000.4284736481864|
+|     STRW2oL|2949.7984683595323|
+|     EQ1DjHV| 2957.128184713376|
+|     J1QgrWA| 2957.128184713376|
+|     qFiJQxM| 2972.469609724888|
++------------+------------------+
+only showing top 10 rows
+
+CPU times: user 31.3 ms, sys: 13.5 ms, total: 44.8 ms
+Wall time: 41.6 s
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><img src="images/spark-3-tasks.png" alt="spark3">
+<img src="images/spark-3-skewness.png" alt="spark3"></p>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.adaptive.enabled&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.autoBroadcastJoinThreshold&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">cond</span> <span class="o">=</span> <span class="p">[</span><span class="n">s1</span><span class="o">.</span><span class="n">make</span> <span class="o">==</span> <span class="n">s2</span><span class="o">.</span><span class="n">make</span><span class="p">,</span> <span class="n">s1</span><span class="o">.</span><span class="n">model</span> <span class="o">==</span> <span class="n">s2</span><span class="o">.</span><span class="n">model</span><span class="p">]</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">s1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="n">cond</span><span class="p">)</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">s2</span><span class="o">.</span><span class="n">engine_size</span> <span class="o">-</span> <span class="n">s1</span><span class="o">.</span><span class="n">engine_size</span> <span class="o">&lt;=</span> <span class="mf">0.1</span><span class="p">)</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;registration&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">avg</span><span class="p">(</span><span class="s2">&quot;sale_price&quot;</span><span class="p">))</span>
+<span class="n">res</span><span class="o">.</span><span class="n">explain</span><span class="p">()</span>
+<span class="n">res</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>== Physical Plan ==
+*(6) HashAggregate(keys=[registration#0], functions=[avg(sale_price#11)])
++- Exchange hashpartitioning(registration#0, 5), ENSURE_REQUIREMENTS, [id=#708]
+   +- *(5) HashAggregate(keys=[registration#0], functions=[partial_avg(sale_price#11)])
+      +- *(5) Project [registration#0, sale_price#11]
+         +- *(5) SortMergeJoin [make#1, model#2], [make#8, model#9], Inner, (cast(CheckOverflow((promote_precision(cast(engine_size#10 as decimal(38,17))) - promote_precision(cast(engine_size#3 as decimal(38,17)))), DecimalType(38,17), true) as double) &lt;= 0.1)
+            :- *(2) Sort [make#1 ASC NULLS FIRST, model#2 ASC NULLS FIRST], false, 0
+            :  +- Exchange hashpartitioning(make#1, model#2, 5), ENSURE_REQUIREMENTS, [id=#690]
+            :     +- *(1) Filter (isnotnull(make#1) AND isnotnull(model#2))
+            :        +- *(1) ColumnarToRow
+            :           +- FileScan parquet [registration#0,make#1,model#2,engine_size#3] Batched: true, DataFilters: [isnotnull(make#1), isnotnull(model#2)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+            +- *(4) Sort [make#8 ASC NULLS FIRST, model#9 ASC NULLS FIRST], false, 0
+               +- Exchange hashpartitioning(make#8, model#9, 5), ENSURE_REQUIREMENTS, [id=#699]
+                  +- *(3) Filter (isnotnull(make#8) AND isnotnull(model#9))
+                     +- *(3) ColumnarToRow
+                        +- FileScan parquet [make#8,model#9,engine_size#10,sale_price#11] Batched: true, DataFilters: [isnotnull(make#8), isnotnull(model#9)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+
+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 26:==============================================&gt;           (4 + 1) / 5]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+------------+------------------+
+|registration|   avg(sale_price)|
++------------+------------------+
+|     VAXwDvW|2949.7984683595323|
+|     oOwbLbj| 2940.165147453083|
+|     atj0cou| 2957.128184713376|
+|     UPDkPxK| 2957.128184713376|
+|     10MC6Fc| 2972.469609724888|
+|     JgYTNw4|3000.4284736481864|
+|     STRW2oL|2949.7984683595323|
+|     EQ1DjHV| 2957.128184713376|
+|     J1QgrWA| 2957.128184713376|
+|     qFiJQxM| 2972.469609724888|
++------------+------------------+
+only showing top 10 rows
+
+CPU times: user 35 ms, sys: 17.3 ms, total: 52.3 ms
+Wall time: 1min 32s
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h4 id="Spark-Tuning-Result">Spark Tuning Result<a class="anchor-link" href="#Spark-Tuning-Result">&#182;</a></h4><table>
+<thead><tr>
+<th>rank</th>
+<th>elapsed</th>
+<th>setting</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>41.4 s</td>
+<td>custom salting</td>
+<td>partition = 3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>41.6s</td>
+<td>adaptive query</td>
+<td>AQE enabled</td>
+</tr>
+<tr>
+<td>3</td>
+<td>51.5 s</td>
+<td>custom salting</td>
+<td>partition = 4</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1min 32s</td>
+<td>default</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+     </div>
+</div>
+</div>
 </div>
 
 </div>

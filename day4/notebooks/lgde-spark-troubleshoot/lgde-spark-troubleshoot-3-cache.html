@@ -14071,7 +14071,7 @@ a.anchor-link {
 </ul>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
@@ -14088,14 +14088,84 @@ a.anchor-link {
     <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.session.timeZone&quot;</span><span class="p">,</span> <span class="s2">&quot;Asia/Seoul&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 <span class="p">)</span>
+
 <span class="c1"># 노트북에서 테이블 형태로 데이터 프레임 출력을 위한 설정을 합니다</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="c1"># display enabled</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.truncate&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># display output columns size</span>
+
+<span class="c1"># 공통 데이터 위치</span>
+<span class="n">home_jovyan</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan&quot;</span>
+<span class="n">work_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_jovyan</span><span class="si">}</span><span class="s2">/work/data&quot;</span>
+<span class="n">work_dir</span><span class="o">=!</span>pwd
+<span class="n">work_dir</span> <span class="o">=</span> <span class="n">work_dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># 로컬 환경 최적화</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># the number of partitions to use when shuffling data for joins or aggregations.</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.forceDeleteTempCheckpointLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">spark</span>
 </pre></div>
 
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 09:02:32 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to &#34;WARN&#34;.
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+21/08/21 09:02:33 WARN Utils: Service &#39;SparkUI&#39; could not bind on port 4040. Attempting port 4041.
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+
+            <div>
+                <p><b>SparkSession - in-memory</b></p>
+                
+        <div>
+            <p><b>SparkContext</b></p>
+
+            <p><a href="http://36066668d2b9:4041">Spark UI</a></p>
+
+            <dl>
+              <dt>Version</dt>
+                <dd><code>v3.1.2</code></dd>
+              <dt>Master</dt>
+                <dd><code>local[*]</code></dd>
+              <dt>AppName</dt>
+                <dd><code>pyspark-shell</code></dd>
+            </dl>
+        </div>
+        
+            </div>
+        
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -14135,6 +14205,17 @@ a.anchor-link {
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
 
 <div class="jp-OutputArea-child">
 
@@ -14349,16 +14430,14 @@ only showing top 1 row
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
-*(2) BroadcastHashJoin [make#33, model#34], [make#40, model#41], Inner, BuildLeft
-:- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true], input[2, string, true])), [id=#106]
-:  +- *(1) Project [registration#32, make#33, model#34, engine_size#35]
-:     +- *(1) Filter (isnotnull(model#34) AND isnotnull(make#33))
-:        +- *(1) ColumnarToRow
-:           +- FileScan parquet [registration#32,make#33,model#34,engine_size#35] Batched: true, DataFilters: [isnotnull(model#34), isnotnull(make#33)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(model), IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-+- *(2) Project [make#40, model#41, engine_size#42, sale_price#43]
-   +- *(2) Filter (((isnotnull(sale_price#43) AND (sale_price#43 &gt; 2000.0)) AND isnotnull(make#40)) AND isnotnull(model#41))
-      +- *(2) ColumnarToRow
-         +- FileScan parquet [make#40,model#41,engine_size#42,sale_price#43] Batched: true, DataFilters: [isnotnull(sale_price#43), (sale_price#43 &gt; 2000.0), isnotnull(make#40), isnotnull(model#41)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(sale_price), GreaterThan(sale_price,2000.0), IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+*(2) BroadcastHashJoin [make#37, model#38], [make#44, model#45], Inner, BuildLeft, false
+:- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, false], input[2, string, false]),false), [id=#104]
+:  +- *(1) Filter (isnotnull(make#37) AND isnotnull(model#38))
+:     +- *(1) ColumnarToRow
+:        +- FileScan parquet [registration#36,make#37,model#38,engine_size#39] Batched: true, DataFilters: [isnotnull(make#37), isnotnull(model#38)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
++- *(2) Filter (((isnotnull(sale_price#47) AND (sale_price#47 &gt; 2000.0)) AND isnotnull(make#44)) AND isnotnull(model#45))
+   +- *(2) ColumnarToRow
+      +- FileScan parquet [make#44,model#45,engine_size#46,sale_price#47] Batched: true, DataFilters: [isnotnull(sale_price#47), (sale_price#47 &gt; 2000.0), isnotnull(make#44), isnotnull(model#45)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(sale_price), GreaterThan(sale_price,2000.0), IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 
 
 </pre>
@@ -14397,18 +14476,16 @@ only showing top 1 row
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
-InMemoryTableScan [registration#32, make#33, model#34, engine_size#35, make#40, model#41, engine_size#42, sale_price#43]
-   +- InMemoryRelation [registration#32, make#33, model#34, engine_size#35, make#40, model#41, engine_size#42, sale_price#43], StorageLevel(disk, memory, deserialized, 1 replicas)
-         +- *(2) BroadcastHashJoin [make#33, model#34], [make#40, model#41], Inner, BuildLeft
-            :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true], input[2, string, true])), [id=#148]
-            :  +- *(1) Project [registration#32, make#33, model#34, engine_size#35]
-            :     +- *(1) Filter (isnotnull(make#33) AND isnotnull(model#34))
-            :        +- *(1) ColumnarToRow
-            :           +- FileScan parquet [registration#32,make#33,model#34,engine_size#35] Batched: true, DataFilters: [isnotnull(make#33), isnotnull(model#34)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-            +- *(2) Project [make#40, model#41, engine_size#42, sale_price#43]
-               +- *(2) Filter (isnotnull(make#40) AND isnotnull(model#41))
-                  +- *(2) ColumnarToRow
-                     +- FileScan parquet [make#40,model#41,engine_size#42,sale_price#43] Batched: true, DataFilters: [isnotnull(make#40), isnotnull(model#41)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+InMemoryTableScan [registration#36, make#37, model#38, engine_size#39, make#44, model#45, engine_size#46, sale_price#47]
+   +- InMemoryRelation [registration#36, make#37, model#38, engine_size#39, make#44, model#45, engine_size#46, sale_price#47], StorageLevel(disk, memory, deserialized, 1 replicas)
+         +- *(2) BroadcastHashJoin [make#37, model#38], [make#44, model#45], Inner, BuildLeft, false
+            :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, false], input[2, string, false]),false), [id=#143]
+            :  +- *(1) Filter (isnotnull(make#37) AND isnotnull(model#38))
+            :     +- *(1) ColumnarToRow
+            :        +- FileScan parquet [registration#36,make#37,model#38,engine_size#39] Batched: true, DataFilters: [isnotnull(make#37), isnotnull(model#38)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+            +- *(2) Filter (isnotnull(make#44) AND isnotnull(model#45))
+               +- *(2) ColumnarToRow
+                  +- FileScan parquet [make#44,model#45,engine_size#46,sale_price#47] Batched: true, DataFilters: [isnotnull(make#44), isnotnull(model#45)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 
 
 </pre>
@@ -14447,21 +14524,19 @@ InMemoryTableScan [registration#32, make#33, model#34, engine_size#35, make#40, 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
-InMemoryTableScan [registration#32, make#33, model#34, engine_size#35, make#40, model#41, engine_size#42, sale_price#43]
-   +- InMemoryRelation [registration#32, make#33, model#34, engine_size#35, make#40, model#41, engine_size#42, sale_price#43], StorageLevel(memory, 1 replicas)
-         +- *(1) Filter (isnotnull(sale_price#43) AND (sale_price#43 &gt; 2100.0))
-            +- InMemoryTableScan [registration#32, make#33, model#34, engine_size#35, make#40, model#41, engine_size#42, sale_price#43], [isnotnull(sale_price#43), (sale_price#43 &gt; 2100.0)]
-                  +- InMemoryRelation [registration#32, make#33, model#34, engine_size#35, make#40, model#41, engine_size#42, sale_price#43], StorageLevel(disk, memory, deserialized, 1 replicas)
-                        +- *(2) BroadcastHashJoin [make#33, model#34], [make#40, model#41], Inner, BuildLeft
-                           :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true], input[2, string, true])), [id=#148]
-                           :  +- *(1) Project [registration#32, make#33, model#34, engine_size#35]
-                           :     +- *(1) Filter (isnotnull(make#33) AND isnotnull(model#34))
-                           :        +- *(1) ColumnarToRow
-                           :           +- FileScan parquet [registration#32,make#33,model#34,engine_size#35] Batched: true, DataFilters: [isnotnull(make#33), isnotnull(model#34)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-                           +- *(2) Project [make#40, model#41, engine_size#42, sale_price#43]
-                              +- *(2) Filter (isnotnull(make#40) AND isnotnull(model#41))
-                                 +- *(2) ColumnarToRow
-                                    +- FileScan parquet [make#40,model#41,engine_size#42,sale_price#43] Batched: true, DataFilters: [isnotnull(make#40), isnotnull(model#41)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
+InMemoryTableScan [registration#36, make#37, model#38, engine_size#39, make#44, model#45, engine_size#46, sale_price#47]
+   +- InMemoryRelation [registration#36, make#37, model#38, engine_size#39, make#44, model#45, engine_size#46, sale_price#47], StorageLevel(memory, 1 replicas)
+         +- *(1) Filter (isnotnull(sale_price#47) AND (sale_price#47 &gt; 2100.0))
+            +- InMemoryTableScan [registration#36, make#37, model#38, engine_size#39, make#44, model#45, engine_size#46, sale_price#47], [isnotnull(sale_price#47), (sale_price#47 &gt; 2100.0)]
+                  +- InMemoryRelation [registration#36, make#37, model#38, engine_size#39, make#44, model#45, engine_size#46, sale_price#47], StorageLevel(disk, memory, deserialized, 1 replicas)
+                        +- *(2) BroadcastHashJoin [make#37, model#38], [make#44, model#45], Inner, BuildLeft, false
+                           :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, false], input[2, string, false]),false), [id=#143]
+                           :  +- *(1) Filter (isnotnull(make#37) AND isnotnull(model#38))
+                           :     +- *(1) ColumnarToRow
+                           :        +- FileScan parquet [registration#36,make#37,model#38,engine_size#39] Batched: true, DataFilters: [isnotnull(make#37), isnotnull(model#38)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s1], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+                           +- *(2) Filter (isnotnull(make#44) AND isnotnull(model#45))
+                              +- *(2) ColumnarToRow
+                                 +- FileScan parquet [make#44,model#45,engine_size#46,sale_price#47] Batched: true, DataFilters: [isnotnull(make#44), isnotnull(model#45)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/s2], PartitionFilters: [], PushedFilters: [IsNotNull(make), IsNotNull(model)], ReadSchema: struct&lt;make:string,model:string,engine_size:decimal(38,18),sale_price:double&gt;
 
 
 </pre>

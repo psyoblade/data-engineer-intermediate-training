@@ -14085,7 +14085,7 @@ a.anchor-link {
 </ul>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
@@ -14102,14 +14102,50 @@ a.anchor-link {
     <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.session.timeZone&quot;</span><span class="p">,</span> <span class="s2">&quot;Asia/Seoul&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 <span class="p">)</span>
+
 <span class="c1"># 노트북에서 테이블 형태로 데이터 프레임 출력을 위한 설정을 합니다</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="c1"># display enabled</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.truncate&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># display output columns size</span>
+
+<span class="c1"># 공통 데이터 위치</span>
+<span class="n">home_jovyan</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan&quot;</span>
+<span class="n">work_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_jovyan</span><span class="si">}</span><span class="s2">/work/data&quot;</span>
+<span class="n">work_dir</span><span class="o">=!</span>pwd
+<span class="n">work_dir</span> <span class="o">=</span> <span class="n">work_dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># 로컬 환경 최적화</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># the number of partitions to use when shuffling data for joins or aggregations.</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.forceDeleteTempCheckpointLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">spark</span>
 </pre></div>
 
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 08:54:11 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to &#34;WARN&#34;.
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+</pre>
+</div>
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -14192,6 +14228,17 @@ a.anchor-link {
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
 
 <div class="jp-OutputArea-child">
 
@@ -14303,7 +14350,7 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>200</pre>
+<pre>5</pre>
 </div>
 
 </div>
@@ -14347,7 +14394,7 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>&#39;200&#39;</pre>
+<pre>&#39;5&#39;</pre>
 </div>
 
 </div>
@@ -14577,8 +14624,30 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>3 3 200
-root
+<pre>3 3 5
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>root
  |-- id: long (nullable = false)
 
 </pre>
@@ -14736,7 +14805,7 @@ root
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">defaultShufflePartitions</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">))</span>
@@ -14773,7 +14842,7 @@ root
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>
-defaultShufflePartitions: 200
+defaultShufflePartitions: 5
 defaultMinPartitions: 2
 defaultParallelism: 3
 maxPartitionBytes: 128mb
@@ -14790,7 +14859,7 @@ openCostInBytes: 4mb
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">sparkContext</span><span class="o">.</span><span class="n">getConf</span><span class="p">()</span><span class="o">.</span><span class="n">getAll</span><span class="p">()</span>
@@ -14809,24 +14878,31 @@ openCostInBytes: 4mb
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[18]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[17]:</div>
 
 
 
 
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
 <pre>[(&#39;spark.sql.session.timeZone&#39;, &#39;Asia/Seoul&#39;),
+ (&#39;spark.driver.host&#39;, &#39;36066668d2b9&#39;),
+ (&#39;spark.executor.id&#39;, &#39;driver&#39;),
+ (&#39;spark.driver.port&#39;, &#39;41917&#39;),
+ (&#39;spark.app.name&#39;, &#39;pyspark-shell&#39;),
+ (&#39;spark.driver.extraJavaOptions&#39;,
+  &#39;-Dio.netty.tryReflectionSetAccessible=true&#39;),
+ (&#39;spark.app.startTime&#39;, &#39;1629536052159&#39;),
  (&#39;spark.rdd.compress&#39;, &#39;True&#39;),
+ (&#39;spark.sql.warehouse.dir&#39;,
+  &#39;file:/home/jovyan/work/lgde-spark-troubleshoot/spark-warehouse&#39;),
+ (&#39;spark.app.id&#39;, &#39;local-1629536053248&#39;),
  (&#39;spark.serializer.objectStreamReset&#39;, &#39;100&#39;),
  (&#39;spark.master&#39;, &#39;local[*]&#39;),
  (&#39;spark.submit.pyFiles&#39;, &#39;&#39;),
- (&#39;spark.executor.id&#39;, &#39;driver&#39;),
  (&#39;spark.submit.deployMode&#39;, &#39;client&#39;),
- (&#39;spark.driver.host&#39;, &#39;66109f816d55&#39;),
- (&#39;spark.app.id&#39;, &#39;local-1628869435761&#39;),
- (&#39;spark.ui.showConsoleProgress&#39;, &#39;true&#39;),
- (&#39;spark.app.name&#39;, &#39;pyspark-shell&#39;),
- (&#39;spark.driver.port&#39;, &#39;43373&#39;)]</pre>
+ (&#39;spark.executor.extraJavaOptions&#39;,
+  &#39;-Dio.netty.tryReflectionSetAccessible=true&#39;),
+ (&#39;spark.ui.showConsoleProgress&#39;, &#39;true&#39;)]</pre>
 </div>
 
 </div>
@@ -14847,7 +14923,7 @@ openCostInBytes: 4mb
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">repartition</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -14893,11 +14969,11 @@ Repartition 1, true
       +- Range (1, 2000000, step=2, splits=Some(3))
 
 == Physical Plan ==
-Exchange RoundRobinPartitioning(1), false, [id=#317]
+Exchange RoundRobinPartitioning(1), REPARTITION_WITH_NUM, [id=#317]
 +- *(2) Project [id#16L]
-   +- *(2) BroadcastHashJoin [id#16L], [id#18L], Inner, BuildRight
+   +- *(2) BroadcastHashJoin [id#16L], [id#18L], Inner, BuildRight, false
       :- *(2) Range (1, 3000000, step=3, splits=3)
-      +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false])), [id=#312]
+      +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#312]
          +- *(1) Range (1, 2000000, step=2, splits=3)
 
 </pre>
@@ -14919,7 +14995,7 @@ Exchange RoundRobinPartitioning(1), false, [id=#317]
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df1</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="s2">&quot;id&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">coalesce</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -14967,9 +15043,9 @@ Repartition 1, false
 == Physical Plan ==
 Coalesce 1
 +- *(2) Project [id#16L]
-   +- *(2) BroadcastHashJoin [id#16L], [id#18L], Inner, BuildRight
+   +- *(2) BroadcastHashJoin [id#16L], [id#18L], Inner, BuildRight, false
       :- *(2) Range (1, 3000000, step=3, splits=3)
-      +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false])), [id=#353]
+      +- BroadcastExchange HashedRelationBroadcastMode(List(input[0, bigint, false]),false), [id=#353]
          +- *(1) Range (1, 2000000, step=2, splits=3)
 
 </pre>
@@ -14990,7 +15066,7 @@ Coalesce 1
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -15014,8 +15090,8 @@ Coalesce 1
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>CPU times: user 1.5 ms, sys: 840 µs, total: 2.34 ms
-Wall time: 1.31 s
+<pre>CPU times: user 1.6 ms, sys: 1.34 ms, total: 2.94 ms
+Wall time: 957 ms
 </pre>
 </div>
 </div>
@@ -15027,7 +15103,7 @@ Wall time: 1.31 s
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
@@ -15051,8 +15127,8 @@ Wall time: 1.31 s
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>CPU times: user 556 µs, sys: 1.18 ms, total: 1.74 ms
-Wall time: 927 ms
+<pre>CPU times: user 397 µs, sys: 1.89 ms, total: 2.29 ms
+Wall time: 627 ms
 </pre>
 </div>
 </div>

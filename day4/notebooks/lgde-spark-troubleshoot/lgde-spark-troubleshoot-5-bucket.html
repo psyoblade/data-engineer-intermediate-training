@@ -14074,7 +14074,7 @@ a.anchor-link {
 </ul>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
@@ -14091,14 +14091,83 @@ a.anchor-link {
     <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.session.timeZone&quot;</span><span class="p">,</span> <span class="s2">&quot;Asia/Seoul&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 <span class="p">)</span>
+
 <span class="c1"># 노트북에서 테이블 형태로 데이터 프레임 출력을 위한 설정을 합니다</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="c1"># display enabled</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.truncate&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># display output columns size</span>
+
+<span class="c1"># 공통 데이터 위치</span>
+<span class="n">home_jovyan</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan&quot;</span>
+<span class="n">work_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_jovyan</span><span class="si">}</span><span class="s2">/work/data&quot;</span>
+<span class="n">work_dir</span><span class="o">=!</span>pwd
+<span class="n">work_dir</span> <span class="o">=</span> <span class="n">work_dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># 로컬 환경 최적화</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># the number of partitions to use when shuffling data for joins or aggregations.</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.forceDeleteTempCheckpointLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">spark</span>
 </pre></div>
 
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 09:04:00 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to &#34;WARN&#34;.
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+
+            <div>
+                <p><b>SparkSession - in-memory</b></p>
+                
+        <div>
+            <p><b>SparkContext</b></p>
+
+            <p><a href="http://36066668d2b9:4040">Spark UI</a></p>
+
+            <dl>
+              <dt>Version</dt>
+                <dd><code>v3.1.2</code></dd>
+              <dt>Master</dt>
+                <dd><code>local[*]</code></dd>
+              <dt>AppName</dt>
+                <dd><code>pyspark-shell</code></dd>
+            </dl>
+        </div>
+        
+            </div>
+        
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -14158,6 +14227,17 @@ a.anchor-link {
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
 
 <div class="jp-OutputArea-child">
 
@@ -14248,35 +14328,66 @@ a.anchor-link {
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
 *(2) Project [make#1, model#2, engine_size#3, registration#0, sale_price#11]
-+- *(2) BroadcastHashJoin [make#1], [make#8], Inner, BuildLeft
-   :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, true])), [id=#88]
-   :  +- *(1) Project [registration#0, make#1, model#2, engine_size#3]
-   :     +- *(1) Filter isnotnull(make#1)
-   :        +- *(1) ColumnarToRow
-   :           +- FileScan parquet [registration#0,make#1,model#2,engine_size#3] Batched: true, DataFilters: [isnotnull(make#1)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/t1], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
-   +- *(2) Project [make#8, sale_price#11]
-      +- *(2) Filter isnotnull(make#8)
-         +- *(2) ColumnarToRow
-            +- FileScan parquet [make#8,sale_price#11] Batched: true, DataFilters: [isnotnull(make#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/source/t2], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;make:string,sale_price:double&gt;
++- *(2) BroadcastHashJoin [make#1], [make#8], Inner, BuildLeft, false
+   :- BroadcastExchange HashedRelationBroadcastMode(List(input[1, string, false]),false), [id=#87]
+   :  +- *(1) Filter isnotnull(make#1)
+   :     +- *(1) ColumnarToRow
+   :        +- FileScan parquet [registration#0,make#1,model#2,engine_size#3] Batched: true, DataFilters: [isnotnull(make#1)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/t1], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;
+   +- *(2) Filter isnotnull(make#8)
+      +- *(2) ColumnarToRow
+         +- FileScan parquet [make#8,sale_price#11] Batched: true, DataFilters: [isnotnull(make#8)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/source/t2], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;make:string,sale_price:double&gt;
 
 
-+-------+-----+--------------------+------------+----------+
-|   make|model|         engine_size|registration|sale_price|
-+-------+-----+--------------------+------------+----------+
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    2046.0|
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    2688.0|
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    3492.0|
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    4723.0|
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    3256.0|
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    2011.0|
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    5457.0|
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    5151.0|
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    4600.0|
-|HYUNDAI|  I20|1.600000000000000000|     Admxty2|    5373.0|
-+-------+-----+--------------------+------------+----------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 7:&gt;                                                          (0 + 3) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+------+-------+--------------------+------------+----------+
+|  make|  model|         engine_size|registration|sale_price|
++------+-------+--------------------+------------+----------+
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    2742.0|
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    4363.0|
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    4468.0|
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    3327.0|
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    3375.0|
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    5364.0|
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    4880.0|
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    2449.0|
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    4977.0|
+|NISSAN|QASHQAI|1.500000000000000000|     Rsk5K1K|    3560.0|
++------+-------+--------------------+------------+----------+
 only showing top 10 rows
 
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14290,7 +14401,7 @@ only showing top 10 rows
 <h4 id="3.2.-%ED%8C%8C%ED%8B%B0%EC%85%98%EC%9C%BC%EB%A1%9C-%EC%A0%80%EC%9E%A5-%EC%8B%9C%EC%97%90%EB%8A%94-%ED%95%9C%EC%AA%BD-%ED%8C%8C%ED%8B%B0%EC%85%98%EC%9D%80-%ED%95%84%ED%84%B0%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%9E%87%EC%A0%90%EC%9D%B4-%EC%9E%88%EC%8A%B5%EB%8B%88%EB%8B%A4">3.2. &#54028;&#54000;&#49496;&#51004;&#47196; &#51200;&#51109; &#49884;&#50640;&#45716; &#54620;&#51901; &#54028;&#54000;&#49496;&#51008; &#54596;&#53552;&#47484; &#53685;&#54620; &#51079;&#51216;&#51060; &#51080;&#49845;&#45768;&#45796;<a class="anchor-link" href="#3.2.-%ED%8C%8C%ED%8B%B0%EC%85%98%EC%9C%BC%EB%A1%9C-%EC%A0%80%EC%9E%A5-%EC%8B%9C%EC%97%90%EB%8A%94-%ED%95%9C%EC%AA%BD-%ED%8C%8C%ED%8B%B0%EC%85%98%EC%9D%80-%ED%95%84%ED%84%B0%EB%A5%BC-%ED%86%B5%ED%95%9C-%EC%9E%87%EC%A0%90%EC%9D%B4-%EC%9E%88%EC%8A%B5%EB%8B%88%EB%8B%A4">&#182;</a></h4><p><img src="images/bucket-2.png" alt="bucket2"></p>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
@@ -14303,6 +14414,26 @@ only showing top 10 rows
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+</div>
+
 </div>
 
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -14350,35 +14481,68 @@ only showing top 10 rows
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
-*(5) Project [make#97, model#95, engine_size#96, registration#94, sale_price#104]
-+- *(5) SortMergeJoin [make#97], [make#105], Inner
-   :- *(2) Sort [make#97 ASC NULLS FIRST], false, 0
-   :  +- Exchange hashpartitioning(make#97, 200), true, [id=#231]
+*(5) Project [make#89, model#87, engine_size#88, registration#86, sale_price#96]
++- *(5) SortMergeJoin [make#89], [make#97], Inner
+   :- *(2) Sort [make#89 ASC NULLS FIRST], false, 0
+   :  +- Exchange hashpartitioning(make#89, 5), ENSURE_REQUIREMENTS, [id=#228]
    :     +- *(1) ColumnarToRow
-   :        +- FileScan parquet [registration#94,model#95,engine_size#96,make#97] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/target/troubleshoot5/model], PartitionFilters: [isnotnull(make#97)], PushedFilters: [], ReadSchema: struct&lt;registration:string,model:string,engine_size:decimal(38,18)&gt;
-   +- *(4) Sort [make#105 ASC NULLS FIRST], false, 0
-      +- Exchange hashpartitioning(make#105, 200), true, [id=#239]
+   :        +- FileScan parquet [registration#86,model#87,engine_size#88,make#89] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/target/troubleshoot5/model], PartitionFilters: [isnotnull(make#89)], PushedFilters: [], ReadSchema: struct&lt;registration:string,model:string,engine_size:decimal(38,18)&gt;
+   +- *(4) Sort [make#97 ASC NULLS FIRST], false, 0
+      +- Exchange hashpartitioning(make#97, 5), ENSURE_REQUIREMENTS, [id=#236]
          +- *(3) ColumnarToRow
-            +- FileScan parquet [sale_price#104,make#105] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/target/troubleshoot5/price], PartitionFilters: [isnotnull(make#105)], PushedFilters: [], ReadSchema: struct&lt;sale_price:double&gt;
+            +- FileScan parquet [sale_price#96,make#97] Batched: true, DataFilters: [], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/target/troubleshoot5/price], PartitionFilters: [isnotnull(make#97)], PushedFilters: [], ReadSchema: struct&lt;sale_price:double&gt;
 
 
-+-------+-----+--------------------+------------+----------+
-|   make|model|         engine_size|registration|sale_price|
-+-------+-----+--------------------+------------+----------+
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    4315.0|
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    3506.0|
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    4359.0|
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    4483.0|
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    3979.0|
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    2997.0|
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    2294.0|
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    4067.0|
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    3278.0|
-|HYUNDAI|  I20|1.200000000000000000|     yazBgLK|    3679.0|
-+-------+-----+--------------------+------------+----------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 14:===================&gt;                                      (1 + 2) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+------+-------+--------------------+------------+----------+
+|  make|  model|         engine_size|registration|sale_price|
++------+-------+--------------------+------------+----------+
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    2559.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    3464.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    4174.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    4446.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    3095.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    2049.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    3344.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    4286.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    5349.0|
+|NISSAN|QASHQAI|1.000000000000000000|     WqAd1O0|    4149.0|
++------+-------+--------------------+------------+----------+
 only showing top 10 rows
 
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14392,7 +14556,7 @@ only showing top 10 rows
 <h4 id="3.3.-%EB%B2%84%ED%82%B7-%EC%A0%80%EC%9E%A5-%EC%8B%9C%EC%97%90%EB%8A%94-%EC%85%94%ED%94%8C%EC%9D%B4-%EB%B0%9C%EC%83%9D%ED%95%98%EC%A7%80-%EC%95%8A%EC%8A%B5%EB%8B%88%EB%8B%A4.">3.3. &#48260;&#53431; &#51200;&#51109; &#49884;&#50640;&#45716; &#49492;&#54540;&#51060; &#48156;&#49373;&#54616;&#51648; &#50506;&#49845;&#45768;&#45796;.<a class="anchor-link" href="#3.3.-%EB%B2%84%ED%82%B7-%EC%A0%80%EC%9E%A5-%EC%8B%9C%EC%97%90%EB%8A%94-%EC%85%94%ED%94%8C%EC%9D%B4-%EB%B0%9C%EC%83%9D%ED%95%98%EC%A7%80-%EC%95%8A%EC%8A%B5%EB%8B%88%EB%8B%A4.">&#182;</a></h4><p><img src="images/bucket-3.png" alt="bucket3"></p>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
@@ -14409,6 +14573,26 @@ only showing top 10 rows
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+</div>
+
 </div>
 
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
@@ -14456,18 +14640,16 @@ only showing top 10 rows
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Physical Plan ==
-*(3) Project [make#170, model#171, engine_size#172, registration#169, sale_price#180]
-+- *(3) SortMergeJoin [make#170], [make#177], Inner
-   :- *(1) Sort [make#170 ASC NULLS FIRST], false, 0
-   :  +- *(1) Project [registration#169, make#170, model#171, engine_size#172]
-   :     +- *(1) Filter isnotnull(make#170)
-   :        +- *(1) ColumnarToRow
-   :           +- FileScan parquet default.model[registration#169,make#170,model#171,engine_size#172] Batched: true, DataFilters: [isnotnull(make#170)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/spark-warehouse/model], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;, SelectedBucketsCount: 10 out of 10
-   +- *(2) Sort [make#177 ASC NULLS FIRST], false, 0
-      +- *(2) Project [make#177, sale_price#180]
-         +- *(2) Filter isnotnull(make#177)
-            +- *(2) ColumnarToRow
-               +- FileScan parquet default.price[make#177,sale_price#180] Batched: true, DataFilters: [isnotnull(make#177)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/spark-warehouse/price], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;make:string,sale_price:double&gt;, SelectedBucketsCount: 10 out of 10
+*(3) Project [make#154, model#155, engine_size#156, registration#153, sale_price#164]
++- *(3) SortMergeJoin [make#154], [make#161], Inner
+   :- *(1) Sort [make#154 ASC NULLS FIRST], false, 0
+   :  +- *(1) Filter isnotnull(make#154)
+   :     +- *(1) ColumnarToRow
+   :        +- FileScan parquet default.model[registration#153,make#154,model#155,engine_size#156] Batched: true, DataFilters: [isnotnull(make#154)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/spark-warehouse/model], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;registration:string,make:string,model:string,engine_size:decimal(38,18)&gt;, SelectedBucketsCount: 10 out of 10
+   +- *(2) Sort [make#161 ASC NULLS FIRST], false, 0
+      +- *(2) Filter isnotnull(make#161)
+         +- *(2) ColumnarToRow
+            +- FileScan parquet default.price[make#161,sale_price#164] Batched: true, DataFilters: [isnotnull(make#161)], Format: Parquet, Location: InMemoryFileIndex[file:/home/jovyan/work/lgde-spark-troubleshoot/spark-warehouse/price], PartitionFilters: [], PushedFilters: [IsNotNull(make)], ReadSchema: struct&lt;make:string,sale_price:double&gt;, SelectedBucketsCount: 10 out of 10
 
 
 +------+-------+--------------------+------------+----------+

@@ -14075,10 +14075,10 @@ a.anchor-link {
 </ul>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[57]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14106,11 +14106,54 @@ a.anchor-link {
 <span class="c1"># 로컬 환경 최적화</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># the number of partitions to use when shuffling data for joins or aggregations.</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.forceDeleteTempCheckpointLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">spark</span>
 </pre></div>
 
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[6]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+
+            <div>
+                <p><b>SparkSession - in-memory</b></p>
+                
+        <div>
+            <p><b>SparkContext</b></p>
+
+            <p><a href="http://0cadd86ac43f:4040">Spark UI</a></p>
+
+            <dl>
+              <dt>Version</dt>
+                <dd><code>v3.1.2</code></dd>
+              <dt>Master</dt>
+                <dd><code>local[*]</code></dd>
+              <dt>AppName</dt>
+                <dd><code>pyspark-shell</code></dd>
+            </dl>
+        </div>
+        
+            </div>
+        
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
@@ -14121,7 +14164,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[58]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 소스 스키마</span>
@@ -14140,6 +14183,17 @@ a.anchor-link {
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
 
 <div class="jp-OutputArea-child">
 
@@ -14234,7 +14288,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[59]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 소스 읽기</span>
@@ -14280,7 +14334,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[60]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 데이터 변환</span>
@@ -14362,7 +14416,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[61]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 싱크 쓰기</span>
@@ -14420,7 +14474,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[63]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 트리거</span>
@@ -14448,10 +14502,10 @@ a.anchor-link {
 </ul>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[64]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 기동</span>
@@ -14463,6 +14517,520 @@ a.anchor-link {
      </div>
 </div>
 </div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 14:43:58 WARN OffsetSeqMetadata: Conf &#39;spark.sql.streaming.stateStore.compression.codec&#39; was not found in the offset log, using default value &#39;lz4&#39;
+21/08/21 14:43:59 WARN HDFSBackedStateStoreProvider: The state for version 31 doesn&#39;t exist in loadedMaps. Reading snapshot file and delta files if needed...Note that this is normal for the first batch of starting query.
+21/08/21 14:43:59 WARN HDFSBackedStateStoreProvider: The state for version 31 doesn&#39;t exist in loadedMaps. Reading snapshot file and delta files if needed...Note that this is normal for the first batch of starting query.
+21/08/21 14:43:59 WARN HDFSBackedStateStoreProvider: The state for version 31 doesn&#39;t exist in loadedMaps. Reading snapshot file and delta files if needed...Note that this is normal for the first batch of starting query.
+21/08/21 14:43:59 WARN HDFSBackedStateStoreProvider: The state for version 31 doesn&#39;t exist in loadedMaps. Reading snapshot file and delta files if needed...Note that this is normal for the first batch of starting query.
+21/08/21 14:43:59 WARN HDFSBackedStateStoreProvider: The state for version 31 doesn&#39;t exist in loadedMaps. Reading snapshot file and delta files if needed...Note that this is normal for the first batch of starting query.
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-------------------------------------------
+Batch: 31
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|393885|
+|     stand|364315|
+|stairsdown|299609|
+|      walk|424161|
+|  stairsup|334659|
+|      null|334282|
+|      bike|345483|
++----------+------+
+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 14:44:00 WARN ProcessingTimeExecutor: Current batch is falling behind. The trigger interval is 1000 milliseconds, but spent 1718 milliseconds
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>-------------------------------------------
+Batch: 32
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|406192|
+|     stand|375701|
+|stairsdown|308970|
+|      walk|437416|
+|  stairsup|345116|
+|      null|344730|
+|      bike|356281|
++----------+------+
+
+-------------------------------------------
+Batch: 33
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|418500|
+|     stand|387087|
+|stairsdown|318333|
+|      walk|450672|
+|  stairsup|355571|
+|      null|355177|
+|      bike|367077|
++----------+------+
+
+-------------------------------------------
+Batch: 34
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|430808|
+|     stand|398473|
+|stairsdown|327693|
+|      walk|463928|
+|  stairsup|366029|
+|      null|365623|
+|      bike|377874|
++----------+------+
+
+-------------------------------------------
+Batch: 35
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|443116|
+|     stand|409857|
+|stairsdown|337052|
+|      walk|477184|
+|  stairsup|376490|
+|      null|376069|
+|      bike|388671|
++----------+------+
+
+-------------------------------------------
+Batch: 36
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|455424|
+|     stand|421241|
+|stairsdown|346412|
+|      walk|490440|
+|  stairsup|386951|
+|      null|386515|
+|      bike|399468|
++----------+------+
+
+-------------------------------------------
+Batch: 37
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|467732|
+|     stand|432625|
+|stairsdown|355773|
+|      walk|503696|
+|  stairsup|397412|
+|      null|396960|
+|      bike|410266|
++----------+------+
+
+-------------------------------------------
+Batch: 38
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|480040|
+|     stand|444009|
+|stairsdown|365134|
+|      walk|516952|
+|  stairsup|407875|
+|      null|407405|
+|      bike|421063|
++----------+------+
+
+-------------------------------------------
+Batch: 39
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|492348|
+|     stand|455392|
+|stairsdown|374497|
+|      walk|530207|
+|  stairsup|418336|
+|      null|417852|
+|      bike|431860|
++----------+------+
+
+-------------------------------------------
+Batch: 40
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|504656|
+|     stand|466775|
+|stairsdown|383858|
+|      walk|543462|
+|  stairsup|428799|
+|      null|428299|
+|      bike|442657|
++----------+------+
+
+-------------------------------------------
+Batch: 41
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|516964|
+|     stand|478158|
+|stairsdown|393220|
+|      walk|556717|
+|  stairsup|439261|
+|      null|438746|
+|      bike|453454|
++----------+------+
+
+-------------------------------------------
+Batch: 42
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|529271|
+|     stand|489542|
+|stairsdown|402586|
+|      walk|569972|
+|  stairsup|449719|
+|      null|449194|
+|      bike|464250|
++----------+------+
+
+-------------------------------------------
+Batch: 43
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|541579|
+|     stand|500926|
+|stairsdown|411953|
+|      walk|583227|
+|  stairsup|460176|
+|      null|459641|
+|      bike|475046|
++----------+------+
+
+-------------------------------------------
+Batch: 44
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|553887|
+|     stand|512310|
+|stairsdown|421321|
+|      walk|596482|
+|  stairsup|470632|
+|      null|470088|
+|      bike|485842|
++----------+------+
+
+-------------------------------------------
+Batch: 45
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|566195|
+|     stand|523695|
+|stairsdown|430690|
+|      walk|609737|
+|  stairsup|481088|
+|      null|480534|
+|      bike|496637|
++----------+------+
+
+-------------------------------------------
+Batch: 46
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|578503|
+|     stand|535080|
+|stairsdown|440057|
+|      walk|622991|
+|  stairsup|491547|
+|      null|490979|
+|      bike|507432|
++----------+------+
+
+-------------------------------------------
+Batch: 47
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|590814|
+|     stand|546465|
+|stairsdown|449425|
+|      walk|636245|
+|  stairsup|502004|
+|      null|501422|
+|      bike|518227|
++----------+------+
+
+-------------------------------------------
+Batch: 48
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|603125|
+|     stand|557851|
+|stairsdown|458790|
+|      walk|649498|
+|  stairsup|512462|
+|      null|511868|
+|      bike|529021|
++----------+------+
+
+-------------------------------------------
+Batch: 49
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|615436|
+|     stand|569237|
+|stairsdown|468153|
+|      walk|662751|
+|  stairsup|522921|
+|      null|522314|
+|      bike|539816|
++----------+------+
+
+-------------------------------------------
+Batch: 50
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|627747|
+|     stand|580623|
+|stairsdown|477518|
+|      walk|676004|
+|  stairsup|533378|
+|      null|532760|
+|      bike|550611|
++----------+------+
+
+-------------------------------------------
+Batch: 51
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|640058|
+|     stand|592009|
+|stairsdown|486881|
+|      walk|689257|
+|  stairsup|543835|
+|      null|543207|
+|      bike|561406|
++----------+------+
+
+-------------------------------------------
+Batch: 52
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|652369|
+|     stand|603394|
+|stairsdown|496243|
+|      walk|702511|
+|  stairsup|554293|
+|      null|553653|
+|      bike|572202|
++----------+------+
+
+-------------------------------------------
+Batch: 53
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|664680|
+|     stand|614779|
+|stairsdown|505604|
+|      walk|715765|
+|  stairsup|564752|
+|      null|564099|
+|      bike|582998|
++----------+------+
+
+-------------------------------------------
+Batch: 54
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|676991|
+|     stand|626164|
+|stairsdown|514965|
+|      walk|729020|
+|  stairsup|575209|
+|      null|574544|
+|      bike|593795|
++----------+------+
+
+-------------------------------------------
+Batch: 55
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|689302|
+|     stand|637549|
+|stairsdown|524326|
+|      walk|742275|
+|  stairsup|585666|
+|      null|584989|
+|      bike|604592|
++----------+------+
+
+-------------------------------------------
+Batch: 56
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|701611|
+|     stand|648933|
+|stairsdown|533688|
+|      walk|755530|
+|  stairsup|596122|
+|      null|595437|
+|      bike|615389|
++----------+------+
+
+-------------------------------------------
+Batch: 57
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|713920|
+|     stand|660317|
+|stairsdown|543051|
+|      walk|768785|
+|  stairsup|606577|
+|      null|605886|
+|      bike|626185|
++----------+------+
+
+-------------------------------------------
+Batch: 58
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|726229|
+|     stand|671701|
+|stairsdown|552415|
+|      walk|782040|
+|  stairsup|617030|
+|      null|616336|
+|      bike|636981|
++----------+------+
+
+-------------------------------------------
+Batch: 59
+-------------------------------------------
++----------+------+
+|        gt| count|
++----------+------+
+|       sit|738536|
+|     stand|683088|
+|stairsdown|561777|
+|      walk|795296|
+|  stairsup|627486|
+|      null|626783|
+|      bike|647778|
++----------+------+
+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 14:44:28 ERROR WriteToDataSourceV2Exec: Data source write support org.apache.spark.sql.execution.streaming.sources.MicroBatchWrite@7d26042 is aborting.
+21/08/21 14:44:28 ERROR WriteToDataSourceV2Exec: Data source write support org.apache.spark.sql.execution.streaming.sources.MicroBatchWrite@7d26042 aborted.
+21/08/21 14:44:28 ERROR DiskBlockObjectWriter: Exception occurred while reverting partial writes to file /tmp/blockmgr-b3f2fd2c-b881-4de8-99da-2c05a5d44bd9/06/temp_shuffle_2969115e-8ccb-400e-ba9a-44358ab45f45, null
+21/08/21 14:44:28 ERROR DiskBlockObjectWriter: Exception occurred while reverting partial writes to file /tmp/blockmgr-b3f2fd2c-b881-4de8-99da-2c05a5d44bd9/37/temp_shuffle_b3287c95-21e2-45b1-abc9-52a1f250a61b, null
+21/08/21 14:44:28 ERROR DiskBlockObjectWriter: Exception occurred while reverting partial writes to file /tmp/blockmgr-b3f2fd2c-b881-4de8-99da-2c05a5d44bd9/30/temp_shuffle_0b3528b4-b9c8-4f3e-b0a4-fa19973f8b64, null
+21/08/21 14:44:28 ERROR DiskBlockObjectWriter: Exception occurred while reverting partial writes to file /tmp/blockmgr-b3f2fd2c-b881-4de8-99da-2c05a5d44bd9/27/temp_shuffle_a499dcc8-a1b6-42bf-b23c-d1be25f54c33, null
+21/08/21 14:44:28 ERROR DiskBlockObjectWriter: Exception occurred while reverting partial writes to file /tmp/blockmgr-b3f2fd2c-b881-4de8-99da-2c05a5d44bd9/03/temp_shuffle_11ff1e90-4c96-4734-84d7-70344f6274c6, null
+21/08/21 14:44:28 WARN TaskSetManager: Lost task 0.0 in stage 64.0 (TID 350) (0cadd86ac43f executor driver): TaskKilled (Stage cancelled)
+</pre>
+</div>
+</div>
+
+</div>
+
 </div>
 
 </div>

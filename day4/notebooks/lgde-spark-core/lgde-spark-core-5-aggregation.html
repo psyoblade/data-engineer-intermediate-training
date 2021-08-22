@@ -14056,10 +14056,10 @@ a.anchor-link {
 </ul>
 
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14073,9 +14073,21 @@ a.anchor-link {
     <span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="s2">&quot;spark.sql.session.timeZone&quot;</span><span class="p">,</span> <span class="s2">&quot;Asia/Seoul&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">getOrCreate</span><span class="p">()</span>
 <span class="p">)</span>
+
 <span class="c1"># 노트북에서 테이블 형태로 데이터 프레임 출력을 위한 설정을 합니다</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.enabled&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="c1"># display enabled</span>
 <span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.repl.eagerEval.truncate&quot;</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># display output columns size</span>
+
+<span class="c1"># 공통 데이터 위치</span>
+<span class="n">home_jovyan</span> <span class="o">=</span> <span class="s2">&quot;/home/jovyan&quot;</span>
+<span class="n">work_data</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">home_jovyan</span><span class="si">}</span><span class="s2">/work/data&quot;</span>
+<span class="n">work_dir</span><span class="o">=!</span>pwd
+<span class="n">work_dir</span> <span class="o">=</span> <span class="n">work_dir</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># 로컬 환경 최적화</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.shuffle.partitions&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span> <span class="c1"># the number of partitions to use when shuffling data for joins or aggregations.</span>
+<span class="n">spark</span><span class="o">.</span><span class="n">conf</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s2">&quot;spark.sql.streaming.forceDeleteTempCheckpointLocation&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
+<span class="n">spark</span>
 </pre></div>
 
      </div>
@@ -14083,10 +14095,67 @@ a.anchor-link {
 </div>
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 09:08:28 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
+Setting default log level to &#34;WARN&#34;.
+To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+
+            <div>
+                <p><b>SparkSession - in-memory</b></p>
+                
+        <div>
+            <p><b>SparkContext</b></p>
+
+            <p><a href="http://36066668d2b9:4040">Spark UI</a></p>
+
+            <dl>
+              <dt>Version</dt>
+                <dd><code>v3.1.2</code></dd>
+              <dt>Master</dt>
+                <dd><code>local[*]</code></dd>
+              <dt>AppName</dt>
+                <dd><code>pyspark-shell</code></dd>
+            </dl>
+        </div>
+        
+            </div>
+        
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 구매 이력 데이터 &quot;&quot;&quot;</span>
@@ -14094,7 +14163,7 @@ a.anchor-link {
     <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;csv&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;inferSchema&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;data/retail-data/all&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">work_data</span><span class="si">}</span><span class="s2">/retail-data/all&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">coalesce</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">cache</span><span class="p">()</span>
@@ -14106,10 +14175,30 @@ a.anchor-link {
 </div>
 </div>
 
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -14125,6 +14214,17 @@ a.anchor-link {
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
 
 <div class="jp-OutputArea-child">
 
@@ -14151,7 +14251,18 @@ only showing top 5 rows
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[4]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
 
 
 
@@ -14174,7 +14285,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">printSchema</span><span class="p">()</span>
@@ -14218,7 +14329,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14274,7 +14385,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14323,7 +14434,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14348,6 +14459,17 @@ only showing top 5 rows
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>+--------------------------------+
 |approx_count_distinct(StockCode)|
@@ -14355,13 +14477,47 @@ only showing top 5 rows
 |                            3364|
 +--------------------------------+
 
-+--------------------------------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>21/08/21 08:49:41 WARN package: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting &#39;spark.sql.debug.maxToStringFields&#39;.
+[Stage 20:&gt;                                                         (0 + 1) / 1]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+--------------------------------+
 |approx_count_distinct(StockCode)|
 +--------------------------------+
 |                            4079|
 +--------------------------------+
 
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14377,7 +14533,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14406,6 +14562,17 @@ only showing top 5 rows
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>+----------------+---------------+
 |first(StockCode)|last(StockCode)|
@@ -14419,7 +14586,29 @@ only showing top 5 rows
 |       -80995|        80995|
 +-------------+-------------+
 
-+--------------------+-----------------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+--------------------+-----------------+
 |    min(Description)| max(Description)|
 +--------------------+-----------------+
 | 4 PURPLE FLOCK D...|wrongly sold sets|
@@ -14457,7 +14646,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14507,7 +14696,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span>
@@ -14563,7 +14752,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">variance</span><span class="p">,</span> <span class="n">stddev</span>
@@ -14609,7 +14798,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">variance</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">),</span> <span class="n">stddev</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">),</span>      
@@ -14633,14 +14822,36 @@ only showing top 5 rows
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 39:&gt;                                                         (0 + 3) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>+------------------+---------------------+------------------+---------------------+-----------------+--------------------+
 |var_samp(Quantity)|stddev_samp(Quantity)|var_samp(Quantity)|stddev_samp(Quantity)|var_pop(Quantity)|stddev_pop(Quantity)|
 +------------------+---------------------+------------------+---------------------+-----------------+--------------------+
-|               NaN|                  NaN|               NaN|                  NaN|              0.0|                 0.0|
+|              null|                 null|              null|                 null|              0.0|                 0.0|
 +------------------+---------------------+------------------+---------------------+-----------------+--------------------+
 
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14659,7 +14870,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">skewness</span><span class="p">,</span> <span class="n">kurtosis</span>
@@ -14729,7 +14940,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[14]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">corr</span><span class="p">,</span> <span class="n">covar_pop</span><span class="p">,</span> <span class="n">covar_samp</span>
@@ -14753,6 +14964,17 @@ only showing top 5 rows
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 43:===================&gt;                                      (1 + 2) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>+-------------------------+------------------------------+-------------------------------+
 |corr(InvoiceNo, Quantity)|covar_pop(InvoiceNo, Quantity)|covar_samp(InvoiceNo, Quantity)|
@@ -14761,6 +14983,17 @@ only showing top 5 rows
 +-------------------------+------------------------------+-------------------------------+
 
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -14795,7 +15028,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">collect_list</span><span class="p">,</span> <span class="n">collect_set</span><span class="p">,</span> <span class="n">size</span>
@@ -14837,7 +15070,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">size</span><span class="p">(</span><span class="n">collect_list</span><span class="p">(</span><span class="s2">&quot;Country&quot;</span><span class="p">)),</span> <span class="n">size</span><span class="p">(</span><span class="n">collect_set</span><span class="p">(</span><span class="s2">&quot;Country&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># 각 컬럼의 복합데이터 사이즈</span>
@@ -14877,7 +15110,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">countDistinct</span><span class="p">(</span><span class="s2">&quot;Country&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># 중복없이 카운트</span>
@@ -14942,7 +15175,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">count</span>
@@ -14977,18 +15210,51 @@ only showing top 5 rows
  |-- CustomerID: integer (nullable = true)
  |-- Country: string (nullable = true)
 
-+---------+----------+---------------+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 52:===================&gt;                                      (1 + 2) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+---------+----------+---------------+
 |InvoiceNo|CustomerId|CountOfQuantity|
 +---------+----------+---------------+
-|   536846|     14573|             76|
-|   537026|     12395|             12|
-|   537883|     14437|              5|
-|   538068|     17978|             12|
-|   538279|     14952|              7|
+|   536366|     17850|              2|
+|   536367|     13047|             12|
+|   536369|     13047|              1|
+|   536376|     15291|              2|
+|   536387|     16029|              5|
 +---------+----------+---------------+
 only showing top 5 rows
 
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -15006,7 +15272,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;InvoiceNo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span> <span class="p">{</span> <span class="s2">&quot;Quantity&quot;</span> <span class="p">:</span> <span class="s2">&quot;avg&quot;</span><span class="p">,</span> <span class="s2">&quot;UnitPrice&quot;</span> <span class="p">:</span> <span class="s2">&quot;stddev_pop&quot;</span> <span class="p">}</span> <span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
@@ -15032,11 +15298,11 @@ only showing top 5 rows
 <pre>+---------+---------------------+------------------+
 |InvoiceNo|stddev_pop(UnitPrice)|     avg(Quantity)|
 +---------+---------------------+------------------+
-|   536596|    6.618375094302897|               1.5|
-|   536938|   2.4313249096586267|33.142857142857146|
-|   537252|                  0.0|              31.0|
-|   537691|    2.761232695735729|              8.15|
-|   538041|                  0.0|              30.0|
+|   536370|   3.6916533897428674|             22.45|
+|   536380|                  0.0|              24.0|
+|   536384|   3.5529802474898813|14.615384615384615|
+|   536387|   1.0775602071346178|             288.0|
+|   536397|                  0.0|              30.0|
 +---------+---------------------+------------------+
 only showing top 5 rows
 
@@ -15066,7 +15332,7 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 런타임 시에 맵으로 전달된 함수를 표현식으로 사용할 수 있습니다.</span>
@@ -15091,33 +15357,33 @@ only showing top 5 rows
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[21]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[20]:</div>
 
 
 
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
 <table border='1'>
 <tr><th>InvoiceNo</th><th>stddev_pop(Quantity)</th></tr>
-<tr><td>536596</td><td>1.1180339887498947</td></tr>
-<tr><td>536938</td><td>20.698023172885524</td></tr>
-<tr><td>537252</td><td>0.0</td></tr>
-<tr><td>537691</td><td>5.597097462078001</td></tr>
-<tr><td>538041</td><td>0.0</td></tr>
-<tr><td>538184</td><td>8.142590198943392</td></tr>
-<tr><td>538517</td><td>2.3946659604837897</td></tr>
-<tr><td>538879</td><td>11.811070444356483</td></tr>
-<tr><td>539275</td><td>12.806248474865697</td></tr>
-<tr><td>539630</td><td>10.225241100118645</td></tr>
-<tr><td>540499</td><td>2.6653642652865788</td></tr>
-<tr><td>540540</td><td>1.0572457590557278</td></tr>
-<tr><td>C540850</td><td>0.0</td></tr>
-<tr><td>540976</td><td>6.496760677872902</td></tr>
-<tr><td>541432</td><td>10.825317547305483</td></tr>
-<tr><td>541518</td><td>20.550782784878713</td></tr>
-<tr><td>541783</td><td>8.467657556242811</td></tr>
-<tr><td>542026</td><td>4.853406592853679</td></tr>
-<tr><td>542375</td><td>3.4641016151377544</td></tr>
-<tr><td>C542604</td><td>15.173990905493518</td></tr>
+<tr><td>536370</td><td>8.935742834258381</td></tr>
+<tr><td>536380</td><td>0.0</td></tr>
+<tr><td>536384</td><td>15.750645708563392</td></tr>
+<tr><td>536387</td><td>117.57550765359255</td></tr>
+<tr><td>536397</td><td>18.0</td></tr>
+<tr><td>536405</td><td>0.0</td></tr>
+<tr><td>536407</td><td>0.0</td></tr>
+<tr><td>536463</td><td>0.0</td></tr>
+<tr><td>536500</td><td>4.019950248448356</td></tr>
+<tr><td>536522</td><td>1.6046058535136642</td></tr>
+<tr><td>536523</td><td>7.487025815072067</td></tr>
+<tr><td>536536</td><td>34.373762603991366</td></tr>
+<tr><td>536538</td><td>3.7173833008743054</td></tr>
+<tr><td>536542</td><td>8.73212459828649</td></tr>
+<tr><td>536555</td><td>0.0</td></tr>
+<tr><td>536561</td><td>2.9814239699997196</td></tr>
+<tr><td>536573</td><td>23.748684174075834</td></tr>
+<tr><td>536579</td><td>78.0</td></tr>
+<tr><td>536580</td><td>2.23606797749979</td></tr>
+<tr><td>536582</td><td>6.99777522727673</td></tr>
 </table>
 only showing top 20 rows
 
@@ -15152,7 +15418,7 @@ evaluate: 집계의 최종 결과를 생성하는 로직을 정의</code></pre>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=blue>1. [중급]</font> 구매 이력 CSV "data/retail-data/all" 파일을 읽고</h3>
+<h3><font color=blue>1. [중급]</font> 구매 이력 CSV f"{work_data}/retail-data/all" 파일을 읽고</h3>
 <h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0-10%EA%B1%B4%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552; 10&#44148;&#51012; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0-10%EA%B1%B4%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)%EC%9D%98-%EC%9C%A0%EC%9D%BC%ED%95%9C-%EA%B0%92%EC%9D%98-%EA%B0%AF%EC%88%98%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">3. &#49345;&#54408;&#53076;&#46300;(StockCode)&#51032; &#50976;&#51068;&#54620; &#44050;&#51032; &#44079;&#49688;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#3.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)%EC%9D%98-%EC%9C%A0%EC%9D%BC%ED%95%9C-%EA%B0%92%EC%9D%98-%EA%B0%AF%EC%88%98%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="4.-%EC%83%81%ED%92%88%EB%8B%A8%EA%B0%80(UnitPrice)%EC%9D%98-%EC%B5%9C%EC%86%8C,-%EC%B5%9C%EB%8C%80-%EA%B0%92%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">4. &#49345;&#54408;&#45800;&#44032;(UnitPrice)&#51032; &#52572;&#49548;, &#52572;&#45824; &#44050;&#51012; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#4.-%EC%83%81%ED%92%88%EB%8B%A8%EA%B0%80(UnitPrice)%EC%9D%98-%EC%B5%9C%EC%86%8C,-%EC%B5%9C%EB%8C%80-%EA%B0%92%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="5.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(StockCode)%EB%B3%84%EB%A1%9C-%EC%86%A1%EC%9E%A5%EB%B3%84%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EA%B3%A0-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%98%EC%84%B8%EC%9A%94">5. &#49569;&#51109;&#48264;&#54840;(StockCode)&#48324;&#47196; &#49569;&#51109;&#48324;&#52509;&#47588;&#52636;&#44552;&#50529;(TotalInvoicePrice)&#47484; &#44228;&#49328;&#54616;&#44256; &#45236;&#47548;&#52264;&#49692;&#51004;&#47196; &#51221;&#47148;&#54616;&#49464;&#50836;<a class="anchor-link" href="#5.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(StockCode)%EB%B3%84%EB%A1%9C-%EC%86%A1%EC%9E%A5%EB%B3%84%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EA%B3%A0-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="6.-%EC%86%A1%EC%9E%A5%EB%B3%84%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EC%9D%B4-%EC%B5%9C%EA%B3%A0%EA%B8%88%EC%95%A1%EC%9D%B4-%EC%86%A1%EC%9E%A5%EC%9D%84-%ED%95%84%ED%84%B0%ED%95%98%EC%97%AC-%EA%B2%80%EC%A6%9D%ED%95%B4-%EB%B3%B4%EC%84%B8%EC%9A%94">6. &#49569;&#51109;&#48324;&#52509;&#47588;&#52636;&#44552;&#50529;(TotalInvoicePrice)&#51060; &#52572;&#44256;&#44552;&#50529;&#51060; &#49569;&#51109;&#51012; &#54596;&#53552;&#54616;&#50668; &#44160;&#51613;&#54644; &#48372;&#49464;&#50836;<a class="anchor-link" href="#6.-%EC%86%A1%EC%9E%A5%EB%B3%84%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EC%9D%B4-%EC%B5%9C%EA%B3%A0%EA%B8%88%EC%95%A1%EC%9D%B4-%EC%86%A1%EC%9E%A5%EC%9D%84-%ED%95%84%ED%84%B0%ED%95%98%EC%97%AC-%EA%B2%80%EC%A6%9D%ED%95%B4-%EB%B3%B4%EC%84%B8%EC%9A%94">&#182;</a></h4><h5 id="%EC%98%88%EB%A5%BC-%EB%93%A4%EC%96%B4-select-sum(unit-price-*-quantity)-from-table-where-invoiceno-=-'123456'-%EC%99%80-%EA%B0%99%EC%9D%80-%EC%BF%BC%EB%A6%AC%EB%A1%9C-%EA%B2%80%EC%A6%9D%EC%9D%B4-%EA%B0%80%EB%8A%A5%ED%95%A9%EB%8B%88%EB%8B%A4">&#50696;&#47484; &#46308;&#50612; <code>select sum(unit-price * quantity) from table where invoiceno = '123456'</code> &#50752; &#44057;&#51008; &#53244;&#47532;&#47196; &#44160;&#51613;&#51060; &#44032;&#45733;&#54633;&#45768;&#45796;<a class="anchor-link" href="#%EC%98%88%EB%A5%BC-%EB%93%A4%EC%96%B4-select-sum(unit-price-*-quantity)-from-table-where-invoiceno-=-'123456'-%EC%99%80-%EA%B0%99%EC%9D%80-%EC%BF%BC%EB%A6%AC%EB%A1%9C-%EA%B2%80%EC%A6%9D%EC%9D%B4-%EA%B0%80%EB%8A%A5%ED%95%A9%EB%8B%88%EB%8B%A4">&#182;</a></h5><details><summary>[실습7] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
@@ -15162,7 +15428,7 @@ df1 = (
     spark.read.format("csv")
     .option("header", "true")
     .option("inferSchema", "true")
-    .load("data/retail-data/all")
+    .load(f"{work_data}/retail-data/all")
 )
 df1.printSchema()
 df1.show()
@@ -15178,7 +15444,7 @@ df1.where("InvoiceNo = '581483'").select(sum(expr("UnitPrice * Quantity"))).show
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
@@ -15193,6 +15459,17 @@ df1.where("InvoiceNo = '581483'").select(sum(expr("UnitPrice * Quantity"))).show
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
 
 <div class="jp-OutputArea-child">
 
@@ -15251,6 +15528,17 @@ root
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
 
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
 <table border='1'>
@@ -15295,7 +15583,7 @@ root
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=green>2. [기본]</font> 매출 테이블 "data/tbl_purchase.csv" CSV 파일을 읽고</h3>
+<h3><font color=green>2. [기본]</font> 매출 테이블 f"{work_data}/tbl_purchase.csv" CSV 파일을 읽고</h3>
 <h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0-10%EA%B1%B4%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552; 10&#44148;&#51012; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0-10%EA%B1%B4%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EC%A0%9C%ED%92%88(p_name)%EB%B3%84-%EA%B8%88%EC%95%A1(p_amount)-%EC%9D%98-%EC%A0%84%EC%B2%B4-%ED%95%A9%EC%9D%B8-%EC%B4%9D-%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(sum_amount)%EC%9D%84-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">3. &#51228;&#54408;(p_name)&#48324; &#44552;&#50529;(p_amount) &#51032; &#51204;&#52404; &#54633;&#51064; &#52509; &#47588;&#52636;&#44552;&#50529;(sum_amount)&#51012; &#44396;&#54616;&#49464;&#50836;<a class="anchor-link" href="#3.-%EC%A0%9C%ED%92%88(p_name)%EB%B3%84-%EA%B8%88%EC%95%A1(p_amount)-%EC%9D%98-%EC%A0%84%EC%B2%B4-%ED%95%A9%EC%9D%B8-%EC%B4%9D-%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(sum_amount)%EC%9D%84-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습2] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
@@ -15305,14 +15593,13 @@ df2 = (
     spark.read.format("csv")
     .option("header", "true")
     .option("inferSchema", "true")
-    .load("data/tbl_purchase.csv")
+    .load(f"{work_data}/tbl_purchase.csv")
 )
 df2.printSchema()
 df2.show()
 answer = df2.groupBy("p_name").agg(sum("p_amount").alias("sum_amount"))
 answer.printSchema()
 display(answer)
-
 ```
 
 </details>
@@ -15320,7 +15607,7 @@ display(answer)
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[22]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
@@ -15381,9 +15668,9 @@ root
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
 <table border='1'>
 <tr><th>p_name</th><th>sum_amount</th></tr>
+<tr><td>LG Cyon</td><td>1400000</td></tr>
 <tr><td>LG Gram</td><td>5300000</td></tr>
 <tr><td>LG Computer</td><td>4500000</td></tr>
-<tr><td>LG Cyon</td><td>1400000</td></tr>
 <tr><td>LG TV</td><td>3500000</td></tr>
 <tr><td>GoldStar TV</td><td>100000</td></tr>
 <tr><td>LG DIOS</td><td>2000000</td></tr>
@@ -15400,7 +15687,7 @@ root
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=green>3. [기본]</font> 매출 테이블 "data/tbl_purchase.csv" CSV 파일을 읽고</h3>
+<h3><font color=green>3. [기본]</font> 매출 테이블 f"{work_data}/tbl_purchase.csv" CSV 파일을 읽고</h3>
 <h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0-10%EA%B1%B4%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552; 10&#44148;&#51012; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0-10%EA%B1%B4%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EA%B5%AC%EB%A7%A4-%EA%B8%88%EC%95%A1%EC%9D%98-%ED%95%A9%EC%9D%B4-%EA%B0%80%EC%9E%A5-%EB%86%92%EC%9D%80-%EA%B3%A0%EA%B0%9D(p_uid)%EC%9D%84-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">3. &#44396;&#47588; &#44552;&#50529;&#51032; &#54633;&#51060; &#44032;&#51109; &#45458;&#51008; &#44256;&#44061;(p_uid)&#51012; &#44396;&#54616;&#49464;&#50836;<a class="anchor-link" href="#3.-%EA%B5%AC%EB%A7%A4-%EA%B8%88%EC%95%A1%EC%9D%98-%ED%95%A9%EC%9D%B4-%EA%B0%80%EC%9E%A5-%EB%86%92%EC%9D%80-%EA%B3%A0%EA%B0%9D(p_uid)%EC%9D%84-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습3] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
@@ -15410,7 +15697,7 @@ df3 = (
     spark.read.format("csv")
     .option("header", "true")
     .option("inferSchema", "true")
-    .load("data/tbl_purchase.csv")
+    .load(f"{work_data}/tbl_purchase.csv")
 )
 df3.printSchema()
 df3.show()
@@ -15424,7 +15711,7 @@ display(answer)
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[29]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
@@ -15485,12 +15772,12 @@ root
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
 <table border='1'>
 <tr><th>p_uid</th><th>sum_amount_per_user</th></tr>
-<tr><td>1</td><td>3800000</td></tr>
+<tr><td>0</td><td>100000</td></tr>
 <tr><td>3</td><td>1000000</td></tr>
 <tr><td>5</td><td>6000000</td></tr>
 <tr><td>4</td><td>4500000</td></tr>
+<tr><td>1</td><td>3800000</td></tr>
 <tr><td>2</td><td>1400000</td></tr>
-<tr><td>0</td><td>100000</td></tr>
 </table>
 
 </div>
@@ -15504,7 +15791,7 @@ root
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=red>4. [고급]</font> 샌프란시스코 긴급출동 데이터 CSV 파일인 "data/learning-spark/sf-fire-calls.csv"를 읽고</h3>
+<h3><font color=red>4. [고급]</font> 샌프란시스코 긴급출동 데이터 CSV 파일인 f"{work_data}/learning-spark/sf-fire-calls.csv"를 읽고</h3>
 <h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-3%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552;&#47484; 3&#44148; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-3%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%ED%98%B8%EC%B6%9C%EC%9D%98-%EC%A2%85%EB%A5%98(CallType)%EA%B0%80-%EC%96%B4%EB%96%A4-%EA%B2%83%EB%93%A4%EC%9D%B4-%EC%9E%88%EB%8A%94%EC%A7%80-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94-(%EC%A4%91%EB%B3%B5%EC%A0%9C%EA%B1%B0)">3. &#54840;&#52636;&#51032; &#51333;&#47448;(CallType)&#44032; &#50612;&#46500; &#44163;&#46308;&#51060; &#51080;&#45716;&#51648; &#52636;&#47141;&#54616;&#49464;&#50836; (&#51473;&#48373;&#51228;&#44144;)<a class="anchor-link" href="#3.-%ED%98%B8%EC%B6%9C%EC%9D%98-%EC%A2%85%EB%A5%98(CallType)%EA%B0%80-%EC%96%B4%EB%96%A4-%EA%B2%83%EB%93%A4%EC%9D%B4-%EC%9E%88%EB%8A%94%EC%A7%80-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94-(%EC%A4%91%EB%B3%B5%EC%A0%9C%EA%B1%B0)">&#182;</a></h4><h4 id="3.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%EC%9D%98-%EA%B0%80%EC%9E%A5-%EB%B9%88%EB%8F%84%EC%88%98%EA%B0%80-%EB%86%92%EC%9D%80-%EC%A2%85%EB%A5%98(CallType)%EB%A5%BC-%EA%B5%AC%ED%95%98%EA%B3%A0-%EB%B9%88%EB%8F%84%EC%88%98%EB%A5%BC-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">3. &#49356;&#54532;&#46976;&#49884;&#49828;&#53076;&#50640;&#49436; &#48156;&#49373;&#51032; &#44032;&#51109; &#48712;&#46020;&#49688;&#44032; &#45458;&#51008; &#51333;&#47448;(CallType)&#47484; &#44396;&#54616;&#44256; &#48712;&#46020;&#49688;&#47484; &#44396;&#54616;&#49464;&#50836;<a class="anchor-link" href="#3.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%EC%9D%98-%EA%B0%80%EC%9E%A5-%EB%B9%88%EB%8F%84%EC%88%98%EA%B0%80-%EB%86%92%EC%9D%80-%EC%A2%85%EB%A5%98(CallType)%EB%A5%BC-%EA%B5%AC%ED%95%98%EA%B3%A0-%EB%B9%88%EB%8F%84%EC%88%98%EB%A5%BC-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="4.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%ED%95%98%EB%8A%94-%EC%B5%9C%EA%B3%A0-%EB%B9%88%EB%8F%84%EC%88%98-3%EA%B1%B4%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80%EC%9A%94?">4. &#49356;&#54532;&#46976;&#49884;&#49828;&#53076;&#50640;&#49436; &#48156;&#49373;&#54616;&#45716; &#52572;&#44256; &#48712;&#46020;&#49688; 3&#44148;&#51008; &#47924;&#50631;&#51064;&#44032;&#50836;?<a class="anchor-link" href="#4.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%ED%95%98%EB%8A%94-%EC%B5%9C%EA%B3%A0-%EB%B9%88%EB%8F%84%EC%88%98-3%EA%B1%B4%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80%EC%9A%94?">&#182;</a></h4><details><summary>[실습3] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
@@ -15515,10 +15802,10 @@ df3 = (
     .read
     .option("header", "true")
     .option("inferSchema", "true")
-    .csv("data/learning-spark/sf-fire-calls.csv")
+    .csv(f"{work_data}/learning-spark/sf-fire-calls.csv")
 )
 df3.printSchema()
-df3.show(3)
+df3.show(5)
 df3.createOrReplaceTempView("fire_calls")
 spark.sql("select distinct(CallType) from fire_calls").show(truncate=False)
 
@@ -15531,7 +15818,7 @@ display(answer.limit(3))
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[31]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[24]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
@@ -15598,26 +15885,26 @@ only showing top 5 rows
 +--------------------------------------------+
 |CallType                                    |
 +--------------------------------------------+
-|Elevator / Escalator Rescue                 |
-|Marine Fire                                 |
-|Aircraft Emergency                          |
-|Confined Space / Structure Collapse         |
-|Administrative                              |
-|Alarms                                      |
-|Odor (Strange / Unknown)                    |
-|Citizen Assist / Service Call               |
-|HazMat                                      |
-|Watercraft in Distress                      |
-|Explosion                                   |
-|Oil Spill                                   |
 |Vehicle Fire                                |
-|Suspicious Package                          |
-|Extrication / Entrapped (Machinery, Vehicle)|
-|Other                                       |
-|Outside Fire                                |
-|Traffic Collision                           |
+|Alarms                                      |
+|Elevator / Escalator Rescue                 |
+|Explosion                                   |
 |Assist Police                               |
+|Marine Fire                                 |
+|Outside Fire                                |
+|Water Rescue                                |
 |Gas Leak (Natural and LP Gases)             |
+|Aircraft Emergency                          |
+|HazMat                                      |
+|Train / Rail Incident                       |
+|Extrication / Entrapped (Machinery, Vehicle)|
+|Medical Incident                            |
+|Smoke Investigation (Outside)               |
+|Fuel Spill                                  |
+|Oil Spill                                   |
+|Watercraft in Distress                      |
+|Confined Space / Structure Collapse         |
+|Structure Fire                              |
 +--------------------------------------------+
 only showing top 20 rows
 
@@ -15651,7 +15938,7 @@ only showing top 20 rows
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=red>5. [고급]</font> 샌프란시스코 긴급출동 데이터 CSV 파일인 "data/learning-spark/sf-fire-calls.csv"를 읽고 다음과 같은 질문도 실습해 보면 재미있을 것 같습니다</h3>
+<h3><font color=red>5. [숙제]</font> 샌프란시스코 긴급출동 데이터 CSV 파일인 f"{work_data}/learning-spark/sf-fire-calls.csv"를 읽고 다음과 같은 질문도 실습해 보면 재미있을 것 같습니다</h3>
 <h4 id="1.-2018-%EB%85%84%EC%9D%98-%EB%AA%A8%EB%93%A0-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0-%EC%9C%A0%ED%98%95%EC%9D%80-%EB%AC%B4%EC%97%87-%EC%9D%B4%EC%97%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">1. 2018 &#45380;&#51032; &#47784;&#46304; &#54868;&#51116; &#49888;&#44256; &#50976;&#54805;&#51008; &#47924;&#50631; &#51060;&#50632;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#1.-2018-%EB%85%84%EC%9D%98-%EB%AA%A8%EB%93%A0-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0-%EC%9C%A0%ED%98%95%EC%9D%80-%EB%AC%B4%EC%97%87-%EC%9D%B4%EC%97%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="2.-2018-%EB%85%84%EC%9D%98-%EB%AA%87-%EC%9B%94%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">2. 2018 &#45380;&#51032; &#47751; &#50900;&#50640; &#54868;&#51116; &#49888;&#44256;&#44032; &#44032;&#51109; &#47566;&#50520;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#2.-2018-%EB%85%84%EC%9D%98-%EB%AA%87-%EC%9B%94%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="3.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-2018-%EB%85%84%EC%97%90-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%9D%80-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">3. &#49356;&#54532;&#46976;&#49884;&#49828;&#53076;&#50640;&#49436; 2018 &#45380;&#50640; &#44032;&#51109; &#47566;&#51008; &#54868;&#51116; &#49888;&#44256;&#44032; &#48156;&#49373;&#54620; &#51648;&#50669;&#51008; &#50612;&#46356;&#51077;&#45768;&#44620;?<a class="anchor-link" href="#3.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-2018-%EB%85%84%EC%97%90-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%9D%80-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="4.-2018-%EB%85%84%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EC%97%90-%EB%8C%80%ED%95%9C-%EC%9D%91%EB%8B%B5-%EC%8B%9C%EA%B0%84%EC%9D%B4-%EA%B0%80%EC%9E%A5-%EB%82%98%EC%81%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">4. 2018 &#45380;&#50640; &#54868;&#51116; &#49888;&#44256;&#50640; &#45824;&#54620; &#51025;&#45813; &#49884;&#44036;&#51060; &#44032;&#51109; &#45208;&#49244; &#51648;&#50669;&#51008; &#50612;&#46356;&#51077;&#45768;&#44620;?<a class="anchor-link" href="#4.-2018-%EB%85%84%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EC%97%90-%EB%8C%80%ED%95%9C-%EC%9D%91%EB%8B%B5-%EC%8B%9C%EA%B0%84%EC%9D%B4-%EA%B0%80%EC%9E%A5-%EB%82%98%EC%81%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="5.-2018-%EB%85%84-%EC%A4%91-%EC%96%B4%EB%8A%90-%EC%A3%BC%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">5. 2018 &#45380; &#51473; &#50612;&#45712; &#51452;&#50640; &#54868;&#51116; &#49888;&#44256;&#44032; &#44032;&#51109; &#47566;&#50520;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#5.-2018-%EB%85%84-%EC%A4%91-%EC%96%B4%EB%8A%90-%EC%A3%BC%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="6.-%EC%9D%B4%EC%9B%83,-%EC%9A%B0%ED%8E%B8-%EB%B2%88%ED%98%B8,-%ED%99%94%EC%9E%AC-%EC%A0%84%ED%99%94-%EA%B1%B4%EC%88%98%EA%B0%84%EC%97%90-%EC%83%81%EA%B4%80-%EA%B4%80%EA%B3%84%EA%B0%80-%EC%9E%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">6. &#51060;&#50883;, &#50864;&#54200; &#48264;&#54840;, &#54868;&#51116; &#51204;&#54868; &#44148;&#49688;&#44036;&#50640; &#49345;&#44288; &#44288;&#44228;&#44032; &#51080;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#6.-%EC%9D%B4%EC%9B%83,-%EC%9A%B0%ED%8E%B8-%EB%B2%88%ED%98%B8,-%ED%99%94%EC%9E%AC-%EC%A0%84%ED%99%94-%EA%B1%B4%EC%88%98%EA%B0%84%EC%97%90-%EC%83%81%EA%B4%80-%EA%B4%80%EA%B3%84%EA%B0%80-%EC%9E%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="7.-Parquet-%ED%8C%8C%EC%9D%BC-%EB%98%90%EB%8A%94-SQL-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC%EC%9D%B4-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B3%A0-%EB%8B%A4%EC%8B%9C-%EC%9D%BD%EC%9D%84-%EC%88%98%EC%9E%88%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9E%85%EB%8B%88%EA%B9%8C?">7. Parquet &#54028;&#51068; &#46608;&#45716; SQL &#53580;&#51060;&#48660;&#51012; &#49324;&#50857;&#54616;&#50668;&#51060; &#45936;&#51060;&#53552;&#47484; &#51200;&#51109;&#54616;&#44256; &#45796;&#49884; &#51069;&#51012; &#49688;&#51080;&#45716; &#48169;&#48277;&#51008; &#47924;&#50631;&#51077;&#45768;&#44620;?<a class="anchor-link" href="#7.-Parquet-%ED%8C%8C%EC%9D%BC-%EB%98%90%EB%8A%94-SQL-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC%EC%9D%B4-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B3%A0-%EB%8B%A4%EC%8B%9C-%EC%9D%BD%EC%9D%84-%EC%88%98%EC%9E%88%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9E%85%EB%8B%88%EA%B9%8C?">&#182;</a></h4>
 </div>
 </div>
