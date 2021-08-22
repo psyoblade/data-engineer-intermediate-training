@@ -2226,7 +2226,7 @@ netstat -tuplen
 
 #### 5-5-10. [iptables](https://man7.org/linux/man-pages/man8/iptables.8.html) : 리눅스 장비의 In/Out Port 관리 도구
 
-> [iptables 를 활용한 Incoming, Outgoing Port 관리](https://lindarex.github.io/ubuntu/ubuntu-iptables-setting/)
+> [우분투(Ubuntu) 환경에 iptables 설정하기](https://lindarex.github.io/ubuntu/ubuntu-iptables-setting/)
 
 * 실습을 위해 기동된 컨테이너는 종료하고 별도의 컨테이너를 기동합니다
 ```bash
@@ -2316,12 +2316,17 @@ docker-compose up -d
 iptables -A INPUT -p tcp --dport 3306 -j REJECT
 ```
 
-* Ubuntu 서버에서 MySQL 서버로 3306 접속하는 포트로 나가는 포트를 막습니다
-  - Append, Check, Delete 명령으로 테스트 합니다
+<details><summary> :closed_book: #. [고급] Ubuntu 서버에서 MySQL 서버로 접근하는 3306 포트를 막아보세요 </summary>
+
+> 아래와 유사한 방법으로 접근하셨다면 정답입니다
+
 ```bash
 # terminal @ ubuntu
 iptables -A OUTPUT -p tcp --dport 3306 -j REJECT
 ```
+
+</details>
+<br>
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
