@@ -11,6 +11,8 @@ services:
       replicas: 1
     cap_add:
       - NET_ADMIN
+    volumes:
+      - ./example:/example
   mysql:
     container_name: mysql
     image: psyoblade/data-engineer-mysql:1.1

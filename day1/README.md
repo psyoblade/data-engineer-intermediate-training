@@ -754,7 +754,7 @@ cat > Dockerfile
 * 아래의 내용을 복사해서 붙여넣은 다음 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 나오면 파일이 생성됩니다
 ```bash
 FROM ubuntu:18.04
-LABEL maintainer="park.suhyuk@gmail.com"
+LABEL maintainer="student@lg.com"
 
 RUN apt-get update && apt-get install -y rsync tree
 
@@ -880,7 +880,7 @@ docker ps -f name=ubuntu_500m
 > <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 
 
-<details><summary> :blue_book: 6. [중급] 메모리 제약을 주지 않고 해당 컨테이너의 상태를 확인해 보세요</summary>
+<details><summary> :blue_book: 6. [중급] 메모리 제약을 주지 않은 컨테이너`ubuntu_unlimited`를 기동하고 컨테이너 상태를 확인해 보세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -985,7 +985,7 @@ docker exec -it mysql-persist mysql --port=3307 -uuser -ppass
 
 #### 3-9-2. 볼륨 확인 실습
 
-<details><summary> :blue_book: 9. [중급] mysql-persist 컨테이너를 강제 종료하고, 동일한 설정으로 다시 생성하여 테이블이 존재하는지 확인해 보세요</summary>
+<details><summary> :closed_book: 9. [고급] mysql-persist 컨테이너를 강제 종료하고, 동일한 설정으로 다시 생성하여 테이블이 존재하는지 확인해 보세요</summary>
 
 > 테이블이 존재하고 데이터가 있다면 정답입니다
 
@@ -1100,8 +1100,7 @@ docker-compose down
 <br>
 
 
-
-<details><summary> :blue_book: #. [중급] 컴포즈 명령어(--scale)를 이용하여 우분투 컨테이너를 3개 띄워보세요  </summary>
+<details><summary> :blue_book: 10. [중급] 컴포즈 명령어(--scale)를 이용하여 우분투 컨테이너를 3개 띄워보세요  </summary>
 
 > 아래와 유사하게 작성 및 실행했다면 정답입니다
 
@@ -1533,7 +1532,7 @@ more -5 data/apache-access.log
 ```
 > more 명령어는 <kbd>Q</kbd> 키를 통해서 빠져나올 수 있습니다
 
-<details><summary> :green_book: 10. [기본] data/hadoop-hdfs-secondarynamenode.log 파일에서 exception 문자열이 발견된 위치부터 10줄씩 출력하세요 </summary>
+<details><summary> :green_book: 11. [기본] data/hadoop-hdfs-secondarynamenode.log 파일에서 exception 문자열이 발견된 위치부터 10줄씩 출력하세요 </summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -1555,7 +1554,7 @@ head -c 1K data/apache-access.log > 1k.log
 ```
 > 로그의 처음부터 1024 bytes 만큼 읽어서 파일을 생성합니다
 
-<details><summary> :green_book: 11. [기본] data/apache-access.log 로그의 첫 번째 30라인만 출력하세요</summary>
+<details><summary> :green_book: 12. [기본] data/apache-access.log 로그의 첫 번째 30라인만 출력하세요</summary>
 
 ```bash
 head -n 30 data/apache-access.log
@@ -1577,7 +1576,7 @@ tail -n 30 data/apache-access.log
 ```
 > 로그의 마지막 30라인만 출력합니다
 
-<details><summary> :green_book: 12. [기본] noexists.log 로그가 없어도 계속 tail 하고 해당 파일에 로그가 추가되면 계속 tailing 하는 명령을 수행하세요 </summary>
+<details><summary> :green_book: 13. [기본] noexists.log 로그가 없어도 계속 tail 하고 해당 파일에 로그가 추가되면 계속 tailing 하는 명령을 수행하세요 </summary>
 
 ```bash
 tail -F data/notexist.log
@@ -1613,7 +1612,7 @@ wc -l data/*
 ```
 > 개별 파일의 라인수와 전체 라인수를 출력합니다
 
-<details><summary> :green_book: 13. [기본] data/apache-access.log 로그에 포함된 단어의 수를 출력하세요</summary>
+<details><summary> :green_book: 14. [기본] data/apache-access.log 로그에 포함된 단어의 수를 출력하세요</summary>
 
 ```bash
 wc -w data/apache-access.log
@@ -1637,7 +1636,7 @@ nl -b data/apache-access.log          # 로그를 라인 수와 함께 출력합
 nl -s ',<tab>' data/apache-access.log # 000123,<line> 와 같이 구분자를 넣어 출력합니다
 ```
 
-<details><summary> :blue_book: 14. [중급] data/apache-access.log '000123' 과 같이 0을 패딩 후 출력하세요</summary>
+<details><summary> :blue_book: 15. [중급] data/apache-access.log '000123' 과 같이 0을 패딩 후 출력하세요</summary>
 
 ```bash
 nl -n rz data/apache-access.log
@@ -1666,7 +1665,7 @@ nl -n rz data/apache-access.log
 cat data/corona.body.tsv | sed 's/,//g' | cut --output-delimiter=',' -f1,2,3 | sort -t, -k3nr | head     # 사망자 톱 10
 ```
 
-<details><summary> :blue_book: 15. [중급] 확진자 톱 10을 구하세요 </summary>
+<details><summary> :closed_book: 16. [고급] 확진자 톱 10을 구하세요 </summary>
 
 ```bash
 cat data/corona.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-delimiter=',' -f1,2,3 | sort -t, -k2nr | head     # 확진자 톱 10
@@ -1684,7 +1683,7 @@ cat data/corona.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-deli
   - 이번에는 제일 처음 컬럼에 번호가 있어 컬럼의 순서가 다르며 `data/corona.2021.header.tsv` 파일을 통해 확인할 수 있습니다
   - 데이터 값 가운데 `N/A` 으로 명시된 값들을 `0` 으로 변경하여 처리할 수 있도록 해주세요
 
-<details><summary> :blue_book: 16. [중급] 사망자/확진자 톱 10을 구하세요 </summary>
+<details><summary> :blue_book: 17. [중급] 사망자/확진자 톱 10을 구하세요 </summary>
 
 * 출력 컬럼 기준이 1:국가,2:확진자,3:사망자,4:완치 (-f2,3,4,5) 이므로 사망자(3), 확진자(2)
 ```bash
@@ -1739,7 +1738,7 @@ ls -al | cut -b -10 --complement    					# ls -al 결과의 앞 10바이트를 �
 * `root:x:0:0:root:/root:/bin/bash`
   - 계정명 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
 
-<details><summary> :blue_book: 17. [중급] 패스워드 파일에서 로그인 쉘 가운데 가장 빈도가 높은 3개를 찾아보세요</summary>
+<details><summary> :blue_book: 18. [중급] 패스워드 파일에서 로그인 쉘 가운데 가장 빈도가 높은 3개를 찾아보세요</summary>
 
 ```bash
 cat /etc/passwd | cut -d: -f7 | sort | uniq -c | sort -nr | head -3
@@ -1766,7 +1765,7 @@ head /etc/passwd | tr ':' ' '   # 패스워드 파일의 구분자 콜론을 공
 ls -al | tr -d [:space:]        # ls -al 결과의 한 줄의 문자열로 출력합니다
 ```
 
-<details><summary> :blue_book: 18. [중급] 패스워드 파일의 계정 이름만 대문자로 출력하세요</summary>
+<details><summary> :blue_book: 19. [중급] 패스워드 파일의 계정 이름만 대문자로 출력하세요</summary>
 
 ```bash
 head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
@@ -1793,7 +1792,7 @@ head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
 sed -n '3,5p' /etc/passwd                     # 패스워드 파일의 3~5번째 줄을 출력합니다
 ```
 
-<details><summary> :blue_book: 19. [중급] 패스워드 파일(/etc/passwd)을 읽어서 ubuntu 계정을 찾고, kubundu 로 변경하세요</summary>
+<details><summary> :blue_book: 20. [중급] 패스워드 파일(/etc/passwd)을 읽어서 ubuntu 계정을 찾고, kubundu 로 변경하세요</summary>
 
 ```bash
 sed 's/ubuntu/kubuntu/g' /etc/passwd
@@ -1830,7 +1829,7 @@ awk '/root/ { print $0 }' /etc/passwd                                 # 패스�
 * `root:x:0:0:root:/root:/bin/bash`
   - 계정명 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
 
-<details><summary> :blue_book: 20. [중급] /etc 경로에 존재하는 파일의 user 와 group 의 유일한(uniq) 값만 출력하세요</summary>
+<details><summary> :blue_book: 21. [중급] /etc 경로에 존재하는 파일의 user 와 group 의 유일한(uniq) 값만 출력하세요</summary>
 
 ```bash
 ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
@@ -1860,7 +1859,7 @@ ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
 # rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/home/ubuntu/data .    # EC2 장비의 data 경로를 로컬에 복사합니다
 ```
 
-<details><summary> :blue_book: 21. [중급] /tmp/backup 경로를 생성하고 linux-for-dummies 폴더 전체를 백업하세요 </summary>
+<details><summary> :blue_book: 22. [중급] /tmp/backup 경로를 생성하고 linux-for-dummies 폴더 전체를 백업하세요 </summary>
 
 ```bash
 cd /home/ubuntu/work/linux-for-dummies
@@ -2316,7 +2315,7 @@ docker-compose up -d
 iptables -A INPUT -p tcp --dport 3306 -j REJECT
 ```
 
-<details><summary> :closed_book: #. [고급] Ubuntu 서버에서 MySQL 서버로 접근하는 3306 포트를 막아보세요 </summary>
+<details><summary> :closed_book: 23. [고급] Ubuntu 서버에서 MySQL 서버로 접근하는 3306 포트를 막아보세요 </summary>
 
 > 아래와 유사한 방법으로 접근하셨다면 정답입니다
 
@@ -2612,7 +2611,7 @@ hdfs dfs -df /
 hdfs dfs -du -s -h /
 ```
 
-<details><summary> :blue_book: 22. [기본] /tmp 경로에 임의의 파일 uploaded.txt 파일을 업로드하고 df 및 du 명령을 실행해 보세요</summary>
+<details><summary> :blue_book: 24. [기본] /tmp 경로에 임의의 파일 uploaded.txt 파일을 업로드하고 df 및 du 명령을 실행해 보세요</summary>
 
 ```bash
 # docker
