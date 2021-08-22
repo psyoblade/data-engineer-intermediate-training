@@ -2224,9 +2224,9 @@ netstat -tuplen
 <br>
 
 
-#### 5-5-10. iptables : 리눅스 장비의 In/Out Port 관리 도구
+#### 5-5-10. [iptables](https://man7.org/linux/man-pages/man8/iptables.8.html) : 리눅스 장비의 In/Out Port 관리 도구
 
-> iptables 도구를 통해서 Incoming, Outgoing Port 를 관리할 수 있습니다 - [ubuntu-iptables-settings](https://lindarex.github.io/ubuntu/ubuntu-iptables-setting/)
+> [iptables 를 활용한 Incoming, Outgoing Port 관리](https://lindarex.github.io/ubuntu/ubuntu-iptables-setting/)
 
 * 실습을 위해 기동된 컨테이너는 종료하고 별도의 컨테이너를 기동합니다
 ```bash
