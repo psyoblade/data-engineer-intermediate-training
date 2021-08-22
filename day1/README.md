@@ -1068,17 +1068,23 @@ cd /home/ubuntu/work/data-engineer-${course}-training/day1
 ```
 <br>
 
+
 ### Docker Compose 기본 명령어
 
 ### 4-1. 컨테이너 관리
 
 > 도커 컴포즈는 **컨테이너를 기동하고 작업의 실행, 종료 등의 명령어**를 주로 다룬다는 것을 알 수 있습니다. 아래에 명시한 커맨드 외에도 도커 수준의 명령어들(pull, create, start, stop, rm)이 존재하지만 잘 사용되지 않으며 일부 deprecated 되어 자주 사용하는 명령어 들로만 소개해 드립니다
 
+* [The Compose Specification](https://github.com/psyoblade/compose-spec/blob/master/spec.md)
+* [Deployment Support](https://github.com/psyoblade/compose-spec/blob/master/deploy.md)
+
+<br>
+
 #### 4-1-1. up : `docker-compose.yml` 파일을 이용하여 컨테이너를 이미지 다운로드(pull), 생성(create) 및 시작(start) 시킵니다
-  - <kbd>-f <filename></kbd> : 별도 yml 파일을 통해 기동시킵니다 (default: `-f docker-compose.yml`)
+  - <kbd>-f [filename]</kbd> : 별도 yml 파일을 통해 기동시킵니다 (default: `-f docker-compose.yml`)
   - <kbd>-d, --detach <filename></kbd> : 서비스들을 백그라운드 모드에서 수행합니다
   - <kbd>-e, --env `KEY=VAL`</kbd> : 환경변수를 전달합니다
-  - <kbd>--scale <service>=<num></kbd> : 특정 서비스를 복제하여 기동합니다 (`container_name` 충돌나지 않도록 주의)
+  - <kbd>--scale [service]=[num]</kbd> : 특정 서비스를 복제하여 기동합니다 (`container_name` 충돌나지 않도록 주의)
 ```bash
 # docker-compose up <options> <services>
 docker-compose up -d
@@ -1086,11 +1092,41 @@ docker-compose up -d
 <br>
 
 #### 4-1-2. down : 컨테이너를 종료 시킵니다
-  - <kbd>-t, --timeout <int> <filename></kbd> : 셧다운 타임아웃을 지정하여 무한정 대기(SIGTERM)하지 않고 종료(SIGKILL)합니다 (default: 10초)
+  - <kbd>-t, --timeout [int] <filename></kbd> : 셧다운 타임아웃을 지정하여 무한정 대기(SIGTERM)하지 않고 종료(SIGKILL)합니다 (default: 10초)
 ```bash
 # docker-compose down <options> <services>
 docker-compose down
 ```
+<br>
+
+
+
+<details><summary> :blue_book: #. [중급] 컴포즈 명령어(--scale)를 이용하여 우분투 컨테이너를 3개 띄워보세요  </summary>
+
+> 아래와 유사하게 작성 및 실행했다면 정답입니다
+
+* `docker-compose.yml` 예제입니다 
+  - 우분투 이미지를 기본 이미지를 사용해도 무관합니다
+```bash
+# cat docker-compose.yml
+version: "3"
+
+services:
+  ubuntu:
+    image: psyoblade/data-engineer-ubuntu:20.04
+    restart: always
+    tty: true
+
+networks:
+  default:
+```
+* 아래와 같이 실행합니다
+```bash
+# terminal
+docker-compose up -d --scale ubuntu=2
+```
+
+</details>
 <br>
 
 
@@ -1099,8 +1135,8 @@ docker-compose down
 #### 4-2-1. exec : 컨테이너에 커맨드를 실행합니다
   - <kbd>-d, --detach</kbd> : 백그라운드 모드에서 실행합니다
   - <kbd>-e, --env `KEY=VAL`</kbd> : 환경변수를 전달합니다
-  - <kbd>-u, --user <string></kbd> : 이용자를 지정합니다
-  - <kbd>-w, --workdir <string></kbd> : 워킹 디렉토리를 지정합니다
+  - <kbd>-u, --user [string]</kbd> : 이용자를 지정합니다
+  - <kbd>-w, --workdir [string]</kbd> : 워킹 디렉토리를 지정합니다
 ```bash
 # docker-compose exec [options] [-e KEY=VAL...] [--] SERVICE COMMAND [ARGS...]
 docker-compose up -d
@@ -2183,6 +2219,108 @@ nmap 192.168.0.1 -p 80
 telnet 192.168.0.1 80
 echo > /dev/tcp/192.168.0.1/80 && echo "port is opened"
 netstat -tuplen
+```
+
+<br>
+
+
+#### 5-5-10. iptables : 리눅스 장비의 In/Out Port 관리 도구
+
+> iptables 도구를 통해서 Incoming, Outgoing Port 를 관리할 수 있습니다 - [ubuntu-iptables-settings](https://lindarex.github.io/ubuntu/ubuntu-iptables-setting/)
+
+* 실습을 위해 기동된 컨테이너는 종료하고 별도의 컨테이너를 기동합니다
+```bash
+# terminal
+cd /home/ubuntu/work/data-engineer-${course}-training/day1
+docker-compose down
+cd /home/ubuntu/work/data-engineer-${course}-training/day1/ubuntu
+docker-compose up -d
+```
+
+* Command : iptables 가 수행할 작업을 지정합니다
+
+  - <kbd>-A, --append chain</kbd> : 선택한 체인 끝의 하나 이상의 룰을 추가
+  - <kbd>-C, --check chain</kbd> : 선택한 체임의 룰과 일치하는 룰이 있는지 확인
+  - <kbd>-D, --delete chain [rulenum]</kbd> : 선택한 체인에서 하나 이상의 룰을 삭제합니다
+  - <kbd>-I, --insert chain [rulenum]</kbd> : 룰 넘버로 선택한 체인에 하나 이상의 룰을 삽입 (default=1)
+  - <kbd>-R, --replace chain rulenum</kbd> : 룰 넘버로 선택한 체인에서 룰을 교체
+  - <kbd>-L, --list [chain [rulenum]]</kbd> : 선택한 체인의 모들 룰을 조회하고, 선택하지 않으면 모든 체인의 룰을 조회합니다 (화면 출력용)
+  - <kbd>-S, --list-rules [chain [rulenum]]</kbd> : -L 옵션과 동일하지만 재사용을 위한 출력 포맷인 점이 다릅니다
+  - <kbd>-F, --flush [chain]</kbd> : 선택한 체인의 모든 룰을 삭제
+  - <kbd>-N, --new chain</kbd> : 이용자 체인을 생성합니다
+  - <kbd>-E, --rename-chain [old] [new] </kbd> : 사용자 정의 체인의 이름을 변경
+  - <kbd>-X, --delete-chain chain </kbd> : 사용자 정의 체인을 삭제합니다
+  - <kbd>-v, --verbose</kbd> : 상세한 정보를 출력합니다
+
+<br>
+
+* Parameters : iptables 룰의 스펙을 구성할 때 사용합니다
+
+  - <kbd>-4, --ipv4</kbd> : IPv4 허용
+  - <kbd>-6, --ipv6</kbd> : IPv6 허용
+  - <kbd>-p, --protocol</kbd> : 룰 또는 패킷의 프로토콜을 확인
+  - <kbd>-s, --source</kbd> : **출발지 네트워크, 호스트, 네트워크 주소**를 확인합니다
+  - <kbd>-d, --destination</kbd> : **목적지 네트워크, 호스트, 네트워크 주소**를 확인합니다
+  - <kbd>-m, --match</kbd> : 사용할 확장 패킷 모듈을 지정
+  - <kbd>-j, --jump</kbd> : 룰의 **타겟(target)을 지정**
+  - <kbd>-g, --goto</kbd> : 사용자 지정 체인으로 계속 처리하도록 명시
+  - <kbd>-i, --in-interface</kbd> : 패킷 수신을 위한 인터페이스 명시
+  - <kbd>-o, --out-interface</kbd> : 패킷 송신을 위한 인터페이스 명시
+
+<br>
+
+* Target : packet 이 rule 과 일치할 때에 실행되는 명령
+
+| 타겟 | 설명 | 기타 |
+| --- | --- | --- |
+| ACCEPT | 패킷을 허용 | - |
+| DROP | 패킷을 차단 | 사용자에게 오류 메시지를 보내지 않음 |
+| REJECT | 패킷을 차단 | 사용자에게 오류 메시지를 전송  |
+| LOG | 패킷을 기록 | syslog |
+| RETURN | 체인 통과를 중지하고, 이전(호출) 체인의 다음 규칙에 따라 다시 시작 | - |
+| QUEUE | 애플리케이션에 패킷을 큐에 넣습니다 | - |
+| SNAT | 소스 네트워크 주소 변환을 이용하여 패킷의 IP 헤더에 Source IP Address 재사용 시에 사용됩니다 | Source Network Address Translation |
+| DNAT | 타겟 네트워크 주소 변환을 이용하여 패킷의 IP 헤더에 Destination IP Address 재사용 시에 사용됩니다 | Destination Network Address Translation |
+
+<br>
+
+* Chain
+  - 순차적으로 검사하는 규칙(Rule) 집합
+  - 패킷이 Rule에 일치하면 관련작업이 실행되고, *체인의 나머지 룰은 확인하지 않습*니다.
+  - 필터 테이블에는 사전 정의된 3개의 체인(INPUT, FORWARD, OUTPUT)과 기타(PREROUTING, POSTROUTING)의 2개 체인이 존재합니다
+	- 사전 정의된 3개의 체인은 삭제가 되지 않고 영구적으로 사용되며 `-N` 옵션으로 커스텀 구성이 가능합니다
+
+| 체인 | 설명 | 기타 |
+| --- | --- | --- |
+| INPUT | 시스템으로 들어오는 패킷의 정책 룰 | - |
+| OUTPUT | 시스템에서 나가는 패킷의 정책 룰 | - |
+| FORWRD | 시스템에서 다른 시스템으로 전달하는 패킷의 정책 룰 | - |
+| PREROUTING  | 패킷이 INPUT 체인에 도달하기 전에 패킷을 변경합니다 | - |
+| POSTROUTING | 패킷이 OUTPUT 체인을 종료한 이후에 패킷을 변경합니다 | - |
+
+<br>
+
+* Table : iptables 에는 filter, nat, mangle, raw, security 의 5개 테이블이 존재합니다
+  - filter : **기본 테이블이며 INPUT, OUTPUT, FORWARD 로 구성**
+  - nat : 새로운 연결을 생성하는 패킷이 발견되면 참조됩니다
+	- mangle : 특수한 패킷 변경에 사용
+	- raw : NOTRAC 대상과 함께 연결 추적의 제외 구성시 사용
+	- security : MAC 네트워킹 룰에 사용
+
+<br>
+
+* MySQL 서버에서 외부로 부터 접근하는 3306 포트 접속을 거절합니다
+  - Append, Check, Delete 명령으로 테스트 합니다
+```bash
+# terminal @ mysql
+iptables -A INPUT -p tcp --dport 3306 -j REJECT
+```
+
+* Ubuntu 서버에서 MySQL 서버로 3306 접속하는 포트로 나가는 포트를 막습니다
+  - Append, Check, Delete 명령으로 테스트 합니다
+```bash
+# terminal @ ubuntu
+iptables -A OUTPUT -p tcp --dport 3306 -j REJECT
 ```
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
