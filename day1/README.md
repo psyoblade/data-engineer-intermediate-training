@@ -3,7 +3,7 @@
 > 전체 과정에서 사용하는 기본적인 명령어 혹은 서비스(git, docker, docker-compose, linux, hdfs, sql) 등에 대해 실습하고 사용법을 익힙니다.
 
 - 범례
-  * :green_book: : 기본, :blue_book: : 중급
+  * :green_book: : 기본, :blue_book: : 중급, :closed_book: : 고급
 
 - 목차
   * [1. 클라우드 장비에 접속](#1-클라우드-장비에-접속)
