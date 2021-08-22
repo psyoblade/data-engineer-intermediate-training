@@ -1792,10 +1792,10 @@ head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
 sed -n '3,5p' /etc/passwd                     # 패스워드 파일의 3~5번째 줄을 출력합니다
 ```
 
-<details><summary> :blue_book: 20. [중급] 패스워드 파일(/etc/passwd)을 읽어서 ubuntu 계정을 찾고, kubundu 로 변경하세요</summary>
+<details><summary> :closed_book: 20. [고급] 예제 패스워드 파일(/example/passwd)을 읽어서 nobody 계정을 찾고, somebody 로 변경하세요</summary>
 
 ```bash
-sed 's/ubuntu/kubuntu/g' /etc/passwd
+sed -i 's/nobody/somebody/g' /example/passwd
 ```
 
 </details>
@@ -1859,7 +1859,7 @@ ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
 # rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/home/ubuntu/data .    # EC2 장비의 data 경로를 로컬에 복사합니다
 ```
 
-<details><summary> :blue_book: 22. [중급] /tmp/backup 경로를 생성하고 linux-for-dummies 폴더 전체를 백업하세요 </summary>
+<details><summary> :closed_book: 22. [고급] /tmp/backup 경로를 생성하고 linux-for-dummies 폴더 전체를 백업하세요 </summary>
 
 ```bash
 cd /home/ubuntu/work/linux-for-dummies

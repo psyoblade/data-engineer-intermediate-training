@@ -82,7 +82,7 @@ database="testdb"
 # docker
 ask sqoop eval --connect jdbc:mysql://mysql:3306/${database} --username ${username} --password ${password} -e "select * from user_20201026"
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 1. [기본] 정답확인</summary>
 
 > 아래의 총 9개의 레코드가 출력되면 성공입니다
 
@@ -124,7 +124,7 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${databa
 --username ${username} --password ${password} --table ${basename}_${basedate} \
 --target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 2. [기본] 정답확인</summary>
 
 > `21/07/10 16:27:47 INFO mapreduce.ImportJobBase: Retrieved 9 records.` 와 같은 메시지가 출력되면 성공입니다
 
@@ -151,7 +151,7 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/$databas
 --username ${username} --password ${password} --table ${basename}_${basedate} \
 --target-dir "file:///tmp/target/${basename}/${basedate}" --as-parquetfile --delete-target-dir
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 3. [기본] 정답확인</summary>
 
 > `21/07/10 16:27:47 INFO mapreduce.ImportJobBase: Retrieved 11 records.` 와 같은 메시지가 출력되면 성공입니다
 
@@ -180,7 +180,7 @@ filename=""
 # docker
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 4. [기본] 정답확인</summary>
 
 > 매출(purchase) 테이블의 경우 아래와 같은 출력이 나오면 성공입니다
 ```
@@ -210,7 +210,7 @@ message purchase_20201026 {
 ask hadoop jar /jdbc/parquet-tools-1.8.1.jar cat file://${filename}
 ```
 
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 5. [기본] 정답확인</summary>
 
 > 아래와 같은 데이터가 출력되면 정상입니다
 
@@ -306,7 +306,7 @@ cat `find /tmp/target/access/20201026 -name '*.json'` | wc -l
 wc -l /tmp/source/access.csv
 ```
 
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 6. [기본] 정답확인</summary>
 
 > 수집된 파일의 라인 수와, 원본 로그의 라인 수가 16 라인으로 일치한다면 정상입니다 
 
@@ -376,7 +376,7 @@ spark.conf.set("spark.sql.repl.eagerEval.enabled", True) # display enabled
 spark.conf.set("spark.sql.repl.eagerEval.truncate", 100) # display output columns size
 spark
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 7. [기본] 정답확인</summary>
 
 > 스파크 엔진의 버전 `v3.0.1`이 출력되면 성공입니다
 
@@ -415,7 +415,7 @@ purchase26 = <매출 데이터 경로에서 읽어서 스키마와, 데이터를
 ```python
 access26 = <접속 데이터 경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 8. [기본] 정답확인</summary>
 
 > 고객, 매출 및 접속 데이터의 스키마와, 데이터가 모두 출력되면 성공입니다
 
@@ -432,7 +432,7 @@ purchase26.createOrReplaceTempView("purchase26")
 access26.createOrReplaceTempView("access26")
 spark.sql("show tables '*26'")
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 9. [기본] 정답확인</summary>
 
 > `show tables` 결과로 `user26`, `purchase26`, `access26` 3개 테이블이 출력되면 성공입니다
 
@@ -462,7 +462,7 @@ access.createOrReplaceTempView("access")
 
 spark.sql("show tables")
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 10. [기본] 정답확인</summary>
 
 > `show tables` 결과에 총 6개의 테이블이 출력되면 성공입니다
 
@@ -498,7 +498,7 @@ spark.sql("describe access")
 # countTop="<가장 접속횟수가 많은 고객의 아이디를 출력하세요>"
 # spark.sql(countTop)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 11. [기본] 정답확인</summary>
 
 > 위에서부터 각각 "여:1, 남:3", "최소: 1000000, 최대: 4500000", "2, 4" 둘 중에 하나가 나오면 정답입니다
 
@@ -524,7 +524,7 @@ display(access)
 # dau = spark.sql(distinctAccessUser)
 # display(dau)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 12. [기본] 정답확인</summary>
 
 > "DAU : 9"가 나오면 정답입니다 
 
@@ -546,7 +546,7 @@ display(purchase)
 # pu = spark.sql(distinctPayingUser)
 # display(pu)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 13. [기본] 정답확인</summary>
 
 > "PU : 5"가 나오면 정답입니다
 
@@ -568,7 +568,7 @@ display(purchase)
 # dr = spark.sql(sumOfDailyRevenue)
 # display(dr)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 14. [기본] 정답확인</summary>
 
 > "DR : 12900000" 이 나오면 정답입니다
 
@@ -591,7 +591,7 @@ v_dr = dr.collect()[0]["DR"]
 
 # print("ARPU : {}".format(<유저당 매출 금액 계산식>))
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 15. [기본] 정답확인</summary>
 
 > "ARPU : 1433333.3333333333" 가 나오면 정답입니다
 
@@ -610,7 +610,7 @@ v_dr = dr.collect()[0]["DR"]
 ```python
 # print("ARPPU : {}".format(<구매유저 당 매출 금액 계산식>))
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 16. [기본] 정답확인</summary>
 
 > "ARPPU : 2580000.0" 가 나오면 정답입니다
 
@@ -681,7 +681,7 @@ yesterday.printSchema()
 # uids.printSchema()
 # display(uids)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 17. [기본] 정답확인</summary>
 
 > 총 9명의 고객정보가 출력되고, 5명은 어제의 정보를 가지고 있으나, 4명은 null 값을 가지고 있다면 정답입니다
 
@@ -718,7 +718,7 @@ user.printSchema()
 # 
 # display(dim1)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 18. [기본] 정답확인</summary>
 
 > 총 7개의 컬럼이 있고, 마지막에 `d_name`, `d_gener` 컬럼이 추가되며, 모든 고객의 이름과 성별이 추가되었다면 정답입니다
 
@@ -742,7 +742,7 @@ user.printSchema()
 # dim2 = dim1.na.fill(fillDefaultValue)
 # display(dim2)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 19. [기본] 정답확인</summary>
 
 > 고객번호 6~9번까지의 접속, 매출횟수, 매출금액이 null 이 아니라 0으로 채워졌다면 성공입니다
 
@@ -782,7 +782,7 @@ dim2.printSchema()
 # dim3.printSchema()
 # display(dim3)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 20. [기본] 정답확인</summary>
 
 > 마지막 컬럼에 `d_acount` 가 추가되고 모든 고객의 접속횟수가 0 이상으로 나오면 정답입니다
 
@@ -825,7 +825,7 @@ dim3.printSchema()
 # dim4.printSchema()
 # display(dim4)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 21. [기본] 정답확인</summary>
 
 > 마지막 두 개 컬럼이 고객의 매출금액(`d_pamount`)과 매출횟수(`d_pcount`)가 추가되었고 값이 계산되었다면 정답입니다
 
@@ -866,7 +866,7 @@ dim4.printSchema()
 # dimension.printSchema()
 # display(dimension)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 22. [기본] 정답확인</summary>
 
 > 마지막 컬럼에 `d_first_purchase`이 추가되었고, 4,8번 고객을 제외한 모든 고객은 구매이력이 있다면 정답입니다
 
@@ -897,7 +897,7 @@ yesterday.printSchema()
 # v_nu = nu.count()
 # print(v_nu)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 23. [기본] 정답확인</summary>
 
 > 신규유저 `NU : 4` 면 정답입니다
 
@@ -917,7 +917,7 @@ dimension.printSchema()
 # target_dir="<저장경로>"
 # dimension.write.mode(<저장모드>).parquet(target_dir)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 24. [기본] 정답확인</summary>
 
 > 저장 시에 오류가 없고 대상 경로(dimension/dt=20201026)가 생성되었다면 성공입니다
 
@@ -936,7 +936,7 @@ dimension.printSchema()
 # newDimension.printSchema()
 # display(newDimension)
 ```
-<details><summary> 정답확인</summary>
+<details><summary> :green_book: 25. [기본] 정답확인</summary>
 
 > 디멘젼 테이블을 정상적으로 읽어왔고, 동일한 스키마와 데이터가 출력되었다면 정답입니다
 

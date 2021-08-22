@@ -381,7 +381,7 @@ show tables 'emp*';
 # beeline> 
 describe employee;
 ```
-<details><summary> [실습] EXTENDED 및 FORMATTED 명령을 통해 테이블 정보를 조회합니다 </summary>
+<details><summary> :green_book: 1. [기본] EXTENDED 및 FORMATTED 명령을 통해 테이블 정보를 조회합니다 </summary>
 
 ```sql
 describe extended employee;
@@ -431,7 +431,7 @@ create table if not exists employee (
     stored as textfile;
 ```
 
-<details><summary>[실습] 테이블 이름을 `employee` 에서 `renamed_emp` 로 변경합니다 </summary>
+<details><summary> :green_book: 2. [기본] 테이블 이름을 `employee` 에서 `renamed_emp` 로 변경합니다 </summary>
 
 ```sql
 # beeline>
@@ -463,7 +463,7 @@ create table if not exists employee (
   stored as textfile;
 ```
 
-<details><summary>[실습] 코멘트 'employee name' 을 가진 고객 이름(`emp_name` string) 컬럼을 추가하세요 </summary>
+<details><summary> :green_book: 3. [기본] 코멘트 'employee name' 을 가진 고객 이름(`emp_name` string) 컬럼을 추가하세요 </summary>
 
 ```sql
 alter table employee add columns (
@@ -494,7 +494,7 @@ insert into renamed_emp values (1, 'suhyuk', 1000);
 select * from renamed_emp;
 ```
 
-<details><summary>[실습] TRUNCATE 구문으로 `renamed_emp` 테이블의 데이터를 삭제해 보세요 </summary>
+<details><summary> :green_book: 4. [기본] TRUNCATE 구문으로 `renamed_emp` 테이블의 데이터를 삭제해 보세요 </summary>
 
 ```sql
 # beeline>
@@ -550,7 +550,7 @@ create table imdb_movies (
 load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 ```
 
-<details><summary>[실습] 별도 터미널을 통해 하둡 명령어로 적재된 파일을 확인해 보세요 </summary>
+<details><summary> :green_book: 5. [기본] 별도 터미널을 통해 하둡 명령어로 적재된 파일을 확인해 보세요 </summary>
 
 ```bash
 # terminal
@@ -591,7 +591,7 @@ describe formatted imdb_movies;
 select genre, title from imdb_movies order by title asc;
 ```
 
-<details><summary>[실습] 랭킹(rank) 오름차순(ASC)으로 장르(genre), 제목(title) 정보를 상위 10개만 출력하세요 </summary>
+<details><summary> :green_book: 6. [기본] 랭킹(rank) 오름차순(ASC)으로 장르(genre), 제목(title) 정보를 상위 10개만 출력하세요 </summary>
 
 ```bash
 # beeline>
@@ -624,7 +624,7 @@ insert into table imdb_title select title from imdb_movies limit 5;
 select title from imdb_title;
 ```
 
-<details><summary>[실습] 제목(title) 오름차순으로 5건, 내림차순으로 5건 각각 `imdb_title` 테이블에 입력하세요  </summary>
+<details><summary> :green_book: 7. [기본] 제목(title) 오름차순으로 5건, 내림차순으로 5건 각각 `imdb_title` 테이블에 입력하세요  </summary>
 
 ```sql
 insert into table imdb_title select title from imdb_movies order by title asc limit 5;
@@ -680,7 +680,7 @@ insert into imdb_title values ('1 my first hive table record'), ('2 my second re
 select title from imdb_title where title like '%record%';
 ```
 
-<details><summary>[실습] `imdb_movies` 테이블로부터 OVERWRITE 옵션으로 모든 제목(title)을 `imdb_title` 테이블에 입력하세요 </summary>
+<details><summary> :green_book: 8. [기본] `imdb_movies` 테이블로부터 OVERWRITE 옵션으로 모든 제목(title)을 `imdb_title` 테이블에 입력하세요 </summary>
 
 ```sql
 insert overwrite table imdb_title select title from imdb_movies;
@@ -729,7 +729,7 @@ insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk'), (3,
 */
 ```
 
-<details><summary>[실습] WHERE 절에 랭크(rank)가 1인 레코드를 삭제 후, 조회해 보세요 </summary>
+<details><summary> :green_book: 9. [기본] WHERE 절에 랭크(rank)가 1인 레코드를 삭제 후, 조회해 보세요 </summary>
 
 ```sql
 delete from imdb_orc where rank = 2;
@@ -777,7 +777,7 @@ select * from imdb_orc;
 export table imdb_orc to '/user/ubuntu/archive/imdb_orc';
 ```
 
-<details><summary>[실습] 별도의 터미널을 통해 익스포트 된 결과를 확인합니다 </summary>
+<details><summary> :green_book: 10. [기본] 별도의 터미널을 통해 익스포트 된 결과를 확인합니다 </summary>
 
 ```bash
 # terminal
@@ -816,7 +816,7 @@ import table imdb_orc_imported from '/user/ubuntu/archive/imdb_orc';
 select * from imdb_orc_imported;
 ```
 
-<details><summary>[실습] `imdb_title` 테이블을 `/user/ubuntu/archive/imdb_title` 경로로 백업후, `imdb_recover` 테이블로 복원해 보세요 </summary>
+<details><summary> :green_book: 11. [기본] `imdb_title` 테이블을 `/user/ubuntu/archive/imdb_title` 경로로 백업후, `imdb_recover` 테이블로 복원해 보세요 </summary>
 
 ```sql
 export table imdb_title to '/user/ubuntu/archive/imdb_title';
@@ -1100,7 +1100,7 @@ create table imdb_movies (
 load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 ```
 
-<details><summary>[실습] 년도(year) 별 개봉된 영화의 수를 년도 오름차순(asc)으로 출력하세요 </summary>
+<details><summary> :blue_book: 12. [중급] 년도(year) 별 개봉된 영화의 수를 년도 오름차순(asc)으로 출력하세요 </summary>
 
 ```sql
 select year, count(title) as movie_count from imdb_movies group by year order by year asc;
@@ -1131,7 +1131,7 @@ select year, count(title) as movie_count from imdb_movies group by year order by
   - `imdb_movies` 의 `revenue` 컬럼은 문자열이므로 float, double 로 형변환이 필요합니다
   - cast ( column as type ) as `new_column` 
 
-<details><summary>[실습] 2015년도 개봉된 영화 중에서 최고 매출 Top 3 영화 제목과 매출금액을 출력하세요 </summary>
+<details><summary> :blue_book: 13. [중급] 2015년도 개봉된 영화 중에서 최고 매출 Top 3 영화 제목과 매출금액을 출력하세요 </summary>
 
 ```sql
 select title, cast(revenue as float) as rev from imdb_movies where year = '2015' order by rev desc limit 3;
@@ -1380,7 +1380,7 @@ load data local inpath '/opt/hive/examples/files/emp.uniq.txt' into table employ
   - 테이블 파일 : /opt/hive/examples/files/dept.txt
   - 테이블 스키마 : (id int, name string) 
 
-<details><summary>[실습] 유사한 방식으로  부서(department) 테이블을 생성하고 데이터를 로딩하세요 </summary>
+<details><summary> :blue_book: 14. [중급] 유사한 방식으로  부서(department) 테이블을 생성하고 데이터를 로딩하세요 </summary>
 
 ```sql
 drop table if exists department;
@@ -1407,7 +1407,7 @@ desc department;
 select * from department;
 ```  
 
-<details><summary>[실습] employee + department 정보를 가진 테이블을 조회하는 SQL문을 수행하세요 </summary>
+<details><summary> :blue_book: 15. [중급] employee + department 정보를 가진 테이블을 조회하는 SQL문을 수행하세요 </summary>
 
 ```sql
 # beeline
@@ -1435,7 +1435,7 @@ select e.dept_id, e.name, e.seq, d.id, d.name from employee e join department d 
   - 테이블 이름 : `emp_dept`
   - 테이블 스키마 : (id int, seq int, name string, dept name) 
 
-<details><summary>[실습] CTAS 구문을 이용하여 아이디(id), 순번(seq), 이름(name), 부서(dept) 를 가진 테이블을 생성하세요 </summary>
+<details><summary> :blue_book: 16. [중급] CTAS 구문을 이용하여 아이디(id), 순번(seq), 이름(name), 부서(dept) 를 가진 테이블을 생성하세요 </summary>
 
 ```sql
 create table emp_dept as select e.dept_id as dept_id, e.seq as seq, e.name as name, d.name as dept 

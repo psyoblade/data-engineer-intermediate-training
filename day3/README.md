@@ -144,7 +144,7 @@ fluentd
 ```
 * `fluentd -c /etc/fluentd/fluent.conf`로 기동해도 동일하게 동작합니다
 
-<details><summary>[실습] 출력 결과 확인</summary>
+<details><summary> :green_book: 1. [기본] 출력 결과 확인</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -192,7 +192,7 @@ curl -i -X POST -d 'json={"action":"login","user":2}' http://localhost:9880/test
 ```
 > 사전에 배포된 `send_http.sh` 를 실행해도 동일한 결과를 얻습니다
 
-<details><summary>[실습] 출력 결과 확인</summary>
+<details><summary> :green_book: 2. [기본] 출력 결과 확인</summary>
 
 > 에이전트가 기동된 컨테이너의 화면에는 아래와 같이 수신된 로그를 출력하면 성공입니다
 
@@ -368,7 +368,7 @@ docker-compose exec fluentd bash
 tree /fluentd/target/
 ```
 
-<details><summary>[실습] 출력 결과 확인</summary>
+<details><summary> :green_book: 3. [기본] 출력 결과 확인</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -490,11 +490,6 @@ networks:
         flush_thread_count 8
     </buffer>
 </match>
-
-<match weblog.debug>
-    @type stdout
-    @log_level debug
-</match>
 ```
 > 소스 경로에 저장되는 로그를 모니터링하여 타겟 경로에 저장합니다 
 
@@ -591,7 +586,7 @@ for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -L 2 /fluentd/target; 
 ```
 > 위의 명령어로 주기적으로 출력 경로를 확인할 수 있습니다
 
-<details><summary>[실습] 출력 결과 확인</summary>
+<details><summary> :green_book: 4. [기본] 출력 결과 확인</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -799,7 +794,7 @@ for x in $(seq 1626479572 3600 1726479572); do \
 done
 ```
 
-<details><summary>[실습] 출력 결과 확인</summary>
+<details><summary> :blue_book: 5. [중급] 출력 결과 확인</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -986,7 +981,7 @@ docker-compose logs -f fluentd
 ```
 > 플루언트디로 전송되어 출력이 되는지 확인합니다
 
-<details><summary>[실습] 출력 결과 확인</summary>
+<details><summary> :blue_book: 6. [중급] 출력 결과 확인</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -1028,7 +1023,7 @@ fluentd  | 2021-07-18 17:03:11.177728881 +0000 docker.fortune: {"container_id":"
 | {{.DaemonName}} | The name of the docker program (docker). |
 
 
-<details><summary>[실습] 컨테이너 이름을 web 으로 tag 를 `docker.{{.Name}}}`로 출력하는 `docker-compose.yml`을 작성하세요 </summary>
+<details><summary> :blue_book: 7. [중급] 컨테이너 이름을 web 으로 tag 를 `docker.{{.Name}}}`로 출력하는 `docker-compose.yml`을 작성하세요 </summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -1119,13 +1114,14 @@ docker ps
 ### 7-2. 키바나를 통해 엘라스틱 서치를 구성합니다
 
 * 키바나 사이트에 접속하여 색인을 생성
-  * 1. http://student{id}.lgebigdata.com:5601 사이트에 접속 (모든 컴포넌트 기동에 약 3~5분 정도 소요됨)
+
+  * 1. http://ubuntu@vm<number>.aiffelbiz.co.kr:5601 사이트에 접속 (모든 컴포넌트 기동에 약 3~5분 정도 소요됨)
   * 2. Explorer on my Own 선택 후, 좌측 "Discover" 메뉴 선택
   * 3. Step1 of 2: Create Index with 'fluentd-\*' 까지 치면 아래에 색인이 뜨고 "Next step" 클릭
   * 4. Step2 of 2: Configure settings 에서 @timestamp 필드를 선택하고 "Create index pattern" 클릭
   * 5. Discover 메뉴로 이동하면 전송되는 로그를 실시간으로 확인할 수 있음
 * 웹 사이트에 접속을 시도
-  * 1. http://student{id}.lgebigdata.com 사이트에 접속하면 It works! 가 뜨면 정상
+  * 1. http://ubuntu@vm<number>.aiffelbiz.co.kr 사이트에 접속하면 It works! 가 뜨면 정상
   * 2. 다시 Kibana 에서 Refresh 버튼을 누르면 접속 로그가 전송됨을 확인
 
 ### 7-3. Fluentd 구성 파일 `docker-compose.yml`
@@ -1445,7 +1441,7 @@ docker ps
 <br>
 
 ### 10-3. HTTP 로 전송하고 해당 데이터가 하둡에 저장되는지 확인합니다
-  * http://student#.lgebigdata.com:50070/explorer.html 에 접속하여 확인합니다
+  * http://ubuntu@vm<number>.aiffelbiz.co.kr:50070/explorer.html 에 접속하여 확인합니다
   * 혹은 namenode 에 설치된 hadoop client 로 확인 합니다
   * WARN: 현재 노드수가 1개밖에 없어서 Replication 오류가 나고 있습니다. 
 ```

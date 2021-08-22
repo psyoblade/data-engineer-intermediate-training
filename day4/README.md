@@ -25,7 +25,9 @@ docker-compose up -d
 <br>
 
 ### 1-3. 스파크 실습을 위해 노트북 페이지에 접속합니다
-* logs 출력에 localhost:8888 페이지를 크롬 브라우저에서 오픈합니다
+
+> 노트북 로그를 확인하여 접속 주소와 토큰을 확인합니다
+
 ```bash
 # terminal
 docker-compose ps
