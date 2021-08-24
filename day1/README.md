@@ -1429,7 +1429,7 @@ docker-compose up -d
 ```
 * MySQL 서버에 접속합니다
 ```bash
-docker exec -it mysql mysql -u user -p pass
+docker exec -it mysql mysql -uuser -ppass
 ```
 ```sql
 use testdb;
