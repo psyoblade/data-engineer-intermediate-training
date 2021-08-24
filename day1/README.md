@@ -1997,9 +1997,65 @@ rsync -av . /tmp/backup
 
 ### 5-5. 운영 도구
 
-> 프로세스 및 리소스 확인을 위한 명령어(top, htop, ps)
+> 프로세스 및 리소스 확인을 위한 명령어(ps, top)
 
-#### 5-5-1. [top](https://www.booleanworld.com/guide-linux-top-command/) : 리눅스 시스템의 프로세스와 리소스의 사용량을 확인하는 명령어
+#### 5-5-1. [ps](https://man7.org/linux/man-pages/man1/ps.1.html) : 현재 수행중인 프로세스의 상태를 출력하는 명령어
+
+> 실행 중인 프로세스의 상태를 출력합니다
+
+  - <kbd>-e, -A</kbd> : 실행 중인 모든 프로세스를 확인
+  - <kbd>-a</kbd> : 터미널을 제외한 프로세스만 출력
+  - <kbd>-f</kbd> : 모든 포맷을 출력 (UID PID PPID ... CMD)
+  - <kbd>-o</kbd> : 출력 컬럼을 지정
+  - <kbd>-p</kbd> : PID 로 필터하여 출력 (ex_ `ps -fp 1234`)
+  - <kbd>-u</kbd> : 특정 이용자 이름으로 출력, 입력하지 않으면 현재 이용자 (ex_ `ps -u root`)
+  - <kbd>-ww</kbd> : 프로세스 실행 명령이 잘리지 않고 모두 출력됩니다
+  - <kbd>-x</kbd> : 현재 tty 와 연관되지 않은 모든 프로세스까지도 출력 (터미널이 끊어져도 보이는 데몬 프로세스 등)
+  - <kbd>-C</kbd> : 프로세스 이름으로 PID 찾기 (ex_ `ps -C run.sh`)
+  - <kbd>-L</kbd> : 쓰레드 까지 출력 (ex_ `ps -p 1234 -L`)
+  - <kbd>-T</kbd> : 터미널과 관련있는 프로세스만 출력
+  - <kbd>--forest</kbd> : 명령어 계층을 트리 형태로 출력 (ex_ `ps -f --forest`)
+  - <kbd>au, aux</kbd> : BSD 포맷으로 출력 (USER PID ... COMMAND)
+
+* 목록 키워드 설명 
+
+| 키 | 값 | 설명 |
+| --- | --- | --- |
+| PID | 프로세스 ID | 프로세스를 유일한 양수인 정수 |
+| PPID | 부모 프로세스 ID | 프로세스를 유일한 양수인 정수 |
+| %CPU | CPU 사용 비율 추정치 | - |
+| %MEM | MEM 사용 비율 추정치 | - |
+| STIME | 프로세스가 시작된 시간 혹은 날짜 | - |
+| VSZ | K단위 또는 페이지 단위 가상 메모리 사용량 | - |
+| RSS | 실제 메모리 사용량 | - |
+| TTY | 터미널의 접속 TTY 정보 | who, write, tty |
+| S, STAT | 터미널의 상태 코드 | - |
+| TIME | 프로세스가 실행된 이후 지나간 시간 | |
+| COMMAND | 실행 프로세스의 이름 | - | 
+
+* [tty](https://www.howtogeek.com/428174/what-is-a-tty-on-linux-and-how-to-use-the-tty-command/)는 `teletypewriter` 의 약자로써 원격지의 장비에 메시지를 보내는 `teleprinters` 에서 시작했으며, 발전하여 다양한 문자과 부호까지 전송이 가능하게 되었으며, 현대 리눅스에서는 모든 접속된 터미널 윈도우와 `pseudo-teletypes(pts)`를 가지게 되며 하나의 장치로 인식되어 `/dev/pts/0`와 같은 파일로 존재하게 되며 `tty`명령으로 확인할 수 있습니다
+  - `multiplexer` 가 master 역할이며 pts 들은 slave 가 됩니다 (master: `/dev/ptmx`)
+
+* 로그인 유저의 모든 프로세스를 출력하고, 명령어 전체를 출력하여 vi 편집기로 여는 명령
+```bash
+# terminal
+# ps [options]
+ps -aufxww | vi -
+```
+
+<br>
+
+<details><summary> :closed_book: #. [급] 프로세스가 시작된 정확한 시간(lstart 컬럼)을 출력하세요  </summary>
+
+* 아래와 유사하게 실행했다면 정답입니다 
+```bash
+# terminal
+ps -eo pid,lstart,cmd
+```
+<br>
+
+
+#### 5-5-2. [top](https://www.booleanworld.com/guide-linux-top-command/) : 리눅스 시스템의 프로세스와 리소스의 사용량을 확인하는 명령어
 
 > `ps` 명령과는 다르게 interactive 한 인터페이스를 가지며, 프로세스를 모니터링 및 관리할 수 있으며 <kbd>q</kbd> 입력으로 종료할 수 있습니다
 
@@ -2068,66 +2124,32 @@ rsync -av . /tmp/backup
 <br>
 
 * root 이용자가 수행한 프로세스 PID 1234 의 프로세스 전체 명령어와 스레드까지 출력
+  - `dockerd` 프로세스의 PID 를 확인하고 테스트 해보세요
 ```bash
 # terminal
-top -p 1234 -H -c -u root
+top -p <dockerd의 PID>
+top -p <dockerd의 PID> -H
+top -p <dockerd의 PID> -c
+top -u ubuntu
+top -u root
 ```
 <br>
 
+<details><summary> :blue_book: #. [중급] `dockerd` 프로세스의 PID 를 확인하고, `-H`, `-c`, `-u` 옵션을 이용하여 top 명령어를 수행하세요 </summary>
 
-#### 5-5-2. [ps](https://man7.org/linux/man-pages/man1/ps.1.html) : 현재 수행중인 프로세스의 상태를 출력하는 명령어
-
-> 실행 중인 프로세스의 상태를 출력합니다
-
-  - <kbd>-e, -A</kbd> : 실행 중인 모든 프로세스를 확인
-  - <kbd>-a</kbd> : 터미널을 제외한 프로세스만 출력
-  - <kbd>-f</kbd> : 모든 포맷을 출력 (UID PID PPID ... CMD)
-  - <kbd>-o</kbd> : 출력 컬럼을 지정
-  - <kbd>-p</kbd> : PID 로 필터하여 출력 (ex_ `ps -fp 1234`)
-  - <kbd>-u</kbd> : 특정 이용자 이름으로 출력, 입력하지 않으면 현재 이용자 (ex_ `ps -u root`)
-  - <kbd>-ww</kbd> : 프로세스 실행 명령이 잘리지 않고 모두 출력됩니다
-  - <kbd>-x</kbd> : 현재 tty 와 연관되지 않은 모든 프로세스까지도 출력 (터미널이 끊어져도 보이는 데몬 프로세스 등)
-  - <kbd>-C</kbd> : 프로세스 이름으로 PID 찾기 (ex_ `ps -C run.sh`)
-  - <kbd>-L</kbd> : 쓰레드 까지 출력 (ex_ `ps -p 1234 -L`)
-  - <kbd>-T</kbd> : 터미널과 관련있는 프로세스만 출력
-  - <kbd>--forest</kbd> : 명령어 계층을 트리 형태로 출력 (ex_ `ps -f --forest`)
-  - <kbd>au, aux</kbd> : BSD 포맷으로 출력 (USER PID ... COMMAND)
-
-* 목록 키워드 설명 
-
-| 키 | 값 | 설명 |
-| --- | --- | --- |
-| PID | 프로세스 ID | 프로세스를 유일한 양수인 정수 |
-| PPID | 부모 프로세스 ID | 프로세스를 유일한 양수인 정수 |
-| %CPU | CPU 사용 비율 추정치 | - |
-| %MEM | MEM 사용 비율 추정치 | - |
-| STIME | 프로세스가 시작된 시간 혹은 날짜 | - |
-| VSZ | K단위 또는 페이지 단위 가상 메모리 사용량 | - |
-| RSS | 실제 메모리 사용량 | - |
-| TTY | 터미널의 접속 TTY 정보 | who, write, tty |
-| S, STAT | 터미널의 상태 코드 | - |
-| TIME | 프로세스가 실행된 이후 지나간 시간 | |
-| COMMAND | 실행 프로세스의 이름 | - | 
-
-* [tty](https://www.howtogeek.com/428174/what-is-a-tty-on-linux-and-how-to-use-the-tty-command/)는 `teletypewriter` 의 약자로써 원격지의 장비에 메시지를 보내는 `teleprinters` 에서 시작했으며, 발전하여 다양한 문자과 부호까지 전송이 가능하게 되었으며, 현대 리눅스에서는 모든 접속된 터미널 윈도우와 `pseudo-teletypes(pts)`를 가지게 되며 하나의 장치로 인식되어 `/dev/pts/0`와 같은 파일로 존재하게 되며 `tty`명령으로 확인할 수 있습니다
-  - `multiplexer` 가 master 역할이며 pts 들은 slave 가 됩니다 (master: `/dev/ptmx`)
-
-* 로그인 유저의 모든 프로세스를 출력하고, 명령어 전체를 출력하여 vi 편집기로 여는 명령
+* 아래와 유사하게 수행했다면 정답입니다
 ```bash
 # terminal
-# ps [options]
-ps -aufxww | vi -
+PID=`ps -e | grep dockerd | awk '{ print $1 }'`
+top -p $PID
+top -p $PID -H
+top -p $PID -c
+top -u ubuntu
+top -u root
 ```
 
 <br>
 
-* 프로세스가 시작된 정확한 시간을 확인하는 명령
-```bash
-# terminal
-ps -eo pid,lstart,cmd
-```
-
-<br>
 
 
 #### 5-5-3. [find](https://man7.org/linux/man-pages/man1/find.1.html) : 파일을 찾는 명령어
