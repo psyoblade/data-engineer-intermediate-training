@@ -1094,6 +1094,11 @@ docker exec -it mysql-bind mysql --port=3308 -uuser -ppass
 
 > 이번 예제는 경로만 다를 뿐 동일하므로 실습은 각자 해보시기 바랍니다
 
+* 실습이 완료되었으므로 모든 컨테이너는 *반드시 종료해 주세요*
+```bash
+docker rm -f `docker ps -aq`
+```
+
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
 <br>
@@ -1147,9 +1152,16 @@ docker-compose down
 <br>
 
 
-<details><summary> :blue_book: 10. [중급] 컴포즈 명령어(--scale)를 이용하여 우분투 컨테이너를 3개 띄워보세요  </summary>
+<details><summary> :closed_book: 10. [고급] 컴포즈 명령어(--scale)를 이용하여 우분투 컨테이너를 3개 띄워보세요  </summary>
 
 > 아래와 유사하게 작성 및 실행했다면 정답입니다
+
+
+* `docker-compose` 명령어 예제입니다 
+```bash
+# terminal
+
+```
 
 * `docker-compose.yml` 예제입니다 
   - 우분투 이미지를 기본 이미지를 사용해도 무관합니다
