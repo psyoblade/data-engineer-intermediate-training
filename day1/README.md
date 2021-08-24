@@ -920,8 +920,12 @@ docker stats ubuntu_500m
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
+* 컨테이너를 기동하고
 ```bash
 docker run --name ubuntu_unlimited -dit ubuntu
+```
+* 상태를 확인합니다
+```bash
 docker stats `docker ps | grep ubuntu_unlimited | awk '{ print $1 }'`
 ```
 
@@ -960,6 +964,7 @@ docker run --name mysql-volatile \
 * 서버가 기동되면 해당 서버로 접속합니다
   - 너무 빨리 접속하면 서버가 기동되기전이라 접속이 실패할 수 있습니다
 ```bash
+sleep 10
 docker exec -it mysql-volatile mysql -uuser -ppass
 ```
 
@@ -1015,7 +1020,7 @@ docker run --name mysql-persist \
   -v mysql-volume:/var/lib/mysql \
   -d mysql
 
-sleep 5
+sleep 10
 docker exec -it mysql-persist mysql --port=3307 -uuser -ppass
 ```
 
@@ -1033,9 +1038,14 @@ insert into foo values (1, 'my name');
 select * from foo;
 ```
 
+* 컨테이너를 삭제합니다
 ```bash
 # terminal
 docker rm -f mysql-persist
+```
+
+* 새로이 컨테이너를 생성하고 볼륨은 그대로 연결합니다
+```bash
 docker run --name mysql-persist \
   -p 3307:3306 \
   -e MYSQL_ROOT_PASSWORD=rootpass \
@@ -1045,10 +1055,11 @@ docker run --name mysql-persist \
   -v mysql-volume:/var/lib/mysql \
   -d mysql
 
-sleep 5
+sleep 10
 docker exec -it mysql-persist mysql --port=3307 -uuser -ppass
 ```
 
+* 컨테이너와 무관하게 데이터가 존재하는지 확인합니다
 ```sql
 # mysql>
 use testdb;
