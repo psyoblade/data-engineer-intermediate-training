@@ -1446,7 +1446,7 @@ select * from seoul_popular_trip;
 #### 4-6-1. 도커 컴포즈를 통해 phpMyAdmin 추가 설치
 
 ```bash
-# cat docker-compose.yml
+# cat > docker-compose.yml
 version: "3"
 
 services:
@@ -1461,7 +1461,6 @@ services:
       MYSQL_PASSWORD: pass
     volumes:
       - ./custom:/etc/mysql/conf.d
-      - mysql_utf8:/var/lib/mysql
   php:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
