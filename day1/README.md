@@ -1932,11 +1932,17 @@ sed -i 's/nobody/somebody/g' example/passwd
     - `OFS (Output Field Separator)` : 출력시 필드 구분자
     - `ORS (Output Record Separator)` : 출력시 레코드 구분자
 
+* 패스워드 파일을 읽어서 레코드 수와 아이디를 출력합니다
 ```bash
 # awk [-W OPTION] [-F VALUE] [-v VAR=VALUE] [--] 'PATTERN { ACTION }' [FILE ...]
 # awk '{$7 = $1 * $3 ; print $3, $1, "*", $2, "=", $1 * $2}' address  # 주소록에서 1번 숫자와 2번 숫자의 곱과 3번째 컬럼을 출력합니다
-awk -F: '{ print NR, $1 }' /etc/passwd                                # 패스워드 파일을 읽어서 레코드 수와 아이디를 출력합니다
-awk '/root/ { print $0 }' /etc/passwd                                 # 패스워드 파일의 root 문자가 존재하는 라인을 출력합니다
+awk -F: '{ print NR, $1 }' /etc/passwd
+```
+<br>
+
+* 패스워드 파일의 root 문자가 존재하는 라인을 출력합니다
+```bash
+awk '/root/ { print $0 }' /etc/passwd
 ```
 <br>
 
