@@ -1497,6 +1497,8 @@ services:
 docker-compose down
 ```
 
+#### 4-7-1. MySQL 기동이 완료되기를 기다리는 컴포즈 파일을 구성합니다
+
 * 아래와 같이 구성된 컴포즈 파일을 생성합니다
 ```bash
 # cat docker-compose.yml
@@ -1533,6 +1535,12 @@ services:
     restart: always
     ports:
       - 80:80
+```
+
+#### 4-7-2. 실습이 완료되었으므로 모든 컨테이너를 종료합니다
+```bash
+# terminal
+docker-compose down
 ```
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
