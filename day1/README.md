@@ -374,7 +374,7 @@ git checkout HEAD README.md
 #### 2-4-2. mv : 파일 혹은 경로를 새로운 경로로 이동합니다
 ```bash
 # git mv [source-path] [target-path]
-git mv REAMDE.md NOREADME.md
+git mv README.md NOREADME.md
 ```
   - 현재 경로의 수정 사항을 되돌립니다
 ```bash
@@ -478,11 +478,11 @@ git stash drop
 ```
 ```bash
 # 혹은 stash 값을 바로 사용
-git stash apply stash@{0}
+# git stash apply stash@{0}
 ```
 ```bash
 # 내역을 보고 싶다면
-git stash show stash@{1}
+# git stash show stash@{1}
 ```
 <br>
 
@@ -534,7 +534,7 @@ docker ps -a
 ```bash
 # CONTAINER ID   IMAGE          COMMAND   CREATED         STATUS    PORTS     NAMES
 # e8f66e162fdd   ubuntu:18.04   "bash"    2 seconds ago   Created             busy_herschel
-container_name="busy_herschel"
+container_name="<목록에서_출력된_NAMES_를_입력하세요>"
 ```
 ```bash
 # docker start <container_name> 
@@ -581,6 +581,7 @@ docker run --rm --name ubuntu20 -dit ubuntu:20.04
 docker exec -it ubuntu20 bash
 cat /etc/issue
 ```
+<kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 명령으로 터미널에서 빠져나올 수 있습니다
 <br>
 
 
