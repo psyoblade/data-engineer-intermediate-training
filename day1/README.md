@@ -1300,12 +1300,19 @@ cd /home/ubuntu/work/compose-training
 for dir in `echo "custom init"`; do mkdir -p $dir; done
 ```
 
-* 터미널에서 `cat` 명령으로 파일 생성하기
-  - 아래와 같이 `cat > path/filename` 명령 후에 클립보드 내용을 붙여넣거나, 타이핑 후에 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 빠져나오면 vim 편집기 없이도 파일을 생성할 수 있는 간편한 방법입니다
+
+#### 4-3-3. 터미널에서 `cat` 명령으로 파일 생성하기
+
+> 아래와 같이 `cat > path/filename` 명령 후에 클립보드 내용을 붙여넣어서, vim 편집기 없이도 파일을 생성할 수 있는 간편한 방법입니다
+
 ```bash
 # terminal
 mkdir -p /home/ubuntu/work/compose-training/foo
 cat > foo/bar.txt
+```
+
+* 아래의 내용을 복사해서 붙여넣고 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 빠져나오면 생성됩니다
+```bash
 data engineer training intermediate course
 hello world
 ```
