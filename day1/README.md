@@ -582,6 +582,7 @@ docker exec -it ubuntu20 bash
 cat /etc/issue
 ```
 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 명령으로 터미널에서 빠져나올 수 있습니다
+
 <br>
 
 
@@ -635,7 +636,7 @@ docker top nginx
 ```bash
 # docker cp <container_name>:<path> <host_path> and vice-versa
 docker run --rm --name ubuntu20 -dit ubuntu:20.04
-docker cp ./helloworld.sh ubuntu:/tmp
+docker cp ./helloworld.sh ubuntu20:/tmp
 ```
 
 #### 3-3-2. exec : 컨테이너 내부에 명령을 실행합니다 
@@ -669,6 +670,13 @@ docker images
 
 
 #### 3-4-2. commit : 현재 컨테이너를 별도의 이미지로 저장합니다 
+
+* 실습을 위해 helloworld.sh 복사된 컨테이너를 생성합니다
+```bash
+# terminal
+docker run --rm --name ubuntu -dit ubuntu:18.04
+docker cp ./helloworld.sh ubuntu:/tmp
+```
 
 * 현재 helloworld.sh 가 복사된 컨테이너를 ubuntu:hello 로 저장해봅니다
 ```bash
