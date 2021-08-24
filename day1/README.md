@@ -1441,7 +1441,13 @@ select * from seoul_popular_trip;
 
 ### 4-6. 도커 컴포즈 통한 여러 이미지 실행
 
-> MySQL 과 phpMyAdmin 2가지 서비스를 실행합니다
+> MySQL 과 phpMyAdmin 2가지 서비스를 기동하는 컴포즈를 생성합니다
+
+* 기존의 컨테이너를 중단시킵니다 (삭제가 아닙니다)
+```bash
+# terminal
+docker-compose down
+```
 
 #### 4-6-1. 도커 컴포즈를 통해 phpMyAdmin 추가 설치
 
@@ -1483,8 +1489,15 @@ services:
 
 ### 4-7. MySQL 이 정상적으로 로딩된 이후에 접속하도록 설정합니다
 
-* 테스트 헬스체크를 통해 MySQL 이 정상 기동되었을 때에 다른 어플리케이션을 띄웁니다
+> 테스트 헬스체크를 통해 MySQL 이 정상 기동되었을 때에 다른 어플리케이션을 띄웁니다
 
+* 기존의 컨테이너를 중단시킵니다 (삭제가 아닙니다)
+```bash
+# terminal
+docker-compose down
+```
+
+* 아래와 같이 구성된 컴포즈 파일을 생성합니다
 ```bash
 # cat docker-compose.yml
 version: "3"
