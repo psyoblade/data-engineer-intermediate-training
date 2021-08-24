@@ -2045,13 +2045,16 @@ ps -aufxww | vi -
 
 <br>
 
-<details><summary> :closed_book: #. [급] 프로세스가 시작된 정확한 시간(lstart 컬럼)을 출력하세요  </summary>
+<details><summary> :closed_book: #. [고급] 프로세스가 시작된 정확한 시간(lstart 컬럼)을 출력하세요  </summary>
 
 * 아래와 유사하게 실행했다면 정답입니다 
 ```bash
 # terminal
 ps -eo pid,lstart,cmd
 ```
+
+</details>
+
 <br>
 
 
@@ -2148,8 +2151,10 @@ top -u ubuntu
 top -u root
 ```
 
-<br>
+</details>
 
+
+<br>
 
 
 #### 5-5-3. [find](https://man7.org/linux/man-pages/man1/find.1.html) : 파일을 찾는 명령어
