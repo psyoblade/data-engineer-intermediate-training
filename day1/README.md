@@ -1423,26 +1423,13 @@ docker build -t local/mysql:5.7 .
 
 #### 4-5-4. 빌드된 이미지로 다시 테스트
 
+* 직접 작성한 `docker-compose.yml` 파일로 컨테이너를 기동합니다
 ```bash
-# cat docker-compose.yml
-version: "3"
-
-services:
-  mysql:
-    container_name: mysql
-    image: local/mysql:5.7
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    volumes:
-      - ./custom:/etc/mysql/conf.d
-      - mysql_utf8:/var/lib/mysql
+docker-compose up -d
 ```
+* MySQL 서버에 접속합니다
 ```bash
-docker exec -it mysql mysql -u user -p
+docker exec -it mysql mysql -u user -p pass
 ```
 ```sql
 use testdb;
