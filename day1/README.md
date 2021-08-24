@@ -1712,18 +1712,29 @@ wc -w data/apache-access.log
   - <kbd>-n, --number-format=FORMAT</kbd> : 포맷을 지정하여 라인 수를 출력합니다
     - `ln : 좌측 정렬, rn : 우측 정렬,  rz : 0을 패딩 후 출력`
   - <kbd>-s, --number-separator=STRING</kbd> : 라인 수와 내용을 구분자로 분리하여 출력합니다
+
 ```bash
 # nl [OPTION] ... [FILE] ...
-nl -b data/apache-access.log          # 로그를 라인 수와 함께 출력합니다
+nl data/apache-access.log
 ```
+<br>
+
+* head 출력 결과에 대해 라인 수를 출력합니다
 ```bash
-nl -s ',<tab>' data/apache-access.log # 000123,<line> 와 같이 구분자를 넣어 출력합니다
+head data/apache-access.log | nl
 ```
+<br>
+
+* 000123,<line> 와 같이 구분자를 넣어 출력합니다
+```bash
+nl -s ',<tab>' data/apache-access.log
+```
+<br>
 
 <details><summary> :blue_book: 15. [중급] data/apache-access.log '000123' 과 같이 0을 패딩 후 출력하세요</summary>
 
 ```bash
-nl -n rz data/apache-access.log
+head data/apache-access.log | nl -n rz 
 ```
 
 </details>
