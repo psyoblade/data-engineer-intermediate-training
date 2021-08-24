@@ -1778,7 +1778,7 @@ cat data/corona.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-deli
   - 이번에는 제일 처음 컬럼에 번호가 있어 컬럼의 순서가 다르며 `data/corona.2021.header.tsv` 파일을 통해 확인할 수 있습니다
   - 데이터 값 가운데 `N/A` 으로 명시된 값들을 `0` 으로 변경하여 처리할 수 있도록 해주세요
 
-<details><summary> :blue_book: 17. [중급] 사망자/확진자 톱 10을 구하세요 </summary>
+<details><summary> :closed_book: 17. [고급] 사망자/확진자 톱 10을 구하세요 </summary>
 
 * 출력 컬럼 기준이 1:국가,2:확진자,3:사망자,4:완치 (-f2,3,4,5) 이므로 사망자(3), 확진자(2)
 ```bash
