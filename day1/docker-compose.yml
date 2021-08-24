@@ -6,6 +6,8 @@ services:
     image: psyoblade/data-engineer-ubuntu:20.04
     restart: always
     tty: true
+    volumes:
+      - ./ubuntu/example:/example
   mysql:
     container_name: mysql
     image: psyoblade/data-engineer-mysql:1.1

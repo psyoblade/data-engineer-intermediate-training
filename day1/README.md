@@ -1821,12 +1821,26 @@ cat /etc/passwd | cut -d: -f4 | sort | uniq -d    # 패스워드 파일에서 �
   - <kbd>-f, --fields=LIST</kbd> :	구분자를 기준으로 컬럼을 지정하여 지정된 컬럼만 출력합니다
   - <kbd>--complement</kbd> :	선택한 조건의 컬럼을 제외한 나머지를 출력합니다
   - <kbd>--output-delimiter=STRING</kbd> : 출력시에 사용할 구분자를 지정합니다
+
+* 탭으로 구분된 라인들의 2번째 컬럼만 출력합니다
 ```bash
 # cut OPTION ... [FILE] ...
-# cut -f 2 cut_txt    												# 탭으로 구분된 라인들의 2번째 컬럼만 출력합니다
-# cut -f1- --output-delimiter=',' cut_text    # 탭으로 구분된 라인을 콤마로 구분된 라인으로 변경하여 출력합니다
-ls -al | cut -b -10 --complement    					# ls -al 결과의 앞 10바이트를 제외한 나머지 컬럼 들만 출력합니다
+# cut -f2 filename
 ```
+<br>
+
+* ':'으로 구분된 컬럼을 '#'으로 구분하여 출력합니다
+```bash
+cat /etc/passwd | cut -f1- -d':' --output-delimiter='#'
+```
+<br>
+
+* ls -al 결과의 앞 10바이트를 제외한 나머지 컬럼 들만 출력합니다
+```bash
+ls -al | cut -b -10 --complement
+```
+<br>
+
 
 ##### /etc/passwd 파일구성
 
@@ -1854,11 +1868,19 @@ cat /etc/passwd | cut -d: -f7 | sort | uniq -c | sort -nr | head -3
     - `[:space:]` : 공백 + 줄바꿈
     - `[:lower:]` / `[:upper:]` : 소문자 / 대문자
 
+* 패스워드 파일의 구분자 콜론을 공백으로 치환합니다
 ```bash
 # tr [OPTION] ... SET1 [SET2]
-head /etc/passwd | tr ':' ' '   # 패스워드 파일의 구분자 콜론을 공백으로 치환합니다
-ls -al | tr -d [:space:]        # ls -al 결과의 한 줄의 문자열로 출력합니다
+head /etc/passwd | tr ':' ' '
 ```
+<br>
+
+* ls -al 결과의 한 줄의 문자열로 출력합니다
+```bash
+# tr [OPTION] ... SET1 [SET2]
+ls -al | tr -d [:space:]
+```
+<br>
 
 <details><summary> :blue_book: 19. [중급] 패스워드 파일의 계정 이름만 대문자로 출력하세요</summary>
 
@@ -1890,7 +1912,7 @@ sed -n '3,5p' /etc/passwd                     # 패스워드 파일의 3~5번째
 <details><summary> :closed_book: 20. [고급] 예제 패스워드 파일(/example/passwd)을 읽어서 nobody 계정을 찾고, somebody 로 변경하세요</summary>
 
 ```bash
-sed -i 's/nobody/somebody/g' /example/passwd
+sed -i 's/nobody/somebody/g' example/passwd
 ```
 
 </details>
