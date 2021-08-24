@@ -1294,6 +1294,9 @@ cat docker-compose.yml | grep -ia20 'mysql:' docker-compose.yml
 # terminal
 mkdir -p /home/ubuntu/work/compose-training
 cd /home/ubuntu/work/compose-training
+```
+* `custom`, `init` 2개의 경로를 생성합니다
+```bash
 for dir in `echo "custom init"`; do mkdir -p $dir; done
 ```
 
