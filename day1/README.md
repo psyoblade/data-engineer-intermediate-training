@@ -677,12 +677,14 @@ docker images
 docker run --rm --name ubuntu -dit ubuntu:18.04
 docker cp ./helloworld.sh ubuntu:/tmp
 ```
+<br>
 
 * 현재 helloworld.sh 가 복사된 컨테이너를 ubuntu:hello 로 저장해봅니다
 ```bash
 # docker commit <container_name> <repository>:<tag>
 docker commit ubuntu ubuntu:hello
 ```
+<br>
 
 #### 3-4-3. rmi : 해당 이미지를 삭제합니다
 
@@ -721,19 +723,26 @@ docker pull psyoblade/data-engineer-ubuntu:18.04
 ```
 
 #### 3-5-2. push : 대상 이미지를 레포지토리로 업로드합니다
+> push 명령은 계정 연동이 되어 있지 않으므로 현재는 동작하지 않습니다
 ```bash
 # docker push repository[:tag]
-docker push psyoblade/data-engineer-ubuntu:18.04
+# docker push psyoblade/data-engineer-ubuntu:18.04
+# errors:
+# denied: requested access to the resource is denied
+# unauthorized: authentication required
 ```
 
 #### 3-5-3. login : 레지스트리에 로그인 합니다
+> login 명령은 계정 연동이 되어 있지 않으므로 현재는 동작하지 않습니다
 ```bash
-docker login
+# terminal
+# docker login
 ```
 
 #### 3-5-4. logout : 레지스트리에 로그아웃 합니다
+> logout 명령은 계정 연동이 되어 있지 않으므로 현재는 동작하지 않습니다
 ```bash
-docker logout
+# docker logout
 ```
 <br>
 
@@ -830,10 +839,17 @@ docker image ls
 * 알파인 리눅스 환경이 아니지만 해당 리눅스 처럼 실행해보기
 ```bash
 docker run alpine top
+```
+> top 명령어는 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
+<br>
+
+
+* 기타 명령어도 테스트 합니다
+```bash
 docker run alpine uname -a
 docker run alpine cat /etc/issue
 ```
-> 개별 명령어는 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
+<br>
 
 
 <details><summary> :blue_book: 5. [중급] 위의 세번의 명령어 실행으로 생성된 컨테이너는 어떻게 삭제할까요?</summary>
@@ -845,7 +861,7 @@ docker rm -f `docker ps -a | grep alpine | awk '{ print $1 }'`
 
 * 사용하지 않는 컨테이너 정리 명령어 (-f, --force)
 ```bash
-dodcker container prune -f
+docker container prune -f
 ```
 
 </details>
@@ -865,12 +881,19 @@ docker run --rm -it alpine /bin/sh
 
 * vim 도 없기 때문에 패키지 도구인 apk 및 apk add/del 를 통해 vim 을 설치 및 제거합니다
   - apk { add, del, search, info, update, upgrade } 등의 명령어를 사용할 수 있습니다
+
+* 업데이트 및 vim 설치
 ```bash
 apk update
 apk add vim
+```
+* 설치된 패키지 제거
+```bash
 apk del vim
 ```
+<kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 명령으로 터미널에서 빠져나올 수 있습니다
 <br>
+
 
 
 ### 3-7-4. [메모리 설정을 변경한 상태 확인](https://docs.docker.com/config/containers/start-containers-automatically)
@@ -884,7 +907,11 @@ docker run --name ubuntu_500m -dit -m 500m ubuntu
 * 메모리 제약을 두고 띄운 컨테이너의 상태를 확인합니다
 ```bash
 docker ps -f name=ubuntu_500m
-# docker stats <CONTAINER ID>
+```
+
+* 메모리 제약을 두고 띄운 컨테이너의 상태를 확인합니다
+```bash
+docker stats ubuntu_500m
 ```
 > <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 
