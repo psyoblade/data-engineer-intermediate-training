@@ -1328,7 +1328,7 @@ hello world
 #### 4-4-1. 캐릭터셋 변경 적용하기
 
 ```bash
-# cat custom/my.cnf
+# cat > custom/my.cnf
 [client]
 default-character-set=utf8
 
@@ -1350,7 +1350,7 @@ default-character-set=utf8
 > 지정한 설정파일을 사용하고, 내부 볼륨을 통한 MySQL 기동으로 변경합니다
 
 ```bash
-# cat docker-compose.yml
+# cat > docker-compose.yml
 version: "3"
 
 services:
@@ -1366,6 +1366,9 @@ services:
     volumes:
       - ./custom:/etc/mysql/conf.d
       - mysql_utf8:/var/lib/mysql
+
+volumes:
+  mysql_utf8:
 ```
 <br>
 
@@ -1375,7 +1378,7 @@ services:
 #### 4-5-1. 초기화 파일을 생성합니다
 
 ```bash
-# cat init/testdb.sql
+# cat > init/testdb.sql
 DROP TABLE IF EXISTS `seoul_popular_trip`;
 CREATE TABLE `seoul_popular_trip` (
   `category` int(11) NOT NULL,
