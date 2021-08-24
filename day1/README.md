@@ -1491,7 +1491,7 @@ version: "3"
 
 services:
   mysql:
-    image: psyoblade/mysql:5.7
+    image: local/mysql:5.7
     container_name: mysql
     restart: always
     environment:
@@ -1506,7 +1506,6 @@ services:
       retries: 3
     volumes:
       - ./custom:/etc/mysql/conf.d
-      - mysql_utf8:/var/lib/mysql
   php:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
@@ -1520,7 +1519,7 @@ services:
       PMA_ARBITRARY: 1
     restart: always
     ports:
-      - 8183:80
+      - 80:80
 ```
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
