@@ -1365,10 +1365,10 @@ services:
       MYSQL_PASSWORD: pass
     volumes:
       - ./custom:/etc/mysql/conf.d
-      - mysql_utf8:/var/lib/mysql
 
-volumes:
-  mysql_utf8:
+networks:
+  default:
+    name: default_network
 ```
 <br>
 
