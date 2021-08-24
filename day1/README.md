@@ -1445,13 +1445,15 @@ select * from seoul_popular_trip;
 
 #### 4-6-1. 도커 컴포즈를 통해 phpMyAdmin 추가 설치
 
+* 기존의 컨테이너를 삭제하게 되면 볼륨 마운트가 없기 때문에 데이터를 확인할 수 없는 점 유의하시기 바랍니다
+  - 아래는 기존의  `docker-compose.yml` 파일을 덮어쓰되 phpMyAdmin 만 추가합니다
 ```bash
 # cat > docker-compose.yml
 version: "3"
 
 services:
   mysql:
-    image: psyoblade/mysql:5.7
+    image: mysql/mysql:5.7
     container_name: mysql
     restart: always
     environment:
@@ -1472,9 +1474,9 @@ services:
       PMA_ARBITRARY: 1
     restart: always
     ports:
-      - 8183:80
+      - 80:80
 ```
-> [phpMyAdmin](http://localhost:8183/index.php) 사이트에 접속하여 mysql/user/pass 로 접속합니다
+> phpMyAdmin(http://`vm<number>.aiffelbiz.co.kr`) 사이트에 접속하여 서버:mysql, 사용자명:user, 암호:pass 로 접속합니다
 
 <br>
 
