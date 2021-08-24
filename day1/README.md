@@ -1088,7 +1088,7 @@ docker run --name mysql-bind \
   -v ./mysql/bind:/var/lib/mysql \
   -d mysql
 
-sleep 5
+sleep 10
 docker exec -it mysql-bind mysql --port=3308 -uuser -ppass
 ```
 
