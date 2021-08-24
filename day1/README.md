@@ -1356,7 +1356,7 @@ version: "3"
 services:
   mysql:
     container_name: mysql
-    image: mysql
+    image: local/mysql:5.7
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
@@ -1429,6 +1429,7 @@ docker-compose up -d
 ```
 * MySQL 서버에 접속합니다
 ```bash
+sleep 10
 docker exec -it mysql mysql -uuser -ppass
 ```
 ```sql
