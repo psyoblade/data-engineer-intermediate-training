@@ -2159,7 +2159,7 @@ top -u root
 
 #### 5-5-3. [find](https://man7.org/linux/man-pages/man1/find.1.html) : 파일을 찾는 명령어
 
-> 이름 혹은 상태를 조건으로 원하는 파일을 찾는 명령입니다 - [35 practical examples of linux find command](https://www.tecmint.com/35-practical-examples-of-linux-find-command/)
+> 이름 혹은 상태를 조건으로 원하는 파일을 찾는 명령입니다
 
   - <kbd>-name [expression]</kbd> : 파일명을 기준으로 찾기
   - <kbd>-iname [expression]</kbd> : 대소문자 구분없이 찾기
@@ -2196,7 +2196,7 @@ find / -type -f -size +100M -exec rm -f {} \;
 
 #### 5-5-4. [df](https://man7.org/linux/man-pages/man1/df.1p.html) : 비어있는 디스크의 공간을 확인
 
-> 현재 마운트된 모든 파일시스템의 디스크 여유 공간을 확인합니다 - [df command in linux](https://www.geeksforgeeks.org/df-command-in-linux-with-examples/)
+> 현재 마운트된 모든 파일시스템의 디스크 여유 공간을 확인합니다
 
   - <kbd>-h</kbd> : 읽기 쉬운 포맷으로 출력 (ex_ 1.4G)
   - <kbd>-i</kbd> : 디스크 블록 대신 inode 정보를 출력
@@ -2218,7 +2218,7 @@ df --total
 
 #### 5-5-5. [du](https://man7.org/linux/man-pages/man1/du.1p.html) : 디스크의 사용 공간을 확인
 
-> 현재 사용하고 있는 디스크의 양을 확인합니다 - [du command in linux](https://www.linuxfordevices.com/tutorials/linux/du-command-in-linux)
+> 현재 사용하고 있는 디스크의 양을 확인합니다
 
   - <kbd>-d [depth]</kbd> : 하위 경로의 깊이를 지정 (-d 0는 -s 와 동일한 효과)
   - <kbd>-h</kbd> : 읽기 쉬운 포맷으로 출력 (ex_ 1.4G)
@@ -2237,7 +2237,7 @@ du -d 1 --exclude=wordpress /root
 
 #### 5-5-6. [sar](https://linuxhint.com/sar_linux_tutorial/) : 시스템 활동 리포트 (System Activity Report)
 
-> 별도로 설치해야 하는 도구이며 `sudo apt install sysstat` 통해 사용할 수 있습니다 - [sar example](https://www.thegeekstuff.com/2011/03/sar-examples/)
+> 별도로 설치해야 하는 도구이며 `sudo apt install sysstat` 통해 사용할 수 있습니다
 
   - <kbd>-b</kbd> : 모든 I/O 관련된 상태를 확인
   - <kbd>-d</kbd> : 디스크의 상태를 확인
@@ -2261,14 +2261,13 @@ sar -S 1 5
 
 #### 5-5-7. [iostat](https://man7.org/linux/man-pages/man1/iostat.1.html) : I/O 통계 정보 확인 도구
 
-> 별도로 설치해야 하는 도구이며 `sudo apt install sysstat` 통해 사용할 수 있습니다 - [iostat example](https://www.geeksforgeeks.org/iostat-command-in-linux-with-examples/) 현재 통계정보를 요약된 화면에서 출력해주기 때문에 최근 상태를 좀 더 직관적으로 이해할 수 있습니다
+> 별도로 설치해야 하는 도구이며 `sudo apt install sysstat` 통해 사용할 수 있습니다 -  현재 통계정보를 요약된 화면에서 출력해주기 때문에 최근 상태를 좀 더 직관적으로 이해할 수 있습니다
 
   - <kbd>-x</kbd> : 좀 더 상세한 리포트 출력
   - <kbd>-c</kbd> : CPU 통계 출력
   - <kbd>-d</kbd> : 장치 통계 출력
   - <kbd>-k [interval] [times]</kbd> : 인터벌과 횟수를 지정하여 측정
   - <kbd>-p</kbd> : 디스크 통계 출력
-  - <kbd></kbd> :
 
 <br>
 
@@ -2314,7 +2313,7 @@ iostat -k 1 5
 
 #### 5-5-8. [netstat](http://www.skrenta.com/rt/man/netstat.8.html) : 네트워크 통계를 출력합니다
 
-> 현재 장비에 연결된 접속 혹은 서버의 소켓 상태를 확인할 수 있습니다 - [netstat example](https://geekflare.com/netstat/)
+> 현재 장비에 연결된 접속 혹은 서버의 소켓 상태를 확인할 수 있습니다
 
   - <kbd>-a, --all</kbd> : 모든 소켓을 출력 (default: connected)
   - <kbd>-i, --interfaces</kbd> : 네트워크 인터페이스를 출력
@@ -2347,8 +2346,6 @@ netstat -nalp | grep 1234
 
 #### 5-5-9. 원격지 장비의 포트 오픈 여부 확인하는 방법 5가지
 
-> [5 ways to check if a Port is open on a remote Linux PC](https://www.fosslinux.com/35730/5-ways-to-check-if-a-port-is-open-on-a-remote-linux-pc.htm)
-
   - <kbd>nc -zvw10 [ip] [port]</kbd> : `[netcat]` 통한 ip:port 으로 UDP 패킷 전송 netcat
     - `z` : zero i/o mode
     - `v` : verbose
@@ -2374,8 +2371,6 @@ netstat -tuplen
 
 
 #### 5-5-10. [iptables](https://man7.org/linux/man-pages/man8/iptables.8.html) : 리눅스 장비의 In/Out Port 관리 도구
-
-> [우분투(Ubuntu) 환경에 iptables 설정하기](https://lindarex.github.io/ubuntu/ubuntu-iptables-setting/)
 
 * 실습을 위해 기동된 컨테이너는 종료하고 별도의 컨테이너를 기동합니다
 ```bash
@@ -2950,4 +2945,12 @@ show databases;
 * [Hadoop Commands Cheatsheet](https://images.linoxide.com/hadoop-hdfs-commands-cheatsheet.pdf)
 * [Linux Password](https://www.cyberciti.biz/faq/understanding-etcpasswd-file-format/)
 * [Hadoop Append](https://community.cloudera.com/t5/Support-Questions/Where-can-I-set-dfs-client-block-write-replace-datanode-on/td-p/2529)
+* [35 practical examples of linux find command](https://www.tecmint.com/35-practical-examples-of-linux-find-command/)
+* [df command in linux](https://www.geeksforgeeks.org/df-command-in-linux-with-examples/)
+* [du command in linux](https://www.linuxfordevices.com/tutorials/linux/du-command-in-linux)
+* [sar example](https://www.thegeekstuff.com/2011/03/sar-examples/)
+* [iostat example](https://www.geeksforgeeks.org/iostat-command-in-linux-with-examples/)
+* [netstat example](https://geekflare.com/netstat/)
+* [5 ways to check if a Port is open on a remote Linux PC](https://www.fosslinux.com/35730/5-ways-to-check-if-a-port-is-open-on-a-remote-linux-pc.htm)
+* [우분투(Ubuntu) 환경에 iptables 설정하기](https://lindarex.github.io/ubuntu/ubuntu-iptables-setting/)
 
