@@ -1233,14 +1233,17 @@ services:
 
 ## 8. 멀티 프로세스를 통한 성능 향상
 
-### 8-1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다
+### 8-1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source/target 경로를 호스트에서 생성합니다)
 
+* `docker` 가 경로를 생성하면 root 권한으로 생성되어 `fluentd`가 파일저장에 실패할 수 있습니다
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex6
 docker-compose down
 
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
+mkdir source
+mkdir target
 docker-compose up -d
 ```
 <br>
