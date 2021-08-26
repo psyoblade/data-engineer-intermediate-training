@@ -677,7 +677,7 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 * 테이블 수집 실습을 위해 컨테이너에 접속합니다
 ```bash
 # terminal
-docker-compose exec mysql mysql -usqoop -psqoop
+docker-compose exec sqoop bash
 ```
 
 ### 4-1. 병렬 수행을 통한 테이블 수집
@@ -815,12 +815,18 @@ ask cmd "CREATE TABLE inc_table (
 );"
 ```
 
+* 테이블 데이터 삭제
 ```bash
 cmd "DESCRIBE inc_table"
 cmd "TRUNCATE inc_table"
+```
+
+* 데이터 삽입 후 확인
+```bash
 cmd "INSERT INTO inc_table (name, salary) VALUES ('suhyuk', 10000)"
 ask cmd "SELECT * FROM inc_table"
 ```
+<br>
 
 <details><summary> :blue_book: 12. [중급] 출력 결과 확인</summary>
 
