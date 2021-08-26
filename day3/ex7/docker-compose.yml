@@ -18,5 +18,5 @@ services:
     entrypoint: [ "fluentd" ]
 
 networks:
-  defualt:
+  default:
     name: default_network
