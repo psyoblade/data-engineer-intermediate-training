@@ -1245,6 +1245,7 @@ cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 mkdir source
 mkdir target
 docker-compose up -d
+docker-compose logs -f
 ```
 <br>
 
@@ -1320,31 +1321,12 @@ curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
 ```
 <br>
 
-* `startup.sh`
-```bash
-#!/bin/bash
-export PROJECT_HOME=`pwd`
-name="multi-process"
-echo "docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd"
-docker run --name $name -u root -p 9880:9880 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd
-```
-
-* `shutdown.sh`
-```bash
-#!/bin/bash
-name="multi-process"
-container_name=`docker ps -a --filter name=$name | grep -v 'CONTAINER' | awk '{ print $1 }'`
-docker rm -f $container_name
-```
-<br>
-
 ### 8-4. 기동된 Fluentd 를 종료합니다
 
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
-./shutdown.sh
-docker ps -a
+docker-compose down
 ```
 
 [목차로 돌아가기](#3일차-트레저데이터-플루언트디-파일-수집)
