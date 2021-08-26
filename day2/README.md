@@ -465,8 +465,8 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 * 원격 하둡 저장소에 제대로 수집이 되었는지 확인합니다
 ```bash
 # docker
-hadoop fs -ls /user/sqoop/target/seoul_popular_trip
-ask hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
+# hadoop fs -ls /user/sqoop/target/seoul_popular_trip
+hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 ```
 
 #### 2-4-2. 예제 실습이 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
