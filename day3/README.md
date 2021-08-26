@@ -1242,27 +1242,36 @@ docker-compose down
 
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 mkdir source
-./startup.sh
+docker-compose up -d
 ```
 <br>
 
-### 8-2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
+### 8-2. `docker-compose.yml` 파일 구성
+```yml
+version: "3"
 
-* 첫 번째 프로세스가 파일로 받은 입력을 표준 출력으로 내보내는 프로세스입니다
-```bash
-# terminal
-cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
-for x in $(seq 1 1000); do echo "{\"hello\":\"world\"}" >> source/start.log; done
-```
-* 두 번째 프로세스는 HTTP 로 입력 받은 내용을 표준 출력으로 내보내는 프로세스입니다
-```bash
-curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
-```
-<br>
+services:
+  fluentd:
+    container_name: multi-process
+    image: psyoblade/data-engineer-fluentd:2.1
+    user: root
+    volumes:
+      - ./fluent.conf:/etc/fluentd/fluent.conf
+      - ./source:/fluentd/source
+      - ./target:/fluentd/target
+    ports:
+      - 9880:9880
+      - 24224:24224
+      - 24224:24224/udp
+    entrypoint: [ "fluentd" ]
 
-### 8-3. Fluentd 구성 파일
-* `fluentd.conf`
-```yaml
+networks:
+  defualt:
+    name: default_network
+```
+
+### 8-3. `fluentd.conf` 파일 구성
+```html
 <system>
     workers 2
     root_dir /fluentd/log
@@ -1292,6 +1301,21 @@ curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
     </match>
 </worker>
 ```
+
+
+### 8-2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
+
+* 첫 번째 프로세스가 파일로 받은 입력을 표준 출력으로 내보내는 프로세스입니다
+```bash
+# terminal
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
+for x in $(seq 1 1000); do sleep 0.1 ; echo "{\"hello\":\"world\"}" >> source/start.log; done
+```
+* 두 번째 프로세스는 HTTP 로 입력 받은 내용을 표준 출력으로 내보내는 프로세스입니다
+```bash
+curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
+```
+<br>
 
 * `startup.sh`
 ```bash
