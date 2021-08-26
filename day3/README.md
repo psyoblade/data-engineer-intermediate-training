@@ -1432,29 +1432,21 @@ networks:
 ```
 <br>
 
+
 ### 9-4. 별도의 터미널에서 아래의 명령
-* 멀티 프로세스를 통해 하나의 쿼리로 읽어오도록 저장되는 것을 확인합니다
+* 멀티 프로세스를 통해 하나의 경로에 저장되는 것을 확인합니다
 
 ```bash
 # terminal
 tree target
 ```
 <br>
-
-
-* `startup.sh`
-```bash
-#!/bin/bash
-export PROJECT_HOME=`pwd`
-name="multi-process-ex"
-echo "docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd"
-docker run --name $name -u root -p 9880:9880 -p 9881:9881 -v $PROJECT_HOME/fluent.conf:/fluentd/etc/fluent.conf -v $PROJECT_HOME/source:/fluentd/source -v $PROJECT_HOME/target:/fluentd/target -it psyoblade/data-engineer-fluentd
 ```
 
 * `progress.sh`
 ```bash
 #!/bin/bash
-max=60
+max=120
 dot="."
 for number in $(seq 0 $max); do
     for port in $(seq 9880 9881); do
@@ -1465,23 +1457,16 @@ for number in $(seq 0 $max); do
     sleep 1
     dot="$dot."
 done
+echo
 tree
 ```
 
-* `shutdown.sh`
-```bash
-#!/bin/bash
-name="multi-process-ex"
-container_name=`docker ps -a --filter name=$name | grep -v 'CONTAINER' | awk '{ print $1 }'`
-docker rm -f $container_name
-```
 <br>
 
 ### 9-4. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 ```bash
 # terminal
 docker-compose down
-docker ps -a
 ```
 
 
