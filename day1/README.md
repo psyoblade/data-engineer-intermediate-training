@@ -2511,7 +2511,7 @@ docker-compose exec namenode bash
 ```bash
 # -ls [-d] [-h] [-R] [<path> ...]
 hdfs dfs -mkdir /user
-hdfs dfs -ls /user
+hdfs dfs -ls /
 ```
 <br>
 
@@ -2573,7 +2573,7 @@ hdfs dfs -cat /tmp/helloworld
   - <kbd>-l</kbd> : 복제수를 1개로 강제합니다 (lazily persist)
 ```bash
 # -put [-f] [-p] [-l] <localsrc> ... <dst>
-echo "lgde ${course} course" > uploaded.txt
+echo "lg data engineering course" > uploaded.txt
 ```
 ```bash
 hdfs dfs -put ./uploaded.txt /tmp
@@ -2716,7 +2716,7 @@ hdfs dfs -ls hdfs:///user/root
   - <kbd>OCTALMODE</kbd> : e.g. 754 is same as u=rwx,g=rx,o=r.
 ```bash
 # -chmod [-R] <MODE[,MODE]... | OCTALMODE> PATH...
-hdfs dfs -chmod 777 /user/root/zero_size_file
+hdfs dfs -chmod 777 /user/root/
 ```
 <br>
 

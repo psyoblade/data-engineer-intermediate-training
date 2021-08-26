@@ -213,7 +213,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-basic-training/day2/
+cd /home/ubuntu/work/data-engineer-{course}-training/day2/
 docker-compose exec mysql mysql -usqoop -psqoop
 ```
 ```sql
