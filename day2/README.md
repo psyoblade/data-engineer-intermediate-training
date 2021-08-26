@@ -659,14 +659,6 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 
 </details>
 
-#### 3-3-4. 테이블 수집 실습이 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
-
-* 테이블 수집 관련 컨테이너를 종료합니다
-
-```bash
-cd /home/ubuntu/work/data-engineer-${course}-training/day2
-docker-compose down
-```
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
 
@@ -1002,12 +994,11 @@ ask sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --username 
 
 
 ### 5-2. 컨테이너 정리
-* 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
+* 테이블 수집 실습이 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day2
 docker-compose down
 ```
-
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
 
