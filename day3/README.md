@@ -1441,7 +1441,6 @@ networks:
 tree target
 ```
 <br>
-```
 
 * `progress.sh`
 ```bash
@@ -1481,57 +1480,19 @@ docker-compose down
 ### 10-1. 서비스를 기동합니다
 ```bash
 # terminal
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex8
+docker-compose down
+
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex9
-./startup.sh
+docker-compose up -d
 ```
 <br>
 
-### 10-2. 별도의 터미널에서 모든 서비스(fluentd, namenode, datanode)가 떠 있는지 확인합니다
+### 10-2. `docker-compose.yml` 파일을 분석합니다
+```yml
+version: "3"
 
-```bash
-# terminal
-docker ps
-```
-<br>
-
-### 10-3. HTTP 로 전송하고 해당 데이터가 하둡에 저장되는지 확인합니다
-  * http://ubuntu@vm<number>.aiffelbiz.co.kr:50070/explorer.html 에 접속하여 확인합니다
-  * 혹은 namenode 에 설치된 hadoop client 로 확인 합니다
-  * WARN: 현재 노드수가 1개밖에 없어서 Replication 오류가 나고 있습니다. 
-```
-./progress.sh
-docker exec -it namenode hadoop fs -ls /user/fluent/webhdfs/
-```
-<br>
-
-### 10-4. Fluentd 구성 파일을 분석합니다
-
-* `fluent.conf`
-```yaml
-version: '2'
 services:
-  namenode:
-    container_name: namenode
-    image: bde2020/hadoop-namenode:1.1.0-hadoop2.8-java8
-    volumes:
-      - ./hadoop/namenode:/hadoop/dfs/name
-    environment:
-      - CLUSTER_NAME=test
-    env_file:
-      - ./hadoop/hadoop.env
-    ports:
-      - 50070:50070
-  datanode:
-    container_name: datanode
-    image: bde2020/hadoop-datanode:1.1.0-hadoop2.8-java8
-    depends_on:
-      - namenode
-    volumes:
-      - ./hadoop/datanode:/hadoop/dfs/data
-    env_file:
-      - ./hadoop/hadoop.env
-    ports:
-      - 50075:50075
   fluentd:
     container_name: fluentd
     image: psyoblade/data-engineer-fluentd:2.1
@@ -1539,26 +1500,66 @@ services:
       - namenode
       - datanode
     user: root
-    ports:
-      - 9880:9880
     tty: true
     volumes:
-      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
-volumes:
-  namenode:
-  datanode:
+      - ./fluentd/fluent.conf:/etc/fluentd/fluent.conf
+    ports:
+      - 9880:9880
+    networks:
+      - default
+    entrypoint: [ "fluentd" ]
+...
 ```
 
-* `start container`
+### 10-3. `fluent.conf` 파일을 분석합니다
+```xml
+<source>
+    @type http
+    port 9880
+    bind 0.0.0.0
+</source>
+
+<match test.info>
+    @type webhdfs
+    @log_level debug
+    host namenode
+    port 50070
+    path "/user/fluent/webhdfs/logs.${tag}.%Y%m%d_%H.#{Socket.gethostname}.log"
+    <buffer time,tag>
+        timekey 1m
+        timekey_wait 10s
+        flush_interval 30s
+    </buffer>
+</match>
+
+<match test.debug>
+    @type stdout
+</match>
+```
+
+### 10-4. 별도의 터미널에서 모든 서비스(fluentd, namenode, datanode)가 떠 있는지 확인합니다
+
 ```bash
 # terminal
-docker-compose up -d
+docker ps
 ```
+<br>
+
+### 10-5. HTTP 로 전송하고 해당 데이터가 하둡에 저장되는지 확인합니다
+
+> http://vm[number].aiffelbiz.co.kr:50070/explorer.html 에 접속하여 확인하거나, namenode 에 설치된 hadoop client 로 확인 합니다
+* WARN: 현재 노드수가 1개밖에 없어서 Replication 오류가 나고 있습니다. 
+```
+./progress.sh
+docker exec -it namenode hadoop fs -ls /user/fluent/webhdfs/
+```
+<br>
+
 
 * `progress.sh` : 테스트를 위한 로그를 전송합니다
 ```bash
 #!/bin/bash
-max=60
+max=120
 dot="."
 for number in $(seq 0 $max); do
     curl -XPOST -d "json={\"hello\":\"$number\"}" http://localhost:9880/test.info
@@ -1572,7 +1573,6 @@ done
 ```bash
 # terminal
 docker-compose down
-docker ps -a
 ```
 
 </details>

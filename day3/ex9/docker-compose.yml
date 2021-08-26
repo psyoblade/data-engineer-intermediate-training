@@ -1,6 +1,22 @@
 version: "3"
 
 services:
+  fluentd:
+    container_name: fluentd
+    image: psyoblade/data-engineer-fluentd:2.1
+    depends_on: 
+      - namenode
+      - datanode
+    user: root
+    tty: true
+    volumes:
+      - ./fluentd/fluent.conf:/etc/fluentd/fluent.conf
+    ports:
+      - 9880:9880
+    networks:
+      - default
+    entrypoint: [ "fluentd" ]
+
   namenode:
     container_name: namenode
     image: bde2020/hadoop-namenode:1.1.0-hadoop2.8-java8
@@ -12,6 +28,7 @@ services:
       - ./hadoop/hadoop.env
     ports:
       - 50070:50070
+
   datanode:
     container_name: datanode
     image: bde2020/hadoop-datanode:1.1.0-hadoop2.8-java8
@@ -23,19 +40,11 @@ services:
       - ./hadoop/hadoop.env
     ports:
       - 50075:50075
-  fluentd:
-    container_name: fluentd
-    image: psyoblade/data-engineer-fluentd:2.1
-    depends_on: 
-      - namenode
-      - datanode
-    user: root
-    ports:
-      - 9880:9880
-    tty: true
-    volumes:
-      - ./fluentd/fluent.conf:/etc/fluentd/fluent.conf
 
 volumes:
   namenode:
   datanode:
+
+networks:
+  default:
+    name: default_network
