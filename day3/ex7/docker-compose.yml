@@ -13,6 +13,8 @@ services:
       - 9880:9880
       - 24224:24224
       - 24224:24224/udp
+    networks:
+      - default
     entrypoint: [ "fluentd" ]
 
 networks:
