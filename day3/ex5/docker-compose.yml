@@ -16,21 +16,6 @@ services:
       options:
         fluentd-address: localhost:24224
         tag: docker.fortune
-  web:
-    container_name: web
-    image: psyoblade/data-engineer-ubuntu:20.04
-    tty: true
-    restart: always
-    volumes:
-      - ./fortune_teller.sh:/fortune_teller.sh
-    entrypoint: [ "/fortune_teller.sh", "1000" ]
-    links:
-      - fluentd
-    logging:
-      driver: "fluentd"
-      options:
-        fluentd-address: localhost:24224
-        tag: docker.{{.Name}}
   fluentd:
     container_name: fluentd
     image: psyoblade/data-engineer-fluentd:2.1

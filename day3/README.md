@@ -777,6 +777,7 @@ fluentd
 * 별도로 컨테이너에 접속하여 예제로 현재 시간을 넣고 로그를 출력합니다
 ```bash
 # terminal
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex4
 docker-compose exec fluentd bash
 ```
 <br>
@@ -985,6 +986,7 @@ docker-compose logs -f ubuntu
 <br>
 
 ```bash
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex5
 docker-compose logs -f fluentd
 ```
 > 플루언트디로 전송되어 출력이 되는지 확인합니다
