@@ -1305,8 +1305,7 @@ networks:
 </worker>
 ```
 
-
-### 8-2. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
+### 8-4. 새로운 터미널에서 다시 아래의 명령으로 2가지 테스트를 수행합니다.
 
 * 첫 번째 프로세스가 파일로 받은 입력을 표준 출력으로 내보내는 프로세스입니다
 ```bash
@@ -1321,7 +1320,7 @@ curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
 ```
 <br>
 
-### 8-4. 기동된 Fluentd 를 종료합니다
+### 8-5. 기동된 Fluentd 를 종료합니다
 
 ```bash
 # terminal
@@ -1338,7 +1337,7 @@ docker-compose down
 
 ## 9. 멀티 프로세스를 통해 하나의 위치에 저장
 
-### 9-1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source 경로를 호스트에서 생성합니다)
+### 9-1. 서비스를 기동하고 별도의 터미널을 통해서 멀티프로세스 기능을 확인합니다 (반드시 source/target 경로를 호스트에서 생성합니다)
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
@@ -1346,16 +1345,37 @@ docker-compose down
 
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex8
 mkdir source
-./startup.sh
+mkdir target
+docker-compose up -d
+docker-compose logs -f
 ```
 <br>
 
-### 9-2. 별도의 터미널에서 아래의 명령
-* 멀티 프로세스를 통해 하나의 쿼리로 읽어오도록 저장되는 것을 확인합니다
+### 9-2. `docker-compose.yml` 파일 구성
+```yml
+version: "3"
 
-```bash
-# terminal
-tree target
+services:
+  fluentd:
+    container_name: multi-process-ex
+    image: psyoblade/data-engineer-fluentd:2.1
+    user: root
+    volumes:
+      - ./fluent.conf:/etc/fluentd/fluent.conf
+      - ./source:/fluentd/source
+      - ./target:/fluentd/target
+    ports:
+      - 9880:9880
+      - 9881:9881
+      - 24224:24224
+      - 24224:24224/udp
+    networks:
+      - default
+    entrypoint: [ "fluentd" ]
+
+networks:
+  default:
+    name: default_network
 ```
 <br>
 
@@ -1410,6 +1430,17 @@ tree target
     </match>
 </worker>
 ```
+<br>
+
+### 9-4. 별도의 터미널에서 아래의 명령
+* 멀티 프로세스를 통해 하나의 쿼리로 읽어오도록 저장되는 것을 확인합니다
+
+```bash
+# terminal
+tree target
+```
+<br>
+
 
 * `startup.sh`
 ```bash
