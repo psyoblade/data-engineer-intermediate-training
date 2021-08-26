@@ -581,9 +581,17 @@ python flush_logs.py
 ```
 <br>
 
+
+* 별도의 터미널을 통해 로그가 생성되는지 확인합니다
+```bash
+# terminal
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex3
+docker-compose exec fluentd bash
+```
 ```
 for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -L 2 /fluentd/target; sleep 10; done
 ```
+
 > 위의 명령어로 주기적으로 출력 경로를 확인할 수 있습니다
 
 <details><summary> :green_book: 4. [기본] 출력 결과 확인</summary>
