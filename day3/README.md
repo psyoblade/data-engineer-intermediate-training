@@ -360,7 +360,7 @@ fluentd
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-${course}-training/day2/ex2
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex2
 docker-compose exec fluentd bash
 ```
 ```bash
@@ -573,7 +573,7 @@ fluentd
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-${course}-training/day2/ex3
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex3
 docker-compose exec fluentd bash
 ```
 ```bash
@@ -642,7 +642,7 @@ root@2cf7c79e8367:~# for x in $(seq 1 100); do tree -L 1 /fluentd/source; tree -
 ### 4-4. 컨테이너 정리
 * 테스트 작업이 완료되었으므로 모든 컨테이너를 종료합니다 (한번에 실행중인 모든 컨테이너를 종료합니다)
 ```bash
-cd /home/ubuntu/work/data-engineer-${course}-training/day2/ex3
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex3
 docker-compose down
 ```
 
