@@ -1033,9 +1033,9 @@ fluentd  | 2021-07-18 17:03:11.177728881 +0000 docker.fortune: {"container_id":"
 | {{.DaemonName}} | The name of the docker program (docker). |
 
 
-<details><summary> :blue_book: 7. [중급] 컨테이너 이름을 web 으로 tag 를 `docker.{{.Name}}}`로 출력하는 `docker-compose.yml`을 작성하세요 </summary>
+<details><summary> :blue_book: 7. [중급] 컨테이너 이름을 web 으로 tag 를 `docker.{{.Name}}}`로 출력하는 `web.yml`을 작성하고 기동하세요 </summary>
 
-> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+> `web.yml` 파일을 아래와 같이 작성하셨다면 정답입니다
 
 ```yaml
 version: '3'
@@ -1086,6 +1086,25 @@ services:
 networks:
   default:
     name: default_network
+```
+
+* 기존에 떠 있던 컨테이너를 종료하고 `web.yml`을 기동합니다
+```bash
+docker-compose down
+docker-compose -f web.yml up -d
+```
+
+* 개별 서비스들의 로그를 확인합니다
+```bash
+docker-compose logs -f ubuntu
+docker-compose logs -f web
+docker-compose logs -f fluentd
+```
+
+* 미처 종료되지 않은 컨테이너도 종료합니다
+```bash
+# terminal
+docker-compose down --remove-orphans
 ```
 
 </details>
