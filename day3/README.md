@@ -1549,12 +1549,10 @@ docker ps
 
 > http://vm[number].aiffelbiz.co.kr:50070/explorer.html 에 접속하여 확인하거나, namenode 에 설치된 hadoop client 로 확인 합니다
 * WARN: 현재 노드수가 1개밖에 없어서 Replication 오류가 나고 있습니다. 
-```
+```bash
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex9
 ./progress.sh
-docker exec -it namenode hadoop fs -ls /user/fluent/webhdfs/
 ```
-<br>
-
 
 * `progress.sh` : 테스트를 위한 로그를 전송합니다
 ```bash
@@ -1568,6 +1566,13 @@ for number in $(seq 0 $max); do
     dot="$dot."
 done
 ```
+
+* 1분 이상 대기했다가 확인합니다
+```bash
+docker exec -it namenode hadoop fs -ls /user/fluent/webhdfs/
+```
+<br>
+
 
 ### 10-5. 실습이 끝났으므로 플루언트디 에이전트를 컨테이너 화면에서 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 ```bash
