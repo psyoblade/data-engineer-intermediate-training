@@ -1,4 +1,5 @@
 version: "3"
+
 services:
   web:
     container_name: web
@@ -7,11 +8,14 @@ services:
       - 80:80
     links:
       - fluentd
+    depends_on:
+      - fluentd
     logging:
       driver: fluentd
       options:
         fluentd-address: localhost:24224
         tag: httpd.access
+
   fluentd:
     container_name: fluentd
     image: psyoblade/data-engineer-fluentd:2.1
@@ -19,9 +23,23 @@ services:
       - ./fluentd/fluent.conf:/etc/fluentd/fluent.conf
     links:
       - elasticsearch
+    depends_on:
+      - elasticsearch
     ports:
       - 24224:24224
       - 24224:24224/udp
+    entrypoint: [ "fluentd" ]
+
+  kibana:
+    container_name: kibana
+    image: kibana:7.8.0
+    links:
+      - elasticsearch
+    depends_on:
+      - elasticsearch
+    ports:
+      - 5601:5601
+
   elasticsearch:
     container_name: elasticsearch
     image: elasticsearch:7.8.0
@@ -50,13 +68,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-  kibana:
-    container_name: kibana
-    image: kibana:7.8.0
-    links:
-      - elasticsearch
-    ports:
-      - 5601:5601
+
 volumes:
   elasticsearchdata:
   elasticsearchlogs:

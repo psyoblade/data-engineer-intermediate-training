@@ -1143,13 +1143,13 @@ docker ps
 ### 7-2. 키바나를 통해 엘라스틱 서치를 구성합니다
 
 * 키바나 사이트에 접속하여 색인을 생성
-
   * 1. http://vm[number].aiffelbiz.co.kr:5601 사이트에 접속 (모든 컴포넌트 기동에 약 3~5분 정도 소요됨)
   * 2. Explorer on my Own 선택 후, 좌측 "Discover" 메뉴 선택
   * 3. Step1 of 2: Create Index with 'fluentd-\*' 까지 치면 아래에 색인이 뜨고 "Next step" 클릭
   * 4. Step2 of 2: Configure settings 에서 @timestamp 필드를 선택하고 "Create index pattern" 클릭
   * 5. Discover 메뉴로 이동하면 전송되는 로그를 실시간으로 확인할 수 있음
-* 웹 사이트에 접속을 시도
+
+* 웹 사이트에 접속을 시도 (초기 기동 시에 시간이 걸립니다)
   * 1. http://vm[number].aiffelbiz.co.kr 사이트에 접속하면 It works! 가 뜨면 정상
   * 2. 다시 Kibana 에서 Refresh 버튼을 누르면 접속 로그가 전송됨을 확인
 
