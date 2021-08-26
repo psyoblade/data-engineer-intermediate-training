@@ -1315,6 +1315,7 @@ for x in $(seq 1 1000); do sleep 0.1 ; echo "{\"hello\":\"world\"}" >> source/st
 ```
 * 두 번째 프로세스는 HTTP 로 입력 받은 내용을 표준 출력으로 내보내는 프로세스입니다
 ```bash
+cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex7
 curl -XPOST -d "json={\"hello\":\"world\"}" http://localhost:9880/test
 ```
 <br>
