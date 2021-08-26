@@ -360,7 +360,7 @@ fluentd
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-basic-training/day2/ex2
+cd /home/ubuntu/work/data-engineer-${course}-training/day2/ex2
 docker-compose exec fluentd bash
 ```
 ```bash
@@ -573,7 +573,7 @@ fluentd
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-basic-training/day2/ex3
+cd /home/ubuntu/work/data-engineer-${course}-training/day2/ex3
 docker-compose exec fluentd bash
 ```
 ```bash
