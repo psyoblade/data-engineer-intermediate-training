@@ -527,6 +527,14 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 ```
 <br>
 
+* 수집된 텍스트파일의 내용과 비교하면서 디버깅 할 수 있습니다
+```bash
+# docker
+hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000 | more
+```
+<br>
+
+
 
 #### 3-2-2. 탭구분자로 테이블 재수집
 
@@ -544,7 +552,7 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 
 ```bash
 # docker
-ask hadoop fs -cat /user/sqoop/target/seoul_popular_exp/part-m-00000 | more
+hadoop fs -cat /user/sqoop/target/seoul_popular_exp/part-m-00000 | more
 ```
 
 <details><summary> :green_book: 7. [기본] 출력 결과 확인</summary>
