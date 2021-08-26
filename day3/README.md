@@ -1548,9 +1548,12 @@ docker ps
 ### 10-5. HTTP 로 전송하고 해당 데이터가 하둡에 저장되는지 확인합니다
 
 > http://vm[number].aiffelbiz.co.kr:50070/explorer.html 에 접속하여 확인하거나, namenode 에 설치된 hadoop client 로 확인 합니다
+
 * WARN: 현재 노드수가 1개밖에 없어서 Replication 오류가 나고 있습니다. 
+  - 네임노드가 정상 기동될 때까지 약 30초 정도 대기합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-${course}-training/day3/ex9
+sleep 30
 ./progress.sh
 ```
 
