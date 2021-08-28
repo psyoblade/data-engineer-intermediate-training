@@ -812,9 +812,9 @@ docker commit ubuntu ubuntu:hello
 #### 3-4-3. `rmi` : 해당 이미지를 삭제합니다
 
 ```bash
-# 이전에 `ubuntu:20.04` 기반의 컨테이너를 종료하고, 이미지도 삭제합니다
+# 이전에 `ubuntu:18.04` 기반의 컨테이너를 종료하고, 이미지도 삭제합니다
 docker rm -f ubuntu
-docker rmi ubuntu:20.04
+docker rmi ubuntu:18.04
 ```
 
 ```bash
