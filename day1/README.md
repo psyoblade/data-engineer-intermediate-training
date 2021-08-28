@@ -431,32 +431,32 @@ tmp/
 
 ### 2-7. 이력 관리
 
-#### 2-7-1. reset : 스테이징된 모든 내역을 제거 혹은 제거된 내역을 롤백합니다
+> `reset` 명령을 통해 스테이징된 모든 내역을 제거 혹은 제거된 내역을 롤백합니다
 
-* git log 명령을 통해 커밋 해시 값을 확인할 수 있습니다
+#### 2-7-1. git log 명령을 통해 커밋 해시 값을 확인할 수 있습니다
 ```bash
 git log
 ```
 
-* 확인된 해시 값으로 해당 커밋 시점으로 돌릴 수 있습니다
+#### 2-7-2. 확인된 해시 값으로 해당 커밋 시점으로 돌릴 수 있습니다
 ```bash
 # git reset --hard [commit]
 # git reset --hard 7e5e3e54e400228cbdb12ab00b13c4af22305a0d
 ```
 
-* git reflog 명령을 통해 모든 커밋 이력을 확인할 수 있습니다
+#### 2-7-3. git reflog 명령을 통해 모든 커밋 이력을 확인할 수 있습니다
 ```bash
 git reflog
 ```
 
-* 특정 HEAD 즉, 커밋된 시점으로 되돌릴 수 있습니다
-  - 단 추가된 파일들은 삭제되지 않고 남아 있습니다
+#### 2-7-4. 특정 HEAD 즉, 커밋된 시점으로 되돌릴 수 있습니다
 ```bash
+# 단 추가된 파일들은 삭제되지 않고 남아 있습니다
 # git reflog (show master)
 # git reset 'HEAD@{1}'
 ```
 
-* 스테이징되지 않은 추가된 파일들을 삭제합니다
+#### 2-7-5. 스테이징되지 않은 추가된 파일들을 삭제합니다
 ```bash
 # git clean (-f, --force | -i, --interactive)
 git clean -f
@@ -466,11 +466,10 @@ git clean -f
 
 ### 2-8. 임시 저장
 
-#### 2-8-1. stash : 변경 내역을 임시 저장소에 저장합니다
-
+> `stash` 명령을 통해 변경 내역을 임시 저장소에 저장합니다
 > 현재 수정내역을 커밋하기는 애매하지만, 다른 브랜치로 체크아웃 하고 싶을 때 임시로 수정 내역 전체를 저장합니다
 
-* [stash] 현재까지 수정된 모든 내역을 임시로 저장
+#### 2-8-1. [stash] 현재까지 수정된 모든 내역을 임시로 저장
 ```bash
 echo "test modify" >> README.md
 git stash
@@ -478,7 +477,7 @@ cat README.md
 ```
 <br>
 
-* [checkout] 다른 브랜치로 이동하여 필요한 작업을 수행합니다
+#### 2-8-2. [checkout] 다른 브랜치로 이동하여 필요한 작업을 수행합니다
 ```bash
 git checkout lgde/2021
 echo "lgde/2021" >> cat README.md
@@ -486,20 +485,20 @@ git commit -am "[개발]"
 ```
 <br>
 
-* [checkout] 다시 이전 작업 브랜치로 돌아옵니다
+#### 2-8-3. [checkout] 다시 이전 작업 브랜치로 돌아옵니다
 ```bash
 git checkout master
 cat README.md
 ```
 <br>
 
-* [stash-list] 임시저장 목록을 확인합니다
+#### 2-8-4. [stash-list] 임시저장 목록을 확인합니다
 ```bash
 git stash list
 ```
 <br>
 
-* [stash-pop] 가장 마지막에 저장한 것을 복원하고 커밋합니다
+#### 2-8-5. [stash-pop] 가장 마지막에 저장한 것을 복원하고 커밋합니다
 ```bash
 git stash pop
 cat README.md
@@ -507,19 +506,20 @@ git commit -am "[완료]"
 ```
 <br>
 
+#### 2-8-6. `drop`, `applly`, `show` 명령어
 
-* [stash-drop] 가장 마지막에 저장된 것을 삭제하거나
 ```bash
+# 가장 마지막에 저장된 것을 삭제하거나
 git stash drop
 ```
 
-* [stash-apply] 혹은 stash 값을 바로 사용
 ```bash
+# stash 인덱스를 직접 지정하거나
 git stash apply stash@{0}
 ```
 
-* [stash-show] 내역을 볼 수도 있습니다
 ```bash
+# 내역을 볼 수도 있습니다
 git stash show stash@{1}
 ```
 <br>
