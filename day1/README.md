@@ -370,6 +370,9 @@ git clean -f
 * `git pull`                       : 작업 시작시에 가장 먼저 해야 하는 명령어
 * `git push`                       : 작업이 완료되면 푸시
 * `git checkout -- .`              : 수정한 내역 버리고 마지막 커밋 시점으로 롤백
+  - `--` means "everything after this should be interpreted as a path/filename. 즉, 경로 목록과 명령어를 구분하기 위한 예약어
+  - `checkout <path>` 는 매칭 되는 파일들을 저장되어 있는 상태로 restore 하라는 의미입니다
+  - `checkout <branch>` 는 지정한 브랜치로 HEAD를 이동하라는 의미입니다
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
