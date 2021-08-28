@@ -2014,21 +2014,20 @@ cat /etc/passwd | cut -d: -f4 | sort | uniq -d    # 패스워드 파일에서 �
 # cut -f2 filename
 ```
 
-* ':'으로 구분된 컬럼을 '#'으로 구분하여 출력합니다
 ```bash
+# terminal ':'으로 구분된 컬럼을 '#'으로 구분하여 출력합니다
 cat /etc/passwd | cut -f1- -d':' --output-delimiter='#'
 ```
 
-* ls -al 결과의 앞 10바이트를 제외한 나머지 컬럼 들만 출력합니다
 ```bash
+# terminal : ls -al 결과의 앞 10바이트를 제외한 나머지 컬럼 들만 출력합니다
 ls -al | cut -b -10 --complement
 ```
 <br>
 
 
-##### /etc/passwd 파일구성
-
-* `root:x:0:0:root:/root:/bin/bash`
+* /etc/passwd 파일구성
+  - `root:x:0:0:root:/root:/bin/bash`
   - 계정명 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
 
 <details><summary> :blue_book: 23. [중급] 패스워드 파일에서 로그인 쉘 가운데 가장 빈도가 높은 3개를 찾아보세요</summary>
@@ -2052,19 +2051,17 @@ cat /etc/passwd | cut -d: -f7 | sort | uniq -c | sort -nr | head -3
     - `[:space:]` : 공백 + 줄바꿈
     - `[:lower:]` / `[:upper:]` : 소문자 / 대문자
 
-* 패스워드 파일의 구분자 콜론을 공백으로 치환합니다
 ```bash
+# terminal : 패스워드 파일의 구분자 콜론을 공백으로 치환합니다
 # tr [OPTION] ... SET1 [SET2]
 head /etc/passwd | tr ':' ' '
 ```
-<br>
 
-* ls -al 결과의 한 줄의 문자열로 출력합니다
 ```bash
+# terminal : ls -al 결과의 한 줄의 문자열로 출력합니다
 # tr [OPTION] ... SET1 [SET2]
 ls -al | tr -d [:space:]
 ```
-<br>
 
 <details><summary> :blue_book: 24. [중급] 패스워드 파일의 계정 이름만 대문자로 출력하세요</summary>
 
@@ -2149,7 +2146,7 @@ ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
 
   - <kbd>-v, --verbose</kbd> : 상세하게 내용을 출력합니다
   - <kbd>-q, --quiet</kbd> : 에러가 아닌 메시지 출력을 하지 않습니다
-  - <kbd>-a, --archive</kbd> : -rlptgoD 옵션과 동일하며, symlink, permission, group, owner 등을 완전히 동일하게 유지합니다
+  - <kbd>-a, --archive</kbd> : symlink, permission, group, owner 등을 완전히 동일하게 유지합니다
   - <kbd>-r, --recursive</kbd> : 디렉토리 하위까지 재귀적으로 복사합니다
   - <kbd>-u, --update</kbd> : 새로운 파일 들만 복사합니다
   - <kbd>-n, --dry-run</kbd> : 실제 복사가 이루어지지 않고 복사될 파일 목록을 체크합니다
@@ -2218,11 +2215,10 @@ rsync -av . /tmp/backup
 * [tty](https://www.howtogeek.com/428174/what-is-a-tty-on-linux-and-how-to-use-the-tty-command/)는 `teletypewriter` 의 약자로써 원격지의 장비에 메시지를 보내는 `teleprinters` 에서 시작했으며, 발전하여 다양한 문자과 부호까지 전송이 가능하게 되었으며, 현대 리눅스에서는 모든 접속된 터미널 윈도우와 `pseudo-teletypes(pts)`를 가지게 되며 하나의 장치로 인식되어 `/dev/pts/0`와 같은 파일로 존재하게 되며 `tty`명령으로 확인할 수 있습니다
   - `multiplexer` 가 master 역할이며 pts 들은 slave 가 됩니다 (master: `/dev/ptmx`)
 
-* 로그인 유저의 모든 프로세스를 출력하고, 명령어 전체를 출력하여 vi 편집기로 여는 명령
 ```bash
-# terminal
+# terminal : 로그인 유저의 모든 프로세스를 출력
 # ps [options]
-ps -aufxww | vi -
+ps -aufxww
 ```
 
 <br>
@@ -2246,6 +2242,7 @@ ps -eo pid,lstart,cmd
 
 ![top](images/top.png)
 
+  - <kbd>top</kbd> : 현재 시간 (3초)
   - <kbd>up</kbd> : 장비가 기동된 시간
   - <kbd>users</kbd> : 접속한 활성화 이용자 (tty)
   - <kbd>load average</kbd> : 1, 5, 15 분간의 평균 부하(load)를 말합니다
@@ -2423,19 +2420,23 @@ df --total
 ```bash
 # terminal
 # du [OPTIONS] [FILE or DIRECTORY NAME]
+# du -d 1 --exclude=wordpress /root
 du -sh .
-du -d 1 --exclude=wordpress /root
 ```
 <br>
 
 
 #### 5-5-6. [sar](https://linuxhint.com/sar_linux_tutorial/) : 시스템 활동 리포트 (System Activity Report)
 
-> 별도로 설치해야 하는 도구이며 `sudo apt install sysstat` 통해 사용할 수 있습니다
+> 별도로 설치해야 하는 도구이며 `sysstat` 설치를 통해 사용할 수 있습니다
+
+```bash
+# terminal
+sudo apt install sysstat -y
+```
 
   - <kbd>-b</kbd> : 모든 I/O 관련된 상태를 확인
   - <kbd>-d</kbd> : 디스크의 상태를 확인
-  - <kbd>-n</kbd> : 네트워크 상태를 확인
   - <kbd>-r</kbd> : 메모리 상태를 확인
   - <kbd>-u ALL</kbd> : CPU 상태를 확인
   - <kbd>-w</kbd> : 컨텍스트 스위칭 상태를 확인
@@ -2445,7 +2446,6 @@ du -d 1 --exclude=wordpress /root
 ```bash
 # sar [options] [interval] [times]
 sar -b 1 5
-sar -n 1 5
 sar -r 1 5
 sar -S 1 5
 ```
@@ -2455,7 +2455,7 @@ sar -S 1 5
 
 #### 5-5-7. [iostat](https://man7.org/linux/man-pages/man1/iostat.1.html) : I/O 통계 정보 확인 도구
 
-> 별도로 설치해야 하는 도구이며 `sudo apt install sysstat` 통해 사용할 수 있습니다 -  현재 통계정보를 요약된 화면에서 출력해주기 때문에 최근 상태를 좀 더 직관적으로 이해할 수 있습니다
+> 별도로 설치해야 하는 도구이며 `sysstat` 패키지에 포함 되어 있습니다. 통계정보를 요약된 화면에서 출력해주기 때문에 최근 상태를 좀 더 직관적으로 이해할 수 있습니다
 
   - <kbd>-x</kbd> : 좀 더 상세한 리포트 출력
   - <kbd>-c</kbd> : CPU 통계 출력
@@ -2550,7 +2550,7 @@ netstat -a | grep 'LISTENING\|CONNECTED' | wc -l
 
 
 
-#### 5-5-9. 원격지 장비의 포트 오픈 여부 확인하는 방법 5가지
+#### 5-5-9. 장비의 포트 오픈 여부 확인하는 방법 5가지
 
   - <kbd>nc -zvw10 [ip] [port]</kbd> : `[netcat]` 통한 ip:port 으로 UDP 패킷 전송 netcat
     - `z` : zero i/o mode
@@ -2561,19 +2561,57 @@ netstat -a | grep 'LISTENING\|CONNECTED' | wc -l
   - <kbd>echo > /dev/[protocol]/[ip]/[port]</kbd> : 명령어 설치가 어렵거나 없는 경우 손쉽게 사용할 수 있는 명령입니다
     - `echo > /dev/tcp/127.0.0.1/80 && echo "Port is open"`
     - `echo > /dev/udp/127.0.0.1/80 && echo "Port is open"`
-  - <kbd> netstat -tuplen</kbd> : `[netstat]` 통한 열려있는 ip/port 정보를 출력합니다
+  - <kbd> netstat -tuplen</kbd> : `[netstat]` 통한 열려있는 ip/port 정보를 출력합니다 (외부에서 접근 가능한 포트 확인)
 
-* 원격 장비의 포트 오픈여부를 확인하는 명령어
 ```bash
-# terminal
-nc -zvw10 192.168.0.1 80 
-nmap 192.168.0.1 -p 80
-telnet 192.168.0.1 80
+# echo 명령으로 원격지 tcp/udp 포트를 확인
 echo > /dev/tcp/192.168.0.1/80 && echo "port is opened"
+```
+
+```bash
+# telnet 
+telnet 192.168.0.1 80
+```
+
+```bash
+# netcat
+nc -zvw10 192.168.0.1 80 
+```
+
+```bash
+# nmap
+nmap 192.168.0.1 -p 80
+```
+
+```bash
+# netstat 통해서 외부에서 접근 가능한 포트를 출력 
 netstat -tuplen
 ```
 
 <br>
+
+<details><summary> :blue_book: #. [중급] docker run 명령으로 mysql 을 띄우고 포트 오픈 여부를 확인해 보세요 </summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```text
+# MySQL 서버를 띄웁니다
+docker run --rm --name mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=rootpass \
+-e MYSQL_DATABASE=testdb -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -d mysql
+
+# IP 를 확인합니다
+ifconfig | grep inet
+
+# 포트 오픈을 확인합니다
+echo > /dev/tcp/<확인한IP>/3306 && echo "3306 port is opened"
+
+# 서버를 종료합니다
+docker rm -f mysql
+```
+</details>
+
+<br>
+
 
 
 #### 5-5-10. [iptables](https://man7.org/linux/man-pages/man8/iptables.8.html) : 리눅스 장비의 In/Out Port 관리 도구
@@ -2671,8 +2709,17 @@ iptables -A INPUT -p tcp --dport 3306 -j REJECT
 > 아래와 유사한 방법으로 접근하셨다면 정답입니다
 
 ```bash
-# terminal @ ubuntu
+# ubuntu 서버에 접속하여 포트가 열려 있음을 확인합니다
+docker-compose exec ubuntu bash
+echo > /dev/tcp/mysql/3306 && echo "OK"
+
+# iptables 명령으로 나가는 포트를 막습니다
 iptables -A OUTPUT -p tcp --dport 3306 -j REJECT
+echo > /dev/tcp/mysql/3306 && echo "OK"
+
+# iptables -D 명령으로 포트규칙을 제거합니다
+iptables -D OUTPUT -p tcp --dport 3306 -j REJECT
+echo > /dev/tcp/mysql/3306 && echo "OK"
 ```
 
 </details>
