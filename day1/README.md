@@ -358,7 +358,7 @@ git reflog
 
 <br>
 
-<details><summary> :green_book: #. [기본] `helloworld.py` 파일에 출력 내용을 수정하고, 실행 후 원래 상태로 복구하세요 </summary>
+<details><summary> :green_book: 3. [기본] `helloworld.py` 파일에 출력 내용을 수정하고, 실행 후 원래 상태로 복구하세요 </summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -483,7 +483,7 @@ git clean -f
 ```
 <br>
 
-<details><summary> :blue_book: #. [중급] 데이터 수정, 추가, 삭제 커밋 등의 작업 후에 clone 받았을 상태로 되돌리는 실습을 해보세요 </summary>
+<details><summary> :blue_book: 4. [중급] 데이터 수정, 추가, 삭제 커밋 등의 작업 후에 clone 받았을 상태로 되돌리는 실습을 해보세요 </summary>
 
 > 임의의 파일을 수정, 혹은 삭제 및 커밋 이후에 아래와 같이 수행할 수 있습니다
 
@@ -563,7 +563,7 @@ git stash show stash@{1}
 ```
 <br>
 
-<details><summary> :closed_book: #. [고급] 임의의 파일을 수정하고, stash 한 이후에 다른 브랜치로 갔다와서 다시 수정내역을 반영해 보세요  </summary>
+<details><summary> :closed_book: 5. [고급] 임의의 파일을 수정하고, stash 한 이후에 다른 브랜치로 갔다와서 다시 수정내역을 반영해 보세요  </summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -756,7 +756,7 @@ docker exec ubuntu20 /tmp/helloworld.sh
 docker rm -f `docker ps -a | grep -v CONTAINER | awk '{ print $1 }'`
 ```
 
-<details><summary> :blue_book: #. [중급] `nginx` 컨테이너를 시작 후에 프로세스 확인 및 로그를 출력하고 종료하세요 </summary>
+<details><summary> :blue_book: 6. [중급] `nginx` 컨테이너를 시작 후에 프로세스 확인 및 로그를 출력하고 종료하세요 </summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -823,7 +823,7 @@ docker image ls | grep ubuntu | grep hello
 ```
 <br>
 
-<details><summary> :green_book: 3. [기본] ubuntu:hello 이미지를 이용하여 helloworld.sh 을 실행하세요</summary>
+<details><summary> :green_book: 7. [기본] ubuntu:hello 이미지를 이용하여 helloworld.sh 을 실행하세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -920,7 +920,7 @@ CMD ["/bin/bash"]
 docker build -t ubuntu:local .
 ```
 
-<details><summary> :green_book: 4. [기본] 도커 이미지를 빌드하고 `echo 'hello world'`를 출력해 보세요</summary>
+<details><summary> :green_book: 8. [기본] 도커 이미지를 빌드하고 `echo 'hello world'`를 출력해 보세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -983,7 +983,7 @@ docker run alpine cat /etc/issue
 <br>
 
 
-<details><summary> :blue_book: 5. [중급] 위의 세번의 명령어 실행으로 생성된 컨테이너는 어떻게 삭제할까요?</summary>
+<details><summary> :blue_book: 9. [중급] 위의 세번의 명령어 실행으로 생성된 컨테이너는 어떻게 삭제할까요?</summary>
 
 * 전체 컨테이너 목록(-a 옵션으로 중지된 컨테이너까지 확인) 가운데 alpine 을 포함한 목록의 컨테이너 아이디를 찾아 모두 종료합니다
 ```bash
@@ -1051,7 +1051,7 @@ docker stats ubuntu_500m
 > <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 종료합니다
 
 
-<details><summary> :blue_book: 6. [중급] 메모리 제약을 주지 않은 컨테이너`ubuntu_unlimited`를 기동하고 컨테이너 상태를 확인해 보세요</summary>
+<details><summary> :blue_book: 10. [중급] 메모리 제약을 주지 않은 컨테이너`ubuntu_unlimited`를 기동하고 컨테이너 상태를 확인해 보세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -1067,7 +1067,7 @@ docker stats `docker ps | grep ubuntu_unlimited | awk '{ print $1 }'`
 
 </details>
 
-<details><summary> :blue_book: 7. [중급] 바로 위의 실습 정답을 활용해서 ubuntu 문자열이 포함된 모든 컨테이너를 종료해 보세요</summary>
+<details><summary> :blue_book: 11. [중급] 바로 위의 실습 정답을 활용해서 ubuntu 문자열이 포함된 모든 컨테이너를 종료해 보세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -1123,7 +1123,7 @@ docker rm -f mysql-volatile
 docker volume ls
 ```
 
-<details><summary> :blue_book: 8. [중급] mysql-volatile 컨테이너를 다시 생성하고 테이블을 확인해 보세요</summary>
+<details><summary> :blue_book: 12. [중급] mysql-volatile 컨테이너를 다시 생성하고 테이블을 확인해 보세요</summary>
 
 > 테이블이 존재하지 않는다면 정답입니다.
 
@@ -1163,7 +1163,7 @@ docker exec -it mysql-persist mysql --port=3307 -uuser -ppass
 
 #### 3-9-2. 볼륨 확인 실습
 
-<details><summary> :closed_book: 9. [고급] mysql-persist 컨테이너를 강제 종료하고, 동일한 설정으로 다시 생성하여 테이블이 존재하는지 확인해 보세요</summary>
+<details><summary> :closed_book: 13. [고급] mysql-persist 컨테이너를 강제 종료하고, 동일한 설정으로 다시 생성하여 테이블이 존재하는지 확인해 보세요</summary>
 
 > 테이블이 존재하고 데이터가 있다면 정답입니다
 
@@ -1292,7 +1292,7 @@ docker-compose down
 <br>
 
 
-<details><summary> :closed_book: 10. [고급] 컴포즈 명령어(--scale)를 이용하여 우분투 컨테이너를 3개 띄워보세요  </summary>
+<details><summary> :closed_book: 14. [고급] 컴포즈 명령어(--scale)를 이용하여 우분투 컨테이너를 3개 띄워보세요  </summary>
 
 > 아래와 유사하게 작성 및 실행했다면 정답입니다
 
@@ -1714,7 +1714,6 @@ cd /home/ubuntu/work/linux-for-dummies
 
 ```bash
 # curl [OPTIONS] [URL...]
-curl -o vue-v2.6.10.js https://cdn.jsdelivr.net/npm/vue/dist/vue.js
 curl -I --http2 https://www.ubuntu.com/
 curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0" https://getfedora.org/
 curl -T newfile.tar.gz -u FTP_USERNAME:FTP_PASSWORD ftp://ftp.example.com/
@@ -1723,6 +1722,18 @@ curl -U username:password -x 192.168.44.1:8888 http://linux.com/
 ```
 
 <br>
+
+<details><summary> :green_book: 15. [기본] -o 옵션을 이용하여 `https://cdn.jsdelivr.net/npm/vue/dist/vue.js` 파일을 `vue-v2.6.10.js` 파일로 저장하세요   </summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```text
+curl -o vue-v2.6.10.js https://cdn.jsdelivr.net/npm/vue/dist/vue.js
+```
+
+</details>
+<br>
+
 
 
 ### 5-2. 출력 및 확인
@@ -1749,7 +1760,7 @@ more -5 data/apache-access.log
 ```
 > more 명령어는 <kbd>Q</kbd> 키를 통해서 빠져나올 수 있습니다
 
-<details><summary> :green_book: 11. [기본] data/hadoop-hdfs-secondarynamenode.log 파일에서 exception 문자열이 발견된 위치부터 10줄씩 출력하세요 </summary>
+<details><summary> :green_book: 16. [기본] data/hadoop-hdfs-secondarynamenode.log 파일에서 exception 문자열이 발견된 위치부터 10줄씩 출력하세요 </summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -1771,7 +1782,7 @@ head -c 1K data/apache-access.log > 1k.log
 ```
 > 로그의 처음부터 1024 bytes 만큼 읽어서 파일을 생성합니다
 
-<details><summary> :green_book: 12. [기본] data/apache-access.log 로그의 첫 번째 30라인만 출력하세요</summary>
+<details><summary> :green_book: 17. [기본] data/apache-access.log 로그의 첫 번째 30라인만 출력하세요</summary>
 
 ```bash
 head -n 30 data/apache-access.log
@@ -1793,7 +1804,7 @@ tail -n 30 data/apache-access.log
 ```
 > 로그의 마지막 30라인만 출력합니다
 
-<details><summary> :green_book: 13. [기본] noexists.log 로그가 없어도 계속 tail 하고 해당 파일에 로그가 추가되면 계속 tailing 하는 명령을 수행하세요 </summary>
+<details><summary> :green_book: 18. [기본] noexists.log 로그가 없어도 계속 tail 하고 해당 파일에 로그가 추가되면 계속 tailing 하는 명령을 수행하세요 </summary>
 
 ```bash
 tail -F data/notexist.log
@@ -1829,7 +1840,7 @@ wc -l data/*
 ```
 > 개별 파일의 라인수와 전체 라인수를 출력합니다
 
-<details><summary> :green_book: 14. [기본] data/apache-access.log 로그에 포함된 단어의 수를 출력하세요</summary>
+<details><summary> :green_book: 19. [기본] data/apache-access.log 로그에 포함된 단어의 수를 출력하세요</summary>
 
 ```bash
 wc -w data/apache-access.log
@@ -1864,7 +1875,7 @@ nl -s ',<tab>' data/apache-access.log
 ```
 <br>
 
-<details><summary> :blue_book: 15. [중급] data/apache-access.log '000123' 과 같이 0을 패딩 후 출력하세요</summary>
+<details><summary> :blue_book: 20. [중급] data/apache-access.log '000123' 과 같이 0을 패딩 후 출력하세요</summary>
 
 ```bash
 head data/apache-access.log | nl -n rz 
@@ -1893,7 +1904,7 @@ head data/apache-access.log | nl -n rz
 cat data/corona.body.tsv | sed 's/,//g' | cut --output-delimiter=',' -f1,2,3 | sort -t, -k3nr | head     # 사망자 톱 10
 ```
 
-<details><summary> :closed_book: 16. [고급] 확진자 톱 10을 구하세요 </summary>
+<details><summary> :closed_book: 21. [고급] 확진자 톱 10을 구하세요 </summary>
 
 ```bash
 cat data/corona.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-delimiter=',' -f1,2,3 | sort -t, -k2nr | head     # 확진자 톱 10
@@ -1911,7 +1922,7 @@ cat data/corona.body.tsv | sed 's/,//g' | sed 's/N\/A/0.0/g' | cut --output-deli
   - 이번에는 제일 처음 컬럼에 번호가 있어 컬럼의 순서가 다르며 `data/corona.2021.header.tsv` 파일을 통해 확인할 수 있습니다
   - 데이터 값 가운데 `N/A` 으로 명시된 값들을 `0` 으로 변경하여 처리할 수 있도록 해주세요
 
-<details><summary> :closed_book: 17. [고급] 사망자/확진자 톱 10을 구하세요 </summary>
+<details><summary> :closed_book: 22. [고급] 사망자/확진자 톱 10을 구하세요 </summary>
 
 * 출력 컬럼 기준이 1:국가,2:확진자,3:사망자,4:완치 (-f2,3,4,5) 이므로 사망자(3), 확진자(2)
 ```bash
@@ -1978,7 +1989,7 @@ ls -al | cut -b -10 --complement
 * `root:x:0:0:root:/root:/bin/bash`
   - 계정명 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
 
-<details><summary> :blue_book: 18. [중급] 패스워드 파일에서 로그인 쉘 가운데 가장 빈도가 높은 3개를 찾아보세요</summary>
+<details><summary> :blue_book: 23. [중급] 패스워드 파일에서 로그인 쉘 가운데 가장 빈도가 높은 3개를 찾아보세요</summary>
 
 ```bash
 cat /etc/passwd | cut -d: -f7 | sort | uniq -c | sort -nr | head -3
@@ -2013,7 +2024,7 @@ ls -al | tr -d [:space:]
 ```
 <br>
 
-<details><summary> :blue_book: 19. [중급] 패스워드 파일의 계정 이름만 대문자로 출력하세요</summary>
+<details><summary> :blue_book: 24. [중급] 패스워드 파일의 계정 이름만 대문자로 출력하세요</summary>
 
 ```bash
 head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
@@ -2040,7 +2051,7 @@ head /etc/passwd | cut -d : -f 1 | tr [:lower:] [:upper:]
 sed -n '3,5p' /etc/passwd                     # 패스워드 파일의 3~5번째 줄을 출력합니다
 ```
 
-<details><summary> :closed_book: 20. [고급] 예제 패스워드 파일(/example/passwd)을 읽어서 nobody 계정을 찾고, somebody 로 변경하세요</summary>
+<details><summary> :closed_book: 25. [고급] 예제 패스워드 파일(/example/passwd)을 읽어서 nobody 계정을 찾고, somebody 로 변경하세요</summary>
 
 ```bash
 sed -i 's/nobody/somebody/g' example/passwd
@@ -2081,7 +2092,7 @@ awk '/root/ { print $0 }' /etc/passwd
   - 파일포맷 : `root:x:0:0:root:/root:/bin/bash`
   - 계정이름 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
 
-<details><summary> :blue_book: 21. [중급] /etc 경로에 존재하는 파일의 user 와 group 의 유일한(uniq) 값만 출력하세요</summary>
+<details><summary> :blue_book: 26. [중급] /etc 경로에 존재하는 파일의 user 와 group 의 유일한(uniq) 값만 출력하세요</summary>
 
 ```bash
 ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
@@ -2111,7 +2122,7 @@ ls -l /etc | awk '{ print $3, $4 }' | sort | uniq
 # rsync --dry-run -rave "ssh -i ~/.ssh/personal.pem" ubuntu@ec2.amazonaws.com:/home/ubuntu/data .    # EC2 장비의 data 경로를 로컬에 복사합니다
 ```
 
-<details><summary> :closed_book: 22. [고급] /tmp/backup 경로를 생성하고 linux-for-dummies 폴더 전체를 백업하세요 </summary>
+<details><summary> :closed_book: 27. [고급] /tmp/backup 경로를 생성하고 linux-for-dummies 폴더 전체를 백업하세요 </summary>
 
 ```bash
 cd /home/ubuntu/work/linux-for-dummies
@@ -2174,7 +2185,7 @@ ps -aufxww | vi -
 
 <br>
 
-<details><summary> :closed_book: #. [고급] 프로세스가 시작된 정확한 시간(lstart 컬럼)을 출력하세요  </summary>
+<details><summary> :closed_book: 28. [고급] 프로세스가 시작된 정확한 시간(lstart 컬럼)을 출력하세요  </summary>
 
 * 아래와 유사하게 실행했다면 정답입니다 
 ```bash
@@ -2267,7 +2278,7 @@ top -u root
 ```
 <br>
 
-<details><summary> :blue_book: #. [중급] `dockerd` 프로세스의 PID 를 확인하고, `-H`, `-c`, `-u` 옵션을 이용하여 top 명령어를 수행하세요 </summary>
+<details><summary> :blue_book: 29. [중급] `dockerd` 프로세스의 PID 를 확인하고, `-H`, `-c`, `-u` 옵션을 이용하여 top 명령어를 수행하세요 </summary>
 
 * 아래와 유사하게 수행했다면 정답입니다
 ```bash
@@ -2321,6 +2332,18 @@ find / -user root -name "*.txt"
 find / -type -f -size +100M -exec rm -f {} \;
 ```
 <br>
+
+<details><summary> :blue_book: 30. [중급] `/etc` 경로 아래에 `*.conf` 파일의 갯수가 몇 개인지 출력하세요 </summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하며, 대략 123개 정도면 정답입니다
+
+```text
+sudo find /etc -name "*.conf" | wc -l
+```
+
+</details>
+<br>
+
 
 
 #### 5-5-4. [df](https://man7.org/linux/man-pages/man1/df.1p.html) : 비어있는 디스크의 공간을 확인
@@ -2472,6 +2495,18 @@ netstat -nalp | grep 1234
 
 <br>
 
+<details><summary> :closed_book: 31. [고급] 현재 장비의 소켓연결 가운데 'LISTENING 혹은 CONNECTED'는 몇 개인가? </summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하며, 대략 88개 정도라면 정답입니다
+
+```bash
+netstat -a | grep 'LISTENING\|CONNECTED' | wc -l
+```
+
+</details>
+<br>
+
+
 
 #### 5-5-9. 원격지 장비의 포트 오픈 여부 확인하는 방법 5가지
 
@@ -2589,7 +2624,7 @@ docker-compose up -d
 iptables -A INPUT -p tcp --dport 3306 -j REJECT
 ```
 
-<details><summary> :closed_book: 23. [고급] Ubuntu 서버에서 MySQL 서버로 접근하는 3306 포트를 막아보세요 </summary>
+<details><summary> :closed_book: 32. [고급] Ubuntu 서버에서 MySQL 서버로 접근하는 3306 포트를 막아보세요 </summary>
 
 > 아래와 유사한 방법으로 접근하셨다면 정답입니다
 
@@ -2885,7 +2920,7 @@ hdfs dfs -df /
 hdfs dfs -du -s -h /
 ```
 
-<details><summary> :blue_book: 24. [기본] /tmp 경로에 임의의 파일 uploaded.txt 파일을 업로드하고 df 및 du 명령을 실행해 보세요</summary>
+<details><summary> :blue_book: 33. [중급] /tmp 경로에 임의의 파일 uploaded.txt 파일을 업로드하고 df 및 du 명령을 실행해 보세요</summary>
 
 ```bash
 # docker
