@@ -337,27 +337,6 @@ git reflog
 ```
 <br>
 
-<details><summary> :blue_book: #. [중급] 데이터 수정, 추가, 삭제 커밋 등의 작업 후에 clone 받았을 상태로 되돌리는 실습을 해보세요 </summary>
-
-> 임의의 파일을 수정, 혹은 삭제 및 커밋 이후에 아래와 같이 수행할 수 있습니다
-
-```text
-# 커밋 로그를 확인하고
-git reflog
-
-# 특정 커밋 시점으로 리셋하고
-git reset 35b38fa
-
-# 수정된 내역을 제거하고
-git checkout -- .
-
-# 스테이징되지 않은 파일을 삭제합니다
-git clean -f
-```
-
-</details>
-<br>
-
 
 
 #### 2-3-8. 자주 사용하는 깃 명령어
@@ -489,6 +468,28 @@ git reflog
 git clean -f
 ```
 <br>
+
+<details><summary> :blue_book: #. [중급] 데이터 수정, 추가, 삭제 커밋 등의 작업 후에 clone 받았을 상태로 되돌리는 실습을 해보세요 </summary>
+
+> 임의의 파일을 수정, 혹은 삭제 및 커밋 이후에 아래와 같이 수행할 수 있습니다
+
+```text
+# 커밋 로그를 확인하고
+git reflog
+
+# 특정 커밋 시점으로 리셋하고
+git reset 35b38fa
+
+# 수정된 내역을 제거하고
+git checkout -- .
+
+# 스테이징되지 않은 파일을 삭제합니다
+git clean -f
+```
+
+</details>
+<br>
+
 
 
 ### 2-8. 임시 저장
