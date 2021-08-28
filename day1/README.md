@@ -354,10 +354,6 @@ git reflog
   - `checkout <path>` 는 매칭 되는 파일들을 저장되어 있는 상태로 restore 하라는 의미입니다
   - `checkout <branch>` 는 지정한 브랜치로 HEAD를 이동하라는 의미입니다
 
-[목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
-
-<br>
-
 <details><summary> :green_book: 3. [기본] `helloworld.py` 파일에 출력 내용을 수정하고, 실행 후 원래 상태로 복구하세요 </summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
@@ -371,6 +367,10 @@ python helloworld.py
 ```
 
 </details>
+<br>
+
+[목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
+
 <br>
 
 
@@ -392,6 +392,7 @@ git rm README.md
   - 여기서 HEAD 는 가장 최근의 커밋을 가리킵니다. 즉, 커밋 후에는 해당 커밋이 HEAD가 됩니다
 ```bash
 git checkout HEAD README.md
+git status -sb
 ```
 <br>
 
@@ -402,12 +403,20 @@ git checkout HEAD README.md
 ```bash
 # git mv [source-path] [target-path]
 git mv README.md NOREADME.md
+git status -sb
 ```
 
 * 현재 경로의 수정 사항을 되돌립니다
+  - 수정사항은 되돌리지만 추가된 파일은 그대로입니다
 ```bash
 git checkout HEAD .
 ```
+
+* 추가된 파일도 되돌립니다
+```bash
+git reset .
+```
+
 <br>
 
 
@@ -435,6 +444,7 @@ tmp/
 
 ```bash
 # git pull (--dry-run)
+git pull
 ```
 <br>
 
@@ -713,7 +723,7 @@ docker run --rm -p 8888:80 --name nginx -dit nginx
 
 ```bash
 # docker logs <container_name>
-docker logs -f nginx
+docker logs nginx
 ```
 
 ```bash
@@ -725,31 +735,40 @@ curl localhost:8888
 
 
 #### 3-2-3. `top` : 컨테이너에 떠 있는 프로세스를 확인합니다
+
+* 실행 확인 후 종료합니다
 ```bash
 # docker top <container_name> <ps options>
 docker top nginx
+docker rm -f nginx
 ```
 <br>
 
 
 ### 3-3. 컨테이너 상호작용
 
+#### 3-3-1. 실습을 위한 우분투 컨테이너를 기동합니다
+
+```bash
+docker run --rm --name ubuntu20 -dit ubuntu:20.04
+```
+
 #### 3-3-1. `cp` :  호스트에서 컨테이너로 혹은 반대로 파일을 복사합니다
+
 ```bash
 # docker cp <container_name>:<path> <host_path> and vice-versa
-docker run --rm --name ubuntu20 -dit ubuntu:20.04
 docker cp ./helloworld.sh ubuntu20:/tmp
 ```
 <br>
 
-#### 3-3-2. `exec` : 컨테이너 내부에 명령을 실행합니다 
+#### 3-3-3. `exec` : 컨테이너 내부에 명령을 실행합니다 
 ```bash
 # docker exec <container_name> <args>
 docker exec ubuntu20 /tmp/helloworld.sh
 ```
 <br>
 
-#### 3-3-3. 사용한 모든 컨테이너를 종료합니다
+#### 3-3-4. 사용한 모든 컨테이너를 종료합니다
 
 * 직접 도커로 실행한 작업은 도커 명령을 이용해 종료합니다
 ```bash
@@ -1118,6 +1137,7 @@ select * from foo;
 
 
 #### 3-8-3. 컨테이너를 강제로 종료합니다
+
 ```bash
 docker rm -f mysql-volatile
 docker volume ls
@@ -1128,7 +1148,7 @@ docker volume ls
 > 테이블이 존재하지 않는다면 정답입니다.
 
 * 볼륨을 마운트하지 않은 상태에서 생성된 MySQL 데이터베이스는 컨테이너의 임시 볼륨 저장소에 저장되므로, 컨테이너가 종료되면 더이상 사용할 수 없습니다
-  - 사용한 컨테이너는 종료해 둡니다
+  - 사용한 컨테이너는 삭제 후 다시 생성하여 테이블이 존재하는지 확인합니다
 ```bash
 docker rm -f mysql-volatile
 ```
@@ -1175,14 +1195,16 @@ insert into foo values (1, 'my name');
 select * from foo;
 ```
 
-* 컨테이너를 삭제합니다
 ```bash
-# terminal
+# terminal : 컨테이너를 삭제합니다
 docker rm -f mysql-persist
+
+# 볼륨이 존재하는지 확인합니다
+docker volume ls
 ```
 
-* 새로이 컨테이너를 생성하고 볼륨은 그대로 연결합니다
 ```bash
+# terminal : 새로이 컨테이너를 생성하고 볼륨은 그대로 연결합니다
 docker run --name mysql-persist \
   -p 3307:3306 \
   -e MYSQL_ROOT_PASSWORD=rootpass \
@@ -1216,13 +1238,14 @@ select * from foo;
 * 아래와 같이 상대 혹은 절대 경로를 포함한 볼륨의 이름을 명시하여 마운트하는 것을 [Bind Mount](https://docs.docker.com/storage/bind-mounts/) 방식이라고 합니다
   - 호스트의 특정 경로를 저장소로 사용하게 되어, 호스트에서 직접 접근 및 확인이 가능합니다
 ```bash
+# terminal : 절대경로를 위해 `pwd` 명령을 사용합니다
 docker run --name mysql-bind \
   -p 3308:3306 \
   -e MYSQL_ROOT_PASSWORD=rootpass \
   -e MYSQL_DATABASE=testdb \
   -e MYSQL_USER=user \
   -e MYSQL_PASSWORD=pass \
-  -v ./mysql/bind:/var/lib/mysql \
+  -v `pwd`/mysql/bind:/var/lib/mysql \
   -d mysql
 
 sleep 10
@@ -1298,15 +1321,18 @@ docker-compose down
 
 
 * `docker-compose` 명령어 예제입니다 
+  - 컴포즈 파일에 `container_name` 이 있으면 이름이 충돌나기 때문에 별도의 파일을 만듭니다
 ```bash
 # terminal
-docker-compose up -d --scale ubuntu=2
+cat docker-compose.yml | grep -v 'container_name: ubuntu' > ubuntu-no-container-name.yml
+docker-compose -f ubuntu-no-container-name.yml up --scale ubuntu=2 -d ubuntu
+docker-compose -f ubuntu-no-container-name.yml down
 ```
 
-* `docker-compose.yml` 예제입니다 
+* `ubuntu-scale.yml` 예제입니다 
   - 우분투 이미지를 기본 이미지를 사용해도 무관합니다
 ```bash
-# cat docker-compose.yml
+# cat > ubuntu-replicated.yml
 version: "3"
 
 services:
@@ -1314,9 +1340,19 @@ services:
     image: psyoblade/data-engineer-ubuntu:20.04
     restart: always
     tty: true
+		deploy:
+      mode: replicated
+      replicas: 3
+      endpoint_mode: vip
 
 networks:
   default:
+```
+
+* 아래와 같이 기동/종료 합니다
+```bash
+docker-compose -f ubuntu-replicated.yml up -d ubuntu
+docker-compose -f ubuntu-replicated.yml down
 ```
 
 </details>
@@ -1458,7 +1494,7 @@ hello world
 
 > 외부 볼륨을 통한 환경설정 제공 및 설정을 실습합니다
 
-#### 4-4-1. 캐릭터셋 변경 적용하기
+#### 4-4-1. 캐릭터셋 변경 위한 `my.cnf` 생성하기
 
 ```bash
 # cat > custom/my.cnf
@@ -1478,7 +1514,7 @@ default-character-set=utf8
 <br>
 
 
-#### 4-4-2. MySQL 설정파일 사용
+#### 4-4-2. MySQL 기동을 위한 `docker-compose.yml` 파일 생성
 
 > 지정한 설정파일을 사용하고, 내부 볼륨을 통한 MySQL 기동으로 변경합니다
 
@@ -1506,9 +1542,9 @@ networks:
 <br>
 
 
-### 4-5. 초기화 파일을 적용한  MySQL 도커 이미지 생성
+### 4-5. 초기화 파일을 적용한 MySQL 도커 이미지 생성
 
-#### 4-5-1. 초기화 파일을 생성합니다
+#### 4-5-1. MySQL 초기화 데이터 파일 `testb.sql` 파일을 생성합니다
 
 ```bash
 # cat > init/testdb.sql
@@ -1529,10 +1565,10 @@ UNLOCK TABLES;
 <br>
 
 
-#### 4-5-2. 도커파일을 생성합니다
+#### 4-5-2. 커스텀 MySQL 빌드를 위한 도커파일 `Dockerfile`을 생성합니다
 
 ```Dockerfile
-# cat Dockerfile
+# cat > Dockerfile
 ARG BASE_CONTAINER=mysql:5.7
 FROM $BASE_CONTAINER
 LABEL maintainer="student@lg.com"
@@ -1592,7 +1628,7 @@ version: "3"
 
 services:
   mysql:
-    image: mysql/mysql:5.7
+    image: local/mysql:5.7
     container_name: mysql
     restart: always
     environment:
@@ -1615,6 +1651,12 @@ services:
     ports:
       - 80:80
 ```
+
+```bash
+# 변경한 컴포즈를 실행합니다
+docker-compose up -d
+```
+
 > phpMyAdmin(http://`vm<number>.aiffelbiz.co.kr`) 사이트에 접속하여 서버: `mysql`, 사용자명: `user`, 암호: `pass` 로 접속합니다
 
 <br>
