@@ -475,7 +475,6 @@ echo "test modify" >> README.md
 git stash
 cat README.md
 ```
-<br>
 
 #### 2-8-2. [checkout] 다른 브랜치로 이동하여 필요한 작업을 수행합니다
 ```bash
@@ -490,13 +489,11 @@ git commit -am "[개발]"
 git checkout master
 cat README.md
 ```
-<br>
 
 #### 2-8-4. [stash-list] 임시저장 목록을 확인합니다
 ```bash
 git stash list
 ```
-<br>
 
 #### 2-8-5. [stash-pop] 가장 마지막에 저장한 것을 복원하고 커밋합니다
 ```bash
@@ -553,17 +550,19 @@ cd /home/ubuntu/work/helloworld
 
 > 도커 이미지로 만들어져 있는 컨테이너를 생성, 실행 종료하는 명령어를 학습합니다
 
-#### 3-1-1. create : 컨테이너를 생성합니다 
+#### 3-1-1. `create` : 컨테이너를 생성합니다 
+
   - <kbd>--name <container_name></kbd> : 컨테이너 이름을 직접 지정합니다 (지정하지 않으면 임의의 이름이 명명됩니다)
   - 로컬에 이미지가 없다면 다운로드(pull) 후 컨테이너를 생성까지만 합니다 (반드시 -it 옵션이 필요합니다)
   - 생성된 컨테이너는 실행 중이 아니라면 `docker ps -a` 실행으로만 확인이 가능합니다
+
 ```bash
 # docker create <image>:<tag>
 docker create -it ubuntu:18.04
 ```
 <br>
 
-#### 3-1-2. start : 생성된 컨테이너를 기동합니다
+#### 3-1-2. `start` : 생성된 컨테이너를 기동합니다
   - 예제의 `busy_herschel` 는 자동으로 생성된 컨테이너 이름입니다
 ```bash
 # 아래 명령으로 현재 생성된 컨테이너의 이름을 확인합니다
@@ -573,8 +572,9 @@ docker ps -a
 ```bash
 # CONTAINER ID   IMAGE          COMMAND   CREATED         STATUS    PORTS     NAMES
 # e8f66e162fdd   ubuntu:18.04   "bash"    2 seconds ago   Created             busy_herschel
-container_name="<목록에서_출력된_NAMES_를_입력하세요>"
+container_name="<목록에서_출력된_NAME을_입력하세요>"
 ```
+
 ```bash
 # docker start <container_name> 
 docker start ${container_name}
@@ -588,7 +588,7 @@ exit
 <br>
 
 
-#### 3-1-3. stop : 컨테이너를 잠시 중지시킵니다
+#### 3-1-3. `stop` : 컨테이너를 잠시 중지시킵니다
   - 해당 컨테이너가 삭제되는 것이 아니라 잠시 실행만 멈추게 됩니다
 ```bash
 # docker stop <container_name>
@@ -597,7 +597,7 @@ docker stop ${container_name}
 <br>
 
 
-#### 3-1-4. rm : 중단된 컨테이너를 삭제합니다
+#### 3-1-4. `rm` : 중단된 컨테이너를 삭제합니다
   - <kbd>-f, --force</kbd> : 실행 중인 컨테이너도 강제로 종료합니다 (실행 중인 컨테이너는 삭제되지 않습니다)
 ```bash
 # docker rm <container_name>
@@ -606,7 +606,7 @@ docker rm ${container_name}
 <br>
 
 
-#### 3-1-5. run : 컨테이너의 생성과 시작을 같이 합니다 (create + start)
+#### 3-1-5. `run` : 컨테이너의 생성과 시작을 같이 합니다 (create + start)
   - <kbd>--rm</kbd> : 종료 시에 컨테이너까지 같이 삭제합니다
   - <kbd>-d, --detach</kbd> : 터미널을 붙지않고 데몬 처럼 백그라운드 실행이 되게 합니다
   - <kbd>-i, --interactive</kbd> : 인터액티브하게 표준 입출력을 키보드로 동작하게 합니다
@@ -625,7 +625,7 @@ cat /etc/issue
 <br>
 
 
-#### 3-1-6. kill : 컨테이너를 종료합니다
+#### 3-1-6. `kill` : 컨테이너를 종료합니다
 ```bash
 # docker kill <container_name>
 docker kill ubuntu20
@@ -635,22 +635,25 @@ docker kill ubuntu20
 
 ### 3-2. 컨테이너 모니터링
 
-#### 3-2-1. ps : 실행 중인 컨테이너를 확인합니다
+#### 3-2-1. `ps` : 실행 중인 컨테이너를 확인합니다
   - <kbd>-a</kbd> : 실행 중이지 않은 컨테이너까지 출력합니다
 ```bash
 docker ps
 ```
 
-#### 3-2-2. logs : 컨테이너 로그를 표준 출력으로 보냅니다
+#### 3-2-2. `logs` : 컨테이너 로그를 표준 출력으로 보냅니다
+
   - <kbd>-f</kbd> : 로그를 지속적으로 tailing 합니다
   - <kbd>-p</kbd> : 호스트 PORT : 게스트 PORT 맵핑
 ```bash
 docker run --rm -p 8888:80 --name nginx -dit nginx
 ```
+
 ```bash
 # docker logs <container_name>
 docker logs -f nginx
 ```
+
 ```bash
 # terminal
 curl localhost:8888
@@ -659,7 +662,7 @@ curl localhost:8888
 <br>
 
 
-#### 3-2-3. top : 컨테이너에 떠 있는 프로세스를 확인합니다
+#### 3-2-3. `top` : 컨테이너에 떠 있는 프로세스를 확인합니다
 ```bash
 # docker top <container_name> <ps options>
 docker top nginx
