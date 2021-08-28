@@ -338,7 +338,6 @@ git reflog
 <br>
 
 
-
 #### 2-3-8. 자주 사용하는 깃 명령어
 
 > 여기의 명령어만 이해하고 있어도 기본 과정에서 불편함은 없습니다. 복구하기 어려운 상황이 생기면 *경로를 제거하고 다시 clone 받*으시면 됩니다. :-)
@@ -357,6 +356,21 @@ git reflog
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
+<br>
+
+<details><summary> :green_book: #. [기본] `helloworld.py` 파일에 출력 내용을 수정하고, 실행 후 원래 상태로 복구하세요 </summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```text
+echo "print('lgde cousrse')" >> helloworld.py
+python helloworld.py
+
+git checkout -- .
+python helloworld.py
+```
+
+</details>
 <br>
 
 
@@ -507,8 +521,8 @@ cat README.md
 #### 2-8-2. `checkout` 다른 브랜치로 이동하여 필요한 작업을 수행합니다
 ```bash
 git checkout lgde/2021
-echo "lgde/2021" >> cat README.md
-git commit -am "[개발]"
+echo "lgde/2021" >> README.md
+git commit -am "[추가] lgde/2021 메시지"
 ```
 <br>
 
@@ -548,6 +562,24 @@ git stash apply stash@{0}
 git stash show stash@{1}
 ```
 <br>
+
+<details><summary> :closed_book: #. [고급] 임의의 파일을 수정하고, stash 한 이후에 다른 브랜치로 갔다와서 다시 수정내역을 반영해 보세요  </summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```text
+echo "내용을 작성합니다" >> README.md
+git add README.md
+git stash
+
+git checkout -b test/stash
+git checkout master
+git stash pop
+```
+
+</details>
+<br>
+
 
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
