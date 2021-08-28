@@ -819,7 +819,7 @@ docker rmi ubuntu:18.04
 
 ```bash
 # ubuntu:hello 가 남아있는지 확인합니다
-docker image ls | grep ubuntu
+docker image ls | grep ubuntu | grep hello
 ```
 <br>
 
@@ -920,7 +920,7 @@ CMD ["/bin/bash"]
 docker build -t ubuntu:local .
 ```
 
-<details><summary> :green_book: 4. [기본] 출력 결과 확인</summary>
+<details><summary> :green_book: 4. [기본] 도커 이미지를 빌드하고 `echo 'hello world'`를 출력해 보세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
 
@@ -938,6 +938,11 @@ Removing intermediate container 88f12333612b
  ---> da9a0e997fc0
 Successfully built da9a0e997fc0
 Successfully tagged ubuntu:local
+```
+
+> 아래와 같이 출력합니다
+```bash
+docker run --rm -it ubuntu:local echo 'hello world'
 ```
 
 </details>
@@ -1020,6 +1025,7 @@ apk add vim
 apk del vim
 ```
 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 명령으로 터미널에서 빠져나올 수 있습니다
+<br>
 <br>
 
 
@@ -1294,7 +1300,7 @@ docker-compose down
 * `docker-compose` 명령어 예제입니다 
 ```bash
 # terminal
-
+docker-compose up -d --scale ubuntu=2
 ```
 
 * `docker-compose.yml` 예제입니다 
@@ -1311,11 +1317,6 @@ services:
 
 networks:
   default:
-```
-* 아래와 같이 실행합니다
-```bash
-# terminal
-docker-compose up -d --scale ubuntu=2
 ```
 
 </details>
