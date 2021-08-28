@@ -29,7 +29,7 @@
 
 ## 1. 클라우드 장비에 접속
 
-> 개인 별로 할당 받은 `ubuntu@vm<number>.aiffelbiz.co.kr` 에 putty 혹은 terminal 을 이용하여 접속합니다
+> 개인 별로 할당 받은 `ubuntu@vm[number].aiffelbiz.co.kr` 에 putty 혹은 terminal 을 이용하여 접속합니다
 
 
 ### 1-1. 원격 서버로 접속합니다
@@ -359,12 +359,17 @@ git reflog
 
 ### 2-4. 경로 관리
 
-#### 2-4-1. rm : 커밋된 파일을 삭제합니다
+#### 2-4-1. rm : 삭제된 파일을 복구합니다
+
+* 임의의 파일을 삭제합니다
+  - 스테이징(add) 혹은 커밋되기 전에는 체크아웃 명령어를 이용하여 복구할 수 있습니다
 ```bash
 # git rm [file]
 git rm README.md
 ```
-  - 삭제한(commit 이전) 파일을 되돌립니다
+
+* 삭제한 (commit 이전) 파일을 되돌립니다
+  - 여기서 HEAD 는 가장 최근의 커밋을 가리킵니다. 즉, 커밋 후에는 해당 커밋이 HEAD가 됩니다
 ```bash
 git checkout HEAD README.md
 ```
@@ -372,11 +377,14 @@ git checkout HEAD README.md
 
 
 #### 2-4-2. mv : 파일 혹은 경로를 새로운 경로로 이동합니다
+
+* 이름 변경도 mv 명령으로 수행합니다
 ```bash
 # git mv [source-path] [target-path]
 git mv README.md NOREADME.md
 ```
-  - 현재 경로의 수정 사항을 되돌립니다
+
+* 현재 경로의 수정 사항을 되돌립니다
 ```bash
 git checkout HEAD .
 ```
@@ -388,6 +396,7 @@ git checkout HEAD .
 > 깃으로 관리되지 않는 파일 혹은 경로를 패턴을 통해 관리합니다 - [gitignore.io](https://www.toptal.com/developers/gitignore)
 
 #### 2-5-1. .gitignore : 해당 파일을 생성하고 내부 파일을 아래와 같이 관리합니다
+
 ```bash
 # cat .gitignore
 logs/
@@ -399,11 +408,11 @@ tmp/
 
 ### 2-6. 저장소 관리
 
-> 원격 저장소와 동기화 하는 방법이며, pull, push 는 항상 conflict 에 유의해야 하며, 로컬 저장소에서 merge 및 conflict 해결하는 습관을 들여야만 합니다
-**원격 저장소(github.com)의 계정이 필요하므로 실습에서는 제외하도록 하겠습니다**
+> 원격 저장소와 동기화 하는 방법이며, pull, push 는 항상 conflict 에 유의해야 하며, 로컬 저장소에서 merge 및 conflict 해결하는 습관을 들여야만 합니다. (**원격 저장소(github.com)의 계정이 필요하므로 실습에서는 제외하도록 하겠습니다**)
 
 
 #### 2-6-1. pull : 원격 저장소에서 변경된 내역을 로컬 저장소에 반영합니다
+
 ```bash
 # git pull (--dry-run)
 ```
@@ -411,9 +420,11 @@ tmp/
 
 
 #### 2-6.2. push : 로컬 저장소의 커밋된 내역을 원격 저장소에 반영합니다
-  - 원격 저장소에 브랜치가 존재하지 않는 경우에 업스트림 옵션(--set-upstream origin lgde/2021)을 활용합니다
+
+* 원격 저장소에 브랜치가 존재하지 않는 경우에 업스트림 옵션으로 origin을 지정합니다
 ```bash
 # git push (--set-upstream <remote> <branch>)
+# git push --set-upstream origin lgde/2021
 ```
 <br>
 
@@ -421,70 +432,98 @@ tmp/
 ### 2-7. 이력 관리
 
 #### 2-7-1. reset : 스테이징된 모든 내역을 제거 혹은 제거된 내역을 롤백합니다
-  - git log 명령을 통해 확인된 commit 해시 값으로 해당 시점으로 돌릴 수 있습니다
-  - git reflog 명령을 통해 모든 이력을 확인할 수 있고, reset 을 undo 할 수 있습니다
+
+* git log 명령을 통해 커밋 해시 값을 확인할 수 있습니다
 ```bash
 git log
 ```
+
+* 확인된 해시 값으로 해당 커밋 시점으로 돌릴 수 있습니다
 ```bash
 # git reset --hard [commit]
 # git reset --hard 7e5e3e54e400228cbdb12ab00b13c4af22305a0d
 ```
+
+* git reflog 명령을 통해 모든 커밋 이력을 확인할 수 있습니다
 ```bash
 git reflog
 ```
+
+* 특정 HEAD 즉, 커밋된 시점으로 되돌릴 수 있습니다
+  - 단 추가된 파일들은 삭제되지 않고 남아 있습니다
 ```bash
 # git reflog (show master)
 # git reset 'HEAD@{1}'
+```
+
+* 스테이징되지 않은 추가된 파일들을 삭제합니다
+```bash
+# git clean (-f, --force | -i, --interactive)
+git clean -f
 ```
 <br>
 
 
 ### 2-8. 임시 저장
 
-#### 2-8-1. stash : 현재 수정내역을 커밋하기는 애매하지만, 다른 브랜치로 체크아웃 하고 싶을 때 임시로 수정 내역 전체를 저장합니다
+#### 2-8-1. stash : 변경 내역을 임시 저장소에 저장합니다
+
+> 현재 수정내역을 커밋하기는 애매하지만, 다른 브랜치로 체크아웃 하고 싶을 때 임시로 수정 내역 전체를 저장합니다
+
+* [stash] 현재까지 수정된 모든 내역을 임시로 저장
 ```bash
-# 임시로 저장
 echo "test modify" >> README.md
 git stash
 cat README.md
 ```
+<br>
+
+* [checkout] 다른 브랜치로 이동하여 필요한 작업을 수행합니다
 ```bash
 git checkout lgde/2021
 echo "lgde/2021" >> cat README.md
 git commit -am "[개발]"
 ```
+<br>
+
+* [checkout] 다시 이전 작업 브랜치로 돌아옵니다
 ```bash
 git checkout master
 cat README.md
 ```
+<br>
+
+* [stash-list] 임시저장 목록을 확인합니다
 ```bash
-# 임시 저장 리스트
 git stash list
 ```
+<br>
+
+* [stash-pop] 가장 마지막에 저장한 것을 복원하고 커밋합니다
 ```bash
-# 가장 마지막에 저장한 것을 복원
 git stash pop
 cat README.md
 git commit -am "[완료]"
 ```
+<br>
+
+
+* [stash-drop] 가장 마지막에 저장된 것을 삭제하거나
 ```bash
-git checkout lgde/2021
-cat README.md
-```
-```bash
-# 가장 마지막에 저장된 것을 삭제
 git stash drop
 ```
+
+* [stash-apply] 혹은 stash 값을 바로 사용
 ```bash
-# 혹은 stash 값을 바로 사용
-# git stash apply stash@{0}
+git stash apply stash@{0}
 ```
+
+* [stash-show] 내역을 볼 수도 있습니다
 ```bash
-# 내역을 보고 싶다면
-# git stash show stash@{1}
+git stash show stash@{1}
 ```
 <br>
+
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
