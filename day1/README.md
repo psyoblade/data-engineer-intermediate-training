@@ -623,12 +623,13 @@ docker create -it ubuntu:18.04
 <br>
 
 #### 3-1-2. `start` : 생성된 컨테이너를 기동합니다
-  - 예제의 `busy_herschel` 는 자동으로 생성된 컨테이너 이름입니다
+
+* 아래 명령으로 현재 생성된 컨테이너의 이름을 확인합니다
 ```bash
-# 아래 명령으로 현재 생성된 컨테이너의 이름을 확인합니다
 docker ps -a
 ```
-  - 아래와 같이 임의의 이름이 생성되므로 변수명으로 지정해 둡니다
+
+* 예제의 `busy_herschel` 는 자동으로 생성된 컨테이너 이름이며, 변수에 담아둡니다
 ```bash
 # CONTAINER ID   IMAGE          COMMAND   CREATED         STATUS    PORTS     NAMES
 # e8f66e162fdd   ubuntu:18.04   "bash"    2 seconds ago   Created             busy_herschel
@@ -639,6 +640,7 @@ container_name="<목록에서_출력된_NAME을_입력하세요>"
 # docker start <container_name> 
 docker start ${container_name}
 ```
+
 ```bash
 # 해당 컨테이너의 우분투 버전을 확인합니다
 docker exec -it ${container_name} bash
@@ -738,12 +740,14 @@ docker top nginx
 docker run --rm --name ubuntu20 -dit ubuntu:20.04
 docker cp ./helloworld.sh ubuntu20:/tmp
 ```
+<br>
 
 #### 3-3-2. `exec` : 컨테이너 내부에 명령을 실행합니다 
 ```bash
 # docker exec <container_name> <args>
 docker exec ubuntu20 /tmp/helloworld.sh
 ```
+<br>
 
 #### 3-3-3. 사용한 모든 컨테이너를 종료합니다
 
@@ -752,10 +756,26 @@ docker exec ubuntu20 /tmp/helloworld.sh
 docker rm -f `docker ps -a | grep -v CONTAINER | awk '{ print $1 }'`
 ```
 
+<details><summary> :blue_book: #. [중급] `nginx` 컨테이너를 시작 후에 프로세스 확인 및 로그를 출력하고 종료하세요 </summary>
+
+> 출력 결과가 오류가 발생하지 않고, 아래와 유사하다면 성공입니다
+
+```text
+docker run --name nginx -dit nginx:latest
+docker ps nginx
+docker top nginx
+docker logs nginx
+docker stop nginx
+docker rm nginx
+```
+
+</details>
+<br>
+
+
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
 <br>
-
 
 
 ### Docker 고급 명령어
@@ -771,28 +791,32 @@ docker images
 
 #### 3-4-2. `commit` : 현재 컨테이너를 별도의 이미지로 저장합니다 
 
-* 실습을 위해 helloworld.sh 복사된 컨테이너를 생성합니다
 ```bash
-# terminal
+# 실습을 위해 우분투 컨테이너를 생성합니다
 docker run --rm --name ubuntu -dit ubuntu:18.04
+```
+
+```bash
+# helloworld.sh 스크립트를 컨테이너 내부에 복사합니다
 docker cp ./helloworld.sh ubuntu:/tmp
 ```
-<br>
 
-* 현재 helloworld.sh 가 복사된 컨테이너를 ubuntu:hello 로 저장해봅니다
 ```bash
 # docker commit <container_name> <repository>:<tag>
+# 현재 helloworld.sh 가 복사된 컨테이너를 ubuntu:hello 로 저장해봅니다
 docker commit ubuntu ubuntu:hello
 ```
 <br>
 
+
 #### 3-4-3. `rmi` : 해당 이미지를 삭제합니다
 
-* 이전에 `ubuntu:20.04` 기반의 컨테이너를 종료하고, 이미지도 삭제합니다
 ```bash
+# 이전에 `ubuntu:20.04` 기반의 컨테이너를 종료하고, 이미지도 삭제합니다
 docker rm -f ubuntu
 docker rmi ubuntu:20.04
 ```
+
 ```bash
 # ubuntu:hello 가 남아있는지 확인합니다
 docker image ls | grep ubuntu
