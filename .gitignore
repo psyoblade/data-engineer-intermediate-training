@@ -19,6 +19,7 @@ tmp/
 dimension/
 spark-warehouse/
 html/
+lgde-spark-delta/
 
 # Created by https://www.toptal.com/developers/gitignore/api/git
 # Edit at https://www.toptal.com/developers/gitignore?templates=git
