@@ -337,6 +337,28 @@ git reflog
 ```
 <br>
 
+<details><summary> :blue_book: #. [중급] 데이터 수정, 추가, 삭제 커밋 등의 작업 후에 clone 받았을 상태로 되돌리는 실습을 해보세요 </summary>
+
+> 임의의 파일을 수정, 혹은 삭제 및 커밋 이후에 아래와 같이 수행할 수 있습니다
+
+```text
+# 커밋 로그를 확인하고
+git reflog
+
+# 특정 커밋 시점으로 리셋하고
+git reset 35b38fa
+
+# 수정된 내역을 제거하고
+git checkout -- .
+
+# 스테이징되지 않은 파일을 삭제합니다
+git clean -f
+```
+
+</details>
+<br>
+
+
 
 #### 2-3-8. 자주 사용하는 깃 명령어
 
@@ -469,14 +491,14 @@ git clean -f
 > `stash` 명령을 통해 변경 내역을 임시 저장소에 저장합니다
 > 현재 수정내역을 커밋하기는 애매하지만, 다른 브랜치로 체크아웃 하고 싶을 때 임시로 수정 내역 전체를 저장합니다
 
-#### 2-8-1. [stash] 현재까지 수정된 모든 내역을 임시로 저장
+#### 2-8-1. `stash` 현재까지 수정된 모든 내역을 임시로 저장
 ```bash
 echo "test modify" >> README.md
 git stash
 cat README.md
 ```
 
-#### 2-8-2. [checkout] 다른 브랜치로 이동하여 필요한 작업을 수행합니다
+#### 2-8-2. `checkout` 다른 브랜치로 이동하여 필요한 작업을 수행합니다
 ```bash
 git checkout lgde/2021
 echo "lgde/2021" >> cat README.md
@@ -484,18 +506,18 @@ git commit -am "[개발]"
 ```
 <br>
 
-#### 2-8-3. [checkout] 다시 이전 작업 브랜치로 돌아옵니다
+#### 2-8-3. `checkout` 다시 이전 작업 브랜치로 돌아옵니다
 ```bash
 git checkout master
 cat README.md
 ```
 
-#### 2-8-4. [stash-list] 임시저장 목록을 확인합니다
+#### 2-8-4. `list` 임시저장 목록을 확인합니다
 ```bash
 git stash list
 ```
 
-#### 2-8-5. [stash-pop] 가장 마지막에 저장한 것을 복원하고 커밋합니다
+#### 2-8-5. `pop` 가장 마지막에 저장한 것을 복원하고 커밋합니다
 ```bash
 git stash pop
 cat README.md
@@ -667,21 +689,19 @@ curl localhost:8888
 # docker top <container_name> <ps options>
 docker top nginx
 ```
-
 <br>
-
 
 
 ### 3-3. 컨테이너 상호작용
 
-#### 3-3-1. cp :  호스트에서 컨테이너로 혹은 반대로 파일을 복사합니다
+#### 3-3-1. `cp` :  호스트에서 컨테이너로 혹은 반대로 파일을 복사합니다
 ```bash
 # docker cp <container_name>:<path> <host_path> and vice-versa
 docker run --rm --name ubuntu20 -dit ubuntu:20.04
 docker cp ./helloworld.sh ubuntu20:/tmp
 ```
 
-#### 3-3-2. exec : 컨테이너 내부에 명령을 실행합니다 
+#### 3-3-2. `exec` : 컨테이너 내부에 명령을 실행합니다 
 ```bash
 # docker exec <container_name> <args>
 docker exec ubuntu20 /tmp/helloworld.sh
@@ -704,14 +724,14 @@ docker rm -f `docker ps -a | grep -v CONTAINER | awk '{ print $1 }'`
 
 ### 3-4. 컨테이너 이미지 생성관리
 
-#### 3-4-1. images : 현재 로컬에 저장된 이미지 목록을 출력합니다 
+#### 3-4-1. `images` : 현재 로컬에 저장된 이미지 목록을 출력합니다 
 ```bash
 docker images
 ```
 <br>
 
 
-#### 3-4-2. commit : 현재 컨테이너를 별도의 이미지로 저장합니다 
+#### 3-4-2. `commit` : 현재 컨테이너를 별도의 이미지로 저장합니다 
 
 * 실습을 위해 helloworld.sh 복사된 컨테이너를 생성합니다
 ```bash
@@ -728,9 +748,9 @@ docker commit ubuntu ubuntu:hello
 ```
 <br>
 
-#### 3-4-3. rmi : 해당 이미지를 삭제합니다
+#### 3-4-3. `rmi` : 해당 이미지를 삭제합니다
 
-* 이전에 ubuntu:20.04 기반의 컨테이너를 종료하고, 이미지도 삭제합니다
+* 이전에 `ubuntu:20.04` 기반의 컨테이너를 종료하고, 이미지도 삭제합니다
 ```bash
 docker rm -f ubuntu
 docker rmi ubuntu:20.04
@@ -758,13 +778,13 @@ docker run --rm ubuntu:hello /tmp/helloworld.sh
 
 > 본 명령은 dockerhub.com 과 같은 docker registry 계정이 있어야 실습이 가능하므로 실습에서는 제외합니다
 
-#### 3-5-1. pull : 대상 이미지를 레포지토리에서 로컬로 다운로드합니다
+#### 3-5-1. `pull` : 대상 이미지를 레포지토리에서 로컬로 다운로드합니다
 ```bash
 # docker pull repository[:tag]
 docker pull psyoblade/data-engineer-ubuntu:18.04
 ```
 
-#### 3-5-2. push : 대상 이미지를 레포지토리로 업로드합니다
+#### 3-5-2. `push` : 대상 이미지를 레포지토리로 업로드합니다
 > push 명령은 계정 연동이 되어 있지 않으므로 현재는 동작하지 않습니다
 ```bash
 # docker push repository[:tag]
@@ -774,14 +794,14 @@ docker pull psyoblade/data-engineer-ubuntu:18.04
 # unauthorized: authentication required
 ```
 
-#### 3-5-3. login : 레지스트리에 로그인 합니다
+#### 3-5-3. `login` : 레지스트리에 로그인 합니다
 > login 명령은 계정 연동이 되어 있지 않으므로 현재는 동작하지 않습니다
 ```bash
 # terminal
 # docker login
 ```
 
-#### 3-5-4. logout : 레지스트리에 로그아웃 합니다
+#### 3-5-4. `logout` : 레지스트리에 로그아웃 합니다
 > logout 명령은 계정 연동이 되어 있지 않으므로 현재는 동작하지 않습니다
 ```bash
 # docker logout
@@ -793,9 +813,9 @@ docker pull psyoblade/data-engineer-ubuntu:18.04
 
 > 별도의 Dockerfile 을 생성하고 해당 이미지를 바탕으로 새로운 이미지를 생성할 수 있습니다
 
-#### 3-6-1. Dockerfile 생성
+#### 3-6-1. `Dockerfile` 생성
 
-* Ubuntu:18.04 LTS 이미지를 한 번 빌드하기로 합니다
+* `Ubuntu:18.04` LTS 이미지를 한 번 빌드하기로 합니다
   - <kbd>FROM image:tag</kbd> : 기반이 되는 이미지와 태그를 명시합니다
   - <kbd>MAINTAINER email</kbd> : 컨테이너 이미지 관리자
   - <kbd>COPY path dst</kbd> : 호스트의 `path` 를 게스트의 `dst`로 복사합니다
@@ -811,6 +831,7 @@ docker pull psyoblade/data-engineer-ubuntu:18.04
 ```bash
 cat > Dockerfile
 ```
+
 * 아래의 내용을 복사해서 붙여넣은 다음 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 나오면 파일이 생성됩니다
 ```bash
 FROM ubuntu:18.04
@@ -831,6 +852,7 @@ CMD ["/bin/bash"]
   - <kbd>-t, --tag</kbd> : 도커 이미지의 이름과 태그를 지정합니다
   - <kbd>-q, --quiet</kbd> : 빌드 로그의 출력을 하지 않습니다
   - <kbd>.</kbd> : 현재 경로에서 빌드를 합니다 
+
 ```bash
 # terminal
 docker build -t ubuntu:local .
@@ -919,7 +941,8 @@ docker container prune -f
 ```bash
 docker run --rm -it alpine /bin/sh
 ```
-> --rm 명령으로 종료와 동시에 가비지 컨테이너를 삭제하는 습관을 들이면 좋습니다
+> `--rm` 명령으로 가비지 컨테이너가 생성되지 않도록 하는 것도 좋습니다
+<br>
 
 * vim 도 없기 때문에 패키지 도구인 apk 및 apk add/del 를 통해 vim 을 설치 및 제거합니다
   - apk { add, del, search, info, update, upgrade } 등의 명령어를 사용할 수 있습니다
@@ -929,6 +952,7 @@ docker run --rm -it alpine /bin/sh
 apk update
 apk add vim
 ```
+
 * 설치된 패키지 제거
 ```bash
 apk del vim
@@ -946,6 +970,7 @@ apk del vim
 ```bash
 docker run --name ubuntu_500m -dit -m 500m ubuntu
 ```
+
 * 메모리 제약을 두고 띄운 컨테이너의 상태를 확인합니다
 ```bash
 docker ps -f name=ubuntu_500m
@@ -966,6 +991,7 @@ docker stats ubuntu_500m
 ```bash
 docker run --name ubuntu_unlimited -dit ubuntu
 ```
+
 * 상태를 확인합니다
 ```bash
 docker stats `docker ps | grep ubuntu_unlimited | awk '{ print $1 }'`
@@ -1002,6 +1028,7 @@ docker run --name mysql-volatile \
   -e MYSQL_PASSWORD=pass \
   -d mysql
 ```
+<br>
 
 * 서버가 기동되면 해당 서버로 접속합니다
   - 너무 빨리 접속하면 서버가 기동되기전이라 접속이 실패할 수 있습니다
@@ -1341,6 +1368,7 @@ cd /home/ubuntu/work/compose-training
 ```bash
 for dir in `echo "custom init"`; do mkdir -p $dir; done
 ```
+<br>
 
 
 #### 4-3-3. 터미널에서 `cat` 명령으로 파일 생성하기
@@ -1869,13 +1897,11 @@ cat /etc/passwd | cut -d: -f4 | sort | uniq -d    # 패스워드 파일에서 �
 # cut OPTION ... [FILE] ...
 # cut -f2 filename
 ```
-<br>
 
 * ':'으로 구분된 컬럼을 '#'으로 구분하여 출력합니다
 ```bash
 cat /etc/passwd | cut -f1- -d':' --output-delimiter='#'
 ```
-<br>
 
 * ls -al 결과의 앞 10바이트를 제외한 나머지 컬럼 들만 출력합니다
 ```bash
@@ -1980,7 +2006,6 @@ sed -i 's/nobody/somebody/g' example/passwd
 # awk '{$7 = $1 * $3 ; print $3, $1, "*", $2, "=", $1 * $2}' address  # 주소록에서 1번 숫자와 2번 숫자의 곱과 3번째 컬럼을 출력합니다
 awk -F: '{ print NR, $1 }' /etc/passwd
 ```
-<br>
 
 * 패스워드 파일의 root 문자가 존재하는 라인을 출력합니다
 ```bash
@@ -1989,10 +2014,9 @@ awk '/root/ { print $0 }' /etc/passwd
 <br>
 
 
-##### /etc/passwd 파일구성
-
-* `root:x:0:0:root:/root:/bin/bash`
-  - 계정명 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
+* `/etc/passwd` 파일구성
+  - 파일포맷 : `root:x:0:0:root:/root:/bin/bash`
+  - 계정이름 : 비밀번호 : 사용자UID : 그룹UID : 사용자정보 : 홈디렉토리 : 로그인쉘
 
 <details><summary> :blue_book: 21. [중급] /etc 경로에 존재하는 파일의 user 와 group 의 유일한(uniq) 값만 출력하세요</summary>
 
