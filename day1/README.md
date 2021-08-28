@@ -2613,7 +2613,6 @@ docker rm -f mysql
 <br>
 
 
-
 #### 5-5-10. [iptables](https://man7.org/linux/man-pages/man8/iptables.8.html) : 리눅스 장비의 In/Out Port 관리 도구
 
 * 실습을 위해 기동된 컨테이너는 종료하고 별도의 컨테이너를 기동합니다
@@ -2724,6 +2723,13 @@ echo > /dev/tcp/mysql/3306 && echo "OK"
 
 </details>
 <br>
+
+#### 5-5-11. 컨테이너를 종료 시킵니다
+```bash
+docker-compose down
+```
+<br>
+
 
 [목차로 돌아가기](#1일차-데이터-엔지니어링-기본)
 
