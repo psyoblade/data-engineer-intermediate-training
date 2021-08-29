@@ -14049,29 +14049,20 @@ a.anchor-link {
 
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="%EC%8A%A4%ED%8C%8C%ED%81%AC-%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D-%EC%8B%A4%EC%8A%B5-1%EA%B5%90%EC%8B%9C-:-%EC%8A%A4%ED%8C%8C%ED%81%AC-%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D-%EC%86%8C%EA%B0%9C">&#49828;&#54028;&#53356; &#49828;&#53944;&#47532;&#48141; &#49892;&#49845; 1&#44368;&#49884; : &#49828;&#54028;&#53356; &#49828;&#53944;&#47532;&#48141; &#49548;&#44060;<a class="anchor-link" href="#%EC%8A%A4%ED%8C%8C%ED%81%AC-%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D-%EC%8B%A4%EC%8A%B5-1%EA%B5%90%EC%8B%9C-:-%EC%8A%A4%ED%8C%8C%ED%81%AC-%EC%8A%A4%ED%8A%B8%EB%A6%AC%EB%B0%8D-%EC%86%8C%EA%B0%9C">&#182;</a></h1><blockquote><p>구조화된 스파크 스트리밍 애플리케이션은 크게 5단계로 구분하여 설계합니다 (스키마/소스읽기, 변환코드작성, 싱크코드작성, 트리거코드작성, 애플리케이션기동), 이번 과정에는 JSON 파일을 읽어서 스트리밍 소스로 활용하는 가장 간단한 예제를 통해서 스파크 스트리밍의 동작방식에 대해 이해합니다</p>
+<h1 id="5%EC%9D%BC%EC%B0%A8-1%EA%B5%90%EC%8B%9C---Spark-Repartition-vs.-Coalesce-Explained">5&#51068;&#52264; 1&#44368;&#49884; - Spark Repartition vs. Coalesce Explained<a class="anchor-link" href="#5%EC%9D%BC%EC%B0%A8-1%EA%B5%90%EC%8B%9C---Spark-Repartition-vs.-Coalesce-Explained">&#182;</a></h1><blockquote><p>스파크는 분산 환경에서 병렬 처리를 잘하는 엔진인데 여기에서 병렬처리의 단위가 파티션이며 스파크 내부 구조에 의해 관리되지만 이용자에 의해 조정되기도 합니다.
+그리고 스파크 어플리케이션을 수행하면서 가장 자주 많이 확인하게 되는 파티션 수에 대해 이해하고, 관련 이슈들을 어떻게 해결하는지 실습합니다.</p>
 </blockquote>
-<h2 id="%ED%95%99%EC%8A%B5-%EB%AA%A9%ED%91%9C">&#54617;&#49845; &#47785;&#54364;<a class="anchor-link" href="#%ED%95%99%EC%8A%B5-%EB%AA%A9%ED%91%9C">&#182;</a></h2><ul>
-<li>스파크 스트리밍 애플리케이션을 구현하는 5가지 단계를 이해합니다<ul>
-<li>스키마/소스 읽기</li>
-<li>변환 코드 작성</li>
-<li>싱크 코드 작성</li>
-<li>트리거 코드 작성</li>
-<li>애플리케이션 기동 및 종료</li>
+<h3 id="%EB%AA%A9%EC%B0%A8">&#47785;&#52264;<a class="anchor-link" href="#%EB%AA%A9%EC%B0%A8">&#182;</a></h3><ul>
+<li><a href="#1.-&#39;Partition&#39;이란-무엇인가?">1. 'Partition'이란 무엇인가?</a></li>
+<li><a href="#2.-&#39;Partition&#39;은-왜-필요한가?">2. 'Partition'은 왜 필요한가?</a></li>
+<li><a href="#3.-&#39;Replication&#39;-무엇인가?">3. 'Replication' 무엇인가?</a></li>
+<li><a href="#4.-&#39;Coalesce&#39;는-무엇인가?">4. 'Coalesce'는 무엇인가?</a></li>
+<li><a href="#5.-&#39;Repartition&#39;과-&#39;Coalesce&#39;-중에서-언제-어떤-것을-쓰면-좋은가?">5. 'Repartition'과 'Coalesce' 중에서 언제 어떤 것을 쓰면 좋은가?</a></li>
 </ul>
-</li>
-<li>특정 경로에 존재하는 JSON 파일을 파일 단위로 읽는 스트리밍 소스를 생성합니다</li>
-<li>특정 컬럼을 기준으로 집계함수를 적용한 변환 로직을 생성합니다</li>
-<li>콘솔에 결과를 출력하는 싱크를 구성하여 스트리밍 애플리케이션을 시작합니다</li>
-<li>약 1분간 스트리밍 처리를 수행하고, 애플리케이션을 종료합니다</li>
-</ul>
-<h2 id="%EB%AA%A9%EC%B0%A8">&#47785;&#52264;<a class="anchor-link" href="#%EB%AA%A9%EC%B0%A8">&#182;</a></h2><ul>
-<li><a href="#1.-소스-스키마-읽기">1. 소스 스키마 읽기</a></li>
-<li><a href="#2.-소스-읽기-코드-작성">2. 소스 읽기 코드 작성</a></li>
-<li><a href="#3.-변환-코드-작성">3. 변환 코드 작성</a></li>
-<li><a href="#4.-싱크-코드-작성">4. 싱크 코드 작성</a></li>
-<li><a href="#5.-트리거-코드-작성">5. 트리거 코드 작성</a></li>
-<li><a href="#6.-애플리케이션-기동-및-종료">6. 애플리케이션 기동 및 종료</a></li>
+<h3 id="%EC%B0%B8%EA%B3%A0%EC%9E%90%EB%A3%8C">&#52280;&#44256;&#51088;&#47308;<a class="anchor-link" href="#%EC%B0%B8%EA%B3%A0%EC%9E%90%EB%A3%8C">&#182;</a></h3><ul>
+<li><a href="https://datanoon.com/blog/spark_repartition_coalesce">Spark Repartition &amp; Coalesce</a></li>
+<li><a href="https://sparkbyexamples.com/spark/spark-repartition-vs-coalesce/">Spark Repartition vs. Coalesce</a></li>
+<li><a href="https://medium.com/swlh/building-partitions-for-processing-data-files-in-apache-spark-2ca40209c9b7">https://medium.com/swlh/building-partitions-for-processing-data-files-in-apache-spark-2ca40209c9b7</a></li>
 </ul>
 
 </div>

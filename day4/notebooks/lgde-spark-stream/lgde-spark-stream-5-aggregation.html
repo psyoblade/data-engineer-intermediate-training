@@ -14541,7 +14541,7 @@ notebook  <span class="p">|</span> +------+-------------------------------------
     <span class="o">.</span><span class="n">count</span><span class="p">()</span>
 <span class="p">)</span>
 
-<span class="n">writer</span> <span class="o">=</span> <span class="p">(</span>
+<span class="n">watermarkWriter</span> <span class="o">=</span> <span class="p">(</span>
     <span class="n">watermarkCounter</span>
     <span class="o">.</span><span class="n">writeStream</span>
     <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;console&quot;</span><span class="p">)</span>
@@ -14551,7 +14551,8 @@ notebook  <span class="p">|</span> +------+-------------------------------------
 <span class="n">checkpointLocation</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">work_dir</span><span class="si">}</span><span class="s2">/tmp/</span><span class="si">{</span><span class="n">queryName</span><span class="si">}</span><span class="s2">&quot;</span>
 <span class="o">!</span>rm -rf <span class="nv">$checkpointLocation</span>
 <span class="n">watermarkTrigger</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;checkpointLocation&quot;</span><span class="p">,</span> <span class="n">checkpointDir</span><span class="p">)</span>
+    <span class="n">watermarkWriter</span>
+    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;checkpointLocation&quot;</span><span class="p">,</span> <span class="n">checkpointLocation</span><span class="p">)</span>
     <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;truncate&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)</span>
 <span class="p">)</span>
 

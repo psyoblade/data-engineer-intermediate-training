@@ -14052,22 +14052,10 @@ a.anchor-link {
 <h1 id="5%EC%9D%BC%EC%B0%A8-3%EA%B5%90%EC%8B%9C---Spark-Cache,-Persist-and-Unpersist">5&#51068;&#52264; 3&#44368;&#49884; - Spark Cache, Persist and Unpersist<a class="anchor-link" href="#5%EC%9D%BC%EC%B0%A8-3%EA%B5%90%EC%8B%9C---Spark-Cache,-Persist-and-Unpersist">&#182;</a></h1><blockquote><p>데이터 캐싱 즉 메모리에 저장하여 성능을 향상 시키는 방식에 대해 이해하고 적용합니다. 기본적으로  스파크는 필요한 데이터 소스의 경우 리니지를 통해 다시 계산하는 것을 원칙으로 하므로 자주 사용되는 중간 데이터의 경우 메모리에 저장해둔다면 유용할 수 있습니다. 일반 ETL 작업 보다는 그래프 연산이나 기계학습 등에 반복적인 처리과정에 효과적입니다.</p>
 </blockquote>
 <h3 id="%EB%AA%A9%EC%B0%A8">&#47785;&#52264;<a class="anchor-link" href="#%EB%AA%A9%EC%B0%A8">&#182;</a></h3><ul>
-<li><ol>
-<li>SparkSQL 을 통한 캐싱</li>
-</ol>
-</li>
-<li><ol>
-<li>Structured API 통한 캐싱</li>
-</ol>
-</li>
-<li><ol>
-<li>Cache vs. Persist 비교</li>
-</ol>
-</li>
-<li><ol>
-<li>캐시 전략</li>
-</ol>
-</li>
+<li><a href="#1.-SparkSQL-을-통한-캐싱">1. SparkSQL 을 통한 캐싱</a></li>
+<li><a href="#2.-Structured-API-통한-캐싱">2. Structured API 통한 캐싱</a></li>
+<li><a href="#3.-Cache-vs.-Persist-비교">3. Cache vs. Persist 비교</a></li>
+<li><a href="#4.-캐시-전략">4. 캐시 전략</a></li>
 </ul>
 
 </div>
