@@ -133,27 +133,6 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 
 > 위와 같이 특정 데이터베이스에 계속 명령을 날리기에는 불편함이 있으므로 반복되는 명령어를 bash 쉘을 통해 만들어보면 편하게 사용할 수 있습니다
 
-<details><summary> :green_book: 1. [기본] eval 명령을 쉽게 할 수 있는 간단한 bash 스크립트(예제: foo)를 만들어 보세요 </summary>
-
-* 아래의 명령으로 터미널이 명령을 받을 준비를 하도록 하고
-```bash
-# docker
-cat > foo
-```
-* 아래의 내용을 복사해서 붙여넣은 다음 <kbd><samp>Ctrl</samp>+<samp>C</samp></kbd> 명령으로 나오면 파일이 생성됩니다
-```bash
-#!/bin/bash
-sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -e "$@"
-```
-* 실행 가능한 파일로 만들기 위해서 모드를 변경합니다
-  - 실행 시에 반드시 쌍따옴표("")로 묶어야 제대로 수행됩니다
-```bash
-# docker
-chmod +x foo
-foo "DESCRIBE user_20201025"
-```
-
-</details>
 <br>
 
 
@@ -209,7 +188,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 | age | INT | 30 | 나이 |
 | gender | VARCHAR(10) | 남 |
 
-<details><summary> :green_book: 2. [기본] 위에서 명시한 student 테이블을 mysql 서버에 접속하여 명령어를 통해 testdb 에 생성하세요 </summary>
+<details><summary> :green_book: 1. [기본] 위에서 명시한 student 테이블을 mysql 서버에 접속하여 명령어를 통해 testdb 에 생성하세요 </summary>
 
 ```bash
 # terminal
@@ -265,7 +244,7 @@ DESC student;
 ,('우소은','Woo.Soeun@lgde.com',30,'여')
 ```
 
-<details><summary> :green_book: 3. [기본] mysql 서버에 접속하여 insert into ... values 명령을 통해 student 테이블에 입력하세요 </summary>
+<details><summary> :green_book: 2. [기본] mysql 서버에 접속하여 insert into ... values 명령을 통해 student 테이블에 입력하세요 </summary>
 
 ```sql
 # mysql>
@@ -351,7 +330,7 @@ ask cat /home/sqoop/target/student/part-m-00000
 
 #### 2-3-1. 탭 구분자 포맷으로 저장
 
-<details><summary> :green_book: 4. [기본] 앞서 생성된 학생(student) 테이블을 탭으로 구분된 포맷으로 로컬 `/home/sqoop/target/student_tab` 경로에 저장하세요 </summary>
+<details><summary> :green_book: 3. [기본] 앞서 생성된 학생(student) 테이블을 탭으로 구분된 포맷으로 로컬 `/home/sqoop/target/student_tab` 경로에 저장하세요 </summary>
 
 * 스쿱 명령어로 테이블을 수집합니다
 ```bash
@@ -374,7 +353,7 @@ head /home/sqoop/target/student_tab/part-m-00000
 
 > 파케이 포맷 저장 <kbd>--as-parquetfile</kbd> 
 
-<details><summary> :green_book: 5. [기본] 앞서 생성된 학생(student) 테이블을 파케이 포맷으로 로컬 `/home/sqoop/target/student_parquet` 경로에 저장하세요 </summary>
+<details><summary> :green_book: 4. [기본] 앞서 생성된 학생(student) 테이블을 파케이 포맷으로 로컬 `/home/sqoop/target/student_parquet` 경로에 저장하세요 </summary>
 
 * 스쿱 명령어로 테이블을 수집합니다
 ```bash
@@ -420,7 +399,7 @@ hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
   - <kbd>meta</kbd> : 파케이 포맷의 메타데이터를 출력합니다 
   - <kbd>dump</kbd> : 텍스트 포맷으로 출력 합니다
 
-<details><summary> :green_book: 6. [기본] 같은 방식으로 해당 파케이 파일의 상위(head) 3개문서, 스키마(schema), 메타(meta) 출력을 해보세요 </summary>
+<details><summary> :green_book: 5. [기본] 같은 방식으로 해당 파케이 파일의 상위(head) 3개문서, 스키마(schema), 메타(meta) 출력을 해보세요 </summary>
 
 * 상위 3개 문서 반환
 ```bash
@@ -555,7 +534,7 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 hadoop fs -cat /user/sqoop/target/seoul_popular_exp/part-m-00000 | more
 ```
 
-<details><summary> :green_book: 7. [기본] 출력 결과 확인</summary>
+<details><summary> :green_book: 6. [기본] 출력 결과 확인</summary>
 
 > 출력 결과가 아래와 같다면 성공입니다
 
@@ -576,7 +555,7 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_exp \
   --fields-terminated-by '\t' 
 ```
-<details><summary> :green_book: 8. [기본] 출력 결과 확인</summary>
+<details><summary> :green_book: 7. [기본] 출력 결과 확인</summary>
 
 > 출력 결과가 아래와 같다면 성공입니다
 
@@ -638,7 +617,7 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 
 > 적재시에 4개의 맵 작업수로 수행된 사항에 대해서도 디버깅 해보시면 어떻게 동작하는 지 확인할 수 있습니다
 
-<details><summary> :green_book: 9. [기본] 출력 결과 확인</summary>
+<details><summary> :green_book: 8. [기본] 출력 결과 확인</summary>
 
 > 출력 결과가 아래와 같다면 성공입니다 - 단, 수집 과정에서는 `seoul_popular_stg` 카운트가 나오거나 exp 테이블 레코드가 없을 수 있습니다
 
@@ -711,7 +690,7 @@ cmd "SELECT MIN(id), MAX(id) FROM seoul_popular_trip"
 ask cmd "SELECT COUNT(1) FROM seoul_popular_trip"
 ```
 
-<details><summary> :blue_book: 10. [중급] 출력 결과 확인</summary>
+<details><summary> :blue_book: 9. [중급] 출력 결과 확인</summary>
 
 > 출력 결과가 아래와 같다면 성공입니다
 
@@ -778,7 +757,7 @@ sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passwor
 hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
 ```
 
-<details><summary> :blue_book: 11. [중급] 출력 결과 확인</summary>
+<details><summary> :blue_book: 10. [중급] 출력 결과 확인</summary>
 
 > 출력 결과가 아래와 같다면 성공입니다
 
@@ -828,7 +807,7 @@ ask cmd "SELECT * FROM inc_table"
 ```
 <br>
 
-<details><summary> :blue_book: 12. [중급] 출력 결과 확인</summary>
+<details><summary> :blue_book: 11. [중급] 출력 결과 확인</summary>
 
 > 출력 결과가 아래와 같다면 성공입니다
 
