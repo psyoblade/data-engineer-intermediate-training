@@ -498,7 +498,7 @@ show tables;
 
 #### 3-2-1. 구분자 오류에 따른 실패 확인
 
-* 적재 작업을 수행하면 오류가 발생하고 예외가 발생하고, 정확한 오류를 확인할 수 없습니다
+* 적재 작업을 수행하면 오류가 발생하고 예외가 발생하게 되는데 출력된 로그와 수집된 데이터를 통해 추적합니다
 ```bash
 # docker
 ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
@@ -514,40 +514,17 @@ hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000 | more
 <br>
 
 
+<details><summary> :blue_book: 6. [기본] 오류의 원인을 파악하고, 문제 해결 후에 Export 작업을 수행하세요 (hint: 수집 컬럼의 필드 구분자) </summary>
 
-#### 3-2-2. 탭구분자로 테이블 재수집
+> 오류 메시지는 태그의 구분자도 콤마이고, 테이블 임포트 구분자도 콤마이기 때문에 익스포트 시에 컬럼의 위치를 못 찾는 다는 오류입니다 
 
-* 수집한 테이블의 경우 콤마를 기준으로 수집했는데, 필드에 콤마(,)가 들어가 있어서 export 시에 필드의 개수가 맞지 않는다는 오류를 확인합니다
-  - 방법#1. 적재 수행 시에 콤마 구분자로 수행하거나 (단, 이번 예제는 내부에 콤마가 들어가 있는 튜플이 있어서 사용할 수 없다)
-  - 방법#2. 테이블 수집을 탭 구분자로 변경하거나 (하여 콤마 보다는 탭을 구분자로 선택하는 것이 좀 더 일반적입니다)
-
+* 탭 구분자로 `seoul_popular_exp` 경로에 다시 수집합니다
 ```bash
 # docker
 ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
   --table seoul_popular_trip --target-dir /user/sqoop/target/seoul_popular_exp \
   --fields-terminated-by '\t' --delete-target-dir 
 ```
-<br>
-
-```bash
-# docker
-hadoop fs -cat /user/sqoop/target/seoul_popular_exp/part-m-00000 | more
-```
-
-<details><summary> :green_book: 6. [기본] 출력 결과 확인</summary>
-
-> 출력 결과가 아래와 같다면 성공입니다
-
-```text
-0    281    통인시장    110-043 서울 종로구 통인동 10-3     03036 서울 종로구 자하문로15길 18     02-722-0911    엽전도시락,종로통인시장,통인시장닭꼬치,런닝맨,엽전시장,통인시장데이트,효자베이커리,통인시장, 1박2일,기름떡볶이
-0    345    타르틴    140-863 서울 용산구 이태원동 119-15     04350 서울 용산구 이태원로23길 4 (이태원동)     02-3785-3400    타르틴,이태원디저트카페,파이,런닝맨,파이맛집,이태원맛집, 유재석,식신로드,타르트맛집
-```
-
-</details>
-<br>
-
-
-#### 3-2-3. 탭구분자로 테이블 재적재
 
 * 탭 구분자로 익스포트된 경로의 파일을 이용하여 다시 익스포트를 수행합니다
 ```bash
@@ -555,13 +532,12 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   --table seoul_popular_exp --export-dir /user/sqoop/target/seoul_popular_exp \
   --fields-terminated-by '\t' 
 ```
-<details><summary> :green_book: 7. [기본] 출력 결과 확인</summary>
 
 > 출력 결과가 아래와 같다면 성공입니다
 
 ```text
-21/07/17 10:09:44 INFO mapreduce.ExportJobBase: Transferred 483.1064 KB in 12.7846 seconds (37.7882 KB/sec)
-21/07/17 10:09:44 INFO mapreduce.ExportJobBase: Exported 1956 records.
+0    281    통인시장    110-043 서울 종로구 통인동 10-3     03036 서울 종로구 자하문로15길 18     02-722-0911    엽전도시락,종로통인시장,통인시장닭꼬치,런닝맨,엽전시장,통인시장데이트,효자베이커리,통인시장, 1박2일,기름떡볶이
+0    345    타르틴    140-863 서울 용산구 이태원동 119-15     04350 서울 용산구 이태원로23길 4 (이태원동)     02-3785-3400    타르틴,이태원디저트카페,파이,런닝맨,파이맛집,이태원맛집, 유재석,식신로드,타르트맛집
 ```
 
 </details>
@@ -616,10 +592,6 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 ```
 
 > 적재시에 4개의 맵 작업수로 수행된 사항에 대해서도 디버깅 해보시면 어떻게 동작하는 지 확인할 수 있습니다
-
-<details><summary> :green_book: 8. [기본] 출력 결과 확인</summary>
-
-> 출력 결과가 아래와 같다면 성공입니다 - 단, 수집 과정에서는 `seoul_popular_stg` 카운트가 나오거나 exp 테이블 레코드가 없을 수 있습니다
 
 ```text
 # "SELECT COUNT(1) FROM seoul_popular_stg"
@@ -772,7 +744,7 @@ sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passwor
 hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
 ```
 
-<details><summary> :blue_book: 9. [중급] 총 4개의 파티션으로 저장하되, 파티션 별 레코드의 수가 최대한 균등하게 저장되도록 수집해 보세요 (hint: id, mod), (bash: 1줄짜리 명령으로도 수행 가능합니다)</summary>
+<details><summary> :blue_book: 7. [중급] 총 4개의 파티션으로 저장하되, 파티션 별 레코드의 수가 최대한 균등하게 저장되도록 수집해 보세요 (hint: id, mod), (bash: 1줄짜리 명령으로도 수행 가능합니다)</summary>
 
 
 > 아래와 유사한 접근을 하셨다면 정답입니다 
@@ -939,7 +911,7 @@ hadoop fs -ls /user/sqoop/target/inc_table
 <br>
 
 
-<details><summary> :closed_book: 10. [고급] `last_value` 값을 수동으로 확인하지 않고 하나의 스크립트로 계속 수행 가능하도록 작성해 보세요 (hint: --query 임시 파일을 생성해 보세요). </summary>
+<details><summary> :closed_book: 8. [고급] `last_value` 값을 수동으로 확인하지 않고 하나의 스크립트로 계속 수행 가능하도록 작성해 보세요 (hint: --query 임시 파일을 생성해 보세요). </summary>
 
 * 현재 최대 값을 저장하는 임시 파일을 생성합니다 
 ```bash
@@ -1012,8 +984,9 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb?useCursorFetch=tr
 
 #### 4-5-6. 배치 옵션
 
-* <kbd>--batch</kbd> : 데이터베이스에 저장시에 한 번에 대량의 데이터를 Export 할 수 있는 Values 구문과 유사하게 동작합니다
-  - export 명령에서만 동작하며, export 시에는 반드시 명시하는 것이 좋습니다
+* 데이터베이스에 저장시에 한 번에 대량의 데이터를 Export 할 수 있는 옵션인데 데이터베이스 마다 기본 옵션이 달라 튜닝이 필요합니다
+  - `-Dsqoop.export.records.per.statement=[number]`
+  - `-Dsqoop.export.statements.per.transaction=[number]`
 <br>
 
 #### 4-5-7. 압축 옵션
