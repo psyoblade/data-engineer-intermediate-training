@@ -663,9 +663,10 @@ docker-compose exec sqoop bash
 
 > 수행할 수 있는 쿼리문(`--query`)을 직접 작성하여 원하는 데이터의 범위를 지정할 수도 있고, 조인을 통해 여러개의 테이블 대신 하나의 테이블로 수집이 가능합니다 (WHERE 절에는 반드시 `$CONDITIONS`라는 구문이 포함되어야만 합니다)
 
-* 테이블의 스키마가 추가되는 경우라도 수집 대상 컬럼에만 영향이 없다면 수집장애가 발생하지 않습니다
-* 필요한 컬럼만 데이터를 가져올 수 있으므로 데이터의 크기를 줄일 수 있습니다
-* 다양한 테이블의 수집 이후에 클러스터에서 조인을 수행하기 보다 사전에 조인을 하여 가져옴으로써 조회성능이 향상됩니다
+* 질의문 직접 입력 방식
+	- 테이블의 스키마가 추가되는 경우라도 수집 대상 컬럼에만 영향이 없다면 수집장애가 발생하지 않습니다
+	- 필요한 컬럼만 데이터를 가져올 수 있으므로 데이터의 크기를 줄일 수 있습니다
+	- 다양한 테이블의 수집 이후에 클러스터에서 조인을 수행하기 보다 사전에 조인을 하여 가져옴으로써 조회성능이 향상됩니다
 
 ```bash
 ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
@@ -705,8 +706,7 @@ ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --u
 cmd "SELECT MIN(id), MAX(id) FROM seoul_popular_trip"
 ask cmd "SELECT COUNT(1) FROM seoul_popular_trip"
 ```
-
-<details><summary> :blue_book: 9. [중급] 출력 결과 확인</summary>
+<br>
 
 > 출력 결과가 아래와 같다면 성공입니다
 
@@ -726,7 +726,6 @@ ask cmd "SELECT COUNT(1) FROM seoul_popular_trip"
 -----------------------
 ```
 
-</details>
 <br>
 
 
@@ -773,7 +772,7 @@ sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passwor
 hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
 ```
 
-<details><summary> :blue_book: 10. [중급] 총 4개의 파티션으로 저장하되, 파티션 별 레코드의 수가 최대한 균등하게 저장되도록 수집해 보세요 (hint: id, mod), (bash: 1줄짜리 명령으로도 수행 가능합니다)</summary>
+<details><summary> :blue_book: 9. [중급] 총 4개의 파티션으로 저장하되, 파티션 별 레코드의 수가 최대한 균등하게 저장되도록 수집해 보세요 (hint: id, mod), (bash: 1줄짜리 명령으로도 수행 가능합니다)</summary>
 
 
 > 아래와 유사한 접근을 하셨다면 정답입니다 
@@ -898,29 +897,6 @@ hadoop fs -cat /user/sqoop/target/inc_table/part-m-00000
 <br>
 
 
-<details><summary> :closed_book: 11. [고급] `last_value` 값을 수동으로 확인하지 않고 하나의 스크립트로 계속 수행 가능하도록 작성해 보세요 (hint: --query 임시 파일을 생성해 보세요). </summary>
-
-* 현재 최대 값을 저장하는 임시 파일을 생성합니다 
-```bash
-sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-	--query "select max(id) from inc_table where \$CONDITIONS" \
-	--target-dir /user/sqoop/target/inc_table_max --delete-target-dir 
-```
-* 저장된 경로의 값을 읽어서 변수에 담아서 증분 테이블 수집을 합니다
-```bash
-last_value=`hadoop fs -cat /user/sqoop/target/inc_table_max/part-m-00000`
-
-sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
-	--table inc_table --incremental append --check-column id --last-value ${last_value} \
-	--target-dir /user/sqoop/target/inc_table
-```
-
-</details>
-<br>
-
-<br>
-
-
 #### 4-4-3. 테이블에 증분 데이터를 추가합니다
 
 ```bash
@@ -961,6 +937,28 @@ hadoop fs -cat /user/sqoop/target/inc_table/part-m-00001
 hadoop fs -ls /user/sqoop/target/inc_table
 ```
 <br>
+
+
+<details><summary> :closed_book: 10. [고급] `last_value` 값을 수동으로 확인하지 않고 하나의 스크립트로 계속 수행 가능하도록 작성해 보세요 (hint: --query 임시 파일을 생성해 보세요). </summary>
+
+* 현재 최대 값을 저장하는 임시 파일을 생성합니다 
+```bash
+sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+	--query "select max(id) from inc_table where \$CONDITIONS" \
+	--target-dir /user/sqoop/target/inc_table_max --delete-target-dir 
+```
+* 저장된 경로의 값을 읽어서 변수에 담아서 증분 테이블 수집을 합니다
+```bash
+last_value=`hadoop fs -cat /user/sqoop/target/inc_table_max/part-m-00000`
+
+sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+	--table inc_table --incremental append --check-column id --last-value ${last_value} \
+	--target-dir /user/sqoop/target/inc_table
+```
+
+</details>
+<br>
+
 
 
 ### 4-5. 수집 옵션 최적화
