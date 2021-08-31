@@ -3,8 +3,9 @@ version: "3"
 services:
   mysql:
     container_name: mysql
-    image: psyoblade/data-engineer-mysql:1.1
+    image: psyoblade/data-engineer-mysql:fat
     restart: always
+    command: --max_allowed_packet=32505856
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: testdb
