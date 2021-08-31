@@ -920,7 +920,7 @@ sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --pa
 	--target-dir /user/sqoop/target/inc_table_max --delete-target-dir 
 ```
 
-* 중간에 테스트 예제 데이터를 입력합니다 
+* 중간에 테스트 예제 데이터를 입력합니다 (증분 데이터 생성)
 ```sql
 # docker
 cmd "INSERT INTO inc_table (name, salary) VALUES ('psyoblade', 20000)"
