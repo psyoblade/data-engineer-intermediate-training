@@ -757,15 +757,35 @@ sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passwor
 hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
 ```
 
-<details><summary> :blue_book: 10. [중급] 출력 결과 확인</summary>
+<details><summary> :blue_book: 10. [중급] 파티션의 결과가 최대한 균등한 4개의 파티션으로 수집해 보세요 (Hint: id, mod)</summary>
 
-> 출력 결과가 아래와 같다면 성공입니다
+> 아래와 유사한 접근을 하셨다면 정답입니다 
 
+* id 값을 4로 나누어 나머지를 파티션을 값으로 사용하는 경우를 먼저 확인합니다 
+
+```sql
+select (id mod 4) as uid, count(1) from seoul_popular_trip group by uid
+```
+
+* 아래의 조건으로 파티션 별 수집을 수행합니다
 ```bash
-# hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
--rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=0/_SUCCESS
--rw-r--r--   1 root supergroup          0 2021-07-17 12:22 /user/sqoop/target/seoul_popular_partition/part=10000/_SUCCESS
--rw-r--r--   1 root supergroup          0 2021-07-17 12:23 /user/sqoop/target/seoul_popular_partition/part=20000/_SUCCESS
+#!/bin/bash
+
+for x in $(seq 0 3); do
+  sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+  --delete-target-dir -m 1 --table seoul_popular_trip \
+  --where "\"(id mod 4) = $x\"" \
+  --target-dir /user/sqoop/target/seoul_popular_mod/mod=$x
+done
+```
+
+* 아래와 같이 검증합니다
+```bash
+root@bab491272ea2:~# hadoop fs -ls -R /user/sqoop/target/seoul_popular_mod/ | grep SUCCESS
+-rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=0/_SUCCESS
+-rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=1/_SUCCESS
+-rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=2/_SUCCESS
+-rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=3/_SUCCESS
 ```
 
 </details>
