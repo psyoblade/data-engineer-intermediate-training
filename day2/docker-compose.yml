@@ -5,6 +5,7 @@ services:
     container_name: mysql
     image: psyoblade/data-engineer-mysql:1.1
     restart: always
+    command: --max_allowed_packet=32505856
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: testdb
@@ -41,6 +42,7 @@ services:
     volumes:
       - ./sqoop/jars:/jdbc
       - ./tmp/target:/tmp/target
+      - ./mysql/mysqldump:/usr/local/sqoop/bin/mysqldump
 
 networks:
   default:
