@@ -994,7 +994,9 @@ sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --pa
   - import 명령에만 동작하며, MySQL 데이터베이스를 사용하는 경우 추천할 수 있는 옵션입니다
 
 ```bash
-ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username root --password root --table seoul_popular_trip --fetch-size 10000 --direct --target-dir /user/sqoop/target/seoul_popular_trip_direct --delete-target-dir
+ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username root --password root \
+	--table seoul_popular_trip --fetch-size 10000 --direct \
+	--target-dir /user/sqoop/target/seoul_popular_trip_direct --delete-target-dir
 ```
 <br>
 
@@ -1003,7 +1005,9 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username root -
 * <kbd>useCursorFetch=true</kbd> : 데이터베이스 별로 설정이 다르지만 MySQL 경우 기본이 클라이언트 커서이므로 대용량 데이터 처리시에 OutOfMemory 오류가 발생하기 쉽습니다. 이러한 경우 아래와 같이 커서 설정을 별도로 지정해 주어야만 합니다 @ [mysql-jdbc-connector](https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-implementation-notes.html)
 
 ```bash
-ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb?useCursorFetch=true --username root --password root --table seoul_popular_trip --fetch-size 10000 --direct --target-dir /user/sqoop/target/seoul_popular_trip_direct --delete-target-dir
+ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb?useCursorFetch=true --username root --password root \
+	--table seoul_popular_trip --fetch-size 10000 --direct \
+	--target-dir /user/sqoop/target/seoul_popular_trip_direct --delete-target-dir
 ```
 
 #### 4-5-6. 배치 옵션
