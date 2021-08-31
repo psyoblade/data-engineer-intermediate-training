@@ -882,7 +882,7 @@ hadoop fs -cat /user/sqoop/target/inc_table/part-m-00000
 <br>
 
 
-<details><summary> :closed_book: 11. [고급] `last_value` 값을 수동으로 확인하지 않고 하나의 스크립트로 계속 수행 가능하도록 작성해 보세요 (hint: --query 임시 파일을 생성해 보세요) </summary>
+<details><summary> :closed_book: 11. [고급] `last_value` 값을 수동으로 확인하지 않고 하나의 스크립트로 계속 수행 가능하도록 작성해 보세요 (hint: --query 임시 파일을 생성해 보세요). </summary>
 
 * 현재 최대 값을 저장하는 임시 파일을 생성합니다 
 ```bash
