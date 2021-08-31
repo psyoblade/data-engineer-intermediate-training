@@ -757,7 +757,8 @@ sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passwor
 hadoop fs -ls -R /user/sqoop/target/seoul_popular_partition | grep SUCCESS
 ```
 
-<details><summary> :blue_book: 10. [중급] 파티션의 결과가 최대한 균등한 4개의 파티션으로 수집해 보세요 (Hint: id, mod)</summary>
+<details><summary> :blue_book: 10. [중급] 총 4개의 파티션으로 저장하되, 파티션 별 레코드의 수가 최대한 균등하게 저장되도록 수집해 보세요 (hint: id, mod), (bash: 1줄짜리 명령으로도 수행 가능합니다)</summary>
+
 
 > 아래와 유사한 접근을 하셨다면 정답입니다 
 
@@ -827,8 +828,6 @@ ask cmd "SELECT * FROM inc_table"
 ```
 <br>
 
-<details><summary> :blue_book: 11. [중급] 출력 결과 확인</summary>
-
 > 출력 결과가 아래와 같다면 성공입니다
 
 ```sql
@@ -848,9 +847,6 @@ ask cmd "SELECT * FROM inc_table"
 | 1          | suhyuk               | 10000      |
 --------------------------------------------------
 ```
-
-</details>
-<br>
 <br>
 
 
@@ -882,6 +878,24 @@ hadoop fs -ls /user/sqoop/target/inc_table
 hadoop fs -cat /user/sqoop/target/inc_table/part-m-00000
 ```
 > 결과가 `1,suhyuk,10000` 로 나오면 정답입니다
+
+<br>
+
+
+<details><summary> :closed_book: 11. [고급] `last_value` 값을 수동으로 확인하지 않고 하나의 스크립트로 계속 수행 가능하도록 작성해 보세요 (hint: --query 임시 파일을 생성해 보세요) </summary>
+
+* 현재 최대 값을 저장하는 임시 파일을 생성합니다 
+```bash
+sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --query "select max(id) from inc_table where \$CONDITIONS" --target-dir /user/sqoop/target/inc_table_max --delete-target-dir 
+```
+* 저장된 경로의 값을 읽어서 변수에 담아서 증분 테이블 수집을 합니다
+```bash
+last_value=`hadoop fs -cat /user/sqoop/target/inc_table_max/part-m-00000`
+sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -m 1 --table inc_table --incremental append --check-column id --last-value ${last_value} --target-dir /user/sqoop/target/inc_table
+```
+
+</details>
+<br>
 
 <br>
 
