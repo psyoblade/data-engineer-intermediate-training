@@ -659,7 +659,23 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 docker-compose exec sqoop bash
 ```
 
-### 4-1. 병렬 수행을 통한 테이블 수집
+### 4-1. 쿼리문을 집적 작성하여 테이블 수집
+
+> 수행할 수 있는 쿼리문(`--query`)을 직접 작성하여 원하는 데이터의 범위를 지정할 수도 있고, 조인을 통해 여러개의 테이블 대신 하나의 테이블로 수집이 가능합니다 (WHERE 절에는 반드시 `$CONDITIONS`라는 구문이 포함되어야만 합니다)
+
+* 테이블의 스키마가 추가되는 경우라도 수집 대상 컬럼에만 영향이 없다면 수집장애가 발생하지 않습니다
+* 필요한 컬럼만 데이터를 가져올 수 있으므로 데이터의 크기를 줄일 수 있습니다
+* 다양한 테이블의 수집 이후에 클러스터에서 조인을 수행하기 보다 사전에 조인을 하여 가져옴으로써 조회성능이 향상됩니다
+
+```bash
+ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+	--query "select id, name, tag from seoul_popular_trip where id > 0 and \$CONDITIONS" \
+	--target-dir /user/sqoop/target/seoul_popular_trip_query --delete-target-dir 
+```
+<br>
+
+
+### 4-2. 병렬 수행을 통한 테이블 수집
 
 > 한 번에 여러개의 작업이 기동되어 하나의 테이블을 조건을 나누어 분할하여 동시에 수집하는 기법이며, 이렇게 분할해서 수집하기 위해서는 min, max 값을 가질 수 있는 편중되지 않은 값을 가진 컬럼이 반드시 존재해야 합니다.
 
@@ -680,11 +696,11 @@ ask sqoop import -m 4 --split-by id --connect jdbc:mysql://mysql:3306/testdb --u
 <br>
 
 
-### 4-2. 파티션 테이블 수집
+### 4-3. 파티션 테이블 수집
 
 > 하나의 테이블을 특정 조건에 따라 분산해서 저장히기 위해 id 값이 적절하다 판단되며, 이 값의 최소, 최대값을 확인해 봅니다
 
-#### 4-2-1. id 필드의 최대, 최소값 확인
+#### 4-3-1. id 필드의 최대, 최소값 확인
 ```bash
 cmd "SELECT MIN(id), MAX(id) FROM seoul_popular_trip"
 ask cmd "SELECT COUNT(1) FROM seoul_popular_trip"
@@ -714,7 +730,7 @@ ask cmd "SELECT COUNT(1) FROM seoul_popular_trip"
 <br>
 
 
-#### 4-2-2. 저장 경로 생성
+#### 4-3-2. 저장 경로 생성
 
 * 테이블을 파티션 단위로 저장하기 위해서는 루트 경로를 생성해 두어야만 합니다
   - 하위에 key=value 형식의 경로로 저장할 예정이기 때문입니다
@@ -728,7 +744,7 @@ ask hadoop fs -ls /user/sqoop/target
 <br>
 
 
-#### 4-2-3. 파티션 별 테이블 수집
+#### 4-3-3. 파티션 별 테이블 수집
 
 > 확인한 값의 범위를 이용하여 조건을 달리하여 **하나의 테이블을 3번으로 나누어 수집**을 수행합니다
 
@@ -793,7 +809,7 @@ root@bab491272ea2:~# hadoop fs -ls -R /user/sqoop/target/seoul_popular_mod/ | gr
 <br>
 
 
-### 4-3. 증분 테이블 수집
+### 4-4. 증분 테이블 수집
 
 > 테이블의 크기는 너무 크지만, **아주 작은 범위의 데이터가 추가**되는 테이블의 경우 *매번 전체 스냅샷으로 수집하는 것은 너무 부하가 크기* 때문에 변경되는 증분만 수집해야 하는 경우가 있습니다. 이런 경우에 변경사항을 반영하는 테이블 컬럼 (ex_ timestamp)이 있어야 하지만, 효과적인 수집이 가능합니다
 
@@ -802,7 +818,7 @@ root@bab491272ea2:~# hadoop fs -ls -R /user/sqoop/target/seoul_popular_mod/ | gr
   - *항상 변경되는 데이터가 append* 되어야 합니다
   - update 가 발생하는 컬럼이 있다면 프로그래밍을 통해 해결하거나, 전체 snapshot 만 가능합니다
 
-#### 4-3-1. 증분 테이블 실습을 위해, 예제 테이블을 생성합니다 `inc_table`
+#### 4-4-1. 증분 테이블 실습을 위해, 예제 테이블을 생성합니다 `inc_table`
 
 * cmd 명령어를 통해 sqoop eval 명령을 수행합니다
 ```bash
@@ -850,7 +866,7 @@ ask cmd "SELECT * FROM inc_table"
 <br>
 
 
-#### 4-3-2. 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
+#### 4-4-2. 증분 테이블 초기 수집은 --last-value 값을 0으로 두고 수집합니다
 
 > 증분 테이블 수집의 경우는 마지막으로 갱신된 레코드의 최대값을 기억해두고 있어야만 하며, 별도로 저장관리되어야 합니다.
 
@@ -886,12 +902,17 @@ hadoop fs -cat /user/sqoop/target/inc_table/part-m-00000
 
 * 현재 최대 값을 저장하는 임시 파일을 생성합니다 
 ```bash
-sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop --query "select max(id) from inc_table where \$CONDITIONS" --target-dir /user/sqoop/target/inc_table_max --delete-target-dir 
+sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+	--query "select max(id) from inc_table where \$CONDITIONS" \
+	--target-dir /user/sqoop/target/inc_table_max --delete-target-dir 
 ```
 * 저장된 경로의 값을 읽어서 변수에 담아서 증분 테이블 수집을 합니다
 ```bash
 last_value=`hadoop fs -cat /user/sqoop/target/inc_table_max/part-m-00000`
-sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop -m 1 --table inc_table --incremental append --check-column id --last-value ${last_value} --target-dir /user/sqoop/target/inc_table
+
+sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
+	--table inc_table --incremental append --check-column id --last-value ${last_value} \
+	--target-dir /user/sqoop/target/inc_table
 ```
 
 </details>
@@ -900,7 +921,7 @@ sqoop import --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passwor
 <br>
 
 
-#### 4-3-3. 테이블에 증분 데이터를 추가합니다
+#### 4-4-3. 테이블에 증분 데이터를 추가합니다
 
 ```bash
 # docker
@@ -909,7 +930,7 @@ cmd "INSERT INTO inc_table (name, salary) VALUES ('psyoblade', 20000)"
 <br>
 
 
-#### 4-3-4. 증분 테이블 수집을 위해 --last-value 1 다시 수집합니다
+#### 4-4-4. 증분 테이블 수집을 위해 --last-value 1 다시 수집합니다
 ```bash
 # docker
 last_value=1
@@ -931,7 +952,7 @@ hadoop fs -cat /user/sqoop/target/inc_table/part-m-00001
 <br>
 
 
-#### 4-3-5. 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
+#### 4-4-5. 수집 된 테이블의 최종 결과 테이블에 파티션 파일이 어떻게 생성되고 있는지 확인합니다
 
 > append 된 파일은 일련번호가 하나씩 늘어나면서 파일이 생성됩니다
 
@@ -942,32 +963,32 @@ hadoop fs -ls /user/sqoop/target/inc_table
 <br>
 
 
-### 4-4. 수집 옵션 최적화
+### 4-5. 수집 옵션 최적화
 
 > 스쿱은 JDBC 를 통해 데이터를 수집하기 때문에 여러가지 JDBC 옵션을 통한 최적화가 가능합니다. 데이터베이스 엔진의 차이에 따른 옵션도 존재하므로, 개별 옵션을 확인해둘 필요가 있습니다
 
 
-#### 4-4-1. 패치 크기 조정
+#### 4-5-1. 패치 크기 조정
 
 * <kbd>--fetch-size <n></kbd> : 데이터베이스로부터 한 번에 가져오는 레코드의 수를 말합니다 (default=1000)
   - 데이터의 크기에 따라서 조정할 수 있으며 데이터 레코드의 크기에 따라서 50,000 이상 수치 까지 조정할 수 있습니다
   - SQLServer 의 경우 한 번에 패치해 올 수 있는 용량이 제한되어 있으므로, Database 에 따라 조정하면서 튜닝합니다
 <br>
 
-#### 4-4-2. 배치 옵션
+#### 4-5-2. 배치 옵션
 
 * <kbd>--batch</kbd> : 데이터베이스에 저장시에 한 번에 대량의 데이터를 Export 할 수 있는 Values 구문과 유사하게 동작합니다
   - export 명령에서만 동작하며, export 시에는 반드시 명시하는 것이 좋습니다
 <br>
 
-#### 4-4-3. 압축 옵션
+#### 4-5-3. 압축 옵션
 
 * <kbd>--compress, -z</kbd> : 압축하여 저장합니다. 기본은 gzip 압축이며, snappy 등의 코덱을 지정할 수 있습니다
   - import 명령에만 동작하며, 저장 시에 압축 코덱을 활용하여 저장할 수 있습니다
   - <kbd>--compression-codec snappy</kbd> : 추가 압축을 위한 외부 jar 는 같이 배포 되어야 합니다
 <br>
 
-#### 4-4-4. 필요한 컬럼만 선택
+#### 4-5-4. 필요한 컬럼만 선택
 
 * <kbd>--columns col,col,col...</kbd> : 반드시 필요한 컬럼만 지정하여 수집 및 저장 데이터 공간을 최적화 할 수 있습니다
   - 필요 없이 많은 데이터를 수집하는 것은 네트워크 I/O 및 저장소 공간만 더 차지하게 됩니다
@@ -975,13 +996,13 @@ hadoop fs -ls /user/sqoop/target/inc_table
   - 가장 일반적으로 많이 취하는 방법이며, 테이블 스키마 변경 시에도 대응이 가능하여 전체 수집 보다 운영에 용이합니다
 <br>
 
-#### 4-4-5. 다이렉트 방식 수집
+#### 4-5-5. 다이렉트 방식 수집
 
 * <kbd>--direct</kbd> : 모든 데이터베이스가 지원하는 것은 아니지만, MySQL 과 같이 mysqldump 등의 도구를 직접 활용할 수 있도록 지원합니다
   - import 명령에만 동작하며, MySQL 데이터베이스를 사용하는 경우 추천할 수 있는 옵션입니다
 <br>
 
-#### 4-4-6. 조인을 통한 최적화
+#### 4-5-6. 조인을 통한 최적화
 
 * 모든 스테이징 테이블을 다 스냅샷으로 저장하는 것이 일반적인 접근이고, 향후 사용에도 용이하지만, **원본 테이블이 충분히 크고 복잡하다면 추천**합니다
   - 스테이징을 다 해서, 다시 *분산환경에서 Join 을 하는 것은 충분히 큰 비용이고, 필요 없는 작업일 수*도 있기 때문입니다
