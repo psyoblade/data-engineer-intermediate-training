@@ -769,11 +769,11 @@ done
 
 * 아래와 같이 검증합니다
 ```bash
-root@bab491272ea2:~# hadoop fs -ls -R /user/sqoop/target/seoul_popular_mod/ | grep SUCCESS
--rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=0/_SUCCESS
--rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=1/_SUCCESS
--rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=2/_SUCCESS
--rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=3/_SUCCESS
+hadoop fs -ls -R /user/sqoop/target/seoul_popular_mod/ | grep SUCCESS
+# -rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=0/_SUCCESS
+# -rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=1/_SUCCESS
+# -rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=2/_SUCCESS
+# -rw-r--r--   1 root root          0 2021-08-31 11:32 /user/sqoop/target/seoul_popular_mod/mod=3/_SUCCESS
 ```
 
 </details>
@@ -913,16 +913,22 @@ hadoop fs -ls /user/sqoop/target/inc_table
 
 <details><summary> :closed_book: 8. [고급] `last_value` 값을 수동으로 확인하지 않고 하나의 스크립트로 계속 수행 가능하도록 작성해 보세요 (hint: --query 임시 파일을 생성해 보세요). </summary>
 
-* 현재 최대 값을 저장하는 임시 파일을 생성합니다 
+* 마지막으로 수행한 작업 이후에 최종 값을 항상 저장해 둡니다 
 ```bash
 sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
 	--query "select max(id) from inc_table where \$CONDITIONS" \
 	--target-dir /user/sqoop/target/inc_table_max --delete-target-dir 
 ```
-* 저장된 경로의 값을 읽어서 변수에 담아서 증분 테이블 수집을 합니다
+
+* 중간에 테스트 예제 데이터를 입력합니다 
+```sql
+# docker
+cmd "INSERT INTO inc_table (name, salary) VALUES ('psyoblade', 20000)"
+```
+
+* 마지막으로 생성된 값을 읽어와서 증분 수집을 합니다
 ```bash
 last_value=`hadoop fs -cat /user/sqoop/target/inc_table_max/part-m-00000`
-
 sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
 	--table inc_table --incremental append --check-column id --last-value ${last_value} \
 	--target-dir /user/sqoop/target/inc_table
