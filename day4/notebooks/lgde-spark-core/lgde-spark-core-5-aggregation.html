@@ -14059,7 +14059,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14107,11 +14107,10 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>21/08/31 16:21:17 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+<pre>21/09/01 13:58:03 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
 Setting default log level to &#34;WARN&#34;.
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-21/08/31 16:21:19 WARN Utils: Service &#39;SparkUI&#39; could not bind on port 4040. Attempting port 4041.
 </pre>
 </div>
 </div>
@@ -14119,7 +14118,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
 
 
 
@@ -14131,7 +14130,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
         <div>
             <p><b>SparkContext</b></p>
 
-            <p><a href="http://c1aa5f4167a8:4041">Spark UI</a></p>
+            <p><a href="http://c1aa5f4167a8:4040">Spark UI</a></p>
 
             <dl>
               <dt>Version</dt>
@@ -15420,24 +15419,31 @@ evaluate: 집계의 최종 결과를 생성하는 로직을 정의</code></pre>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h3><font color=blue>1. [중급]</font> 구매 이력 CSV f"{work_data}/retail-data/all" 파일을 읽고</h3>
-<h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0-10%EA%B1%B4%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552; 10&#44148;&#51012; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0-10%EA%B1%B4%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)%EC%9D%98-%EC%9C%A0%EC%9D%BC%ED%95%9C-%EA%B0%92%EC%9D%98-%EA%B0%AF%EC%88%98%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">3. &#49345;&#54408;&#53076;&#46300;(StockCode)&#51032; &#50976;&#51068;&#54620; &#44050;&#51032; &#44079;&#49688;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#3.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)%EC%9D%98-%EC%9C%A0%EC%9D%BC%ED%95%9C-%EA%B0%92%EC%9D%98-%EA%B0%AF%EC%88%98%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="4.-%EC%83%81%ED%92%88%EB%8B%A8%EA%B0%80(UnitPrice)%EC%9D%98-%EC%B5%9C%EC%86%8C,-%EC%B5%9C%EB%8C%80-%EA%B0%92%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">4. &#49345;&#54408;&#45800;&#44032;(UnitPrice)&#51032; &#52572;&#49548;, &#52572;&#45824; &#44050;&#51012; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#4.-%EC%83%81%ED%92%88%EB%8B%A8%EA%B0%80(UnitPrice)%EC%9D%98-%EC%B5%9C%EC%86%8C,-%EC%B5%9C%EB%8C%80-%EA%B0%92%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="5.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(StockCode)%EB%B3%84%EB%A1%9C-%EC%86%A1%EC%9E%A5%EB%B3%84%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EA%B3%A0-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%98%EC%84%B8%EC%9A%94">5. &#49569;&#51109;&#48264;&#54840;(StockCode)&#48324;&#47196; &#49569;&#51109;&#48324;&#52509;&#47588;&#52636;&#44552;&#50529;(TotalInvoicePrice)&#47484; &#44228;&#49328;&#54616;&#44256; &#45236;&#47548;&#52264;&#49692;&#51004;&#47196; &#51221;&#47148;&#54616;&#49464;&#50836;<a class="anchor-link" href="#5.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(StockCode)%EB%B3%84%EB%A1%9C-%EC%86%A1%EC%9E%A5%EB%B3%84%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EA%B3%A0-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="6.-%EC%86%A1%EC%9E%A5%EB%B3%84%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EC%9D%B4-%EC%B5%9C%EA%B3%A0%EA%B8%88%EC%95%A1%EC%9D%B4-%EC%86%A1%EC%9E%A5%EC%9D%84-%ED%95%84%ED%84%B0%ED%95%98%EC%97%AC-%EA%B2%80%EC%A6%9D%ED%95%B4-%EB%B3%B4%EC%84%B8%EC%9A%94">6. &#49569;&#51109;&#48324;&#52509;&#47588;&#52636;&#44552;&#50529;(TotalInvoicePrice)&#51060; &#52572;&#44256;&#44552;&#50529;&#51060; &#49569;&#51109;&#51012; &#54596;&#53552;&#54616;&#50668; &#44160;&#51613;&#54644; &#48372;&#49464;&#50836;<a class="anchor-link" href="#6.-%EC%86%A1%EC%9E%A5%EB%B3%84%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EC%9D%B4-%EC%B5%9C%EA%B3%A0%EA%B8%88%EC%95%A1%EC%9D%B4-%EC%86%A1%EC%9E%A5%EC%9D%84-%ED%95%84%ED%84%B0%ED%95%98%EC%97%AC-%EA%B2%80%EC%A6%9D%ED%95%B4-%EB%B3%B4%EC%84%B8%EC%9A%94">&#182;</a></h4><h5 id="%EC%98%88%EB%A5%BC-%EB%93%A4%EC%96%B4-select-sum(unit-price-*-quantity)-from-table-where-invoiceno-=-'123456'-%EC%99%80-%EA%B0%99%EC%9D%80-%EC%BF%BC%EB%A6%AC%EB%A1%9C-%EA%B2%80%EC%A6%9D%EC%9D%B4-%EA%B0%80%EB%8A%A5%ED%95%A9%EB%8B%88%EB%8B%A4">&#50696;&#47484; &#46308;&#50612; <code>select sum(unit-price * quantity) from table where invoiceno = '123456'</code> &#50752; &#44057;&#51008; &#53244;&#47532;&#47196; &#44160;&#51613;&#51060; &#44032;&#45733;&#54633;&#45768;&#45796;<a class="anchor-link" href="#%EC%98%88%EB%A5%BC-%EB%93%A4%EC%96%B4-select-sum(unit-price-*-quantity)-from-table-where-invoiceno-=-'123456'-%EC%99%80-%EA%B0%99%EC%9D%80-%EC%BF%BC%EB%A6%AC%EB%A1%9C-%EA%B2%80%EC%A6%9D%EC%9D%B4-%EA%B0%80%EB%8A%A5%ED%95%A9%EB%8B%88%EB%8B%A4">&#182;</a></h5><details><summary>[실습7] 출력 결과 확인 </summary>
+<h4 id="1.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)%EC%9D%98-%EC%9C%A0%EC%9D%BC%ED%95%9C-%EA%B0%92%EC%9D%98-%EA%B0%AF%EC%88%98%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49345;&#54408;&#53076;&#46300;(StockCode)&#51032; &#50976;&#51068;&#54620; &#44050;&#51032; &#44079;&#49688;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)%EC%9D%98-%EC%9C%A0%EC%9D%BC%ED%95%9C-%EA%B0%92%EC%9D%98-%EA%B0%AF%EC%88%98%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EC%83%81%ED%92%88%EB%8B%A8%EA%B0%80(UnitPrice)%EC%9D%98-%EC%B5%9C%EC%86%8C,-%EC%B5%9C%EB%8C%80-%EA%B0%92%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#49345;&#54408;&#45800;&#44032;(UnitPrice)&#51032; &#52572;&#49548;, &#52572;&#45824; &#44050;&#51012; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EC%83%81%ED%92%88%EB%8B%A8%EA%B0%80(UnitPrice)%EC%9D%98-%EC%B5%9C%EC%86%8C,-%EC%B5%9C%EB%8C%80-%EA%B0%92%EC%9D%84-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(StockCode)%EB%B3%84%EB%A1%9C-%EC%86%A1%EC%9E%A5%EB%B3%84-%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EA%B3%A0-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%98%EC%84%B8%EC%9A%94">3. &#49569;&#51109;&#48264;&#54840;(StockCode)&#48324;&#47196; <code>&#49569;&#51109;&#48324; &#52509;&#47588;&#52636;&#44552;&#50529;</code>(TotalInvoicePrice)&#47484; &#44228;&#49328;&#54616;&#44256; &#45236;&#47548;&#52264;&#49692;&#51004;&#47196; &#51221;&#47148;&#54616;&#49464;&#50836;<a class="anchor-link" href="#3.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(StockCode)%EB%B3%84%EB%A1%9C-%EC%86%A1%EC%9E%A5%EB%B3%84-%EC%B4%9D%EB%A7%A4%EC%B6%9C%EA%B8%88%EC%95%A1(TotalInvoicePrice)%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EA%B3%A0-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
+<li>정상 범위에 있는 UnitPrice 값만 처리되어야 합니다 (&gt;= 0)</li>
+<li>`송장별 총매출금액``(TotalInvoicePrice) 값의 소수점 이하는 버림으로 계산합니다</li>
+<li>`송장별 총매출금액``(TotalInvoicePrice) 가장 큰 5개의 송장번호만 출력합니다<ul>
+<li><code>select sum(unit-price * quantity) from table where invoiceno = '123456'</code> 와 같은 쿼리로 검증이 가능합니다</li>
+</ul>
+</li>
+</ul>
+<details><summary>[실습7] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 
 ```python
-df1 = (
-    spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{work_data}/retail-data/all")
-)
-df1.printSchema()
-df1.show()
-answer = df1.withColumn("TotalPrice", expr("UnitPrice * Quantity")).groupBy("InvoiceNo").agg(sum("TotalPrice").alias("TotalInvoicePrice"))
-answer.printSchema()
-display(answer.orderBy(desc("TotalInvoicePrice")).limit(10))
+df1 = spark.read.csv(f"{work_data}/retail-data/all", inferSchema=True, header=True)
+display(df1.select("StockCode").count()) # 541909 -> 4070
+df1.select(min("UnitPrice"), max("UnitPrice")).show()
 
-df1.where("InvoiceNo = '581483'").select(sum(expr("UnitPrice * Quantity"))).show()
+answer = (
+    df1.where(col("UnitPrice") > 0).withColumn("InvoicePrice", col("UnitPrice") * col("Quantity"))
+    .groupBy("StockCode").agg(floor(sum("InvoicePrice")).alias("TotalInvoicePrice"))
+    .orderBy(desc(col("TotalInvoicePrice")))
+)
+display(answer.limit(5))
+
+df1.where(col("StockCode") == "DOT").select(floor(sum(col("UnitPrice") * col("Quantity"))))
 ```
 
 </details>
@@ -15445,7 +15451,7 @@ df1.where("InvoiceNo = '581483'").select(sum(expr("UnitPrice * Quantity"))).show
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[21]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[23]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
@@ -15478,46 +15484,26 @@ df1.where("InvoiceNo = '581483'").select(sum(expr("UnitPrice * Quantity"))).show
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
+
+
+<div class="jp-RenderedText jp-OutputArea-output " data-mime-type="text/plain">
+<pre>541909</pre>
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>root
- |-- InvoiceNo: string (nullable = true)
- |-- StockCode: string (nullable = true)
- |-- Description: string (nullable = true)
- |-- Quantity: integer (nullable = true)
- |-- InvoiceDate: string (nullable = true)
- |-- UnitPrice: double (nullable = true)
- |-- CustomerID: integer (nullable = true)
- |-- Country: string (nullable = true)
-
-+---------+---------+--------------------+--------+--------------+---------+----------+--------------+
-|InvoiceNo|StockCode|         Description|Quantity|   InvoiceDate|UnitPrice|CustomerID|       Country|
-+---------+---------+--------------------+--------+--------------+---------+----------+--------------+
-|   536365|   85123A|WHITE HANGING HEA...|       6|12/1/2010 8:26|     2.55|     17850|United Kingdom|
-|   536365|    71053| WHITE METAL LANTERN|       6|12/1/2010 8:26|     3.39|     17850|United Kingdom|
-|   536365|   84406B|CREAM CUPID HEART...|       8|12/1/2010 8:26|     2.75|     17850|United Kingdom|
-|   536365|   84029G|KNITTED UNION FLA...|       6|12/1/2010 8:26|     3.39|     17850|United Kingdom|
-|   536365|   84029E|RED WOOLLY HOTTIE...|       6|12/1/2010 8:26|     3.39|     17850|United Kingdom|
-|   536365|    22752|SET 7 BABUSHKA NE...|       2|12/1/2010 8:26|     7.65|     17850|United Kingdom|
-|   536365|    21730|GLASS STAR FROSTE...|       6|12/1/2010 8:26|     4.25|     17850|United Kingdom|
-|   536366|    22633|HAND WARMER UNION...|       6|12/1/2010 8:28|     1.85|     17850|United Kingdom|
-|   536366|    22632|HAND WARMER RED P...|       6|12/1/2010 8:28|     1.85|     17850|United Kingdom|
-|   536367|    84879|ASSORTED COLOUR B...|      32|12/1/2010 8:34|     1.69|     13047|United Kingdom|
-|   536367|    22745|POPPY&#39;S PLAYHOUSE...|       6|12/1/2010 8:34|      2.1|     13047|United Kingdom|
-|   536367|    22748|POPPY&#39;S PLAYHOUSE...|       6|12/1/2010 8:34|      2.1|     13047|United Kingdom|
-|   536367|    22749|FELTCRAFT PRINCES...|       8|12/1/2010 8:34|     3.75|     13047|United Kingdom|
-|   536367|    22310|IVORY KNITTED MUG...|       6|12/1/2010 8:34|     1.65|     13047|United Kingdom|
-|   536367|    84969|BOX OF 6 ASSORTED...|       6|12/1/2010 8:34|     4.25|     13047|United Kingdom|
-|   536367|    22623|BOX OF VINTAGE JI...|       3|12/1/2010 8:34|     4.95|     13047|United Kingdom|
-|   536367|    22622|BOX OF VINTAGE AL...|       2|12/1/2010 8:34|     9.95|     13047|United Kingdom|
-|   536367|    21754|HOME BUILDING BLO...|       3|12/1/2010 8:34|     5.95|     13047|United Kingdom|
-|   536367|    21755|LOVE BUILDING BLO...|       3|12/1/2010 8:34|     5.95|     13047|United Kingdom|
-|   536367|    21777|RECIPE BOX WITH M...|       4|12/1/2010 8:34|     7.95|     13047|United Kingdom|
-+---------+---------+--------------------+--------+--------------+---------+----------+--------------+
-only showing top 20 rows
-
-root
- |-- InvoiceNo: string (nullable = true)
- |-- TotalInvoicePrice: double (nullable = true)
+<pre>+--------------+--------------+
+|min(UnitPrice)|max(UnitPrice)|
++--------------+--------------+
+|     -11062.06|       38970.0|
++--------------+--------------+
 
 </pre>
 </div>
@@ -15543,17 +15529,12 @@ root
 
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
 <table border='1'>
-<tr><th>InvoiceNo</th><th>TotalInvoicePrice</th></tr>
-<tr><td>581483</td><td>168469.6</td></tr>
-<tr><td>541431</td><td>77183.6</td></tr>
-<tr><td>574941</td><td>52940.93999999999</td></tr>
-<tr><td>576365</td><td>50653.909999999996</td></tr>
-<tr><td>556444</td><td>38970.0</td></tr>
-<tr><td>567423</td><td>31698.159999999996</td></tr>
-<tr><td>556917</td><td>22775.930000000008</td></tr>
-<tr><td>572209</td><td>22206.0</td></tr>
-<tr><td>567381</td><td>22104.8</td></tr>
-<tr><td>563614</td><td>21880.439999999995</td></tr>
+<tr><th>StockCode</th><th>TotalInvoicePrice</th></tr>
+<tr><td>DOT</td><td>206245</td></tr>
+<tr><td>22423</td><td>164762</td></tr>
+<tr><td>47566</td><td>98302</td></tr>
+<tr><td>85123A</td><td>97894</td></tr>
+<tr><td>85099B</td><td>92356</td></tr>
 </table>
 
 </div>
@@ -15563,18 +15544,18 @@ root
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[23]:</div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>+---------------------------+
-|sum((UnitPrice * Quantity))|
-+---------------------------+
-|                   168469.6|
-+---------------------------+
 
-</pre>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<table border='1'>
+<tr><th>FLOOR(sum((UnitPrice * Quantity)))</th></tr>
+<tr><td>206245</td></tr>
+</table>
+
 </div>
+
 </div>
 
 </div>
@@ -15792,26 +15773,16 @@ root
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=red>4. [고급]</font> 샌프란시스코 긴급출동 데이터 CSV 파일인 f"{work_data}/learning-spark/sf-fire-calls.csv"를 읽고</h3>
-<h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-3%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552;&#47484; 3&#44148; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-3%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%ED%98%B8%EC%B6%9C%EC%9D%98-%EC%A2%85%EB%A5%98(CallType)%EA%B0%80-%EC%96%B4%EB%96%A4-%EA%B2%83%EB%93%A4%EC%9D%B4-%EC%9E%88%EB%8A%94%EC%A7%80-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94-(%EC%A4%91%EB%B3%B5%EC%A0%9C%EA%B1%B0)">3. &#54840;&#52636;&#51032; &#51333;&#47448;(CallType)&#44032; &#50612;&#46500; &#44163;&#46308;&#51060; &#51080;&#45716;&#51648; &#52636;&#47141;&#54616;&#49464;&#50836; (&#51473;&#48373;&#51228;&#44144;)<a class="anchor-link" href="#3.-%ED%98%B8%EC%B6%9C%EC%9D%98-%EC%A2%85%EB%A5%98(CallType)%EA%B0%80-%EC%96%B4%EB%96%A4-%EA%B2%83%EB%93%A4%EC%9D%B4-%EC%9E%88%EB%8A%94%EC%A7%80-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94-(%EC%A4%91%EB%B3%B5%EC%A0%9C%EA%B1%B0)">&#182;</a></h4><h4 id="3.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%EC%9D%98-%EA%B0%80%EC%9E%A5-%EB%B9%88%EB%8F%84%EC%88%98%EA%B0%80-%EB%86%92%EC%9D%80-%EC%A2%85%EB%A5%98(CallType)%EB%A5%BC-%EA%B5%AC%ED%95%98%EA%B3%A0-%EB%B9%88%EB%8F%84%EC%88%98%EB%A5%BC-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">3. &#49356;&#54532;&#46976;&#49884;&#49828;&#53076;&#50640;&#49436; &#48156;&#49373;&#51032; &#44032;&#51109; &#48712;&#46020;&#49688;&#44032; &#45458;&#51008; &#51333;&#47448;(CallType)&#47484; &#44396;&#54616;&#44256; &#48712;&#46020;&#49688;&#47484; &#44396;&#54616;&#49464;&#50836;<a class="anchor-link" href="#3.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%EC%9D%98-%EA%B0%80%EC%9E%A5-%EB%B9%88%EB%8F%84%EC%88%98%EA%B0%80-%EB%86%92%EC%9D%80-%EC%A2%85%EB%A5%98(CallType)%EB%A5%BC-%EA%B5%AC%ED%95%98%EA%B3%A0-%EB%B9%88%EB%8F%84%EC%88%98%EB%A5%BC-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="4.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%ED%95%98%EB%8A%94-%EC%B5%9C%EA%B3%A0-%EB%B9%88%EB%8F%84%EC%88%98-3%EA%B1%B4%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80%EC%9A%94?">4. &#49356;&#54532;&#46976;&#49884;&#49828;&#53076;&#50640;&#49436; &#48156;&#49373;&#54616;&#45716; &#52572;&#44256; &#48712;&#46020;&#49688; 3&#44148;&#51008; &#47924;&#50631;&#51064;&#44032;&#50836;?<a class="anchor-link" href="#4.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%ED%95%98%EB%8A%94-%EC%B5%9C%EA%B3%A0-%EB%B9%88%EB%8F%84%EC%88%98-3%EA%B1%B4%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80%EC%9A%94?">&#182;</a></h4><details><summary>[실습3] 출력 결과 확인 </summary>
+<h3><font color=blue>4. [중급]</font> 샌프란시스코 긴급출동 데이터 CSV 파일인 f"{work_data}/learning-spark/sf-fire-calls.csv"를 읽고</h3>
+<h4 id="1.-%ED%98%B8%EC%B6%9C%EC%9D%98-%EC%A2%85%EB%A5%98-(CallType)%EC%9D%98-%EC%9C%A0%EC%9D%BC%ED%95%9C-%EA%B0%92%EB%93%A4%EC%9D%84-%EC%98%81%EB%AC%B8-%EC%98%A4%EB%A6%84%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#54840;&#52636;&#51032; &#51333;&#47448; (CallType)&#51032; &#50976;&#51068;&#54620; &#44050;&#46308;&#51012; &#50689;&#47928; &#50724;&#47492;&#52264;&#49692;&#51004;&#47196; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%ED%98%B8%EC%B6%9C%EC%9D%98-%EC%A2%85%EB%A5%98-(CallType)%EC%9D%98-%EC%9C%A0%EC%9D%BC%ED%95%9C-%EA%B0%92%EB%93%A4%EC%9D%84-%EC%98%81%EB%AC%B8-%EC%98%A4%EB%A6%84%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EA%B0%80%EC%9E%A5-%EB%B9%88%EB%8F%84%EC%88%98%EA%B0%80-%EB%86%92%EC%9D%80-3%EA%B0%9C%EC%9D%98-%EC%A2%85%EB%A5%98(CallType)%EC%99%80-%EB%B9%88%EB%8F%84%EC%88%98%EB%A5%BC-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">2. &#44032;&#51109; &#48712;&#46020;&#49688;&#44032; &#45458;&#51008; 3&#44060;&#51032; &#51333;&#47448;(CallType)&#50752; &#48712;&#46020;&#49688;&#47484; &#44396;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EA%B0%80%EC%9E%A5-%EB%B9%88%EB%8F%84%EC%88%98%EA%B0%80-%EB%86%92%EC%9D%80-3%EA%B0%9C%EC%9D%98-%EC%A2%85%EB%A5%98(CallType)%EC%99%80-%EB%B9%88%EB%8F%84%EC%88%98%EB%A5%BC-%EA%B5%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습3] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 
 ```python
-df3 = (
-    spark
-    .read
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .csv(f"{work_data}/learning-spark/sf-fire-calls.csv")
-)
-df3.printSchema()
-df3.show(5)
-df3.createOrReplaceTempView("fire_calls")
-spark.sql("select distinct(CallType) from fire_calls").show(truncate=False)
-
-answer = spark.sql("select CallType, count(CallType) as CallTypeCount from fire_calls group by CallType order by CallTypeCount desc")
-display(answer.limit(3))
+df4 = spark.read.csv(f"{work_data}/learning-spark/sf-fire-calls.csv", inferSchema=True, header=True)
+df4.printSchema()
+display(df4.select("CallType").distinct().orderBy(asc(col("CallType"))).limit(10))
+df4.groupBy("CallType").agg(count(col("CallType")).alias("CallTypeCount")).orderBy(desc(col("CallTypeCount"))).limit(3)
 ```
 
 </details>
@@ -15819,7 +15790,7 @@ display(answer.limit(3))
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[24]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[36]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
@@ -15834,6 +15805,17 @@ display(answer.limit(3))
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
 
 <div class="jp-OutputArea-child">
 
@@ -15872,44 +15854,18 @@ display(answer.limit(3))
  |-- RowID: string (nullable = true)
  |-- Delay: double (nullable = true)
 
-+----------+------+--------------+----------------+----------+----------+--------------------+--------------------+--------------------+----+-------+---------+-----------+----+----------------+--------+-------------+-------+-------------+---------+--------+--------------------------+----------------------+------------------+--------------------+--------------------+-------------+---------+
-|CallNumber|UnitID|IncidentNumber|        CallType|  CallDate| WatchDate|CallFinalDisposition|       AvailableDtTm|             Address|City|Zipcode|Battalion|StationArea| Box|OriginalPriority|Priority|FinalPriority|ALSUnit|CallTypeGroup|NumAlarms|UnitType|UnitSequenceInCallDispatch|FirePreventionDistrict|SupervisorDistrict|        Neighborhood|            Location|        RowID|    Delay|
-+----------+------+--------------+----------------+----------+----------+--------------------+--------------------+--------------------+----+-------+---------+-----------+----+----------------+--------+-------------+-------+-------------+---------+--------+--------------------------+----------------------+------------------+--------------------+--------------------+-------------+---------+
-|  20110016|   T13|       2003235|  Structure Fire|01/11/2002|01/10/2002|               Other|01/11/2002 01:51:...|2000 Block of CAL...|  SF|  94109|      B04|         38|3362|               3|       3|            3|  false|         null|        1|   TRUCK|                         2|                     4|                 5|     Pacific Heights|(37.7895840679362...|020110016-T13|     2.95|
-|  20110022|   M17|       2003241|Medical Incident|01/11/2002|01/10/2002|               Other|01/11/2002 03:01:...|0 Block of SILVER...|  SF|  94124|      B10|         42|6495|               3|       3|            3|   true|         null|        1|   MEDIC|                         1|                    10|                10|Bayview Hunters P...|(37.7337623673897...|020110022-M17|      4.7|
-|  20110023|   M41|       2003242|Medical Incident|01/11/2002|01/10/2002|               Other|01/11/2002 02:39:...|MARKET ST/MCALLIS...|  SF|  94102|      B03|         01|1455|               3|       3|            3|   true|         null|        1|   MEDIC|                         2|                     3|                 6|          Tenderloin|(37.7811772186856...|020110023-M41|2.4333334|
-|  20110032|   E11|       2003250|    Vehicle Fire|01/11/2002|01/10/2002|               Other|01/11/2002 04:16:...|APPLETON AV/MISSI...|  SF|  94110|      B06|         32|5626|               3|       3|            3|  false|         null|        1|  ENGINE|                         1|                     6|                 9|      Bernal Heights|(37.7388432849018...|020110032-E11|      1.5|
-|  20110043|   B04|       2003259|          Alarms|01/11/2002|01/10/2002|               Other|01/11/2002 06:01:...|1400 Block of SUT...|  SF|  94109|      B04|         03|3223|               3|       3|            3|  false|         null|        1|   CHIEF|                         2|                     4|                 2|    Western Addition|(37.7872890372638...|020110043-B04|3.4833333|
-+----------+------+--------------+----------------+----------+----------+--------------------+--------------------+--------------------+----+-------+---------+-----------+----+----------------+--------+-------------+-------+-------------+---------+--------+--------------------------+----------------------+------------------+--------------------+--------------------+-------------+---------+
-only showing top 5 rows
-
-+--------------------------------------------+
-|CallType                                    |
-+--------------------------------------------+
-|Vehicle Fire                                |
-|Alarms                                      |
-|Elevator / Escalator Rescue                 |
-|Explosion                                   |
-|Assist Police                               |
-|Marine Fire                                 |
-|Outside Fire                                |
-|Water Rescue                                |
-|Gas Leak (Natural and LP Gases)             |
-|Aircraft Emergency                          |
-|HazMat                                      |
-|Train / Rail Incident                       |
-|Extrication / Entrapped (Machinery, Vehicle)|
-|Medical Incident                            |
-|Smoke Investigation (Outside)               |
-|Fuel Spill                                  |
-|Oil Spill                                   |
-|Watercraft in Distress                      |
-|Confined Space / Structure Collapse         |
-|Structure Fire                              |
-+--------------------------------------------+
-only showing top 20 rows
-
 </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
 </div>
 </div>
 
@@ -15921,6 +15877,32 @@ only showing top 20 rows
 
 
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<table border='1'>
+<tr><th>CallType</th></tr>
+<tr><td>Administrative</td></tr>
+<tr><td>Aircraft Emergency</td></tr>
+<tr><td>Alarms</td></tr>
+<tr><td>Assist Police</td></tr>
+<tr><td>Citizen Assist / Service Call</td></tr>
+<tr><td>Confined Space / Structure Collapse</td></tr>
+<tr><td>Electrical Hazard</td></tr>
+<tr><td>Elevator / Escalator Rescue</td></tr>
+<tr><td>Explosion</td></tr>
+<tr><td>Extrication / Entrapped (Machinery, Vehicle)</td></tr>
+</table>
+
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[36]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
 <table border='1'>
 <tr><th>CallType</th><th>CallTypeCount</th></tr>
 <tr><td>Medical Incident</td><td>113794</td></tr>
@@ -15939,13 +15921,15 @@ only showing top 20 rows
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=red>5. [숙제]</font> 샌프란시스코 긴급출동 데이터 CSV 파일인 f"{work_data}/learning-spark/sf-fire-calls.csv"를 읽고 다음과 같은 질문도 실습해 보면 재미있을 것 같습니다</h3>
-<h4 id="1.-2018-%EB%85%84%EC%9D%98-%EB%AA%A8%EB%93%A0-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0-%EC%9C%A0%ED%98%95%EC%9D%80-%EB%AC%B4%EC%97%87-%EC%9D%B4%EC%97%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">1. 2018 &#45380;&#51032; &#47784;&#46304; &#54868;&#51116; &#49888;&#44256; &#50976;&#54805;&#51008; &#47924;&#50631; &#51060;&#50632;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#1.-2018-%EB%85%84%EC%9D%98-%EB%AA%A8%EB%93%A0-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0-%EC%9C%A0%ED%98%95%EC%9D%80-%EB%AC%B4%EC%97%87-%EC%9D%B4%EC%97%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="2.-2018-%EB%85%84%EC%9D%98-%EB%AA%87-%EC%9B%94%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">2. 2018 &#45380;&#51032; &#47751; &#50900;&#50640; &#54868;&#51116; &#49888;&#44256;&#44032; &#44032;&#51109; &#47566;&#50520;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#2.-2018-%EB%85%84%EC%9D%98-%EB%AA%87-%EC%9B%94%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="3.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-2018-%EB%85%84%EC%97%90-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%9D%80-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">3. &#49356;&#54532;&#46976;&#49884;&#49828;&#53076;&#50640;&#49436; 2018 &#45380;&#50640; &#44032;&#51109; &#47566;&#51008; &#54868;&#51116; &#49888;&#44256;&#44032; &#48156;&#49373;&#54620; &#51648;&#50669;&#51008; &#50612;&#46356;&#51077;&#45768;&#44620;?<a class="anchor-link" href="#3.-%EC%83%8C%ED%94%84%EB%9E%80%EC%8B%9C%EC%8A%A4%EC%BD%94%EC%97%90%EC%84%9C-2018-%EB%85%84%EC%97%90-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%9D%80-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="4.-2018-%EB%85%84%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EC%97%90-%EB%8C%80%ED%95%9C-%EC%9D%91%EB%8B%B5-%EC%8B%9C%EA%B0%84%EC%9D%B4-%EA%B0%80%EC%9E%A5-%EB%82%98%EC%81%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">4. 2018 &#45380;&#50640; &#54868;&#51116; &#49888;&#44256;&#50640; &#45824;&#54620; &#51025;&#45813; &#49884;&#44036;&#51060; &#44032;&#51109; &#45208;&#49244; &#51648;&#50669;&#51008; &#50612;&#46356;&#51077;&#45768;&#44620;?<a class="anchor-link" href="#4.-2018-%EB%85%84%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EC%97%90-%EB%8C%80%ED%95%9C-%EC%9D%91%EB%8B%B5-%EC%8B%9C%EA%B0%84%EC%9D%B4-%EA%B0%80%EC%9E%A5-%EB%82%98%EC%81%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="5.-2018-%EB%85%84-%EC%A4%91-%EC%96%B4%EB%8A%90-%EC%A3%BC%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">5. 2018 &#45380; &#51473; &#50612;&#45712; &#51452;&#50640; &#54868;&#51116; &#49888;&#44256;&#44032; &#44032;&#51109; &#47566;&#50520;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#5.-2018-%EB%85%84-%EC%A4%91-%EC%96%B4%EB%8A%90-%EC%A3%BC%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="6.-%EC%9D%B4%EC%9B%83,-%EC%9A%B0%ED%8E%B8-%EB%B2%88%ED%98%B8,-%ED%99%94%EC%9E%AC-%EC%A0%84%ED%99%94-%EA%B1%B4%EC%88%98%EA%B0%84%EC%97%90-%EC%83%81%EA%B4%80-%EA%B4%80%EA%B3%84%EA%B0%80-%EC%9E%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">6. &#51060;&#50883;, &#50864;&#54200; &#48264;&#54840;, &#54868;&#51116; &#51204;&#54868; &#44148;&#49688;&#44036;&#50640; &#49345;&#44288; &#44288;&#44228;&#44032; &#51080;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#6.-%EC%9D%B4%EC%9B%83,-%EC%9A%B0%ED%8E%B8-%EB%B2%88%ED%98%B8,-%ED%99%94%EC%9E%AC-%EC%A0%84%ED%99%94-%EA%B1%B4%EC%88%98%EA%B0%84%EC%97%90-%EC%83%81%EA%B4%80-%EA%B4%80%EA%B3%84%EA%B0%80-%EC%9E%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h4><h4 id="7.-Parquet-%ED%8C%8C%EC%9D%BC-%EB%98%90%EB%8A%94-SQL-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC%EC%9D%B4-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B3%A0-%EB%8B%A4%EC%8B%9C-%EC%9D%BD%EC%9D%84-%EC%88%98%EC%9E%88%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9E%85%EB%8B%88%EA%B9%8C?">7. Parquet &#54028;&#51068; &#46608;&#45716; SQL &#53580;&#51060;&#48660;&#51012; &#49324;&#50857;&#54616;&#50668;&#51060; &#45936;&#51060;&#53552;&#47484; &#51200;&#51109;&#54616;&#44256; &#45796;&#49884; &#51069;&#51012; &#49688;&#51080;&#45716; &#48169;&#48277;&#51008; &#47924;&#50631;&#51077;&#45768;&#44620;?<a class="anchor-link" href="#7.-Parquet-%ED%8C%8C%EC%9D%BC-%EB%98%90%EB%8A%94-SQL-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%84-%EC%82%AC%EC%9A%A9%ED%95%98%EC%97%AC%EC%9D%B4-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B3%A0-%EB%8B%A4%EC%8B%9C-%EC%9D%BD%EC%9D%84-%EC%88%98%EC%9E%88%EB%8A%94-%EB%B0%A9%EB%B2%95%EC%9D%80-%EB%AC%B4%EC%97%87%EC%9E%85%EB%8B%88%EA%B9%8C?">&#182;</a></h4>
+<h3><font color=red>5. [숙제]</font> 샌프란시스코 긴급출동 데이터 CSV 파일인 f"{work_data}/learning-spark/sf-fire-calls.csv"를 읽고 다음 질문에 대해 실습해 보세요</h3>
+<blockquote><p>명확한 정답을 찾기 보다 데이터를 어떻게 해석하고 접근하여 프로그래밍 하셨는 지에 집중하시면 좋을 듯 합니다.</p>
+</blockquote>
+
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[33]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fire</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">work_data</span><span class="si">}</span><span class="s2">/learning-spark/sf-fire-calls.csv&quot;</span><span class="p">,</span> <span class="n">inferSchema</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -16018,19 +16002,7 @@ only showing top 20 rows
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>21/08/31 16:21:39 WARN package: Truncated the string representation of a plan since it was too large. This behavior can be adjusted by setting &#39;spark.sql.debug.maxToStringFields&#39;.
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[33]:</div>
 
 
 
@@ -16052,14 +16024,30 @@ only showing top 20 rows
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="5-1.-2018-%EB%85%84%EC%9D%98-%EB%AA%A8%EB%93%A0-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0-%EC%9C%A0%ED%98%95-%EA%B0%80%EC%9A%B4%EB%8D%B0-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%9D%80-%EB%B9%88%EB%8F%84%EC%88%98-%EC%83%81%EC%9C%84-3%EA%B1%B4%EC%9D%80-%EB%AC%B4%EC%97%87-%EC%9D%B4%EC%97%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">5-1. 2018 &#45380;&#51032; &#47784;&#46304; &#54868;&#51116; &#49888;&#44256; &#50976;&#54805; &#44032;&#50868;&#45936; &#44032;&#51109; &#47566;&#51008; &#48712;&#46020;&#49688; &#49345;&#50948; 3&#44148;&#51008; &#47924;&#50631; &#51060;&#50632;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#5-1.-2018-%EB%85%84%EC%9D%98-%EB%AA%A8%EB%93%A0-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0-%EC%9C%A0%ED%98%95-%EA%B0%80%EC%9A%B4%EB%8D%B0-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%9D%80-%EB%B9%88%EB%8F%84%EC%88%98-%EC%83%81%EC%9C%84-3%EA%B1%B4%EC%9D%80-%EB%AC%B4%EC%97%87-%EC%9D%B4%EC%97%88%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h3><details><summary> 강사가 풀이한 결과와 비교 </summary>
+
+```python
+answer = (
+    fire.withColumn("CallYear", year(to_date("CallDate", "MM/dd/yyyy")))
+    .where(col("CallYear") == lit(2018))
+    .groupBy("CallType").count()
+    .orderBy(desc("count"))
+)
+answer.limit(3)
+```
+
+</details>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[34]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 1. 2018 년의 모든 화재 신고 유형 가운데 가장 많은 빈도수 상위 3건은 무엇 이었습니까?</span>
-<span class="n">fire</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;CallYear&quot;</span><span class="p">,</span> <span class="n">year</span><span class="p">(</span><span class="n">to_date</span><span class="p">(</span><span class="s2">&quot;CallDate&quot;</span><span class="p">,</span> <span class="s2">&quot;MM/dd/yyyy&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;CallYear&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="n">lit</span><span class="p">(</span><span class="mi">2018</span><span class="p">))</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;CallType&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
 </pre></div>
 
      </div>
@@ -16086,7 +16074,7 @@ only showing top 20 rows
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[12]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[34]:</div>
 
 
 
@@ -16106,14 +16094,32 @@ only showing top 20 rows
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="5-2.-2018-%EB%85%84%EC%9D%98-%EB%AA%87-%EC%9B%94%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EB%AA%87-%EA%B1%B4%EC%9C%BC%EB%A1%9C-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">5-2. 2018 &#45380;&#51032; &#47751; &#50900;&#50640; &#54868;&#51116; &#49888;&#44256;&#44032; &#47751; &#44148;&#51004;&#47196; &#44032;&#51109; &#47566;&#50520;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#5-2.-2018-%EB%85%84%EC%9D%98-%EB%AA%87-%EC%9B%94%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EB%AA%87-%EA%B1%B4%EC%9C%BC%EB%A1%9C-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h3><details><summary> 강사가 풀이한 결과와 비교 </summary>
+
+```python
+answer = (
+    fire.withColumn("CallDate", to_date("CallDate", "MM/dd/yyyy"))
+    .where(year(col("CallDate")) == lit(2018))
+    .where(lower(col("CallType")).contains("fire"))
+    .withColumn("Month", month(col("CallDate")))
+    .groupBy("Month").count()
+    .orderBy(desc("count"))
+)
+answer.limit(1)
+```
+
+</details>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[39]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[37]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 2. 2018 년의 몇 월에 화재 신고가 가장 많았습니까?</span>
-<span class="n">fire</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;CallDate&quot;</span><span class="p">,</span> <span class="n">to_date</span><span class="p">(</span><span class="s2">&quot;CallDate&quot;</span><span class="p">,</span> <span class="s2">&quot;MM/dd/yyyy&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">year</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;CallDate&quot;</span><span class="p">))</span> <span class="o">==</span> <span class="n">lit</span><span class="p">(</span><span class="mi">2018</span><span class="p">))</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">lower</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;CallType&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s2">&quot;fire&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span><span class="s2">&quot;Month&quot;</span><span class="p">,</span> <span class="n">month</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;CallDate&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;Month&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">limit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
 </pre></div>
 
      </div>
@@ -16140,7 +16146,7 @@ only showing top 20 rows
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[39]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[37]:</div>
 
 
 
@@ -16158,15 +16164,61 @@ only showing top 20 rows
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="5-3.-2018-%EB%85%84%EC%97%90-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%9D%80-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%A7%80%EC%97%AD(city-or-zipcode)%EB%8A%94-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">5-3. 2018 &#45380;&#50640; &#44032;&#51109; &#47566;&#51008; &#54868;&#51116; &#49888;&#44256;&#44032; &#48156;&#49373;&#54620; &#51648;&#50669;(city or zipcode)&#45716; &#50612;&#46356;&#51077;&#45768;&#44620;?<a class="anchor-link" href="#5-3.-2018-%EB%85%84%EC%97%90-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%9D%80-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%9C-%EC%A7%80%EC%97%AD(city-or-zipcode)%EB%8A%94-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">&#182;</a></h3><ul>
+<li>city 값 전체를 확인하고 동일한 값은 하나로 처리되도록 전처리를 수행합니다 (예: sf -&gt; san francisco )<ul>
+<li>참고로 샌프란시스코 내의 소규모 도시를 포함한 값이므로 city 값은 sf 가 대부분입니다 :-)</li>
+</ul>
+</li>
+</ul>
+<details><summary> 강사가 풀이한 결과와 비교 </summary>
+
+```python
+@udf(returnType=StringType())
+def replace_city_names(name):
+    city_names = { 
+        "bn":"brisbane", "dc":"daly city", "fm":"fort mason"
+        , "hp":"hunters point", "pr":"presidio", "sf":"san francisco"
+        , "ti":"treasure island", "treasure isla":"treasure island"
+        , "yb":"yerba buena", "sfo":"san francisco airport"
+    }
+    return city_names.get(name, name)
+
+fire.select(replace_city_names(lower("City")).alias("city")).distinct().show(truncate=False)
+
+answer = (
+    fire.withColumn("CallDate", to_date("CallDate", "MM/dd/yyyy"))
+    .where(year(col("CallDate")) == lit(2018))
+    .where(lower(col("CallType")).contains("fire"))
+    .withColumn("Cities", replace_city_names(lower(col("City"))))
+    .groupBy("Cities").count()
+    .orderBy(desc("count"))
+)
+answer.show(truncate=False)
+
+zipcode = (
+    fire.withColumn("CallDate", to_date("CallDate", "MM/dd/yyyy"))
+    .where(year(col("CallDate")) == lit(2018))
+    .where(lower(col("CallType")).contains("fire"))
+    .groupBy("Zipcode").count()
+    .orderBy(desc("count"))
+)
+zipcode.show(truncate=False)
+```
+
+* [94102@zillow.com](https://www.zillow.com/homes/94102_rb/)
+
+</details>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[42]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[66]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 3. 샌프란시스코에서 2018 년에 가장 많은 화재 신고가 발생한 지역은 어디입니까?</span>
-<span class="n">fire</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">lower</span><span class="p">(</span><span class="s2">&quot;City&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;city&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="s2">&quot;city&quot;</span><span class="p">)</span>
-<span class="c1"># fire.withColumn(&quot;CallDate&quot;, to_date(&quot;CallDate&quot;, &quot;MM/dd/yyyy&quot;)).where(year(col(&quot;CallDate&quot;)) == lit(2018)).where(lower(col(&quot;CallType&quot;)).contains(&quot;fire&quot;)).withColumn(&quot;Month&quot;, month(col(&quot;CallDate&quot;))).groupBy(&quot;Month&quot;).count().orderBy(desc(&quot;count&quot;)).limit(1)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
 </pre></div>
 
      </div>
@@ -16182,35 +16234,131 @@ only showing top 20 rows
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[42]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
 
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
-<table border='1'>
-<tr><th>city</th></tr>
-<tr><td>null</td></tr>
-<tr><td>bn</td></tr>
-<tr><td>brisbane</td></tr>
-<tr><td>daly city</td></tr>
-<tr><td>dc</td></tr>
-<tr><td>fm</td></tr>
-<tr><td>fort mason</td></tr>
-<tr><td>hp</td></tr>
-<tr><td>hunters point</td></tr>
-<tr><td>oak</td></tr>
-<tr><td>pr</td></tr>
-<tr><td>presidio</td></tr>
-<tr><td>san francisco</td></tr>
-<tr><td>sf</td></tr>
-<tr><td>sfo</td></tr>
-<tr><td>ti</td></tr>
-<tr><td>treasure isla</td></tr>
-<tr><td>treasure island</td></tr>
-<tr><td>yb</td></tr>
-<tr><td>yerba buena</td></tr>
-</table>
+<div class="jp-OutputArea-child">
 
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+---------------------+
+|city                 |
++---------------------+
+|treasure island      |
+|brisbane             |
+|daly city            |
+|oak                  |
+|presidio             |
+|yerba buena          |
+|null                 |
+|san francisco        |
+|san francisco airport|
+|hunters point        |
+|fort mason           |
++---------------------+
+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+---------------+-----+
+|Cities         |count|
++---------------+-----+
+|san francisco  |1071 |
+|presidio       |7    |
+|treasure island|4    |
+|null           |3    |
+|daly city      |1    |
+|yerba buena    |1    |
++---------------+-----+
+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>[Stage 372:======================================&gt;                  (2 + 1) / 3]</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+-------+-----+
+|Zipcode|count|
++-------+-----+
+|94102  |114  |
+|94109  |98   |
+|94103  |98   |
+|94110  |81   |
+|94107  |64   |
+|94124  |63   |
+|94112  |58   |
+|94111  |45   |
+|94115  |42   |
+|94122  |40   |
+|94133  |39   |
+|94118  |36   |
+|94117  |34   |
+|94121  |34   |
+|94114  |32   |
+|94108  |31   |
+|94123  |29   |
+|94132  |28   |
+|94134  |25   |
+|94105  |24   |
++-------+-----+
+only showing top 20 rows
+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
 </div>
 
 </div>
@@ -16218,14 +16366,23 @@ only showing top 20 rows
 </div>
 
 </div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><img src="images/sf.png" alt="sf"></p>
 
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="5-4.-2018-%EB%85%84%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EC%97%90-%EB%8C%80%ED%95%9C-%EC%9D%91%EB%8B%B5-%EC%8B%9C%EA%B0%84%EC%9D%B4-%EA%B0%80%EC%9E%A5-%EB%82%98%EC%81%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">5-4. 2018 &#45380;&#50640; &#54868;&#51116; &#49888;&#44256;&#50640; &#45824;&#54620; &#51025;&#45813; &#49884;&#44036;&#51060; &#44032;&#51109; &#45208;&#49244; &#51648;&#50669;&#51008; &#50612;&#46356;&#51077;&#45768;&#44620;?<a class="anchor-link" href="#5-4.-2018-%EB%85%84%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EC%97%90-%EB%8C%80%ED%95%9C-%EC%9D%91%EB%8B%B5-%EC%8B%9C%EA%B0%84%EC%9D%B4-%EA%B0%80%EC%9E%A5-%EB%82%98%EC%81%9C-%EC%A7%80%EC%97%AD%EC%9D%80-%EC%96%B4%EB%94%94%EC%9E%85%EB%8B%88%EA%B9%8C?">&#182;</a></h3>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 4. 2018 년에 화재 신고에 대한 응답 시간이 가장 나쁜 지역은 어디입니까?</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
 </pre></div>
 
      </div>
@@ -16233,13 +16390,18 @@ only showing top 20 rows
 </div>
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="5-5.-2018-%EB%85%84-%EC%A4%91-%EC%96%B4%EB%8A%90-%EC%A3%BC%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">5-5. 2018 &#45380; &#51473; &#50612;&#45712; &#51452;&#50640; &#54868;&#51116; &#49888;&#44256;&#44032; &#44032;&#51109; &#47566;&#50520;&#49845;&#45768;&#44620;?<a class="anchor-link" href="#5-5.-2018-%EB%85%84-%EC%A4%91-%EC%96%B4%EB%8A%90-%EC%A3%BC%EC%97%90-%ED%99%94%EC%9E%AC-%EC%8B%A0%EA%B3%A0%EA%B0%80-%EA%B0%80%EC%9E%A5-%EB%A7%8E%EC%95%98%EC%8A%B5%EB%8B%88%EA%B9%8C?">&#182;</a></h3>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 5. 2018 년 중 어느 주에 화재 신고가 가장 많았습니까?</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
 </pre></div>
 
      </div>

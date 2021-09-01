@@ -14065,7 +14065,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14113,10 +14113,11 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>21/08/21 09:07:45 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+<pre>21/09/01 13:38:22 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
 Setting default log level to &#34;WARN&#34;.
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+21/09/01 13:38:24 WARN Utils: Service &#39;SparkUI&#39; could not bind on port 4040. Attempting port 4041.
 </pre>
 </div>
 </div>
@@ -14124,7 +14125,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[2]:</div>
 
 
 
@@ -14136,7 +14137,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
         <div>
             <p><b>SparkContext</b></p>
 
-            <p><a href="http://36066668d2b9:4040">Spark UI</a></p>
+            <p><a href="http://c1aa5f4167a8:4041">Spark UI</a></p>
 
             <dl>
               <dt>Version</dt>
@@ -15203,31 +15204,21 @@ root
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h3><font color=blue>3. [중급]</font> 고객 정보 f"{work_data}/tbl_user", 제품 정보 f"{work_data}/tbl_purchase" CSV 파일을 읽고</h3>
-<h4 id="1.-%EA%B0%81%EA%B0%81-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#44033;&#44033; &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EA%B0%81%EA%B0%81-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EA%B0%81%EA%B0%81-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#44033;&#44033; &#45936;&#51060;&#53552;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EA%B0%81%EA%B0%81-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EA%B3%A0%EA%B0%9D(tbl_user)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-u_id-%EC%99%80-%EC%A0%9C%ED%92%88(tbl_purchase)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-p_uid-%EB%8A%94-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94-%EC%9E%85%EB%8B%88%EB%8B%A4">3. &#44256;&#44061;(tbl_user) &#53580;&#51060;&#48660;&#51032; u_id &#50752; &#51228;&#54408;(tbl_purchase) &#53580;&#51060;&#48660;&#51032; p_uid &#45716; &#44256;&#44061;&#50500;&#51060;&#46356; &#51077;&#45768;&#45796;<a class="anchor-link" href="#3.-%EA%B3%A0%EA%B0%9D(tbl_user)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-u_id-%EC%99%80-%EC%A0%9C%ED%92%88(tbl_purchase)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-p_uid-%EB%8A%94-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94-%EC%9E%85%EB%8B%88%EB%8B%A4">&#182;</a></h4><h4 id="4.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EC%9D%84-%EA%B8%B0%EC%A4%80%EC%9C%BC%EB%A1%9C-%EA%B5%AC%EB%A7%A4%ED%95%9C-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94-(left:-user,-right:-purchase,-join:-left_outer)">4. &#47784;&#46304; &#44256;&#44061;&#51012; &#44592;&#51456;&#51004;&#47196; &#44396;&#47588;&#54620; &#49345;&#54408; &#51221;&#48372;&#47484; &#51312;&#51064;&#54644; &#51452;&#49464;&#50836; (left: user, right: purchase, join: left_outer)<a class="anchor-link" href="#4.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EC%9D%84-%EA%B8%B0%EC%A4%80%EC%9C%BC%EB%A1%9C-%EA%B5%AC%EB%A7%A4%ED%95%9C-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94-(left:-user,-right:-purchase,-join:-left_outer)">&#182;</a></h4><h4 id="5.-%EC%A1%B0%EC%9D%B8%EB%90%9C-%EC%B5%9C%EC%A2%85-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">5. &#51312;&#51064;&#46108; &#52572;&#51333; &#53580;&#51060;&#48660;&#51032; &#49828;&#53412;&#47560;&#50752; &#45936;&#51060;&#53552;&#47484; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#5.-%EC%A1%B0%EC%9D%B8%EB%90%9C-%EC%B5%9C%EC%A2%85-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="6.-%EC%B6%9C%EB%A0%A5%EC%8B%9C%EC%97%90-%EC%83%81%ED%92%88-%EA%B0%80%EA%B2%A9(tbl_purchase.p_amount)%EC%9D%98-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">6. &#52636;&#47141;&#49884;&#50640; &#49345;&#54408; &#44032;&#44201;(tbl_purchase.p_amount)&#51032; &#45236;&#47548;&#52264;&#49692;&#51004;&#47196; &#51221;&#47148;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#6.-%EC%B6%9C%EB%A0%A5%EC%8B%9C%EC%97%90-%EC%83%81%ED%92%88-%EA%B0%80%EA%B2%A9(tbl_purchase.p_amount)%EC%9D%98-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="7.-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9%EC%9D%B4-%EC%97%86%EB%8A%94-%EA%B2%BD%EC%9A%B0%EC%97%90%EB%8A%94-%EB%93%B1%EB%A1%9D%EC%9D%BC%EC%9E%90(tbl_user.u_signup)%EA%B0%80-%EC%B5%9C%EC%8B%A0%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">7. &#49345;&#54408;&#44032;&#44201;&#51060; &#50630;&#45716; &#44221;&#50864;&#50640;&#45716; &#46321;&#47197;&#51068;&#51088;(tbl_user.u_signup)&#44032; &#52572;&#49888;&#51004;&#47196; &#51221;&#47148;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#7.-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9%EC%9D%B4-%EC%97%86%EB%8A%94-%EA%B2%BD%EC%9A%B0%EC%97%90%EB%8A%94-%EB%93%B1%EB%A1%9D%EC%9D%BC%EC%9E%90(tbl_user.u_signup)%EA%B0%80-%EC%B5%9C%EC%8B%A0%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습3] 출력 결과 확인 </summary>
+<h4 id="1.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EC%9D%84-%EA%B8%B0%EC%A4%80%EC%9C%BC%EB%A1%9C-%EA%B5%AC%EB%A7%A4%ED%95%9C-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94-(left:-user,-right:-purchase,-join:-left_outer)">1. &#47784;&#46304; &#44256;&#44061;&#51012; &#44592;&#51456;&#51004;&#47196; &#44396;&#47588;&#54620; &#49345;&#54408; &#51221;&#48372;&#47484; &#51312;&#51064;&#54644; &#51452;&#49464;&#50836; (left: user, right: purchase, join: left_outer)<a class="anchor-link" href="#1.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EC%9D%84-%EA%B8%B0%EC%A4%80%EC%9C%BC%EB%A1%9C-%EA%B5%AC%EB%A7%A4%ED%95%9C-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94-(left:-user,-right:-purchase,-join:-left_outer)">&#182;</a></h4><ul>
+<li>고객(tbl_user) 테이블의 u_id 와 제품(tbl_purchase) 테이블의 p_uid 는 고객아이디 입니다</li>
+<li>조인된 최종 테이블의 스키마와 데이터를 출력해 주세요</li>
+<li>출력시에 상품 가격(tbl_purchase.p_amount)의 내림차순으로 정렬해 주세요</li>
+<li>상품가격이 없는 경우에는 등록일자(tbl_user.u_signup)가 최신으로 정렬해 주세요</li>
+<li>가능한 Structured API 를 사용하여 작성하되 최대한 간결하게 작성해 보세요</li>
+</ul>
+<details><summary>[실습3] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 
 ```python
-left = (
-    spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{work_data}/tbl_user.csv")
-)
-left.printSchema()
-# left.show()
-
-right = (
-    spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{work_data}/tbl_purchase.csv")
-)
-right.printSchema()
-# right.show()
-
-join_codition = left.u_id == right.p_uid
-answer = left.join(right, join_codition, "left_outer")
+left = spark.read.csv(f"{work_data}/tbl_user.csv", inferSchema=True, header=True)
+right = spark.read.csv(f"{work_data}/tbl_purchase.csv", inferSchema=True, header=True)
+answer = left.join(right, left.u_id == right.p_uid, "left_outer")
 answer.printSchema()
 display(answer.orderBy(desc("p_amount"), desc("u_signup")))
 ```
@@ -15237,7 +15228,7 @@ display(answer.orderBy(desc("p_amount"), desc("u_signup")))
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
@@ -15259,21 +15250,19 @@ display(answer.orderBy(desc("p_amount"), desc("u_signup")))
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>                                                                                </pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>root
- |-- u_id: integer (nullable = true)
- |-- u_name: string (nullable = true)
- |-- u_gender: string (nullable = true)
- |-- u_signup: integer (nullable = true)
-
-root
- |-- p_time: integer (nullable = true)
- |-- p_uid: integer (nullable = true)
- |-- p_id: integer (nullable = true)
- |-- p_name: string (nullable = true)
- |-- p_amount: integer (nullable = true)
-
-root
  |-- u_id: integer (nullable = true)
  |-- u_name: string (nullable = true)
  |-- u_gender: string (nullable = true)
@@ -15322,34 +15311,24 @@ root
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=red>4. [고급]</font> 고객 정보 f"{work_data}/tbl_user", 제품 정보 f"{work_data}/tbl_purchase" CSV 파일을 읽고</h3>
-<h4 id="1.-%EA%B0%81%EA%B0%81-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#44033;&#44033; &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EA%B0%81%EA%B0%81-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EA%B0%81%EA%B0%81-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#44033;&#44033; &#45936;&#51060;&#53552;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EA%B0%81%EA%B0%81-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EA%B3%A0%EA%B0%9D(tbl_user)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-u_id-%EC%99%80-%EC%A0%9C%ED%92%88(tbl_purchase)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-p_uid-%EB%8A%94-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94-%EC%9E%85%EB%8B%88%EB%8B%A4">3. &#44256;&#44061;(tbl_user) &#53580;&#51060;&#48660;&#51032; u_id &#50752; &#51228;&#54408;(tbl_purchase) &#53580;&#51060;&#48660;&#51032; p_uid &#45716; &#44256;&#44061;&#50500;&#51060;&#46356; &#51077;&#45768;&#45796;<a class="anchor-link" href="#3.-%EA%B3%A0%EA%B0%9D(tbl_user)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-u_id-%EC%99%80-%EC%A0%9C%ED%92%88(tbl_purchase)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-p_uid-%EB%8A%94-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94-%EC%9E%85%EB%8B%88%EB%8B%A4">&#182;</a></h4><h4 id="4.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EC%9D%84-%EA%B8%B0%EC%A4%80%EC%9C%BC%EB%A1%9C-%EB%AA%A8%EB%93%A0-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94-(left:-user,-right:-purchase,-join:-inner)">4. &#47784;&#46304; &#44256;&#44061;&#51012; &#44592;&#51456;&#51004;&#47196; &#47784;&#46304; &#49345;&#54408; &#51221;&#48372;&#47484; &#51312;&#51064;&#54644; &#51452;&#49464;&#50836; (left: user, right: purchase, join: inner)<a class="anchor-link" href="#4.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EC%9D%84-%EA%B8%B0%EC%A4%80%EC%9C%BC%EB%A1%9C-%EB%AA%A8%EB%93%A0-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94-(left:-user,-right:-purchase,-join:-inner)">&#182;</a></h4><h4 id="5.-%EC%A1%B0%EC%9D%B8%EB%90%9C-%EC%B5%9C%EC%A2%85-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">5. &#51312;&#51064;&#46108; &#52572;&#51333; &#53580;&#51060;&#48660;&#51032; &#49828;&#53412;&#47560;&#50752; &#45936;&#51060;&#53552;&#47484; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#5.-%EC%A1%B0%EC%9D%B8%EB%90%9C-%EC%B5%9C%EC%A2%85-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="6.-%EC%B6%9C%EB%A0%A5%EC%8B%9C%EC%97%90-%EC%83%81%ED%92%88-%EA%B0%80%EA%B2%A9(tbl_purchase.p_amount)%EC%9D%98-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">6. &#52636;&#47141;&#49884;&#50640; &#49345;&#54408; &#44032;&#44201;(tbl_purchase.p_amount)&#51032; &#45236;&#47548;&#52264;&#49692;&#51004;&#47196; &#51221;&#47148;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#6.-%EC%B6%9C%EB%A0%A5%EC%8B%9C%EC%97%90-%EC%83%81%ED%92%88-%EA%B0%80%EA%B2%A9(tbl_purchase.p_amount)%EC%9D%98-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="7.-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9%EC%9D%B4-%EC%97%86%EB%8A%94-%EA%B2%BD%EC%9A%B0%EC%97%90%EB%8A%94-%EB%93%B1%EB%A1%9D%EC%9D%BC%EC%9E%90(tbl_user.u_signup)%EA%B0%80-%EC%B5%9C%EC%8B%A0%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">7. &#49345;&#54408;&#44032;&#44201;&#51060; &#50630;&#45716; &#44221;&#50864;&#50640;&#45716; &#46321;&#47197;&#51068;&#51088;(tbl_user.u_signup)&#44032; &#52572;&#49888;&#51004;&#47196; &#51221;&#47148;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#7.-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9%EC%9D%B4-%EC%97%86%EB%8A%94-%EA%B2%BD%EC%9A%B0%EC%97%90%EB%8A%94-%EB%93%B1%EB%A1%9D%EC%9D%BC%EC%9E%90(tbl_user.u_signup)%EA%B0%80-%EC%B5%9C%EC%8B%A0%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습4] 출력 결과 확인 </summary>
+<h3><font color=blue>4. [중급]</font> 고객 정보 f"{work_data}/tbl_user", 제품 정보 f"{work_data}/tbl_purchase" CSV 파일을 읽고</h3>
+<h4 id="1.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EA%B3%BC-%EB%AA%A8%EB%93%A0-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EA%B0%80-%EC%B6%9C%EB%A0%A5%EB%90%A0-%EC%88%98-%EC%9E%88%EB%8F%84%EB%A1%9D-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">1. &#47784;&#46304; &#44256;&#44061;&#44284; &#47784;&#46304; &#49345;&#54408; &#51221;&#48372;&#44032; &#52636;&#47141;&#46112; &#49688; &#51080;&#46020;&#47197; &#51312;&#51064;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#1.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EA%B3%BC-%EB%AA%A8%EB%93%A0-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EA%B0%80-%EC%B6%9C%EB%A0%A5%EB%90%A0-%EC%88%98-%EC%9E%88%EB%8F%84%EB%A1%9D-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
+<li>고객(tbl_user) 테이블의 u_id 와 제품(tbl_purchase) 테이블의 p_uid 는 고객아이디 입니다</li>
+<li>조인된 최종 테이블의 스키마와 데이터를 출력해 주세요</li>
+<li>출력시에 상품 가격(tbl_purchase.p_amount)의 내림차순으로 정렬해 주세요 (단, null 이 먼저 출력 되도록)</li>
+<li>상품가격이 없는 경우에는 등록일자(tbl_user.u_signup)가 최신으로 정렬해 주세요 (단, null 이 마지막에 출력 되도록)</li>
+<li>가능한 Structured API 를 사용하여 작성하되 최대한 간결하게 작성해 주세요</li>
+</ul>
+<details><summary>[실습4] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 
 ```python
-left = (
-    spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{work_data}/tbl_user.csv")
-)
-left.printSchema()
-# left.show()
-
-right = (
-    spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{work_data}/tbl_purchase.csv")
-)
-right.printSchema()
-# right.show()
-
-join_codition = left.u_id == right.p_uid
-answer = left.join(right, join_codition, "inner")
+left = spark.read.csv(f"{work_data}/tbl_user.csv", inferSchema=True, header=True)
+right = spark.read.csv(f"{work_data}/tbl_purchase.csv", inferSchema=True, header=True)
+answer = left.join(right, left.u_id == right.p_uid, "full_outer")
 answer.printSchema()
-display(answer.orderBy(desc("p_amount"), desc("u_signup")))
+display(answer.orderBy(desc_nulls_first("p_amount"), desc_nulls_last("u_signup")))
 ```
 
 </details>
@@ -15357,7 +15336,7 @@ display(answer.orderBy(desc("p_amount"), desc("u_signup")))
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
@@ -15385,19 +15364,6 @@ display(answer.orderBy(desc("p_amount"), desc("u_signup")))
  |-- u_name: string (nullable = true)
  |-- u_gender: string (nullable = true)
  |-- u_signup: integer (nullable = true)
-
-root
- |-- p_time: integer (nullable = true)
- |-- p_uid: integer (nullable = true)
- |-- p_id: integer (nullable = true)
- |-- p_name: string (nullable = true)
- |-- p_amount: integer (nullable = true)
-
-root
- |-- u_id: integer (nullable = true)
- |-- u_name: string (nullable = true)
- |-- u_gender: string (nullable = true)
- |-- u_signup: integer (nullable = true)
  |-- p_time: integer (nullable = true)
  |-- p_uid: integer (nullable = true)
  |-- p_id: integer (nullable = true)
@@ -15418,122 +15384,10 @@ root
 <div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
 <table border='1'>
 <tr><th>u_id</th><th>u_name</th><th>u_gender</th><th>u_signup</th><th>p_time</th><th>p_uid</th><th>p_id</th><th>p_name</th><th>p_amount</th></tr>
-<tr><td>4</td><td>청소기</td><td>남</td><td>19770329</td><td>1603674500</td><td>4</td><td>2004</td><td>LG Computer</td><td>4500000</td></tr>
-<tr><td>5</td><td>유코드제로</td><td>여</td><td>20021029</td><td>1603665955</td><td>5</td><td>2001</td><td>LG Gram</td><td>3500000</td></tr>
-<tr><td>5</td><td>유코드제로</td><td>여</td><td>20021029</td><td>1603666155</td><td>5</td><td>2003</td><td>LG TV</td><td>2500000</td></tr>
-<tr><td>1</td><td>정휘센</td><td>남</td><td>19700808</td><td>1603651550</td><td>1</td><td>2000</td><td>LG DIOS</td><td>2000000</td></tr>
-<tr><td>1</td><td>정휘센</td><td>남</td><td>19700808</td><td>1603694755</td><td>1</td><td>2001</td><td>LG Gram</td><td>1800000</td></tr>
-<tr><td>2</td><td>김싸이언</td><td>남</td><td>19710201</td><td>1603673500</td><td>2</td><td>2002</td><td>LG Cyon</td><td>1400000</td></tr>
-<tr><td>3</td><td>박트롬</td><td>여</td><td>19951030</td><td>1603652155</td><td>3</td><td>2003</td><td>LG TV</td><td>1000000</td></tr>
-</table>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=blue>5. [중급]</font> 실습 5. 고객 정보 f"{work_data}/tbl_user", 제품 정보 f"{work_data}/tbl_purchase" CSV 파일을 읽고</h3>
-<h4 id="1.-%EA%B0%81%EA%B0%81-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#44033;&#44033; &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EA%B0%81%EA%B0%81-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EA%B0%81%EA%B0%81-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#44033;&#44033; &#45936;&#51060;&#53552;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EA%B0%81%EA%B0%81-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EA%B3%A0%EA%B0%9D(tbl_user)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-u_id-%EC%99%80-%EC%A0%9C%ED%92%88(tbl_purchase)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-p_uid-%EB%8A%94-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94-%EC%9E%85%EB%8B%88%EB%8B%A4">3. &#44256;&#44061;(tbl_user) &#53580;&#51060;&#48660;&#51032; u_id &#50752; &#51228;&#54408;(tbl_purchase) &#53580;&#51060;&#48660;&#51032; p_uid &#45716; &#44256;&#44061;&#50500;&#51060;&#46356; &#51077;&#45768;&#45796;<a class="anchor-link" href="#3.-%EA%B3%A0%EA%B0%9D(tbl_user)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-u_id-%EC%99%80-%EC%A0%9C%ED%92%88(tbl_purchase)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-p_uid-%EB%8A%94-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94-%EC%9E%85%EB%8B%88%EB%8B%A4">&#182;</a></h4><h4 id="4.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EA%B3%BC-%EB%AA%A8%EB%93%A0-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94-(left:-user,-right:-purchase,-join:-full_outer)">4. &#47784;&#46304; &#44256;&#44061;&#44284; &#47784;&#46304; &#49345;&#54408; &#51221;&#48372;&#47484; &#51312;&#51064;&#54644; &#51452;&#49464;&#50836; (left: user, right: purchase, join: full_outer)<a class="anchor-link" href="#4.-%EB%AA%A8%EB%93%A0-%EA%B3%A0%EA%B0%9D%EA%B3%BC-%EB%AA%A8%EB%93%A0-%EC%83%81%ED%92%88-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%A1%B0%EC%9D%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94-(left:-user,-right:-purchase,-join:-full_outer)">&#182;</a></h4><h4 id="5.-%EC%A1%B0%EC%9D%B8%EB%90%9C-%EC%B5%9C%EC%A2%85-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">5. &#51312;&#51064;&#46108; &#52572;&#51333; &#53580;&#51060;&#48660;&#51032; &#49828;&#53412;&#47560;&#50752; &#45936;&#51060;&#53552;&#47484; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#5.-%EC%A1%B0%EC%9D%B8%EB%90%9C-%EC%B5%9C%EC%A2%85-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="6.-%EC%B6%9C%EB%A0%A5%EC%8B%9C%EC%97%90-%EC%83%81%ED%92%88-%EA%B0%80%EA%B2%A9(tbl_purchase.p_amount)%EC%9D%98-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">6. &#52636;&#47141;&#49884;&#50640; &#49345;&#54408; &#44032;&#44201;(tbl_purchase.p_amount)&#51032; &#45236;&#47548;&#52264;&#49692;&#51004;&#47196; &#51221;&#47148;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#6.-%EC%B6%9C%EB%A0%A5%EC%8B%9C%EC%97%90-%EC%83%81%ED%92%88-%EA%B0%80%EA%B2%A9(tbl_purchase.p_amount)%EC%9D%98-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="7.-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9%EC%9D%B4-%EC%97%86%EB%8A%94-%EA%B2%BD%EC%9A%B0%EC%97%90%EB%8A%94-%EB%93%B1%EB%A1%9D%EC%9D%BC%EC%9E%90(tbl_user.u_signup)%EA%B0%80-%EC%B5%9C%EC%8B%A0%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">7. &#49345;&#54408;&#44032;&#44201;&#51060; &#50630;&#45716; &#44221;&#50864;&#50640;&#45716; &#46321;&#47197;&#51068;&#51088;(tbl_user.u_signup)&#44032; &#52572;&#49888;&#51004;&#47196; &#51221;&#47148;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#7.-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9%EC%9D%B4-%EC%97%86%EB%8A%94-%EA%B2%BD%EC%9A%B0%EC%97%90%EB%8A%94-%EB%93%B1%EB%A1%9D%EC%9D%BC%EC%9E%90(tbl_user.u_signup)%EA%B0%80-%EC%B5%9C%EC%8B%A0%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습5] 출력 결과 확인 </summary>
-
-> 아래와 유사하게 방식으로 작성 되었다면 정답입니다
-
-```python
-left = (
-    spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{work_data}/tbl_user.csv")
-)
-left.printSchema()
-# left.show()
-
-right = (
-    spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{work_data}/tbl_purchase.csv")
-)
-right.printSchema()
-# right.show()
-
-join_codition = left.u_id == right.p_uid
-answer = left.join(right, join_codition, "full_outer")
-answer.printSchema()
-display(answer.orderBy(desc("p_amount"), desc("u_signup")))
-```
-
-</details>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>root
- |-- u_id: integer (nullable = true)
- |-- u_name: string (nullable = true)
- |-- u_gender: string (nullable = true)
- |-- u_signup: integer (nullable = true)
-
-root
- |-- p_time: integer (nullable = true)
- |-- p_uid: integer (nullable = true)
- |-- p_id: integer (nullable = true)
- |-- p_name: string (nullable = true)
- |-- p_amount: integer (nullable = true)
-
-root
- |-- u_id: integer (nullable = true)
- |-- u_name: string (nullable = true)
- |-- u_gender: string (nullable = true)
- |-- u_signup: integer (nullable = true)
- |-- p_time: integer (nullable = true)
- |-- p_uid: integer (nullable = true)
- |-- p_id: integer (nullable = true)
- |-- p_name: string (nullable = true)
- |-- p_amount: integer (nullable = true)
-
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
-<table border='1'>
-<tr><th>u_id</th><th>u_name</th><th>u_gender</th><th>u_signup</th><th>p_time</th><th>p_uid</th><th>p_id</th><th>p_name</th><th>p_amount</th></tr>
+<tr><td>9</td><td>최컴퓨터</td><td>남</td><td>20201124</td><td>null</td><td>null</td><td>null</td><td>null</td><td>null</td></tr>
+<tr><td>8</td><td>조노트북</td><td>여</td><td>20161201</td><td>null</td><td>null</td><td>null</td><td>null</td><td>null</td></tr>
+<tr><td>7</td><td>임모바일</td><td>남</td><td>20040807</td><td>null</td><td>null</td><td>null</td><td>null</td><td>null</td></tr>
+<tr><td>6</td><td>윤디오스</td><td>남</td><td>20040101</td><td>null</td><td>null</td><td>null</td><td>null</td><td>null</td></tr>
 <tr><td>4</td><td>청소기</td><td>남</td><td>19770329</td><td>1603674500</td><td>4</td><td>2004</td><td>LG Computer</td><td>4500000</td></tr>
 <tr><td>5</td><td>유코드제로</td><td>여</td><td>20021029</td><td>1603665955</td><td>5</td><td>2001</td><td>LG Gram</td><td>3500000</td></tr>
 <tr><td>5</td><td>유코드제로</td><td>여</td><td>20021029</td><td>1603666155</td><td>5</td><td>2003</td><td>LG TV</td><td>2500000</td></tr>
@@ -15542,10 +15396,6 @@ root
 <tr><td>2</td><td>김싸이언</td><td>남</td><td>19710201</td><td>1603673500</td><td>2</td><td>2002</td><td>LG Cyon</td><td>1400000</td></tr>
 <tr><td>3</td><td>박트롬</td><td>여</td><td>19951030</td><td>1603652155</td><td>3</td><td>2003</td><td>LG TV</td><td>1000000</td></tr>
 <tr><td>null</td><td>null</td><td>null</td><td>null</td><td>1603651550</td><td>0</td><td>1000</td><td>GoldStar TV</td><td>100000</td></tr>
-<tr><td>9</td><td>최컴퓨터</td><td>남</td><td>20201124</td><td>null</td><td>null</td><td>null</td><td>null</td><td>null</td></tr>
-<tr><td>8</td><td>조노트북</td><td>여</td><td>20161201</td><td>null</td><td>null</td><td>null</td><td>null</td><td>null</td></tr>
-<tr><td>7</td><td>임모바일</td><td>남</td><td>20040807</td><td>null</td><td>null</td><td>null</td><td>null</td><td>null</td></tr>
-<tr><td>6</td><td>윤디오스</td><td>남</td><td>20040101</td><td>null</td><td>null</td><td>null</td><td>null</td><td>null</td></tr>
 </table>
 
 </div>
@@ -15559,8 +15409,8 @@ root
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=green>6. [기본]</font> 아래의 조인 연산 결과에서 null 값에 대한 치환을 해주세요</h3>
-<h4 id="1.-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94(u_id)%EC%99%80-%EA%B3%A0%EA%B0%9D%EC%9D%B4%EB%A6%84(u_name),-%EC%84%B1%EB%B3%84(u_gender),-%EA%B0%80%EC%9E%85%EC%9D%BC%EC%9E%90(u_signup)-%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84-%EC%B1%84%EC%9B%8C%EC%A3%BC%EC%84%B8%EC%9A%94">1. &#44256;&#44061;&#50500;&#51060;&#46356;(u_id)&#50752; &#44256;&#44061;&#51060;&#47492;(u_name), &#49457;&#48324;(u_gender), &#44032;&#51077;&#51068;&#51088;(u_signup) &#44592;&#48376;&#44050;&#51012; &#52292;&#50892;&#51452;&#49464;&#50836;<a class="anchor-link" href="#1.-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94(u_id)%EC%99%80-%EA%B3%A0%EA%B0%9D%EC%9D%B4%EB%A6%84(u_name),-%EC%84%B1%EB%B3%84(u_gender),-%EA%B0%80%EC%9E%85%EC%9D%BC%EC%9E%90(u_signup)-%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84-%EC%B1%84%EC%9B%8C%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h5 id="u_id-=-0,-u_name-=-'%EB%AF%B8%ED%99%95%EC%9D%B8',-u_gender-=-'%EB%AF%B8%ED%99%95%EC%9D%B8',-u_signup-=-'19700101'">u_id = 0, u_name = '&#48120;&#54869;&#51064;', u_gender = '&#48120;&#54869;&#51064;', u_signup = '19700101'<a class="anchor-link" href="#u_id-=-0,-u_name-=-'%EB%AF%B8%ED%99%95%EC%9D%B8',-u_gender-=-'%EB%AF%B8%ED%99%95%EC%9D%B8',-u_signup-=-'19700101'">&#182;</a></h5><details><summary>[실습6] 출력 결과 확인 </summary>
+<h3><font color=green>5. [기본]</font> 아래의 조인 연산 결과에서 null 값에 대한 치환을 해주세요</h3>
+<h4 id="1.-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94(u_id)%EC%99%80-%EA%B3%A0%EA%B0%9D%EC%9D%B4%EB%A6%84(u_name),-%EC%84%B1%EB%B3%84(u_gender),-%EA%B0%80%EC%9E%85%EC%9D%BC%EC%9E%90(u_signup)-%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84-%EC%B1%84%EC%9B%8C%EC%A3%BC%EC%84%B8%EC%9A%94">1. &#44256;&#44061;&#50500;&#51060;&#46356;(u_id)&#50752; &#44256;&#44061;&#51060;&#47492;(u_name), &#49457;&#48324;(u_gender), &#44032;&#51077;&#51068;&#51088;(u_signup) &#44592;&#48376;&#44050;&#51012; &#52292;&#50892;&#51452;&#49464;&#50836;<a class="anchor-link" href="#1.-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94(u_id)%EC%99%80-%EA%B3%A0%EA%B0%9D%EC%9D%B4%EB%A6%84(u_name),-%EC%84%B1%EB%B3%84(u_gender),-%EA%B0%80%EC%9E%85%EC%9D%BC%EC%9E%90(u_signup)-%EA%B8%B0%EB%B3%B8%EA%B0%92%EC%9D%84-%EC%B1%84%EC%9B%8C%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h5 id="u_id-=-0,-u_name-=-'%EB%AF%B8%ED%99%95%EC%9D%B8',-u_gender-=-'%EB%AF%B8%ED%99%95%EC%9D%B8',-u_signup-=-'19700101'">u_id = 0, u_name = '&#48120;&#54869;&#51064;', u_gender = '&#48120;&#54869;&#51064;', u_signup = '19700101'<a class="anchor-link" href="#u_id-=-0,-u_name-=-'%EB%AF%B8%ED%99%95%EC%9D%B8',-u_gender-=-'%EB%AF%B8%ED%99%95%EC%9D%B8',-u_signup-=-'19700101'">&#182;</a></h5><details><summary>[실습5] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 
@@ -15997,37 +15847,23 @@ root
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=red>7. [고급]</font> 고객 정보 f"{work_data}/tbl_user_id", 제품 정보 f"{work_data}/tbl_purchase_id" CSV 파일을 읽고</h3>
-<h4 id="1.-%EA%B3%A0%EA%B0%9D(tbl_user)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%95%84%EC%9D%B4%EB%94%94%EB%8F%84-id-%EC%9D%B4%EA%B3%A0-%EC%A0%9C%ED%92%88(tbl_purchase)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%95%84%EC%9D%B4%EB%94%94%EB%8F%84-id-%EC%9E%85%EB%8B%88%EB%8B%A4">1. <em>&#44256;&#44061;(tbl_user) &#53580;&#51060;&#48660;&#51032; &#50500;&#51060;&#46356;&#46020; id &#51060;&#44256; &#51228;&#54408;(tbl_purchase) &#53580;&#51060;&#48660;&#51032; &#50500;&#51060;&#46356;&#46020; id &#51077;&#45768;&#45796;</em><a class="anchor-link" href="#1.-%EA%B3%A0%EA%B0%9D(tbl_user)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%95%84%EC%9D%B4%EB%94%94%EB%8F%84-id-%EC%9D%B4%EA%B3%A0-%EC%A0%9C%ED%92%88(tbl_purchase)-%ED%85%8C%EC%9D%B4%EB%B8%94%EC%9D%98-%EC%95%84%EC%9D%B4%EB%94%94%EB%8F%84-id-%EC%9E%85%EB%8B%88%EB%8B%A4">&#182;</a></h4><h4 id="2.-%EA%B0%80%EC%9E%A5-%EB%B9%84%EC%8B%BC-%EC%A0%9C%ED%92%88%EC%9D%84-%EA%B5%AC%EB%A7%A4%ED%95%9C-%EA%B3%A0%EA%B0%9D%EC%9D%98-%EA%B3%A0%EA%B0%9D%EC%A0%95%EB%B3%B4%EC%99%80-%EC%A0%9C%ED%92%88%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">2. &#44032;&#51109; &#48708;&#49916; &#51228;&#54408;&#51012; &#44396;&#47588;&#54620; &#44256;&#44061;&#51032; &#44256;&#44061;&#51221;&#48372;&#50752; &#51228;&#54408;&#51221;&#48372;&#47484; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#2.-%EA%B0%80%EC%9E%A5-%EB%B9%84%EC%8B%BC-%EC%A0%9C%ED%92%88%EC%9D%84-%EA%B5%AC%EB%A7%A4%ED%95%9C-%EA%B3%A0%EA%B0%9D%EC%9D%98-%EA%B3%A0%EA%B0%9D%EC%A0%95%EB%B3%B4%EC%99%80-%EC%A0%9C%ED%92%88%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EC%B5%9C%EC%A2%85-%EC%B6%9C%EB%A0%A5%EB%90%98%EB%8A%94-%EC%BB%AC%EB%9F%BC%EC%9D%80-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94(u_id),-%EA%B3%A0%EA%B0%9D%EC%9D%B4%EB%A6%84(u_name),-%EC%83%81%ED%92%88%EC%9D%B4%EB%A6%84(p_name),-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9(p_amount)-%EC%9D%B4%EB%A0%87%EA%B2%8C-4%EA%B0%9C-%EC%BB%AC%EB%9F%BC%EC%9E%85%EB%8B%88%EB%8B%A4">3. &#52572;&#51333; &#52636;&#47141;&#46104;&#45716; &#52972;&#47100;&#51008; &#44256;&#44061;&#50500;&#51060;&#46356;(u_id), &#44256;&#44061;&#51060;&#47492;(u_name), &#49345;&#54408;&#51060;&#47492;(p_name), &#49345;&#54408;&#44032;&#44201;(p_amount) &#51060;&#47111;&#44172; 4&#44060; &#52972;&#47100;&#51077;&#45768;&#45796;<a class="anchor-link" href="#3.-%EC%B5%9C%EC%A2%85-%EC%B6%9C%EB%A0%A5%EB%90%98%EB%8A%94-%EC%BB%AC%EB%9F%BC%EC%9D%80-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94(u_id),-%EA%B3%A0%EA%B0%9D%EC%9D%B4%EB%A6%84(u_name),-%EC%83%81%ED%92%88%EC%9D%B4%EB%A6%84(p_name),-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9(p_amount)-%EC%9D%B4%EB%A0%87%EA%B2%8C-4%EA%B0%9C-%EC%BB%AC%EB%9F%BC%EC%9E%85%EB%8B%88%EB%8B%A4">&#182;</a></h4><h4 id="4.-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9-(p_amount)-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%EB%90%98%EC%96%B4%EC%95%BC-%ED%95%A9%EB%8B%88%EB%8B%A4">4. &#49345;&#54408;&#44032;&#44201; (p_amount) &#45236;&#47548;&#52264;&#49692;&#51004;&#47196; &#51221;&#47148;&#46104;&#50612;&#50556; &#54633;&#45768;&#45796;<a class="anchor-link" href="#4.-%EC%83%81%ED%92%88%EA%B0%80%EA%B2%A9-(p_amount)-%EB%82%B4%EB%A6%BC%EC%B0%A8%EC%88%9C%EC%9C%BC%EB%A1%9C-%EC%A0%95%EB%A0%AC%EB%90%98%EC%96%B4%EC%95%BC-%ED%95%A9%EB%8B%88%EB%8B%A4">&#182;</a></h4><details><summary>[실습7] 출력 결과 확인 </summary>
+<h3><font color=red>6. [고급]</font> 고객 정보 f"{work_data}/tbl_user_id", 제품 정보 f"{work_data}/tbl_purchase_id" CSV 파일을 읽고</h3>
+<h4 id="1.-%EA%B0%80%EC%9E%A5-%EB%B9%84%EC%8B%BC-%EC%A0%9C%ED%92%88%EC%9D%84-%EA%B5%AC%EB%A7%A4%ED%95%9C-%EA%B3%A0%EA%B0%9D%EC%9D%98-%EA%B3%A0%EA%B0%9D%EC%A0%95%EB%B3%B4%EC%99%80-%EC%A0%9C%ED%92%88%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">1. &#44032;&#51109; &#48708;&#49916; <code>&#51228;&#54408;</code>&#51012; &#44396;&#47588;&#54620; &#44256;&#44061;&#51032; &#44256;&#44061;&#51221;&#48372;&#50752; &#51228;&#54408;&#51221;&#48372;&#47484; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#1.-%EA%B0%80%EC%9E%A5-%EB%B9%84%EC%8B%BC-%EC%A0%9C%ED%92%88%EC%9D%84-%EA%B5%AC%EB%A7%A4%ED%95%9C-%EA%B3%A0%EA%B0%9D%EC%9D%98-%EA%B3%A0%EA%B0%9D%EC%A0%95%EB%B3%B4%EC%99%80-%EC%A0%9C%ED%92%88%EC%A0%95%EB%B3%B4%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
+<li><strong>고객(tbl_user) 테이블의 아이디도 id 이고 제품(tbl_purchase) 테이블의 아이디도 id</strong> 인 점을 주의 하세요</li>
+<li>최종 출력되는 컬럼은 고객아이디(u_id), 고객이름(u_name), 상품이름(p_name), 상품가격(p_amount) 이렇게 4개 컬럼입니다</li>
+<li>상품가격 (p_amount) 내림차순으로 정렬해 주세요</li>
+<li>가능한 Structured API 를 사용하여 작성하되 최대한 간결하게 작성해 보세요</li>
+</ul>
+<details><summary>[실습6] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 
 ```python
-left = (
-    spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{work_data}/tbl_purchase_id.csv")
-)
-# left.printSchema()
-# left.show()
-
-right = (
-    spark.read.format("csv")
-    .option("header", "true")
-    .option("inferSchema", "true")
-    .load(f"{work_data}/tbl_user_id.csv")
-)
-# right.printSchema()
-# right.show()
-
+left = spark.read.csv(f"{work_data}/tbl_purchase_id.csv", inferSchema=True, header=True)
+right = spark.read.csv(f"{work_data}/tbl_user_id.csv", inferSchema=True, header=True)
 u_left = left.withColumnRenamed("id", "u_id")
 u_right = right.withColumnRenamed("id", "p_uid")
-u_left.printSchema()
-u_right.printSchema()
-
-join_codition = u_left.u_id == u_right.p_uid
-answer = u_left.join(u_right, join_codition, "inner").where("p_amount > 0").select("u_id", "u_name", "p_name", "p_amount")
+answer = u_left.join(u_right, u_left.u_id == u_right.p_uid, "inner").where("p_amount > 0").select("u_id", "u_name", "p_name", "p_amount")
 answer.printSchema()
 display(answer.orderBy(desc("p_amount")))
 ```
@@ -16037,7 +15873,7 @@ display(answer.orderBy(desc("p_amount")))
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[24]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
@@ -16061,19 +15897,6 @@ display(answer.orderBy(desc("p_amount")))
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>root
- |-- p_time: integer (nullable = true)
- |-- u_id: integer (nullable = true)
- |-- p_id: integer (nullable = true)
- |-- p_name: string (nullable = true)
- |-- p_amount: integer (nullable = true)
-
-root
- |-- p_uid: integer (nullable = true)
- |-- u_name: string (nullable = true)
- |-- u_gender: string (nullable = true)
- |-- u_signup: integer (nullable = true)
-
-root
  |-- u_id: integer (nullable = true)
  |-- u_name: string (nullable = true)
  |-- p_name: string (nullable = true)
