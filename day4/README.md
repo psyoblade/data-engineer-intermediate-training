@@ -1,4 +1,4 @@
-# 4~5일차. 아파치 스파크 데이터 변환
+# 4일차. 아파치 스파크 데이터 변환 기본
 
 > 아파치 스파크를 통해 다양한 변환 예제를 실습합니다. 이번 장에서 사용하는 외부 오픈 포트는 4040, 4041, 8888 입니다
 
@@ -43,10 +43,6 @@ docker-compose logs notebook
 ### [1. 아파치 스파크 기본](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-1-basic.html)
 ### [2. 아파치 스파크 연산자](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-2-operators.html)
 ### [3. 아파치 스파크 데이타입](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-3-data-types.html)
-### [4. 아파치 스파크 조인](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-4-join.html)
-### [5. 아파치 스파크 집계](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-5-aggregation.html)
-### [6. 아파치 스파크 JDBC to MySQL](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-6-jdbc-mysql.html)
-### [7. 아파치 스파크 JDBC to MongoDB](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-7-jdbc-mongodb.html)
 <br>
 
 
