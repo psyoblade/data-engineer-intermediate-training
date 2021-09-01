@@ -1033,7 +1033,7 @@ fluentd  | 2021-07-18 17:03:11.177728881 +0000 docker.fortune: {"container_id":"
 | {{.DaemonName}} | The name of the docker program (docker). |
 
 
-<details><summary> :blue_book: 7. [중급] 컨테이너 이름을 web 으로 tag 를 `docker.{{.Name}}}`로 출력하는 `web.yml`을 작성하고 기동하세요 </summary>
+<details><summary> :blue_book: 7. [중급] 기존 ubuntu 컨테이너를 그대로 복사하여, 이름을 web 으로 tag 를 `docker.{{.Name}}}`로 출력하는 `web.yml`을 작성하고 기동하여, ubuntu, web, fluentd 이렇게 3개의 컨테이너 서비스가 운영되는 web.yml 파일을 생성하고 기동합니다 </summary>
 
 > `web.yml` 파일을 아래와 같이 작성하셨다면 정답입니다
 
