@@ -14066,7 +14066,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[68]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14110,22 +14110,7 @@ a.anchor-link {
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>21/09/01 13:16:02 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
-Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
-Setting default log level to &#34;WARN&#34;.
-To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
-</pre>
-</div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[68]:</div>
 
 
 
@@ -14162,7 +14147,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[69]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; DataFrame 생성 &quot;&quot;&quot;</span>
@@ -14186,17 +14171,6 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
 
 
 <div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>                                                                                </pre>
-</div>
-</div>
 
 <div class="jp-OutputArea-child">
 
@@ -14354,10 +14328,11 @@ only showing top 2 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[16]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">instr</span>
+<span class="c1"># df.where( (col(&quot;UnitPrice&quot;) &gt; 600) | (instr(col(&quot;Description&quot;), &quot;POSTAGE&quot;) &gt;= 1) ).show()</span>
 <span class="n">df</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;UnitPrice &gt; 600 OR instr(Description, &#39;POSTAGE&#39;) &gt;= 1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
@@ -14388,6 +14363,16 @@ only showing top 2 rows
 |   536592|      DOT|DOTCOM POSTAGE|       1|2010-12-01 17:06:00|   607.49|      null|United Kingdom|
 +---------+---------+--------------+--------+-------------------+---------+----------+--------------+
 
++---------+---------+--------------+--------+-------------------+---------+----------+--------------+
+|InvoiceNo|StockCode|   Description|Quantity|        InvoiceDate|UnitPrice|CustomerID|       Country|
++---------+---------+--------------+--------+-------------------+---------+----------+--------------+
+|   536370|     POST|       POSTAGE|       3|2010-12-01 08:45:00|     18.0|   12583.0|        France|
+|   536403|     POST|       POSTAGE|       1|2010-12-01 11:27:00|     15.0|   12791.0|   Netherlands|
+|   536527|     POST|       POSTAGE|       1|2010-12-01 13:04:00|     18.0|   12662.0|       Germany|
+|   536544|      DOT|DOTCOM POSTAGE|       1|2010-12-01 14:32:00|   569.77|      null|United Kingdom|
+|   536592|      DOT|DOTCOM POSTAGE|       1|2010-12-01 17:06:00|   607.49|      null|United Kingdom|
++---------+---------+--------------+--------+-------------------+---------+----------+--------------+
+
 </pre>
 </div>
 </div>
@@ -14404,11 +14389,12 @@ only showing top 2 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># SparkSQL 을 이용한 is in 구문 사용</span>
 <span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">desc</span>
+<span class="c1"># df.select(&quot;StockCode&quot;).where(col(&quot;StockCode&quot;).isin([&quot;DOT&quot;, &quot;POST&quot;, &quot;C2&quot;])).distinct().show()</span>
 <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;StockCode&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="s2">&quot;StockCode in (&#39;DOT&#39;, &#39;POST&#39;, &#39;C2&#39;)&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
@@ -14430,6 +14416,14 @@ only showing top 2 rows
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>+---------+
+|StockCode|
++---------+
+|     POST|
+|       C2|
+|      DOT|
++---------+
+
++---------+
 |StockCode|
 +---------+
 |     POST|
@@ -14578,6 +14572,76 @@ only showing top 10 rows
 
 </pre>
 </div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3><font color=blue>2. [중급]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
+<h4 id="1.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)-%EA%B0%80-(%22POST%22,-%22M%22,-%22DOT%22,-%22D%22,-%22C2%22)-%ED%98%B9%EC%9D%80-%EC%A0%9C%ED%92%88%EB%8B%A8%EA%B0%80(UnitPrice)-%EA%B0%80-30-%EC%9D%B4%EC%83%81%EC%9D%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC">1. &#49345;&#54408;&#53076;&#46300;(StockCode) &#44032; ("POST", "M", "DOT", "D", "C2") &#54841;&#51008; &#51228;&#54408;&#45800;&#44032;(UnitPrice) &#44032; 30 &#51060;&#49345;&#51064; &#45936;&#51060;&#53552;&#50640; &#45824;&#54616;&#50668;<a class="anchor-link" href="#1.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)-%EA%B0%80-(%22POST%22,-%22M%22,-%22DOT%22,-%22D%22,-%22C2%22)-%ED%98%B9%EC%9D%80-%EC%A0%9C%ED%92%88%EB%8B%A8%EA%B0%80(UnitPrice)-%EA%B0%80-30-%EC%9D%B4%EC%83%81%EC%9D%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%97%90-%EB%8C%80%ED%95%98%EC%97%AC">&#182;</a></h4><h4 id="2.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)-%EA%B8%B0%EC%A4%80%EC%9D%98-%EB%B9%88%EB%8F%84(count)%EB%8A%94-%EC%96%BC%EB%A7%88%EC%9D%B8%EC%A7%80-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#49345;&#54408;&#53076;&#46300;(StockCode) &#44592;&#51456;&#51032; &#48712;&#46020;(count)&#45716; &#50620;&#47560;&#51064;&#51648; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EC%83%81%ED%92%88%EC%BD%94%EB%93%9C(StockCode)-%EA%B8%B0%EC%A4%80%EC%9D%98-%EB%B9%88%EB%8F%84(count)%EB%8A%94-%EC%96%BC%EB%A7%88%EC%9D%B8%EC%A7%80-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
+<li>Structured API를 활용하여 작성하세요</li>
+<li>StockCode 내림 차순으로 정렬하세요</li>
+</ul>
+<details><summary>[실습2] 출력 결과 확인 </summary>
+
+> 아래와 유사하게 방식으로 작성 되었다면 정답입니다
+
+```python
+df2 = spark.read.csv(f"{work_data}/retail-data/by-day/2010-12-01.csv", inferSchema=True, header=True)
+df2.where( (col("StockCode").isin(["POST", "M", "DOT", "D", "C2"])) | (col("UnitPrice") >= 30)).groupBy("StockCode").count().orderBy(desc("StockCode"))
+```
+
+</details>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[33]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[33]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<table border='1'>
+<tr><th>StockCode</th><th>count</th></tr>
+<tr><td>POST</td><td>3</td></tr>
+<tr><td>M</td><td>2</td></tr>
+<tr><td>DOT</td><td>2</td></tr>
+<tr><td>D</td><td>1</td></tr>
+<tr><td>C2</td><td>1</td></tr>
+<tr><td>22947</td><td>1</td></tr>
+<tr><td>22946</td><td>1</td></tr>
+<tr><td>22847</td><td>1</td></tr>
+<tr><td>22827</td><td>1</td></tr>
+<tr><td>22803</td><td>2</td></tr>
+<tr><td>22769</td><td>1</td></tr>
+<tr><td>22503</td><td>1</td></tr>
+</table>
+
+</div>
+
 </div>
 
 </div>
@@ -14800,21 +14864,21 @@ only showing top 1 row
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=green>2. [기본]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
-<h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-10%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552;&#47484; 10&#44148; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-10%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(InvoiceNo)-%EA%B0%80-'536367'-%EC%9D%B8-%EA%B1%B0%EB%9E%98-%EB%82%B4%EC%97%AD%EC%9D%98">3. &#49569;&#51109;&#48264;&#54840;(InvoiceNo) &#44032; '536367' &#51064; &#44144;&#47000; &#45236;&#50669;&#51032;<a class="anchor-link" href="#3.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(InvoiceNo)-%EA%B0%80-'536367'-%EC%9D%B8-%EA%B1%B0%EB%9E%98-%EB%82%B4%EC%97%AD%EC%9D%98">&#182;</a></h4><h4 id="4.-%EC%B4%9D-%EA%B8%88%EC%95%A1-(TotalPrice)-=-%EC%88%98%EB%9F%89(Quantity)-*-%EB%8B%A8%EA%B0%80(UnitPrice)-%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EC%97%AC-TotalPrice-%EC%BB%AC%EB%9F%BC%EC%9D%84-%EC%B6%94%EA%B0%80%ED%95%98%EC%84%B8%EC%9A%94">4. &#52509; &#44552;&#50529; (TotalPrice) = &#49688;&#47049;(Quantity) * &#45800;&#44032;(UnitPrice) &#47484; &#44228;&#49328;&#54616;&#50668; TotalPrice &#52972;&#47100;&#51012; &#52628;&#44032;&#54616;&#49464;&#50836;<a class="anchor-link" href="#4.-%EC%B4%9D-%EA%B8%88%EC%95%A1-(TotalPrice)-=-%EC%88%98%EB%9F%89(Quantity)-*-%EB%8B%A8%EA%B0%80(UnitPrice)-%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EC%97%AC-TotalPrice-%EC%BB%AC%EB%9F%BC%EC%9D%84-%EC%B6%94%EA%B0%80%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="5.-%EB%8B%A8,-%EC%B4%9D-%EA%B8%88%EC%95%A1-(TotalPrice)-%EA%B3%84%EC%82%B0%EC%8B%9C%EC%97%90-%EC%86%8C%EC%88%98%EC%A0%90-%EC%9D%B4%ED%95%98%EB%8A%94-%EB%B2%84%EB%A6%BC%EC%9C%BC%EB%A1%9C-%EC%B2%98%EB%A6%AC%ED%95%98%EC%84%B8%EC%9A%94">5. &#45800;, &#52509; &#44552;&#50529; (TotalPrice) &#44228;&#49328;&#49884;&#50640; &#49548;&#49688;&#51216; &#51060;&#54616;&#45716; &#48260;&#47548;&#51004;&#47196; &#52376;&#47532;&#54616;&#49464;&#50836;<a class="anchor-link" href="#5.-%EB%8B%A8,-%EC%B4%9D-%EA%B8%88%EC%95%A1-(TotalPrice)-%EA%B3%84%EC%82%B0%EC%8B%9C%EC%97%90-%EC%86%8C%EC%88%98%EC%A0%90-%EC%9D%B4%ED%95%98%EB%8A%94-%EB%B2%84%EB%A6%BC%EC%9C%BC%EB%A1%9C-%EC%B2%98%EB%A6%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습2] 출력 결과 확인 </summary>
+<h3><font color=green>3. [기본]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
+<h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-10%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552;&#47484; 10&#44148; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-10%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(InvoiceNo)-%EA%B0%80-'536367'-%EC%9D%B8-%EA%B1%B0%EB%9E%98-%EB%82%B4%EC%97%AD%EC%9D%98">3. &#49569;&#51109;&#48264;&#54840;(InvoiceNo) &#44032; '536367' &#51064; &#44144;&#47000; &#45236;&#50669;&#51032;<a class="anchor-link" href="#3.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(InvoiceNo)-%EA%B0%80-'536367'-%EC%9D%B8-%EA%B1%B0%EB%9E%98-%EB%82%B4%EC%97%AD%EC%9D%98">&#182;</a></h4><h4 id="4.-%EC%B4%9D-%EA%B8%88%EC%95%A1-(TotalPrice)-=-%EC%88%98%EB%9F%89(Quantity)-*-%EB%8B%A8%EA%B0%80(UnitPrice)-%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EC%97%AC-TotalPrice-%EC%BB%AC%EB%9F%BC%EC%9D%84-%EC%B6%94%EA%B0%80%ED%95%98%EC%84%B8%EC%9A%94">4. &#52509; &#44552;&#50529; (TotalPrice) = &#49688;&#47049;(Quantity) * &#45800;&#44032;(UnitPrice) &#47484; &#44228;&#49328;&#54616;&#50668; TotalPrice &#52972;&#47100;&#51012; &#52628;&#44032;&#54616;&#49464;&#50836;<a class="anchor-link" href="#4.-%EC%B4%9D-%EA%B8%88%EC%95%A1-(TotalPrice)-=-%EC%88%98%EB%9F%89(Quantity)-*-%EB%8B%A8%EA%B0%80(UnitPrice)-%EB%A5%BC-%EA%B3%84%EC%82%B0%ED%95%98%EC%97%AC-TotalPrice-%EC%BB%AC%EB%9F%BC%EC%9D%84-%EC%B6%94%EA%B0%80%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="5.-%EB%8B%A8,-%EC%B4%9D-%EA%B8%88%EC%95%A1-(TotalPrice)-%EA%B3%84%EC%82%B0%EC%8B%9C%EC%97%90-%EC%86%8C%EC%88%98%EC%A0%90-%EC%9D%B4%ED%95%98%EB%8A%94-%EB%B2%84%EB%A6%BC%EC%9C%BC%EB%A1%9C-%EC%B2%98%EB%A6%AC%ED%95%98%EC%84%B8%EC%9A%94">5. &#45800;, &#52509; &#44552;&#50529; (TotalPrice) &#44228;&#49328;&#49884;&#50640; &#49548;&#49688;&#51216; &#51060;&#54616;&#45716; &#48260;&#47548;&#51004;&#47196; &#52376;&#47532;&#54616;&#49464;&#50836;<a class="anchor-link" href="#5.-%EB%8B%A8,-%EC%B4%9D-%EA%B8%88%EC%95%A1-(TotalPrice)-%EA%B3%84%EC%82%B0%EC%8B%9C%EC%97%90-%EC%86%8C%EC%88%98%EC%A0%90-%EC%9D%B4%ED%95%98%EB%8A%94-%EB%B2%84%EB%A6%BC%EC%9C%BC%EB%A1%9C-%EC%B2%98%EB%A6%AC%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습3] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 
 ```python
-df2 = (
+df3 = (
     spark.read.format("csv")
     .option("header", "true")
     .option("inferSchema", "true")
     .load(f"{work_data}/retail-data/by-day/2010-12-01.csv")
 )
-df2.printSchema()
-df2.show(10)
-answer = df2.where("InvoiceNo = '536367'").withColumn("TotalPrice", expr("floor(Quantity * UnitPrice)"))
+df3.printSchema()
+df3.show(10)
+answer = df3.where("InvoiceNo = '536367'").withColumn("TotalPrice", expr("floor(Quantity * UnitPrice)"))
 display(answer)
 ```
 
@@ -15064,20 +15128,20 @@ only showing top 2 rows
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=blue>3. [중급]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
+<h3><font color=blue>4. [중급]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
 <h4 id="1.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(InvoiceNo)-%EA%B0%80-'536365'-%EC%9D%B8-%EA%B1%B0%EB%9E%98-%EB%82%B4%EC%97%AD%EC%9D%98-%EC%A0%9C%ED%92%88%EC%BD%94%EB%93%9C(StockCode)-%EB%A5%BC-%EC%B4%9D-8%EC%9E%90%EB%A6%AC-%EB%AC%B8%EC%9E%90%EB%A1%9C-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">1. &#49569;&#51109;&#48264;&#54840;(InvoiceNo) &#44032; '536365' &#51064; &#44144;&#47000; &#45236;&#50669;&#51032; &#51228;&#54408;&#53076;&#46300;(StockCode) &#47484; &#52509; 8&#51088;&#47532; &#47928;&#51088;&#47196; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(InvoiceNo)-%EA%B0%80-'536365'-%EC%9D%B8-%EA%B1%B0%EB%9E%98-%EB%82%B4%EC%97%AD%EC%9D%98-%EC%A0%9C%ED%92%88%EC%BD%94%EB%93%9C(StockCode)-%EB%A5%BC-%EC%B4%9D-8%EC%9E%90%EB%A6%AC-%EB%AC%B8%EC%9E%90%EB%A1%9C-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
 <li>제품코드의 출력 시의 빈 앞자리는 0으로 채워주세요 (Padding)</li>
 <li>0이 패딩된 제품코드(StockCode) 컬럼의 컬럼명은 StockCode 로 유지되어야 합니다</li>
 <li>최종 출력되는 컬럼은 "InvoiceNo", "StockCode", "Description" 만 출력하세요</li>
 <li>가능한 Structured API 를 사용하여 작성하되 최대한 간결하게 작성해 보세요</li>
 </ul>
-<details><summary>[실습3] 출력 결과 확인 </summary>
+<details><summary>[실습4] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 
 ```python
-df3 = spark.read.csv(f"{work_data}/retail-data/by-day/2010-12-01.csv", inferSchema=True, header=True)
-df3.where("InvoiceNo = '536365'").select("InvoiceNo", lpad("StockCode", 8, "0").alias("StockCode"), "Description")
+df4 = spark.read.csv(f"{work_data}/retail-data/by-day/2010-12-01.csv", inferSchema=True, header=True)
+df4.where("InvoiceNo = '536365'").select("InvoiceNo", lpad("StockCode", 8, "0").alias("StockCode"), "Description")
 ```
 
 </details>
@@ -15132,11 +15196,11 @@ df3.where("InvoiceNo = '536365'").select("InvoiceNo", lpad("StockCode", 8, "0").
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><br></p>
-<h2 id="5.-%EC%A0%95%EA%B7%9C-%ED%91%9C%ED%98%84%EC%8B%9D">5. &#51221;&#44508; &#54364;&#54788;&#49885;<a class="anchor-link" href="#5.-%EC%A0%95%EA%B7%9C-%ED%91%9C%ED%98%84%EC%8B%9D">&#182;</a></h2><ul>
+<h2 id="5.-%EC%A0%95%EA%B7%9C-%ED%91%9C%ED%98%84%EC%8B%9D-&amp;-%EC%A1%B0%EA%B1%B4%EB%B6%80-%EC%BB%AC%EB%9F%BC">5. &#51221;&#44508; &#54364;&#54788;&#49885; &amp; &#51312;&#44148;&#48512; &#52972;&#47100;<a class="anchor-link" href="#5.-%EC%A0%95%EA%B7%9C-%ED%91%9C%ED%98%84%EC%8B%9D-&amp;-%EC%A1%B0%EA%B1%B4%EB%B6%80-%EC%BB%AC%EB%9F%BC">&#182;</a></h2><h3 id="5.1-%EB%8B%A8%EC%96%B4-%EC%B9%98%ED%99%98,-regexp_extract">5.1 &#45800;&#50612; &#52824;&#54872;, regexp_extract<a class="anchor-link" href="#5.1-%EB%8B%A8%EC%96%B4-%EC%B9%98%ED%99%98,-regexp_extract">&#182;</a></h3><ul>
 <li>존재 여부를 확인하거나 일치하는 모든 문자열을 치환</li>
 <li>정규 표현식을 위해 regexp_extract 함수와 regexp_replace 함수를 제공</li>
 </ul>
-<h3 id="5.1-%EB%8B%A8%EC%96%B4-%EC%B9%98%ED%99%98,-regexp_extract">5.1 &#45800;&#50612; &#52824;&#54872;, regexp_extract<a class="anchor-link" href="#5.1-%EB%8B%A8%EC%96%B4-%EC%B9%98%ED%99%98,-regexp_extract">&#182;</a></h3>
+
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
@@ -15349,6 +15413,7 @@ only showing top 3 rows
 <span class="n">selected_cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">color_locator</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Description</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">simple_colors</span><span class="p">]</span> <span class="c1"># locate 함수를 하나씩 list에 저장</span>
 <span class="n">selected_cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">))</span> <span class="c1"># column 타입이여야 함 </span>
 
+<span class="c1"># * means -&gt; Unnest List to variable arguments</span>
 <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">selected_cols</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="o">*</span><span class="n">selected_cols</span><span class="p">)</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">expr</span><span class="p">(</span><span class="s2">&quot;is_white OR is_red&quot;</span><span class="p">))</span> \
@@ -15390,6 +15455,374 @@ only showing top 3 rows
 |RED WOOLLY HOTTIE WHITE HEART.    |
 +----------------------------------+
 only showing top 3 rows
+
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="5.2-%EC%A1%B0%EA%B1%B4%EB%B6%80-%EC%BB%AC%EB%9F%BC-%EC%83%9D%EC%84%B1,-when-case-else">5.2 &#51312;&#44148;&#48512; &#52972;&#47100; &#49373;&#49457;, when case else<a class="anchor-link" href="#5.2-%EC%A1%B0%EA%B1%B4%EB%B6%80-%EC%BB%AC%EB%9F%BC-%EC%83%9D%EC%84%B1,-when-case-else">&#182;</a></h3><ul>
+<li>IF ELSE 와 같이 조건에 부합하는 경우에 따라 컬럼을 반환</li>
+<li>조건을 중첩시켜서 N개의 조건을 적용할 수 있습니다</li>
+</ul>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[75]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="p">(</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">withColumn</span><span class="p">(</span>
+        <span class="s2">&quot;Size&quot;</span><span class="p">,</span> 
+        <span class="n">when</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">,</span> <span class="s2">&quot;Large&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">when</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">250</span><span class="p">,</span> <span class="s2">&quot;Middle&quot;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">otherwise</span><span class="p">(</span><span class="s2">&quot;Small&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="s2">&quot;Quantity&quot;</span><span class="p">))</span>
+<span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    select Quantity,</span>
+<span class="s2">        case when Quantity &gt; 500 then &#39;large&#39; </span>
+<span class="s2">        when Quantity &gt; 250 then &#39;middle&#39; </span>
+<span class="s2">        else &#39;small&#39; end as size </span>
+<span class="s2">    from retail </span>
+<span class="s2">    order by Quantity desc</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+--------+------+
+|Quantity|  size|
++--------+------+
+|     600| Large|
+|     480|Middle|
+|     432|Middle|
+|     432|Middle|
+|     384|Middle|
+|     288|Middle|
+|     252|Middle|
+|     216| Small|
+|     200| Small|
+|     200| Small|
++--------+------+
+only showing top 10 rows
+
++--------+------+
+|Quantity|  size|
++--------+------+
+|     600| large|
+|     480|middle|
+|     432|middle|
+|     432|middle|
+|     384|middle|
+|     288|middle|
+|     252|middle|
+|     216| small|
+|     200| small|
+|     200| small|
++--------+------+
+only showing top 10 rows
+
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="5-3.-%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%A0%95%EC%9D%98-%ED%95%A8%EC%88%98">5-3. &#49324;&#50857;&#51088; &#51221;&#51032; &#54632;&#49688;<a class="anchor-link" href="#5-3.-%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%A0%95%EC%9D%98-%ED%95%A8%EC%88%98">&#182;</a></h3><blockquote><p>User defined function(UDF)는 레포트별로 데이터를 처리하는 함수이며, SparkSession이나 Context에서 사용할 수 있도록 임시 함수 형태로 등록됨</p>
+</blockquote>
+<ul>
+<li>내장 함수가 제공하는 코드 생성 기능의 장점을 활용할 수 없어 약간의 성능 저하 발생</li>
+<li>언어별로 성능차이가 존재, 파이썬에서도 사용할 수 있으므로 자바나 스칼라도 함수 작성을 추천</li>
+</ul>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[122]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; UDF 사용하기 &quot;&quot;&quot;</span>
+<span class="n">udfExDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">toDF</span><span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">power3</span><span class="p">(</span><span class="n">double_value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">double_value</span> <span class="o">**</span> <span class="mi">3</span>
+<span class="n">power3</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[122]:</div>
+
+
+
+
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
+<pre>8.0</pre>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[131]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; UDF 등록 및 사용 &quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">udf</span>
+<span class="n">power3udf</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="n">power3</span><span class="p">)</span>
+<span class="n">udfExDF</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">power3udf</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+-----------+
+|power3(num)|
++-----------+
+|          0|
+|          1|
+|          8|
+|         27|
+|         64|
++-----------+
+
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3><font color=blue>5. [중급]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
+<h4 id="1.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(InvoiceNo)-%EA%B0%80-'536365'-%EC%9D%B8-%EA%B1%B0%EB%9E%98-%EB%82%B4%EC%97%AD%EC%9D%98-%EC%A0%9C%ED%92%88%EC%BD%94%EB%93%9C(StockCode)-%EB%A5%BC-%EC%B4%9D-8%EC%9E%90%EB%A6%AC-%EB%AC%B8%EC%9E%90%EB%A1%9C-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">1. &#49569;&#51109;&#48264;&#54840;(InvoiceNo) &#44032; '536365' &#51064; &#44144;&#47000; &#45236;&#50669;&#51032; &#51228;&#54408;&#53076;&#46300;(StockCode) &#47484; &#52509; 8&#51088;&#47532; &#47928;&#51088;&#47196; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%86%A1%EC%9E%A5%EB%B2%88%ED%98%B8(InvoiceNo)-%EA%B0%80-'536365'-%EC%9D%B8-%EA%B1%B0%EB%9E%98-%EB%82%B4%EC%97%AD%EC%9D%98-%EC%A0%9C%ED%92%88%EC%BD%94%EB%93%9C(StockCode)-%EB%A5%BC-%EC%B4%9D-8%EC%9E%90%EB%A6%AC-%EB%AC%B8%EC%9E%90%EB%A1%9C-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
+<li>제품코드의 출력 시의 빈 앞자리는 0으로 채워주세요 (Padding)</li>
+<li>0이 패딩된 제품코드(StockCode) 컬럼의 컬럼명은 StockCode 로 유지되어야 합니다</li>
+<li>최종 출력되는 컬럼은 "InvoiceNo", "StockCode", "Description" 만 출력하세요</li>
+<li>가능한 Structured API 를 사용하여 작성하되 최대한 간결하게 작성해 보세요</li>
+</ul>
+<details><summary>[실습5] 출력 결과 확인 </summary>
+
+> 아래와 유사하게 방식으로 작성 되었다면 정답입니다
+
+```python
+df5 = spark.read.csv(f"{work_data}/retail-data/by-day/2010-12-01.csv", inferSchema=True, header=True)
+df5.where("InvoiceNo = '536365'").select("InvoiceNo", lpad("StockCode", 8, "0").alias("StockCode"), "Description")
+```
+
+</details>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[77]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[77]:</div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html">
+<table border='1'>
+<tr><th>InvoiceNo</th><th>StockCode</th><th>Description</th></tr>
+<tr><td>536365</td><td>0085123A</td><td>WHITE HANGING HEART T-LIGHT HOLDER</td></tr>
+<tr><td>536365</td><td>00071053</td><td>WHITE METAL LANTERN</td></tr>
+<tr><td>536365</td><td>0084406B</td><td>CREAM CUPID HEARTS COAT HANGER</td></tr>
+<tr><td>536365</td><td>0084029G</td><td>KNITTED UNION FLAG HOT WATER BOTTLE</td></tr>
+<tr><td>536365</td><td>0084029E</td><td>RED WOOLLY HOTTIE WHITE HEART.</td></tr>
+<tr><td>536365</td><td>00022752</td><td>SET 7 BABUSHKA NESTING BOXES</td></tr>
+<tr><td>536365</td><td>00021730</td><td>GLASS STAR FROSTED T-LIGHT HOLDER</td></tr>
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3><font color=red>6. [고급]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
+<h4 id="1.-DESCRIPTION-%ED%95%AD%EB%AA%A9%EC%97%90%EC%84%9C-'GREEN'--%3E-'%EC%B4%88%EA%B8%89',-'BLUE'--%3E-'%EC%A4%91%EA%B8%89',-'RED'--%3E-'%EA%B3%A0%EA%B8%89'-%EC%9C%BC%EB%A1%9C-%EB%B3%80%EA%B2%BD%ED%95%98%EC%97%AC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. DESCRIPTION &#54637;&#47785;&#50640;&#49436; 'GREEN' -&gt; '&#52488;&#44553;', 'BLUE' -&gt; '&#51473;&#44553;', 'RED' -&gt; '&#44256;&#44553;' &#51004;&#47196; &#48320;&#44221;&#54616;&#50668; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-DESCRIPTION-%ED%95%AD%EB%AA%A9%EC%97%90%EC%84%9C-'GREEN'--%3E-'%EC%B4%88%EA%B8%89',-'BLUE'--%3E-'%EC%A4%91%EA%B8%89',-'RED'--%3E-'%EA%B3%A0%EA%B8%89'-%EC%9C%BC%EB%A1%9C-%EB%B3%80%EA%B2%BD%ED%95%98%EC%97%AC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
+<li>해당 함수를 colorGrade(column) 라는 함수를 이용해서 작성해 보세요</li>
+<li>최종 출력 시에는 Description 컬럼에 '급' 문자를 포함한 결과만 출력하세요</li>
+</ul>
+<details><summary>[실습6] 출력 결과 확인 </summary>
+
+> 아래와 유사하게 방식으로 작성 되었다면 정답입니다
+
+```python
+df6 = spark.read.csv(f"{work_data}/retail-data/by-day/2010-12-01.csv", inferSchema=True, header=True)
+df6.printSchema()
+df6.show(3)
+
+def colorReplacer(column):
+    return (
+        when(column.contains("GREEN"), regexp_replace(column, "GREEN", "초급"))
+            .when(column.contains("BLUE"), regexp_replace(column, "BLUE", "중급"))
+            .when(column.contains("RED"), regexp_replace(column, "RED", "고급"))
+            .otherwise(column).alias("Description")
+    )
+
+df6.select(colorReplacer(col("Description"))).where(col("Description").contains("급")).show(truncate=False)
+```
+
+</details>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[146]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>root
+ |-- InvoiceNo: string (nullable = true)
+ |-- StockCode: string (nullable = true)
+ |-- Description: string (nullable = true)
+ |-- Quantity: integer (nullable = true)
+ |-- InvoiceDate: string (nullable = true)
+ |-- UnitPrice: double (nullable = true)
+ |-- CustomerID: double (nullable = true)
+ |-- Country: string (nullable = true)
+
++---------+---------+--------------------+--------+-------------------+---------+----------+--------------+
+|InvoiceNo|StockCode|         Description|Quantity|        InvoiceDate|UnitPrice|CustomerID|       Country|
++---------+---------+--------------------+--------+-------------------+---------+----------+--------------+
+|   536365|   85123A|WHITE HANGING HEA...|       6|2010-12-01 08:26:00|     2.55|   17850.0|United Kingdom|
+|   536365|    71053| WHITE METAL LANTERN|       6|2010-12-01 08:26:00|     3.39|   17850.0|United Kingdom|
+|   536365|   84406B|CREAM CUPID HEART...|       8|2010-12-01 08:26:00|     2.75|   17850.0|United Kingdom|
++---------+---------+--------------------+--------+-------------------+---------+----------+--------------+
+only showing top 3 rows
+
++-----------------------------------+
+|Description                        |
++-----------------------------------+
+|고급 WOOLLY HOTTIE WHITE HEART.    |
+|HAND WARMER 고급 POLKA DOT         |
+|고급 COAT RACK PARIS FASHION       |
+|중급 COAT RACK PARIS FASHION       |
+|ALARM CLOCK BAKELIKE 고급          |
+|ALARM CLOCK BAKELIKE 초급          |
+|SET/2 고급 RETROSPOT TEA TOWELS    |
+|고급 TOADSTOOL LED NIGHT LIGHT     |
+|HAND WARMER 고급 POLKA DOT         |
+|EDWARDIAN PARASOL 고급             |
+|고급 WOOLLY HOTTIE WHITE HEART.    |
+|EDWARDIAN PARASOL 고급             |
+|고급 WOOLLY HOTTIE WHITE HEART.    |
+|고급 HANGING HEART T-LIGHT HOLDER  |
+|HAND WARMER 고급 POLKA DOT         |
+|고급 3 PIECE RETROSPOT CUTLERY SET |
+|중급 3 PIECE POLKADOT CUTLERY SET  |
+|SET/6 고급 SPOTTY PAPER PLATES     |
+|LUNCH BAG 고급 RETROSPOT           |
+|고급 CHARLIE+LOLA PERSONAL DOORSIGN|
++-----------------------------------+
+only showing top 20 rows
 
 </pre>
 </div>
@@ -15802,18 +16235,18 @@ only showing top 1 row
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=blue>4. [중급]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
+<h3><font color=blue>7. [중급]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
 <h4 id="1.-%EC%A0%81%EC%9E%AC%EC%9D%BC%EC%9E%90(LoadDate)-%EC%BB%AC%EB%9F%BC%EC%9D%84-%EB%84%A3%EB%90%98-%ED%8F%AC%EB%A7%B7%EC%9D%80-'yyyy-MM-dd'-%EC%9C%BC%EB%A1%9C-%EC%B6%94%EA%B0%80%ED%95%B4-%EC%A3%BC%EC%8B%9C%EA%B3%A0-%ED%98%84%EC%9E%AC-%EC%9D%BC%EC%9E%90%EB%A5%BC-%EB%84%A3%EC%9C%BC%EC%8B%9C%EB%A9%B4-%EB%90%A9%EB%8B%88%EB%8B%A4">1. &#51201;&#51116;&#51068;&#51088;(LoadDate) &#52972;&#47100;&#51012; &#45347;&#46104; &#54252;&#47607;&#51008; 'yyyy-MM-dd' &#51004;&#47196; &#52628;&#44032;&#54644; &#51452;&#49884;&#44256; &#54788;&#51116; &#51068;&#51088;&#47484; &#45347;&#51004;&#49884;&#47732; &#46121;&#45768;&#45796;<a class="anchor-link" href="#1.-%EC%A0%81%EC%9E%AC%EC%9D%BC%EC%9E%90(LoadDate)-%EC%BB%AC%EB%9F%BC%EC%9D%84-%EB%84%A3%EB%90%98-%ED%8F%AC%EB%A7%B7%EC%9D%80-'yyyy-MM-dd'-%EC%9C%BC%EB%A1%9C-%EC%B6%94%EA%B0%80%ED%95%B4-%EC%A3%BC%EC%8B%9C%EA%B3%A0-%ED%98%84%EC%9E%AC-%EC%9D%BC%EC%9E%90%EB%A5%BC-%EB%84%A3%EC%9C%BC%EC%8B%9C%EB%A9%B4-%EB%90%A9%EB%8B%88%EB%8B%A4">&#182;</a></h4><h4 id="2.-%EC%86%A1%EC%9E%A5%EC%9D%BC%EC%9E%90(InvoiceDate)-%EC%99%80-%EC%98%A4%EB%8A%98-%EC%8B%9C%EA%B0%84%EA%B3%BC%EC%9D%98-%EC%B0%A8%EC%9D%B4%EB%A5%BC-%EB%82%98%ED%83%80%EB%82%B4%EB%8A%94-%EC%BB%AC%EB%9F%BC(InvoiceDiff)%EC%9D%84-(LoadDate---to_date(InvoiceDate))%EB%84%A3%EC%96%B4%EC%A3%BC%EC%84%B8%EC%9A%94">2. &#49569;&#51109;&#51068;&#51088;(InvoiceDate) &#50752; &#50724;&#45720; &#49884;&#44036;&#44284;&#51032; &#52264;&#51060;&#47484; &#45208;&#53440;&#45236;&#45716; &#52972;&#47100;(InvoiceDiff)&#51012; (LoadDate - to_date(InvoiceDate))&#45347;&#50612;&#51452;&#49464;&#50836;<a class="anchor-link" href="#2.-%EC%86%A1%EC%9E%A5%EC%9D%BC%EC%9E%90(InvoiceDate)-%EC%99%80-%EC%98%A4%EB%8A%98-%EC%8B%9C%EA%B0%84%EA%B3%BC%EC%9D%98-%EC%B0%A8%EC%9D%B4%EB%A5%BC-%EB%82%98%ED%83%80%EB%82%B4%EB%8A%94-%EC%BB%AC%EB%9F%BC(InvoiceDiff)%EC%9D%84-(LoadDate---to_date(InvoiceDate))%EB%84%A3%EC%96%B4%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
 <li>변경된 스키마를 출력하여 동일한 지 확인해 주세요</li>
 <li>가능한 Structured API 를 사용하여 작성하되 최대한 간결하게 작성해 보세요</li>
 </ul>
-<details><summary>[실습4] 출력 결과 확인 </summary>
+<details><summary>[실습7] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 
 ```python
-df4 = spark.read.csv(f"{work_data}/retail-data/by-day/2010-12-01.csv", inferSchema=True, header=True)
-answer = df4.withColumn("LoadDate", current_date()).withColumn("InvoiceDiff", col("LoadDate") - to_date(col("InvoiceDate")))
+df7 = spark.read.csv(f"{work_data}/retail-data/by-day/2010-12-01.csv", inferSchema=True, header=True)
+answer = df7.withColumn("LoadDate", current_date()).withColumn("InvoiceDiff", col("LoadDate") - to_date(col("InvoiceDate")))
 display(answer)
 answer.printSchema()
 ```
@@ -16037,10 +16470,10 @@ only showing top 1 row
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[34]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[103]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 배열 형태의 컬럼을 인수로 전달하여 지정한 컬럼만 제거합니다</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 배열 형태의 컬럼을 인수로 전달하여 지정한 컬럼만 전체(all)가 null 인 경우만 제거합니다</span>
 <span class="n">df</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;StockCode&quot;</span><span class="p">,</span> <span class="s2">&quot;InvoiceNo&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
@@ -16084,7 +16517,7 @@ only showing top 1 row
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[35]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[105]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; null을 포함한 DataFrame 행성 &quot;&quot;&quot;</span>
@@ -16098,8 +16531,10 @@ only showing top 1 row
 <span class="p">])</span>
 
 <span class="n">myRows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">myRows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Row</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="s2">&quot;World&quot;</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span> <span class="c1"># string 컬럼에 null 포함</span>
 <span class="n">myRows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Row</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="mi">5</span><span class="p">)))</span> <span class="c1"># string 컬럼에 null 포함</span>
 <span class="n">myRows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Row</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;World&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>     <span class="c1"># number 컬럼에 null 포함</span>
+<span class="n">myRows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Row</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>        <span class="c1"># 모든 컬럼이 null</span>
 
 <span class="n">myDf</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">createDataFrame</span><span class="p">(</span><span class="n">myRows</span><span class="p">,</span> <span class="n">myManualSchema</span><span class="p">)</span>
 <span class="n">myDf</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -16123,10 +16558,56 @@ only showing top 1 row
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>                                                                                </pre>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+-----------+------------+-----------+
+|string_null|string2_null|number_null|
++-----------+------------+-----------+
+|      Hello|       World|        5.0|
+|      Hello|        null|        5.0|
+|       null|       World|       null|
+|       null|        null|       null|
++-----------+------------+-----------+
+
++-----------+------------+-----------+
+|string_null|string2_null|number_null|
++-----------+------------+-----------+
+|      Hello|       World|        5.0|
+|      Hello|        null|        5.0|
+|   not_null|       World|        5.0|
+|   not_null|        null|        5.0|
++-----------+------------+-----------+
+
+</pre>
 </div>
 </div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[108]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">myDf</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">myDf</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;string_null&quot;</span><span class="p">,</span> <span class="s2">&quot;number_null&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">myDf</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">myDf</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;any&quot;</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;string_null&quot;</span><span class="p">,</span> <span class="s2">&quot;number_null&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">myDf</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;any&quot;</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;string_null&quot;</span><span class="p">,</span> <span class="s2">&quot;string2_null&quot;</span><span class="p">,</span> <span class="s2">&quot;number_null&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">myDf</span><span class="o">.</span><span class="n">na</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;any&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
 
 <div class="jp-OutputArea-child">
 
@@ -16138,6 +16619,23 @@ only showing top 1 row
 <pre>+-----------+------------+-----------+
 |string_null|string2_null|number_null|
 +-----------+------------+-----------+
+|      Hello|       World|        5.0|
+|      Hello|        null|        5.0|
+|       null|       World|       null|
+|       null|        null|       null|
++-----------+------------+-----------+
+
++-----------+------------+-----------+
+|string_null|string2_null|number_null|
++-----------+------------+-----------+
+|      Hello|       World|        5.0|
+|      Hello|        null|        5.0|
++-----------+------------+-----------+
+
++-----------+------------+-----------+
+|string_null|string2_null|number_null|
++-----------+------------+-----------+
+|      Hello|       World|        5.0|
 |      Hello|        null|        5.0|
 |       null|       World|       null|
 +-----------+------------+-----------+
@@ -16145,8 +16643,20 @@ only showing top 1 row
 +-----------+------------+-----------+
 |string_null|string2_null|number_null|
 +-----------+------------+-----------+
+|      Hello|       World|        5.0|
 |      Hello|        null|        5.0|
-|   not_null|       World|        5.0|
++-----------+------------+-----------+
+
++-----------+------------+-----------+
+|string_null|string2_null|number_null|
++-----------+------------+-----------+
+|      Hello|       World|        5.0|
++-----------+------------+-----------+
+
++-----------+------------+-----------+
+|string_null|string2_null|number_null|
++-----------+------------+-----------+
+|      Hello|       World|        5.0|
 +-----------+------------+-----------+
 
 </pre>
@@ -16195,6 +16705,81 @@ only showing top 1 row
 |      Hello|        null|        5.0|
 |       null|       World|       null|
 +-----------+------------+-----------+
+
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3><font color=blue>8. [중급]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
+<h4 id="1.-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94(CustomerID)-%EC%BB%AC%EB%9F%BC%EC%97%90-%EB%8C%80%ED%95%B4%EC%84%9C%EB%A7%8C-%EB%84%90-%EA%B2%80%EC%82%AC%EB%A5%BC-%ED%95%98%EB%90%98-%EB%84%90%EA%B0%92%EC%9D%B4-%EC%9E%88%EB%8B%A4%EB%A9%B4-%ED%95%B4%EB%8B%B9-%EB%A1%9C%EC%9A%B0%EB%8A%94-%EC%A0%9C%EC%99%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">1. &#44256;&#44061;&#50500;&#51060;&#46356;(CustomerID) &#52972;&#47100;&#50640; &#45824;&#54644;&#49436;&#47564; &#45328; &#44160;&#49324;&#47484; &#54616;&#46104; &#45328;&#44050;&#51060; &#51080;&#45796;&#47732; &#54644;&#45817; &#47196;&#50864;&#45716; &#51228;&#50808;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#1.-%EA%B3%A0%EA%B0%9D%EC%95%84%EC%9D%B4%EB%94%94(CustomerID)-%EC%BB%AC%EB%9F%BC%EC%97%90-%EB%8C%80%ED%95%B4%EC%84%9C%EB%A7%8C-%EB%84%90-%EA%B2%80%EC%82%AC%EB%A5%BC-%ED%95%98%EB%90%98-%EB%84%90%EA%B0%92%EC%9D%B4-%EC%9E%88%EB%8B%A4%EB%A9%B4-%ED%95%B4%EB%8B%B9-%EB%A1%9C%EC%9A%B0%EB%8A%94-%EC%A0%9C%EC%99%B8%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EA%B5%AD%EA%B0%80(Country)-%EA%B0%92%EC%9D%80-%EC%95%84%EB%9E%98%EC%9D%98-%EA%B7%9C%EC%B9%99%EC%9C%BC%EB%A1%9C-%EB%B3%80%EA%B2%BD%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">2. &#44397;&#44032;(Country) &#44050;&#51008; &#50500;&#47000;&#51032; &#44508;&#52825;&#51004;&#47196; &#48320;&#44221;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#2.-%EA%B5%AD%EA%B0%80(Country)-%EA%B0%92%EC%9D%80-%EC%95%84%EB%9E%98%EC%9D%98-%EA%B7%9C%EC%B9%99%EC%9C%BC%EB%A1%9C-%EB%B3%80%EA%B2%BD%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
+<li>"United Kingdom" -&gt; "UK", "France" -&gt; "FR", "Germany" -&gt; "DE", "Netherlands" -&gt; "NL", "Australia" -&gt; "AT", "Norway" -&gt; "NO", "EIRE" -&gt; "IE"</li>
+</ul>
+<h4 id="3.-%EA%B5%AD%EA%B0%80(Country)-%EB%B3%84-%EB%B9%88%EB%8F%84%EC%88%98%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">3. &#44397;&#44032;(Country) &#48324; &#48712;&#46020;&#49688;&#47484; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#3.-%EA%B5%AD%EA%B0%80(Country)-%EB%B3%84-%EB%B9%88%EB%8F%84%EC%88%98%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><ul>
+<li>국가의 빈도수 역순으로 정렬해 주세요</li>
+<li>가능한 Structured API 를 사용하여 작성하되 최대한 간결하게 작성해 주세요</li>
+</ul>
+<details><summary>[실습8] 출력 결과 확인 </summary>
+
+> 아래와 유사하게 방식으로 작성 되었다면 정답입니다
+
+```python
+df8 = spark.read.csv(f"{work_data}/retail-data/by-day/2010-12-01.csv", inferSchema=True, header=True)
+keys = ["United Kingdom", "France", "Germany", "Netherlands", "Australia", "Norway", "EIRE"]
+values = ["UK", "FR", "DE", "NL", "AT", "NO", "IE"]
+answer = (
+    df8.na.drop("any", subset=("CustomerID"))
+    .na.replace(keys, values, "Country")
+    .groupBy("Country")
+    .count().orderBy(desc("count"))
+).show()
+```
+
+</details>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[119]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>+-------+-----+
+|Country|count|
++-------+-----+
+|     UK| 1809|
+|     NO|   73|
+|     DE|   29|
+|     IE|   21|
+|     FR|   20|
+|     AT|   14|
+|     NL|    2|
++-------+-----+
 
 </pre>
 </div>
@@ -17022,106 +17607,8 @@ only showing top 2 rows
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="10.-%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%A0%95%EC%9D%98-%ED%95%A8%EC%88%98">10. &#49324;&#50857;&#51088; &#51221;&#51032; &#54632;&#49688;<a class="anchor-link" href="#10.-%EC%82%AC%EC%9A%A9%EC%9E%90-%EC%A0%95%EC%9D%98-%ED%95%A8%EC%88%98">&#182;</a></h3><blockquote><p>User defined function(UDF)는 레포트별로 데이터를 처리하는 함수이며, SparkSession이나 Context에서 사용할 수 있도록 임시 함수 형태로 등록됨</p>
-<ul>
-<li>내장 함수가 제공하는 코드 생성 기능의 장점을 활용할 수 없어 약간의 성능 저하 발생</li>
-<li>언어별로 성능차이가 존재, 파이썬에서도 사용할 수 있으므로 자바나 스칼라도 함수 작성을 추천</li>
-</ul>
-</blockquote>
-
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[53]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; UDF 사용하기 &quot;&quot;&quot;</span>
-<span class="n">udfExDF</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">toDF</span><span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">power3</span><span class="p">(</span><span class="n">double_value</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">double_value</span> <span class="o">**</span> <span class="mi">3</span>
-<span class="n">power3</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[53]:</div>
-
-
-
-
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain">
-<pre>8.0</pre>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[54]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; UDF 등록 및 사용 &quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">pyspark.sql.functions</span> <span class="kn">import</span> <span class="n">udf</span>
-<span class="n">power3udf</span> <span class="o">=</span> <span class="n">udf</span><span class="p">(</span><span class="n">power3</span><span class="p">)</span>
-
-<span class="n">udfExDF</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">power3udf</span><span class="p">(</span><span class="n">col</span><span class="p">(</span><span class="s2">&quot;num&quot;</span><span class="p">)))</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>+-----------+
-|power3(num)|
-+-----------+
-|          0|
-|          1|
-+-----------+
-only showing top 2 rows
-
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3><font color=green>5. [기본]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
-<h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-10%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552;&#47484; 10&#44148; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-10%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EA%B3%A0%EA%B0%9D%EA%B5%AC%EB%B6%84%EC%9E%90(CustomerID)%EC%99%80-%EC%84%A4%EB%AA%85(Description)-%EC%BB%AC%EB%9F%BC%EC%9D%B4-%EB%84%90%EA%B0%92%EC%9D%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%94%84%EB%A0%88%EC%9E%84%EC%9D%84-%EC%B6%94%EC%B6%9C%ED%95%98%EC%97%AC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">3. &#44256;&#44061;&#44396;&#48516;&#51088;(CustomerID)&#50752; &#49444;&#47749;(Description) &#52972;&#47100;&#51060; &#45328;&#44050;&#51064; &#45936;&#51060;&#53552;&#54532;&#47112;&#51076;&#51012; &#52628;&#52636;&#54616;&#50668; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#3.-%EA%B3%A0%EA%B0%9D%EA%B5%AC%EB%B6%84%EC%9E%90(CustomerID)%EC%99%80-%EC%84%A4%EB%AA%85(Description)-%EC%BB%AC%EB%9F%BC%EC%9D%B4-%EB%84%90%EA%B0%92%EC%9D%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%94%84%EB%A0%88%EC%9E%84%EC%9D%84-%EC%B6%94%EC%B6%9C%ED%95%98%EC%97%AC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="4.-%EA%B3%A0%EA%B0%9D%EA%B5%AC%EB%B6%84%EC%9E%90(CustomerID)%EA%B0%80-null-%EC%9D%B8-%EA%B2%BD%EC%9A%B0%EB%8A%94-0.0-%EC%9C%BC%EB%A1%9C-%EC%B9%98%ED%99%98%ED%95%98%EA%B3%A0">4. &#44256;&#44061;&#44396;&#48516;&#51088;(CustomerID)&#44032; null &#51064; &#44221;&#50864;&#45716; 0.0 &#51004;&#47196; &#52824;&#54872;&#54616;&#44256;<a class="anchor-link" href="#4.-%EA%B3%A0%EA%B0%9D%EA%B5%AC%EB%B6%84%EC%9E%90(CustomerID)%EA%B0%80-null-%EC%9D%B8-%EA%B2%BD%EC%9A%B0%EB%8A%94-0.0-%EC%9C%BC%EB%A1%9C-%EC%B9%98%ED%99%98%ED%95%98%EA%B3%A0">&#182;</a></h4><h4 id="5.-%EC%84%A4%EB%AA%85(Description)%EA%B0%80-null-%EC%9D%B8-%EA%B2%BD%EC%9A%B0%EB%8A%94-%22NOT-MENTIONED%22-%EA%B0%92%EC%9C%BC%EB%A1%9C-%EC%A0%80%EC%9E%A5%EB%90%A0-%EC%88%98-%EC%9E%88%EB%8F%84%EB%A1%9D-%EB%A7%8C%EB%93%A4%EC%96%B4%EC%A3%BC%EC%84%B8%EC%9A%94">5. &#49444;&#47749;(Description)&#44032; null &#51064; &#44221;&#50864;&#45716; "NOT MENTIONED" &#44050;&#51004;&#47196; &#51200;&#51109;&#46112; &#49688; &#51080;&#46020;&#47197; &#47564;&#46308;&#50612;&#51452;&#49464;&#50836;<a class="anchor-link" href="#5.-%EC%84%A4%EB%AA%85(Description)%EA%B0%80-null-%EC%9D%B8-%EA%B2%BD%EC%9A%B0%EB%8A%94-%22NOT-MENTIONED%22-%EA%B0%92%EC%9C%BC%EB%A1%9C-%EC%A0%80%EC%9E%A5%EB%90%A0-%EC%88%98-%EC%9E%88%EB%8F%84%EB%A1%9D-%EB%A7%8C%EB%93%A4%EC%96%B4%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="6.-%EC%B5%9C%EC%A2%85-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">6. &#52572;&#51333; &#49828;&#53412;&#47560;&#50752; &#45936;&#51060;&#53552;&#47484; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#6.-%EC%B5%9C%EC%A2%85-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습5] 출력 결과 확인 </summary>
+<h3><font color=green>9. [기본]</font> f"{work_data}/retail-data/by-day/2010-12-01.csv" 에 저장된 CSV 파일을 읽고</h3>
+<h4 id="1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#49828;&#53412;&#47560;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%8A%A4%ED%82%A4%EB%A7%88%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-10%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#45936;&#51060;&#53552;&#47484; 10&#44148; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-10%EA%B1%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-%EA%B3%A0%EA%B0%9D%EA%B5%AC%EB%B6%84%EC%9E%90(CustomerID)%EC%99%80-%EC%84%A4%EB%AA%85(Description)-%EC%BB%AC%EB%9F%BC%EC%9D%B4-%EB%84%90%EA%B0%92%EC%9D%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%94%84%EB%A0%88%EC%9E%84%EC%9D%84-%EC%B6%94%EC%B6%9C%ED%95%98%EC%97%AC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">3. &#44256;&#44061;&#44396;&#48516;&#51088;(CustomerID)&#50752; &#49444;&#47749;(Description) &#52972;&#47100;&#51060; &#45328;&#44050;&#51064; &#45936;&#51060;&#53552;&#54532;&#47112;&#51076;&#51012; &#52628;&#52636;&#54616;&#50668; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#3.-%EA%B3%A0%EA%B0%9D%EA%B5%AC%EB%B6%84%EC%9E%90(CustomerID)%EC%99%80-%EC%84%A4%EB%AA%85(Description)-%EC%BB%AC%EB%9F%BC%EC%9D%B4-%EB%84%90%EA%B0%92%EC%9D%B8-%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%94%84%EB%A0%88%EC%9E%84%EC%9D%84-%EC%B6%94%EC%B6%9C%ED%95%98%EC%97%AC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="4.-%EA%B3%A0%EA%B0%9D%EA%B5%AC%EB%B6%84%EC%9E%90(CustomerID)%EA%B0%80-null-%EC%9D%B8-%EA%B2%BD%EC%9A%B0%EB%8A%94-0.0-%EC%9C%BC%EB%A1%9C-%EC%B9%98%ED%99%98%ED%95%98%EA%B3%A0">4. &#44256;&#44061;&#44396;&#48516;&#51088;(CustomerID)&#44032; null &#51064; &#44221;&#50864;&#45716; 0.0 &#51004;&#47196; &#52824;&#54872;&#54616;&#44256;<a class="anchor-link" href="#4.-%EA%B3%A0%EA%B0%9D%EA%B5%AC%EB%B6%84%EC%9E%90(CustomerID)%EA%B0%80-null-%EC%9D%B8-%EA%B2%BD%EC%9A%B0%EB%8A%94-0.0-%EC%9C%BC%EB%A1%9C-%EC%B9%98%ED%99%98%ED%95%98%EA%B3%A0">&#182;</a></h4><h4 id="5.-%EC%84%A4%EB%AA%85(Description)%EA%B0%80-null-%EC%9D%B8-%EA%B2%BD%EC%9A%B0%EB%8A%94-%22NOT-MENTIONED%22-%EA%B0%92%EC%9C%BC%EB%A1%9C-%EC%A0%80%EC%9E%A5%EB%90%A0-%EC%88%98-%EC%9E%88%EB%8F%84%EB%A1%9D-%EB%A7%8C%EB%93%A4%EC%96%B4%EC%A3%BC%EC%84%B8%EC%9A%94">5. &#49444;&#47749;(Description)&#44032; null &#51064; &#44221;&#50864;&#45716; "NOT MENTIONED" &#44050;&#51004;&#47196; &#51200;&#51109;&#46112; &#49688; &#51080;&#46020;&#47197; &#47564;&#46308;&#50612;&#51452;&#49464;&#50836;<a class="anchor-link" href="#5.-%EC%84%A4%EB%AA%85(Description)%EA%B0%80-null-%EC%9D%B8-%EA%B2%BD%EC%9A%B0%EB%8A%94-%22NOT-MENTIONED%22-%EA%B0%92%EC%9C%BC%EB%A1%9C-%EC%A0%80%EC%9E%A5%EB%90%A0-%EC%88%98-%EC%9E%88%EB%8F%84%EB%A1%9D-%EB%A7%8C%EB%93%A4%EC%96%B4%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="6.-%EC%B5%9C%EC%A2%85-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">6. &#52572;&#51333; &#49828;&#53412;&#47560;&#50752; &#45936;&#51060;&#53552;&#47484; &#52636;&#47141;&#54644; &#51452;&#49464;&#50836;<a class="anchor-link" href="#6.-%EC%B5%9C%EC%A2%85-%EC%8A%A4%ED%82%A4%EB%A7%88%EC%99%80-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%B4-%EC%A3%BC%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습9] 출력 결과 확인 </summary>
 
 > 아래와 유사하게 방식으로 작성 되었다면 정답입니다
 

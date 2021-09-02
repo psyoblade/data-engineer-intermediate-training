@@ -14066,7 +14066,7 @@ a.anchor-link {
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="o">*</span>
@@ -14114,10 +14114,11 @@ a.anchor-link {
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>21/08/31 15:45:56 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+<pre>21/09/02 15:23:08 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
 Using Spark&#39;s default log4j profile: org/apache/spark/log4j-defaults.properties
 Setting default log level to &#34;WARN&#34;.
 To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLevel(newLevel).
+21/09/02 15:23:11 WARN Utils: Service &#39;SparkUI&#39; could not bind on port 4040. Attempting port 4041.
 </pre>
 </div>
 </div>
@@ -14125,7 +14126,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
 <div class="jp-OutputArea-child">
 
     
-    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[1]:</div>
+    <div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
 
 
 
@@ -14137,7 +14138,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
         <div>
             <p><b>SparkContext</b></p>
 
-            <p><a href="http://c1aa5f4167a8:4040">Spark UI</a></p>
+            <p><a href="http://c1aa5f4167a8:4041">Spark UI</a></p>
 
             <dl>
               <dt>Version</dt>
@@ -14566,7 +14567,7 @@ To adjust logging level use sc.setLogLevel(newLevel). For SparkR, use setLogLeve
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# 원시 데이터로 부터 읽거나, Spark SQL 통한 결과는 항상 데이터프레임이 생성됩니다&quot;</span><span class="p">)</span>
@@ -15551,7 +15552,7 @@ root
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[20]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;# 컬럼의 데이터 유형을 변경합니다&quot;</span><span class="p">)</span>
@@ -18069,7 +18070,7 @@ display(answer)
 </li>
 <li><p>데이터를 읽고 DeviceIoTData 클래스로 변환을 수행합니다</p>
 <div class="highlight"><pre><span></span><span class="kd">val</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">spark</span><span class="p">.</span><span class="n">read</span><span class="p">.</span><span class="n">json</span><span class="p">(</span><span class="s">&quot;/databricks-datasets/learning-spark-v2/iot-devices/iot_devices.json&quot;</span><span class="p">).</span><span class="n">as</span><span class="p">[</span><span class="nc">DeviceIoTData</span><span class="p">]</span>
-<span class="kd">val</span> <span class="n">filterTempDS</span> <span class="o">=</span> <span class="n">ds</span><span class="p">.</span><span class="n">filter</span><span class="p">({</span><span class="n">d</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="n">d</span><span class="p">.</span><span class="n">temp</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="o">&amp;&amp;</span> <span class="n">d</span><span class="p">.</span><span class="n">humidity</span> <span class="o">&gt;</span> <span class="mi">70</span><span class="p">})</span>
+<span class="kd">val</span> <span class="n">filterTempDS</span> <span class="o">=</span> <span class="n">ds</span><span class="p">.</span><span class="n">filter</span><span class="p">({</span><span class="n">d</span> <span class="o">=&gt;</span> <span class="p">{</span><span class="n">d</span><span class="p">.</span><span class="n">temp</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="o">&amp;&amp;</span> <span class="n">d</span><span class="p">.</span><span class="n">humidity</span> <span class="o">&gt;</span> <span class="mi">70</span><span class="p">}})</span>
 </pre></div>
 </li>
 <li>Datasets 이용 시에는 filter(), map(), groupBy(), select(), take() 등의 일반적인 함수를 사용합니다<div class="highlight"><pre><span></span><span class="k">case</span> <span class="k">class</span> <span class="nc">DeviceTempByCountry</span><span class="p">(</span><span class="n">temp</span><span class="p">:</span> <span class="nc">Long</span><span class="p">,</span> <span class="n">device_name</span><span class="p">:</span> <span class="nc">String</span><span class="p">,</span> <span class="n">device_id</span><span class="p">:</span> <span class="nc">Long</span><span class="p">,</span> <span class="n">cca3</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span>
@@ -18133,14 +18134,14 @@ code generation, which we discuss in the next section</p>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[66]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="sd">&quot;&quot;&quot; 원시 데이터소스 활용 &quot;&quot;&quot;</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">work_data</span><span class="si">}</span><span class="s2">/flight-data/json/2015-summary.json&quot;</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;2015_summary&quot;</span><span class="p">)</span>
-
-<span class="n">sql_result</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM 2015_summary&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">flightData2015</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">read</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">&quot;json&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">work_data</span><span class="si">}</span><span class="s2">/flight-data/json/2015-summary.json&quot;</span><span class="p">)</span>
+<span class="n">flightData2015</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;2015_summary&quot;</span><span class="p">)</span>
+<span class="n">sql_result</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM 2015_summary LIMIT 5&quot;</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">sql_result</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -18159,20 +18160,19 @@ code generation, which we discuss in the next section</p>
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>+-----------------+-------------------+-----+
-|DEST_COUNTRY_NAME|ORIGIN_COUNTRY_NAME|count|
-+-----------------+-------------------+-----+
-|    United States|            Romania|   15|
-|    United States|            Croatia|    1|
-|    United States|            Ireland|  344|
-|            Egypt|      United States|   15|
-|    United States|              India|   62|
-+-----------------+-------------------+-----+
-only showing top 5 rows
 
-</pre>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<table border='1'>
+<tr><th>DEST_COUNTRY_NAME</th><th>ORIGIN_COUNTRY_NAME</th><th>count</th></tr>
+<tr><td>United States</td><td>Romania</td><td>15</td></tr>
+<tr><td>United States</td><td>Croatia</td><td>1</td></tr>
+<tr><td>United States</td><td>Ireland</td><td>344</td></tr>
+<tr><td>Egypt</td><td>United States</td><td>15</td></tr>
+<tr><td>United States</td><td>India</td><td>62</td></tr>
+</table>
+
 </div>
+
 </div>
 
 </div>
@@ -18209,23 +18209,10 @@ only showing top 5 rows
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[67]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[17]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mnm_df</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">spark</span><span class="o">.</span><span class="n">read</span>
-    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;header&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;inferSchema&quot;</span><span class="p">,</span> <span class="s2">&quot;true&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">csv</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">work_data</span><span class="si">}</span><span class="s2">/databricks/mnm_dataset.csv&quot;</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">count_mnm_df</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">mnm_df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="s2">&quot;Color&quot;</span><span class="p">,</span> <span class="s2">&quot;Count&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="s2">&quot;State&quot;</span><span class="p">,</span> <span class="s2">&quot;Color&quot;</span><span class="p">,</span> <span class="s2">&quot;Count&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="s2">&quot;Count&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s2">&quot;Total&quot;</span><span class="p">))</span>
-    <span class="o">.</span><span class="n">orderBy</span><span class="p">(</span><span class="s2">&quot;Total&quot;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="p">)</span>
-<span class="n">count_mnm_df</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sql_result</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 
      </div>
@@ -18246,30 +18233,27 @@ only showing top 5 rows
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Parsed Logical Plan ==
-&#39;Sort [&#39;Total DESC NULLS LAST], true
-+- Aggregate [State#1877, Color#1878, Count#1879], [State#1877, Color#1878, Count#1879, sum(cast(Count#1879 as bigint)) AS Total#1890L]
-   +- Project [State#1877, Color#1878, Count#1879]
-      +- Relation[State#1877,Color#1878,Count#1879] csv
+&#39;GlobalLimit 5
++- &#39;LocalLimit 5
+   +- &#39;Project [*]
+      +- &#39;UnresolvedRelation [2015_summary], [], false
 
 == Analyzed Logical Plan ==
-State: string, Color: string, Count: int, Total: bigint
-Sort [Total#1890L DESC NULLS LAST], true
-+- Aggregate [State#1877, Color#1878, Count#1879], [State#1877, Color#1878, Count#1879, sum(cast(Count#1879 as bigint)) AS Total#1890L]
-   +- Project [State#1877, Color#1878, Count#1879]
-      +- Relation[State#1877,Color#1878,Count#1879] csv
+DEST_COUNTRY_NAME: string, ORIGIN_COUNTRY_NAME: string, count: bigint
+GlobalLimit 5
++- LocalLimit 5
+   +- Project [DEST_COUNTRY_NAME#434, ORIGIN_COUNTRY_NAME#435, count#436L]
+      +- SubqueryAlias 2015_summary
+         +- Relation[DEST_COUNTRY_NAME#434,ORIGIN_COUNTRY_NAME#435,count#436L] json
 
 == Optimized Logical Plan ==
-Sort [Total#1890L DESC NULLS LAST], true
-+- Aggregate [State#1877, Color#1878, Count#1879], [State#1877, Color#1878, Count#1879, sum(cast(Count#1879 as bigint)) AS Total#1890L]
-   +- Relation[State#1877,Color#1878,Count#1879] csv
+GlobalLimit 5
++- LocalLimit 5
+   +- Relation[DEST_COUNTRY_NAME#434,ORIGIN_COUNTRY_NAME#435,count#436L] json
 
 == Physical Plan ==
-*(3) Sort [Total#1890L DESC NULLS LAST], true, 0
-+- Exchange rangepartitioning(Total#1890L DESC NULLS LAST, 5), ENSURE_REQUIREMENTS, [id=#1516]
-   +- *(2) HashAggregate(keys=[State#1877, Color#1878, Count#1879], functions=[sum(cast(Count#1879 as bigint))], output=[State#1877, Color#1878, Count#1879, Total#1890L])
-      +- Exchange hashpartitioning(State#1877, Color#1878, Count#1879, 5), ENSURE_REQUIREMENTS, [id=#1512]
-         +- *(1) HashAggregate(keys=[State#1877, Color#1878, Count#1879], functions=[partial_sum(cast(Count#1879 as bigint))], output=[State#1877, Color#1878, Count#1879, sum#1896L])
-            +- FileScan csv [State#1877,Color#1878,Count#1879] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex[file:/home/jovyan/work/data/databricks/mnm_dataset.csv], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;State:string,Color:string,Count:int&gt;
+CollectLimit 5
++- FileScan json [DEST_COUNTRY_NAME#434,ORIGIN_COUNTRY_NAME#435,count#436L] Batched: false, DataFilters: [], Format: JSON, Location: InMemoryFileIndex[file:/home/jovyan/work/data/flight-data/json/2015-summary.json], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;DEST_COUNTRY_NAME:string,ORIGIN_COUNTRY_NAME:string,count:bigint&gt;
 
 </pre>
 </div>
@@ -18279,20 +18263,38 @@ Sort [Total#1890L DESC NULLS LAST], true
 
 </div>
 
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3><font color=blue>8. [중급]</font> f"{work_data}/databricks/mnm_dataset.csv" M&amp;M 초콜렛 판매 데이터 CSV 파일을 읽고,</h3>
+<h4 id="1.-%EC%B4%88%EC%BD%9C%EB%A6%BF%ED%8C%90%EB%A7%A4-%EC%A7%80%EC%97%AD(State),-%EC%B4%88%EC%BD%9C%EB%A6%BF-%EC%83%89%EA%B9%94(Color)-%EB%B3%84-%EC%B4%9D-%ED%8C%90%EB%A7%A4-%EC%88%98-(Total)%EB%A5%BC-%EA%B5%AC%ED%95%98%EB%90%98,-Spark-SQL-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EC%83%81%EC%9C%84-5%EA%B0%9C%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">1. &#52488;&#53084;&#47551;&#54032;&#47588; &#51648;&#50669;(State), &#52488;&#53084;&#47551; &#49353;&#44628;(Color) &#48324; &#52509; &#54032;&#47588; &#49688; (Total)&#47484; &#44396;&#54616;&#46104;, Spark SQL &#51060;&#50857;&#54616;&#50668; &#49345;&#50948; 5&#44060;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#1.-%EC%B4%88%EC%BD%9C%EB%A6%BF%ED%8C%90%EB%A7%A4-%EC%A7%80%EC%97%AD(State),-%EC%B4%88%EC%BD%9C%EB%A6%BF-%EC%83%89%EA%B9%94(Color)-%EB%B3%84-%EC%B4%9D-%ED%8C%90%EB%A7%A4-%EC%88%98-(Total)%EB%A5%BC-%EA%B5%AC%ED%95%98%EB%90%98,-Spark-SQL-%EC%9D%B4%EC%9A%A9%ED%95%98%EC%97%AC-%EC%83%81%EC%9C%84-5%EA%B0%9C%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="2.-%EB%8F%99%EC%9D%BC%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%A5%BC-Structured-API%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-%EC%9E%91%EC%84%B1-%ED%9B%84,-%EB%8F%99%EC%9D%BC%ED%95%98%EA%B2%8C-%EC%83%81%EC%9C%84-5%EA%B0%9C%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">2. &#46041;&#51068;&#54620; &#44208;&#44284;&#47484; Structured API&#47484; &#54876;&#50857;&#54616;&#50668; &#51089;&#49457; &#54980;, &#46041;&#51068;&#54616;&#44172; &#49345;&#50948; 5&#44060;&#47484; &#52636;&#47141;&#54616;&#49464;&#50836;<a class="anchor-link" href="#2.-%EB%8F%99%EC%9D%BC%ED%95%9C-%EA%B2%B0%EA%B3%BC%EB%A5%BC-Structured-API%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-%EC%9E%91%EC%84%B1-%ED%9B%84,-%EB%8F%99%EC%9D%BC%ED%95%98%EA%B2%8C-%EC%83%81%EC%9C%84-5%EA%B0%9C%EB%A5%BC-%EC%B6%9C%EB%A0%A5%ED%95%98%EC%84%B8%EC%9A%94">&#182;</a></h4><h4 id="3.-1~2%EB%B2%88%EC%9D%98-%EC%8B%A4%ED%96%89-%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%94%84%EB%A0%88%EC%9E%84%EC%9D%84-explain(True)-%ED%95%A8%EC%88%98%EB%A5%BC-%ED%86%B5%ED%95%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B3%A0-%EB%8F%99%EC%9D%BC%ED%95%9C%EC%A7%80-%EC%97%AC%EB%B6%80%EB%A5%BC-%ED%99%95%EC%9D%B8%ED%95%B4-%EB%B3%B4%EC%84%B8%EC%9A%94">3. 1~2&#48264;&#51032; &#49892;&#54665; &#45936;&#51060;&#53552;&#54532;&#47112;&#51076;&#51012; explain(True) &#54632;&#49688;&#47484; &#53685;&#54644; &#52636;&#47141;&#54616;&#44256; &#46041;&#51068;&#54620;&#51648; &#50668;&#48512;&#47484; &#54869;&#51064;&#54644; &#48372;&#49464;&#50836;<a class="anchor-link" href="#3.-1~2%EB%B2%88%EC%9D%98-%EC%8B%A4%ED%96%89-%EB%8D%B0%EC%9D%B4%ED%84%B0%ED%94%84%EB%A0%88%EC%9E%84%EC%9D%84-explain(True)-%ED%95%A8%EC%88%98%EB%A5%BC-%ED%86%B5%ED%95%B4-%EC%B6%9C%EB%A0%A5%ED%95%98%EA%B3%A0-%EB%8F%99%EC%9D%BC%ED%95%9C%EC%A7%80-%EC%97%AC%EB%B6%80%EB%A5%BC-%ED%99%95%EC%9D%B8%ED%95%B4-%EB%B3%B4%EC%84%B8%EC%9A%94">&#182;</a></h4><details><summary>[실습9] 출력 결과 확인 </summary>
+
+> 아래와 유사하게 방식으로 작성 되었다면 정답입니다
+
+```python
+# 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)
+
+mnm_df = spark.read.csv(f"{work_data}/databricks/mnm_dataset.csv", inferSchema=True, header=True)
+mnm_df.createOrReplaceTempView("mnm_df")
+
+mnmSql = mnm_df.select("State", "Color", "Count").groupBy("State", "Color").agg(sum("Count").alias("Total")).orderBy(desc(col("Total"))).limit(5)
+display(mnmSql)
+mnmSql.explain(True)
+
+mnmApi = spark.sql("select State, Color, sum(Count) as Total from mnm_df group by State, Color order by Total desc limit 5")
+display(mnmApi)
+mnmApi.explain(True)
+```
+
+</details>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[68]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">mnm_df</span><span class="o">.</span><span class="n">createOrReplaceTempView</span><span class="p">(</span><span class="s2">&quot;mnm_dataset&quot;</span><span class="p">)</span>
-<span class="n">count_mnm_df</span> <span class="o">=</span> <span class="n">spark</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">    SELECT State, Color, Count, sum(Count) AS Total</span>
-<span class="s2">    FROM mnm_dataset</span>
-<span class="s2">    GROUP BY State, Color, Count</span>
-<span class="s2">    ORDER BY Total DESC</span>
-<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
-<span class="n">count_mnm_df</span><span class="o">.</span><span class="n">explain</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># 여기에 실습 코드를 작성하고 실행하세요 (Shift+Enter)</span>
 </pre></div>
 
      </div>
@@ -18311,31 +18313,120 @@ Sort [Total#1890L DESC NULLS LAST], true
     <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 
 
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<table border='1'>
+<tr><th>State</th><th>Color</th><th>Total</th></tr>
+<tr><td>CA</td><td>Yellow</td><td>100956</td></tr>
+<tr><td>WA</td><td>Green</td><td>96486</td></tr>
+<tr><td>CA</td><td>Brown</td><td>95762</td></tr>
+<tr><td>TX</td><td>Green</td><td>95753</td></tr>
+<tr><td>TX</td><td>Red</td><td>95404</td></tr>
+</table>
+
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
 <pre>== Parsed Logical Plan ==
-&#39;Sort [&#39;Total DESC NULLS LAST], true
-+- &#39;Aggregate [&#39;State, &#39;Color, &#39;Count], [&#39;State, &#39;Color, &#39;Count, &#39;sum(&#39;Count) AS Total#1897]
-   +- &#39;UnresolvedRelation [mnm_dataset], [], false
+GlobalLimit 5
++- LocalLimit 5
+   +- Sort [Total#203L DESC NULLS LAST], true
+      +- Aggregate [State#190, Color#191], [State#190, Color#191, sum(cast(Count#192 as bigint)) AS Total#203L]
+         +- Project [State#190, Color#191, Count#192]
+            +- Relation[State#190,Color#191,Count#192] csv
 
 == Analyzed Logical Plan ==
-State: string, Color: string, Count: int, Total: bigint
-Sort [Total#1897L DESC NULLS LAST], true
-+- Aggregate [State#1877, Color#1878, Count#1879], [State#1877, Color#1878, Count#1879, sum(cast(Count#1879 as bigint)) AS Total#1897L]
-   +- SubqueryAlias mnm_dataset
-      +- Relation[State#1877,Color#1878,Count#1879] csv
+State: string, Color: string, Total: bigint
+GlobalLimit 5
++- LocalLimit 5
+   +- Sort [Total#203L DESC NULLS LAST], true
+      +- Aggregate [State#190, Color#191], [State#190, Color#191, sum(cast(Count#192 as bigint)) AS Total#203L]
+         +- Project [State#190, Color#191, Count#192]
+            +- Relation[State#190,Color#191,Count#192] csv
 
 == Optimized Logical Plan ==
-Sort [Total#1897L DESC NULLS LAST], true
-+- Aggregate [State#1877, Color#1878, Count#1879], [State#1877, Color#1878, Count#1879, sum(cast(Count#1879 as bigint)) AS Total#1897L]
-   +- Relation[State#1877,Color#1878,Count#1879] csv
+GlobalLimit 5
++- LocalLimit 5
+   +- Sort [Total#203L DESC NULLS LAST], true
+      +- Aggregate [State#190, Color#191], [State#190, Color#191, sum(cast(Count#192 as bigint)) AS Total#203L]
+         +- Relation[State#190,Color#191,Count#192] csv
 
 == Physical Plan ==
-*(3) Sort [Total#1897L DESC NULLS LAST], true, 0
-+- Exchange rangepartitioning(Total#1897L DESC NULLS LAST, 5), ENSURE_REQUIREMENTS, [id=#1549]
-   +- *(2) HashAggregate(keys=[State#1877, Color#1878, Count#1879], functions=[sum(cast(Count#1879 as bigint))], output=[State#1877, Color#1878, Count#1879, Total#1897L])
-      +- Exchange hashpartitioning(State#1877, Color#1878, Count#1879, 5), ENSURE_REQUIREMENTS, [id=#1545]
-         +- *(1) HashAggregate(keys=[State#1877, Color#1878, Count#1879], functions=[partial_sum(cast(Count#1879 as bigint))], output=[State#1877, Color#1878, Count#1879, sum#1905L])
-            +- FileScan csv [State#1877,Color#1878,Count#1879] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex[file:/home/jovyan/work/data/databricks/mnm_dataset.csv], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;State:string,Color:string,Count:int&gt;
+TakeOrderedAndProject(limit=5, orderBy=[Total#203L DESC NULLS LAST], output=[State#190,Color#191,Total#203L])
++- *(2) HashAggregate(keys=[State#190, Color#191], functions=[sum(cast(Count#192 as bigint))], output=[State#190, Color#191, Total#203L])
+   +- Exchange hashpartitioning(State#190, Color#191, 5), ENSURE_REQUIREMENTS, [id=#394]
+      +- *(1) HashAggregate(keys=[State#190, Color#191], functions=[partial_sum(cast(Count#192 as bigint))], output=[State#190, Color#191, sum#217L])
+         +- FileScan csv [State#190,Color#191,Count#192] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex[file:/home/jovyan/work/data/databricks/mnm_dataset.csv], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;State:string,Color:string,Count:int&gt;
+
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<table border='1'>
+<tr><th>State</th><th>Color</th><th>Total</th></tr>
+<tr><td>CA</td><td>Yellow</td><td>100956</td></tr>
+<tr><td>WA</td><td>Green</td><td>96486</td></tr>
+<tr><td>CA</td><td>Brown</td><td>95762</td></tr>
+<tr><td>TX</td><td>Green</td><td>95753</td></tr>
+<tr><td>TX</td><td>Red</td><td>95404</td></tr>
+</table>
+
+</div>
+
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>== Parsed Logical Plan ==
+&#39;GlobalLimit 5
++- &#39;LocalLimit 5
+   +- &#39;Sort [&#39;Total DESC NULLS LAST], true
+      +- &#39;Aggregate [&#39;State, &#39;Color], [&#39;State, &#39;Color, &#39;sum(&#39;Count) AS Total#241]
+         +- &#39;UnresolvedRelation [mnm_df], [], false
+
+== Analyzed Logical Plan ==
+State: string, Color: string, Total: bigint
+GlobalLimit 5
++- LocalLimit 5
+   +- Sort [Total#241L DESC NULLS LAST], true
+      +- Aggregate [State#190, Color#191], [State#190, Color#191, sum(cast(Count#192 as bigint)) AS Total#241L]
+         +- SubqueryAlias mnm_df
+            +- Relation[State#190,Color#191,Count#192] csv
+
+== Optimized Logical Plan ==
+GlobalLimit 5
++- LocalLimit 5
+   +- Sort [Total#241L DESC NULLS LAST], true
+      +- Aggregate [State#190, Color#191], [State#190, Color#191, sum(cast(Count#192 as bigint)) AS Total#241L]
+         +- Relation[State#190,Color#191,Count#192] csv
+
+== Physical Plan ==
+TakeOrderedAndProject(limit=5, orderBy=[Total#241L DESC NULLS LAST], output=[State#190,Color#191,Total#241L])
++- *(2) HashAggregate(keys=[State#190, Color#191], functions=[sum(cast(Count#192 as bigint))], output=[State#190, Color#191, Total#241L])
+   +- Exchange hashpartitioning(State#190, Color#191, 5), ENSURE_REQUIREMENTS, [id=#484]
+      +- *(1) HashAggregate(keys=[State#190, Color#191], functions=[partial_sum(cast(Count#192 as bigint))], output=[State#190, Color#191, sum#257L])
+         +- FileScan csv [State#190,Color#191,Count#192] Batched: false, DataFilters: [], Format: CSV, Location: InMemoryFileIndex[file:/home/jovyan/work/data/databricks/mnm_dataset.csv], PartitionFilters: [], PushedFilters: [], ReadSchema: struct&lt;State:string,Color:string,Count:int&gt;
 
 </pre>
 </div>
@@ -18534,10 +18625,7 @@ spark.read.csv(f"{work_data}/tbl_purchase.csv", inferSchema=True, header=True).o
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="%EC%B0%B8%EA%B3%A0%EC%9E%90%EB%A3%8C">&#52280;&#44256;&#51088;&#47308;<a class="anchor-link" href="#%EC%B0%B8%EA%B3%A0%EC%9E%90%EB%A3%8C">&#182;</a></h2><h4 id="1.-Spark-Programming-Guide">1. <a href="https://spark.apache.org/docs/latest/sql-programming-guide.html">Spark Programming Guide</a><a class="anchor-link" href="#1.-Spark-Programming-Guide">&#182;</a></h4><h4 id="2.-PySpark-SQL-Modules-Documentation">2. <a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html">PySpark SQL Modules Documentation</a><a class="anchor-link" href="#2.-PySpark-SQL-Modules-Documentation">&#182;</a></h4><h4 id="3.-PySpark-3.0.1-Builtin-Functions">3. <a href="https://spark.apache.org/docs/3.0.1/api/sql/" target="_blank">PySpark 3.0.1 Builtin Functions</a><a class="anchor-link" href="#3.-PySpark-3.0.1-Builtin-Functions">&#182;</a></h4><ul>
-<li><a href="https://towardsdatascience.com/3-ways-to-create-tables-with-apache-spark-32aed0f355ab">3-ways-to-create-tables-with-apache-spark</a></li>
-</ul>
-
+<h2 id="%EC%B0%B8%EA%B3%A0%EC%9E%90%EB%A3%8C">&#52280;&#44256;&#51088;&#47308;<a class="anchor-link" href="#%EC%B0%B8%EA%B3%A0%EC%9E%90%EB%A3%8C">&#182;</a></h2><h4 id="1.-Spark-Programming-Guide">1. <a href="https://spark.apache.org/docs/latest/sql-programming-guide.html">Spark Programming Guide</a><a class="anchor-link" href="#1.-Spark-Programming-Guide">&#182;</a></h4><h4 id="2.-PySpark-SQL-Modules-Documentation">2. <a href="https://spark.apache.org/docs/latest/api/python/pyspark.sql.html">PySpark SQL Modules Documentation</a><a class="anchor-link" href="#2.-PySpark-SQL-Modules-Documentation">&#182;</a></h4><h4 id="3.-PySpark-3.1.2-Builtin-Functions">3. <a href="https://spark.apache.org/docs/3.1.2/api/sql/" target="_blank">PySpark 3.1.2 Builtin Functions</a><a class="anchor-link" href="#3.-PySpark-3.1.2-Builtin-Functions">&#182;</a></h4><h4 id="4.-3-ways-to-create-tables-with-apache-spark">4. <a href="https://towardsdatascience.com/3-ways-to-create-tables-with-apache-spark-32aed0f355ab">3-ways-to-create-tables-with-apache-spark</a><a class="anchor-link" href="#4.-3-ways-to-create-tables-with-apache-spark">&#182;</a></h4>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
