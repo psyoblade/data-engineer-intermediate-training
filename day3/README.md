@@ -1096,15 +1096,15 @@ docker-compose -f web.yml up -d
 
 * 개별 서비스들의 로그를 확인합니다
 ```bash
-docker-compose logs -f ubuntu
-docker-compose logs -f web
-docker-compose logs -f fluentd
+docker-compose -f web.yml logs -f ubuntu
+docker-compose -f web.yml logs -f web
+docker-compose -f web.yml logs -f fluentd
 ```
 
 * 미처 종료되지 않은 컨테이너도 종료합니다
 ```bash
 # terminal
-docker-compose down --remove-orphans
+docker-compose -f web.yml down --remove-orphans
 ```
 
 </details>
