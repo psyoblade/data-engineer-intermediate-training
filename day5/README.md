@@ -44,4 +44,5 @@ docker-compose logs notebook
 ### [2. 아파치 스파크 집계](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-5-aggregation.html)
 ### [3. 아파치 스파크 JDBC to MySQL](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-6-jdbc-mysql.html)
 ### [4. 아파치 스파크 JDBC to MongoDB](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-7-jdbc-mongodb.html)
+### [5. 아파치 스파크 성능 튜닝](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day4/notebooks/lgde-spark-core/lgde-spark-core-8-perf-tuning.html)
 <br>
