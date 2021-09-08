@@ -466,7 +466,7 @@ create table if not exists employee (
 
 ```sql
 alter table employee add columns (
-  emp_name string comment 'employee name', 
+  emp_name string comment 'employee name'
 );
 desc employee;
 desc renamed_emp;
