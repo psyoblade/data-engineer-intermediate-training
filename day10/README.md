@@ -943,6 +943,48 @@ dimension.printSchema()
 </details>
 
 
+### 7-11. 오늘 생성된 지표를 MySQL testdb.lgde 테이블로 저장합니다
+
+> **어제의 데이터가 삭제되어서는 안되**며, **여러번 실행해도 멱등하게 동작해야 합**니다 
+
+* 테이블 정보
+  - host : mysql
+  - port : 3306
+  - user : sqoop
+  - password : sqoop
+  - db : testdb
+  - table : lgde
+  - schema : `dt char(10), dau int, pu int, ru int`
+
+
+```python
+today = "2020-10-26"
+# lgde_origin = <Spark JDBC 를 이용하여 어제까지의 데이터를 가져옵니다>
+# lgde_today = <spark createDataFrame 메소드를 이용하여 오늘자 저장 데이터프레임을 생성합니다>
+# lgde_union = <어제까지의 데이터와 오늘 데이터를 유니온합니다>
+# lgde_local = <lgde_union 데이터 프레임을 collect 통해 로컬 객체로 생성합니다>
+# lgde = spark.createDataFrame(lgde_local)
+# lgde.write.mode("overwrite").jdbc("jdbc:mysql://mysql:3306/testdb", "testdb.lgde", properties={"user": "sqoop", "password": "sqoop"})
+```
+
+<details><summary> :blue_book: 28. [기본] 정답확인</summary>
+
+> MySQL 테이블에 2020-10-25 ~ 26 일자의 지표가 저장되었다면 정답입니다
+
+```sql
+mysql> select * from lgde order by dt asc;
++------------+------+------+----------+
+| DT         | DAU  | PU   | DR       |
++------------+------+------+----------+
+| 2020-10-25 |    5 |    4 | 12200000 |
+| 2020-10-26 |    9 |    5 | 12900000 |
++------------+------+------+----------+
+```
+
+</details>
+<br>
+
+
 ## 8. 질문 및 컨테이너 종료
 
 ### 8-1. 질문과 답변
