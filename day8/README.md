@@ -29,8 +29,11 @@
 ### 1-1. 최신 소스를 내려 받습니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training
+cd /home/ubuntu/work/data-engineer-intermediate-training/day8
+docker-compose down
+rm -rf tmp
 git pull
+docker-compose up -d
 ```
 <br>
 
