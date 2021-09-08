@@ -780,7 +780,7 @@ export table imdb_orc to '/user/ubuntu/archive/imdb_orc';
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-basic-training/day8
+cd /home/ubuntu/work/data-engineer-intermediate-training/day8
 docker-compose exec hive-server bash
 ```
 ```bash
