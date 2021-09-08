@@ -31,7 +31,6 @@
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day8
 docker-compose down
-rm -rf tmp
 git pull
 docker-compose up -d
 ```
