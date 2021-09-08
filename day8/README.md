@@ -67,8 +67,8 @@ docker-compose ps
 #### 1-2-4. 실습에 필요한 IMDB 데이터를 컨테이너로 복사합니다
 ```bash
 # terminal
-docker-compose cp data/imdb.tsv hive:/opt/hive/examples/imdb.tsv
-docker-compose exec hive-serverls /opt/hive/examples
+docker cp data/imdb.tsv hive-server:/opt/hive/examples/imdb.tsv
+docker-compose exec hive-server ls /opt/hive/examples
 ```
 
 > 마지막 ls /opt/hive/examples 명령어 결과로 imdb.tsv 파일이 확인되면 정상입니다
@@ -78,6 +78,8 @@ docker-compose exec hive-serverls /opt/hive/examples
 #### 1-2-5. 하이브 컨테이너로 접속합니다
 ```bash
 # terminal
+echo "하이브 서버가 기동 되는데에 시간이 좀 걸립니다... 30초 후에 접속합니다"
+sleep 30 
 docker-compose exec hive-server bash
 ```
 <br>
@@ -90,9 +92,6 @@ docker-compose exec hive-server bash
 * 도커 컨테이너에서 beeline 명령을 수행하면 프롬프트가 `beeline>` 으로 변경되고, SQL 명령의 수행이 가능합니다
 ```bash
 # docker
-echo "하이브 서버가 기동 되는데에 시간이 좀 걸립니다... 30초 후에 접속합니다"
-sleep 30 
-
 beeline
 ```
 <br>
@@ -467,7 +466,7 @@ create table if not exists employee (
 
 ```sql
 alter table employee add columns (
-  emp_name string comment 'employee name', 
+  emp_name string comment 'employee name'
 );
 desc employee;
 desc renamed_emp;
@@ -781,7 +780,7 @@ export table imdb_orc to '/user/ubuntu/archive/imdb_orc';
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-basic-training/day4
+cd /home/ubuntu/work/data-engineer-intermediate-training/day8
 docker-compose exec hive-server bash
 ```
 ```bash
