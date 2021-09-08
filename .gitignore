@@ -11,14 +11,12 @@ namenode/
 nodes/
 logs/
 target/
-*-answer.ipynb
 access/
 purchase/
 user/
 tmp/
 dimension/
 spark-warehouse/
-html/
 lgde-spark-delta/
 
 # Created by https://www.toptal.com/developers/gitignore/api/git
