@@ -15,6 +15,9 @@
   * [7. 고급 지표 생성](#7-고급-지표-생성)
   * [8. 질문 및 컨테이너 종료](#8-질문-및-컨테이너-종료)
 
+- 정답
+  * [프로젝트 1일차 정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day9/notebooks/answer/data-engineer-lgde-day1-answer.html)
+
 <br>
 
 ## 1. 최신버전 업데이트
