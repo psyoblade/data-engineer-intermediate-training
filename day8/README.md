@@ -78,6 +78,8 @@ docker-compose exec hive-server ls /opt/hive/examples
 #### 1-2-5. 하이브 컨테이너로 접속합니다
 ```bash
 # terminal
+echo "하이브 서버가 기동 되는데에 시간이 좀 걸립니다... 30초 후에 접속합니다"
+sleep 30 
 docker-compose exec hive-server bash
 ```
 <br>
@@ -90,9 +92,6 @@ docker-compose exec hive-server bash
 * 도커 컨테이너에서 beeline 명령을 수행하면 프롬프트가 `beeline>` 으로 변경되고, SQL 명령의 수행이 가능합니다
 ```bash
 # docker
-echo "하이브 서버가 기동 되는데에 시간이 좀 걸립니다... 30초 후에 접속합니다"
-sleep 30 
-
 beeline
 ```
 <br>
