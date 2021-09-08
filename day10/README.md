@@ -18,7 +18,7 @@
 
 - 정답
   * [프로젝트 2일차 정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day9/notebooks/answer/data-engineer-lgde-day2-answer.html)
-  * [프로젝트 3일차 정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day9/notebooks/answer/data-engineer-lgde-day3-answer.html)
+  * [프로젝트 3일차 정답](https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day9/notebooks/answer/data-engineer-lgde-day3-answer.html)
 
 <br>
 
