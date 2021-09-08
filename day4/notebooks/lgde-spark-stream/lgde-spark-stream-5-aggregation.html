@@ -14640,10 +14640,10 @@ notebook  <span class="p">|</span> +------+-------------------------------------
 <p><br></p>
 <h3 id="1.2.4-%EC%B9%B4%ED%94%84%EC%B9%B4-%EC%9B%8C%ED%84%B0%EB%A7%88%ED%81%AC-%EC%9D%B4%EC%9A%A9-%EC%98%88%EC%A0%9C">1.2.4 &#52852;&#54532;&#52852; &#50892;&#53552;&#47560;&#53356; &#51060;&#50857; &#50696;&#51228;<a class="anchor-link" href="#1.2.4-%EC%B9%B4%ED%94%84%EC%B9%B4-%EC%9B%8C%ED%84%B0%EB%A7%88%ED%81%AC-%EC%9D%B4%EC%9A%A9-%EC%98%88%EC%A0%9C">&#182;</a></h3>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[25]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">queryName</span> <span class="o">=</span> <span class="s2">&quot;kafka-watermark-stream&quot;</span>
@@ -14685,8 +14685,27 @@ notebook  <span class="p">|</span> +------+-------------------------------------
     <span class="n">kafkaWatermarkWriter</span>
     <span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;truncate&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
 <span class="p">)</span>
+</pre></div>
 
-<span class="n">kafkaWatermarkQuery</span> <span class="o">=</span> <span class="n">kafkaWatermarkTrigger</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+     </div>
+</div>
+</div>
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<blockquote><p>스트리밍 애플리케이션을 기동하고, 파이썬 프로듀서를 통해서 카프카 메시지를 생성합니다.</p>
+</blockquote>
+
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">kafkaWatermarkQuery</span> <span class="o">=</span> <span class="n">kafkaWatermarkTrigger</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 <span class="n">kafkaWatermarkQuery</span><span class="o">.</span><span class="n">awaitTermination</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
 <span class="n">kafkaWatermarkQuery</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
 </pre></div>
@@ -14696,81 +14715,17 @@ notebook  <span class="p">|</span> +------+-------------------------------------
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>21/08/17 13:28:06 WARN StreamingQueryManager: Temporary checkpoint location created which is deleted normally when the query didn&#39;t fail: /tmp/temporary-361c207b-a021-44e8-9f79-705d6653ab41. If it&#39;s required to delete it under any circumstances, please set spark.sql.streaming.forceDeleteTempCheckpointLocation to true. Important to know deleting temp checkpoint folder is best effort.
-</pre>
 </div>
-</div>
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-------------------------------------------
-Batch: 0
--------------------------------------------
-+------+------+-----+
-|emp_id|window|count|
-+------+------+-----+
-+------+------+-----+
-
--------------------------------------------
-Batch: 1
--------------------------------------------
-+------+------+-----+
-|emp_id|window|count|
-+------+------+-----+
-+------+------+-----+
-
--------------------------------------------
-Batch: 2
--------------------------------------------
-+------+------+-----+
-|emp_id|window|count|
-+------+------+-----+
-+------+------+-----+
-
--------------------------------------------
-Batch: 3
--------------------------------------------
-+------+------------------------------------------+-----+
-|emp_id|window                                    |count|
-+------+------------------------------------------+-----+
-|2     |{2021-07-03 00:00:00, 2021-07-03 00:25:00}|1    |
-|1     |{2021-07-03 00:00:00, 2021-07-03 00:25:00}|3    |
-+------+------------------------------------------+-----+
-
--------------------------------------------
-Batch: 4
--------------------------------------------
-+------+------------------------------------------+-----+
-|emp_id|window                                    |count|
-+------+------------------------------------------+-----+
-|3     |{2021-07-03 00:25:00, 2021-07-03 00:50:00}|1    |
-+------+------------------------------------------+-----+
-
-</pre>
-</div>
-</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<ul>
+<li>노트북 터미널을 통해서 아래의 경로로 이동하여 수행합니다.<div class="highlight"><pre><span></span><span class="nb">cd</span> /home/jovyan/work/lgde-spark-stream/python 
+python watermarks.py
+</pre></div>
+</li>
+</ul>
 
 </div>
-
-</div>
-
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
