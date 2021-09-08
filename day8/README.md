@@ -68,7 +68,7 @@ docker-compose ps
 ```bash
 # terminal
 docker-compose cp data/imdb.tsv hive:/opt/hive/examples/imdb.tsv
-docker-compose exec hive-serverls /opt/hive/examples
+docker-compose exec hive-server ls /opt/hive/examples
 ```
 
 > 마지막 ls /opt/hive/examples 명령어 결과로 imdb.tsv 파일이 확인되면 정상입니다
