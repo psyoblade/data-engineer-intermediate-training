@@ -865,7 +865,7 @@ select * from imdb_recover;
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training
+cd /home/ubuntu/work/data-engineer-intermediate-training/day8
 git pull
 ```
 
