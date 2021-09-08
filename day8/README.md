@@ -67,7 +67,7 @@ docker-compose ps
 #### 1-2-4. 실습에 필요한 IMDB 데이터를 컨테이너로 복사합니다
 ```bash
 # terminal
-docker-compose cp data/imdb.tsv hive:/opt/hive/examples/imdb.tsv
+docker cp data/imdb.tsv hive:/opt/hive/examples/imdb.tsv
 docker-compose exec hive-server ls /opt/hive/examples
 ```
 
