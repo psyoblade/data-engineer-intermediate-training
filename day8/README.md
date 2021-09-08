@@ -57,9 +57,9 @@ docker rm -f `docker ps -aq`
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day8
-docker compose pull
-docker compose up -d
-docker compose ps
+docker-compose pull
+docker-compose up -d
+docker-compose ps
 ```
 <br>
 
@@ -67,8 +67,8 @@ docker compose ps
 #### 1-2-4. 실습에 필요한 IMDB 데이터를 컨테이너로 복사합니다
 ```bash
 # terminal
-docker compose cp data/imdb.tsv hive:/opt/hive/examples/imdb.tsv
-docker compose exec hive-serverls /opt/hive/examples
+docker-compose cp data/imdb.tsv hive:/opt/hive/examples/imdb.tsv
+docker-compose exec hive-serverls /opt/hive/examples
 ```
 
 > 마지막 ls /opt/hive/examples 명령어 결과로 imdb.tsv 파일이 확인되면 정상입니다
