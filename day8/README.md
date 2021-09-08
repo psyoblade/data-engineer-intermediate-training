@@ -860,6 +860,13 @@ select * from imdb_recover;
 
 > 로컬 경로에 수집되었던 테이블 parquet 파일이 존재하므로, 해당 파일을 이용하여 생성합니다
 
+
+```bash
+# terminal
+cd /home/ubuntu/work/data-engineer-intermediate-training
+git pull
+```
+
 * 하이브 컨테이너로 접속합니다
 ```bash
 # terminal
