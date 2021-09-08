@@ -876,7 +876,7 @@ docker-compose exec hive-server bash
 
 * 원본 파일의 스키마를 확인 및 파일을 하둡 클러스터에 업로드합니다
 ```
-hadoop jar /tmp/source/parquet-tools-1.8.1.jar schema file:///tmp/source/user/20201025/2e3738ff-5e2b-4bec-bdf4-278fe21daa3b.parquet
+hadoop jar /tmp/source/parquet-tools-1.8.1.jar schema file:///tmp/source/purchase/20201025/38dc1f5b-d49d-436d-a84a-4e5c2a4022a5.parquet
 ```
 ```text
 message purchase_20201025 {
