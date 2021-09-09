@@ -991,8 +991,6 @@ dimension.printSchema()
 
 ### 7-11. 오늘 생성된 지표를 MySQL testdb.lgde 테이블로 저장합니다
 
-> 반드시 사전에 `testdb.lgde` 테이블을 생성해 두어야 합니다
-
 * 테이블 정보
   - host : mysql
   - port : 3306
