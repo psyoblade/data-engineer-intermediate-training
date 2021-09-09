@@ -280,7 +280,7 @@ p_amount = 2500000
 *  <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너에서 빠져나와 `원격 터미널` 로컬 디스크에 모든 파일이 모두 수집되었다면 테이블 수집에 성공한 것입니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-basic-training/day9
+cd /home/ubuntu/work/data-engineer-intermediate-training/day9
 find notebooks -name '*.parquet'
 ```
 <br>
@@ -392,7 +392,7 @@ ask fluentd -c /etc/fluentd/fluent.tail
 #### 3-2-1. 새로운 `원격 터미널`을 접속합니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-basic-training/day9
+cd /home/ubuntu/work/data-engineer-intermediate-training/day9
 docker-compose exec fluentd bash
 ```
 
