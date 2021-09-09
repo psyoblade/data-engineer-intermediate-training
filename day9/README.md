@@ -805,7 +805,7 @@ purchase.printSchema()
 * 아래의 조건이 만족하는 코드를 작성하세요
   - 지표정의 : 이용자 데이터와 매출 정보의 결합 <kbd>leftSide.join(rightSide, joinCondition, joinHow)</kbd>
   - 지표산식 : 이용자는 반드시 존재해야하며, 매출은 없어도 됩니다 (`left_outer`)
-  - 입력형태 : accs, amts
+  - 입력형태 : accs (7-2 에서 생성한 접속정보), amts (7-3 에서 생성한 매출정보)
   - 출력형태 : `a_uid`, `a_count`, `p_uid`, `p_count`, `p_amount`
   - 정렬형태 : `a_uid` asc
 
