@@ -160,7 +160,7 @@ ask sqoop list-tables --connect jdbc:mysql://${hostname}:3306/$database --userna
 ```bash
 # docker
 basename="user"
-basedate=""
+# basedate="<수집기준_일자를입력하세요>"
 ```
 
 #### 2-5-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
