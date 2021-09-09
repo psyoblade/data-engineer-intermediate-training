@@ -757,7 +757,7 @@ v_dr = dr.collect()[0]["DR"]
 * 아래의 조건이 만족하는 코드를 작성하세요
   - 지표정의 : 오늘 접속한 이용자 <kbd>select `a_uid`, count(`a_uid`) ... group by `a_uid`</kbd>
   - 지표산식 : 접속 여부는 'login' 로그가 존재하면 접속한 유저로 가정
-  - 입력형태 : user
+  - 입력형태 : access
   - 출력형태 : `a_uid`, `a_count`
   - 정렬형태 : `a_uid` asc
 
