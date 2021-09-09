@@ -874,7 +874,7 @@ dim3 = dim2.drop("p_uid", "u_id")
 ```
 <details><summary> :green_book: 23. [기본] 정답확인</summary>
 
-> uid 가 4번인 이용자만 매출 정보가 0 이면 정답입니다
+> uid 가 4번인 이용자만 매출 비용 및 빈도가 0 이면 정답입니다
 
 </details>
 <br>
