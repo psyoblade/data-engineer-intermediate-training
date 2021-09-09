@@ -120,7 +120,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/${database} --username ${userna
 ```bash
 # docker
 basename="user"
-basedate=""
+basedate="<수집기준_일자를입력하세요>"
 ```
 
 #### 2-3-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
@@ -147,7 +147,7 @@ ask sqoop import -jt local -m 1 --connect jdbc:mysql://${hostname}:3306/${databa
 ```bash
 # docker
 basename="purchase"
-basedate=""
+basedate="<수집기준_일자를입력하세요>"
 ```
 
 #### 2-4-1. ask 명령을 통해서 결과 명령어를 확인 후에 실행합니다
@@ -178,7 +178,7 @@ find /tmp/target -name "*.parquet"
 #### 2-5-2. 출력된 파일 경로를 복사하여 경로르 변수명에 할당합니다
 ```bash
 # docker
-filename=""
+filename="<출력된_파케이파일의_경로를_입력하세요>"
 ```
 
 #### 2-5-3. 대상 파일경로 전체를 복사하여 아래와 같이 스키마를 확인합니다
