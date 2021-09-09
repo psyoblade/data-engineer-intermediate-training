@@ -23,7 +23,7 @@ services:
       - ./mysql/etc:/etc/mysql/conf.d
   sqoop:
     container_name: sqoop
-    image: psyoblade/data-engineer-sqoop:1.1
+    image: psyoblade/data-engineer-sqoop:2.0
     tty: true
     environment:
       LANG: ko_KR.UTF-8
