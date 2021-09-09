@@ -667,7 +667,7 @@ display(purchase)
 * 아래의 조건이 만족하는 코드를 작성하세요
   - 지표정의 : 지정한 일자에 발생한 총 매출 금액 <kbd>sum(`p_amount`)</kbd>
   - 지표산식 : 지정한 일자의 구매 테이블에 저장된 전체 매출 금액의 합
-  - 입력형태 : access 테이블
+  - 입력형태 : purchase 테이블
   - 출력형태 : number (컬럼명: DR)
 
 ```python
@@ -1000,7 +1000,7 @@ dimension.printSchema()
   - password : sqoop
   - db : testdb
   - table : lgde
-  - schema : `dt char(10), dau int, pu int, ru int`
+  - schema : `dt char(10), dau int, pu int, dr int`
 
 ```python
 today = "2020-10-25"
