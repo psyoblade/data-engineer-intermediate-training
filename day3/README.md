@@ -21,19 +21,19 @@ docker-compose logs -f notebook
 
 * 목차
   * 스파크 기본 명령어 이해
-    * [1. 스파크 기본 명령어 이해](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_1.html)
-    * [2. 기본 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_2.html)
-    * [3. 데이터 타입 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_3.html)
-    * [4. 조인 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_4.html)
-    * [5. 집계 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_5.html)
-    * [6. 스파크 JDBC to MySQL](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_6.html)
-    * [7. 스파크 JDBC to MongoDB](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day4_pyspark_tutorial_7.html)
+    * [1. 스파크 기본 명령어 이해](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day4_pyspark_tutorial_1.html)
+    * [2. 기본 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day4_pyspark_tutorial_2.html)
+    * [3. 데이터 타입 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day4_pyspark_tutorial_3.html)
+    * [4. 조인 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day4_pyspark_tutorial_4.html)
+    * [5. 집계 연산 다루기](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day4_pyspark_tutorial_5.html)
+    * [6. 스파크 JDBC to MySQL](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day4_pyspark_tutorial_6.html)
+    * [7. 스파크 JDBC to MongoDB](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day4_pyspark_tutorial_7.html)
   * 스파크 고급 명령어 이해
-    * [1. Repartition vs. Coalesce Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_1.html)
-    * [2. Skewness Problem Resolutions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_2.html)
-    * [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_3.html)
-    * [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_4.html)
-    * [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/html/day5_pyspark_troubleshoot_5.html)
+    * [1. Repartition vs. Coalesce Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day5_pyspark_troubleshoot_1.html)
+    * [2. Skewness Problem Resolutions](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day5_pyspark_troubleshoot_2.html)
+    * [3. Cache, Persist and Unpersist ](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day5_pyspark_troubleshoot_3.html)
+    * [4. Partitioning Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day5_pyspark_troubleshoot_4.html)
+    * [5. Bucketing Explained](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/lgde/2020/day3/notebooks/html/day5_pyspark_troubleshoot_5.html)
   * 파이썬 첫걸음 (외부 문서링크) - Python 3.x 기준
     * [1. 파이썬 기초문법 1부](https://blog.myungseokang.dev/posts/python-basic-grammar1/)
     * [2. 파이썬 기초문법 2부](https://blog.myungseokang.dev/posts/python-basic-grammar2/)
