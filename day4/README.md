@@ -1,4 +1,4 @@
-# 8일차. 아파치 하이브 데이터 적재
+# 4일차. 아파치 하이브 데이터 적재
 
 > 아파치 하이브를 통해 다양한 데이터 웨어하우스 예제를 실습합니다
 
@@ -29,7 +29,7 @@
 ### 1-1. 최신 소스를 내려 받습니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training/day8
+cd /home/ubuntu/work/data-engineer-intermediate-training/day4
 docker-compose down
 git pull
 docker-compose up -d
@@ -58,7 +58,7 @@ docker rm -f `docker ps -aq`
 #### 1-2-3. 하이브 실습을 위한 컨테이너를 기동합니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training/day8
+cd /home/ubuntu/work/data-engineer-intermediate-training/day4
 docker-compose pull
 docker-compose up -d
 docker-compose ps
@@ -113,7 +113,7 @@ Driver: Hive JDBC (version 2.3.2)
 Transaction isolation: TRANSACTION_REPEATABLE_READ
 ```
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -254,7 +254,7 @@ alter database testdb set owner role admin;
 describe database extended testdb;
 ```
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -506,7 +506,7 @@ select count(1) from renamed_emp;
 
 </details>
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -782,7 +782,7 @@ export table imdb_orc to '/user/ubuntu/archive/imdb_orc';
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training/day8
+cd /home/ubuntu/work/data-engineer-intermediate-training/day4
 docker-compose exec hive-server bash
 ```
 ```bash
@@ -848,7 +848,7 @@ select * from imdb_recover;
 
 </details>
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -865,7 +865,7 @@ select * from imdb_recover;
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training/day8
+cd /home/ubuntu/work/data-engineer-intermediate-training/day4
 git pull
 ```
 
@@ -1036,7 +1036,7 @@ select dt, count(1) as cnt from `user` group by dt;
 | binary | string | 문자열 |
 <br>
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -1218,13 +1218,13 @@ explain select year, count(1) as cnt from imdb_partitioned group by year;
 * **일반 테이블과, 파티셔닝 테이블의 성능을 비교합니다**
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training/day8/ex1
+cd /home/ubuntu/work/data-engineer-intermediate-training/day4/ex1
 vimdiff agg.imdb_movies.out agg.imdb_partitioned.out
 ```
 * 관련 링크
   * [Hive Language Manul DML](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML#LanguageManualDML-DynamicPartitionInserts)
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -1253,7 +1253,7 @@ select year, count(1) as cnt from imdb_parquet group by year;
 * **파티셔닝 테이블과 파케이 포맷 테이블의 성능을 비교합니다**
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-intermediate-training/day8/ex1
+cd /home/ubuntu/work/data-engineer-intermediate-training/day4/ex1
 vimdiff agg.imdb_partitioned.out agg.imdb_parquet.out
 ```
 <br>
@@ -1296,11 +1296,11 @@ explain select rank, title, metascore from imdb_parquet_small order by metascore
 
 * **필요한 컬럼만 유지하는 경우에도 성능개선의 효과가 있는지 비교합니다**
 ```bash
-cd /home/ubuntu/work/data-engineer-intermediate-training/day8/ex2
+cd /home/ubuntu/work/data-engineer-intermediate-training/day4/ex2
 vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 ```
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -1318,7 +1318,7 @@ vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 
 ![star-schema](images/star-schema.jpg)
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -1615,7 +1615,7 @@ select * from (
 +------------+------------+--------+---------+
 ```
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -1733,7 +1733,7 @@ explain select rank, metascore, title from imdb_parquet_bucketed where year = '2
 # Statistics: Num rows: 44 Data size: 484 Basic stats: COMPLETE Column stats: NONE
 ```
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
 <br>
@@ -1748,6 +1748,6 @@ explain select rank, metascore, title from imdb_parquet_bucketed where year = '2
   * [Hive update, delete ERROR](https://community.cloudera.com/t5/Support-Questions/Hive-update-delete-and-insert-ERROR-in-cdh-5-4-2/td-p/29485)
 
 
-[목차로 돌아가기](#8일차-아파치-하이브-데이터-적재)
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
 <br>
