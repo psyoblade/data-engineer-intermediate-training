@@ -1,0 +1,31 @@
+{
+  "type" : "record",
+  "name" : "user_20201025",
+  "doc" : "Sqoop import of user_20201025",
+  "fields" : [ {
+    "name" : "u_id",
+    "type" : [ "null", "int" ],
+    "default" : null,
+    "columnName" : "u_id",
+    "sqlType" : "4"
+  }, {
+    "name" : "u_name",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "u_name",
+    "sqlType" : "12"
+  }, {
+    "name" : "u_gender",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "u_gender",
+    "sqlType" : "12"
+  }, {
+    "name" : "u_signup",
+    "type" : [ "null", "int" ],
+    "default" : null,
+    "columnName" : "u_signup",
+    "sqlType" : "4"
+  } ],
+  "tableName" : "user_20201025"
+}

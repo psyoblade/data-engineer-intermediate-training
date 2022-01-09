@@ -5,19 +5,14 @@ backup/
 __pycache__/
 .ipynb_checkpoints/
 **/.ipynb_checkpoints/
-data/
 datanode/
 namenode/
 nodes/
 logs/
 target/
-access/
-purchase/
-user/
 tmp/
 dimension/
 spark-warehouse/
-lgde-spark-delta/
 
 # Created by https://www.toptal.com/developers/gitignore/api/git
 # Edit at https://www.toptal.com/developers/gitignore?templates=git

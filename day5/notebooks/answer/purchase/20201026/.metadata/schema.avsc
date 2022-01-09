@@ -1,0 +1,37 @@
+{
+  "type" : "record",
+  "name" : "purchase_20201026",
+  "doc" : "Sqoop import of purchase_20201026",
+  "fields" : [ {
+    "name" : "p_time",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "p_time",
+    "sqlType" : "-1"
+  }, {
+    "name" : "p_uid",
+    "type" : [ "null", "int" ],
+    "default" : null,
+    "columnName" : "p_uid",
+    "sqlType" : "4"
+  }, {
+    "name" : "p_id",
+    "type" : [ "null", "int" ],
+    "default" : null,
+    "columnName" : "p_id",
+    "sqlType" : "4"
+  }, {
+    "name" : "p_name",
+    "type" : [ "null", "string" ],
+    "default" : null,
+    "columnName" : "p_name",
+    "sqlType" : "12"
+  }, {
+    "name" : "p_amount",
+    "type" : [ "null", "int" ],
+    "default" : null,
+    "columnName" : "p_amount",
+    "sqlType" : "4"
+  } ],
+  "tableName" : "purchase_20201026"
+}

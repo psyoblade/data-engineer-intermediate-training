@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  notebook:
+    container_name: notebook
+    user: root
+    privileged: true
+    image: psyoblade/data-engineer-notebook:1.6.1
+    restart: always
+    volumes:
+      - ./notebooks:/home/jovyan/work
+    environment:
+      - GRANT_SUDO=yes
+    ports:
+      - "4040:4040"
+      - "4041:4041"
+      - "8888:8888"
+
+networks:
+  default:
+    name: default_network
