@@ -1,20 +1,22 @@
-# 5일차. 지표생성 프로젝트
+# 5일차. 지표 생성 프로젝트
 
-> 가상의 웹 쇼핑몰 주요 지표를 생성하기 위한, 접속정보, 매출 및 고객정보 등의 데이터를 수집하여 기본 지표를 생성합니다
+> 가상의 웹 쇼핑몰의 주요 지표를 생성하기 위한, 접속정보, 매출 및 고객정보 등의 데이터를 수집하여 기본 지표를 생성합니다
+
 
 - 범례
-  * :green_book: : 기본, :blue_book: : 중급, :closed_book: : 고급
+  * :green_book: : 기본, :blue_book: : 중급
 
 - 목차
-  * [1. 최신버전 업데이트](#1-최신버전-업데이트)
-  * [2. 노트북 컨테이너 기동](#2-노트북-컨테이너-기동)
-  * [3. 수집된 데이터 탐색](#3-수집된-데이터-탐색)
-  * [4. 기본 지표 생성](#4-기본-지표-생성)
-  * [5. 고급 지표 생성](#5-고급-지표-생성)
-  * [6. 질문 및 컨테이너 종료](#6-질문-및-컨테이너-종료)
+  * [1. :green_book: 최신버전 업데이트](#1-최신버전-업데이트)
+  * [2. :green_book: 노트북 컨테이너 기동](#2-green_book-노트북-컨테이너-기동)
+  * [3. :green_book: 수집된 데이터 탐색](#3-green_book-수집된-데이터-탐색)
+  * [4. :green_book: 기본 지표 생성](#4-green_book-기본-지표-생성)
+  * [5. :blue_book: 고급 지표 생성](#5-blue_book-고급-지표-생성)
+  * [6. :green_book: 질문 및 컨테이너 종료](#6-green_book-질문-및-컨테이너-종료)
 
 - 정답
-  * [프로젝트 1일차 정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day5/notebooks/answer/data-engineer-lgde-day1-answer.html)
+  * [1. :green_book:/:blue_book: 시작 노트북](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day5/notebooks/html/data-engineer-training-course.html)
+  * [2. :green_book:/:blue_book: 정답 노트북](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day5/notebooks/html/data-engineer-training-course-answer.html)
 
 <br>
 
@@ -44,8 +46,12 @@ docker rm -f `docker ps -aq`
 > 다시 `docker ps -a` 명령으로 결과가 없다면 모든 컨테이너가 종료되었다고 보시면 됩니다
 <br>
 
+[목차로 돌아가기](#5일차-데이터-엔지니어링-프로젝트)
+<br>
+<br>
 
-## 2. 노트북 컨테이너 기동
+
+## 2. :green_book: 노트북 컨테이너 기동
 
 > 본 장에서 수집한 데이터를 활용하여 데이터 변환 및 지표 생성작업을 위하여 주피터 노트북을 열어둡니다
 
@@ -59,7 +65,7 @@ docker-compose logs notebook | grep 8888
 > 출력된  URL을 복사하여 `127.0.0.1:8888` 대신 개인 `<hostname>.aiffelbiz.co.kr:8888` 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
 
 #### 2-1-2. 기 생성된 실습용 노트북을 엽니다
-* 좌측 메뉴에서 "data-engineer-lgde-day1.ipynb" 을 더블클릭합니다
+* 좌측 메뉴에서 "data-engineer-lgde-day5.ipynb" 을 더블클릭합니다
 
 #### 2-1-3. 신규로 노트북을 만들고 싶은 경우
 * `Launcher` 탭에서 `Notebook - Python 3` 를 선택하고
@@ -67,8 +73,12 @@ docker-compose logs notebook | grep 8888
 
 <br>
 
+[목차로 돌아가기](#5일차-데이터-엔지니어링-프로젝트)
+<br>
+<br>
 
-## 3. 수집된 데이터 탐색
+
+## 3. :green_book: 수집된 데이터 탐색
 
 > 스파크 세션을 통해서 수집된 데이터의 형태를 파악하고, 스파크의 기본 명령어를 통해 수집된 데이터 집합을 탐색합니다
 
@@ -95,7 +105,7 @@ spark.conf.set("spark.sql.repl.eagerEval.enabled", True) # display enabled
 spark.conf.set("spark.sql.repl.eagerEval.truncate", 100) # display output columns size
 spark
 ```
-<details><summary> :green_book: 9. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > 스파크 엔진의 버전 `v3.0.1`이 출력되면 성공입니다
 
@@ -134,7 +144,7 @@ purchase25 = <매출 데이터 경로에서 읽어서 스키마와, 데이터를
 ```python
 access25 = <접속 데이터 경로에서 읽어서 스키마와, 데이터를 출력하는 코드를 작성하세요>
 ```
-<details><summary> :green_book: 10. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > 고객, 매출 및 접속 데이터의 스키마와, 데이터가 모두 출력되면 성공입니다
 
@@ -151,7 +161,7 @@ purchase25.createOrReplaceTempView("purchase25")
 access25.createOrReplaceTempView("access25")
 spark.sql("show tables '*25'")
 ```
-<details><summary> :green_book: 11. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > `show tables` 결과로 `user25`, `purchase25`, `access25` 3개 테이블이 출력되면 성공입니다
 
@@ -171,17 +181,20 @@ spark.sql("show tables '*25'")
 u_signup_condition = "<10월 25일자에 등록된 유저만 포함되는 조건을 작성합니다>"
 user = spark.sql("select u_id, u_name, u_gender from user25").where(u_signup_condition)
 user.createOrReplaceTempView("user")
+display(user)
 
 p_time_condition = "<10월 25일자에 발생한 매출만 포함되는 조건을 작성합니다>"
 purchase = spark.sql("select from_unixtime(p_time) as p_time, p_uid, p_id, p_name, p_amount from purchase25").where(p_time_condition)
 purchase.createOrReplaceTempView("purchase")
+display(purchase)
 
 access = spark.sql("select a_id, a_tag, a_timestamp, a_uid from access25")
 access.createOrReplaceTempView("access")
+display(access)
 
 spark.sql("show tables")
 ```
-<details><summary> :green_book: 12. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > `show tables` 결과에 총 6개의 테이블이 출력되면 성공입니다
 
@@ -195,6 +208,7 @@ spark.sql("show tables")
 #### 3-4-1. 한 쪽의 성별('남' 혹은 '여')을 가진 목록을 출력하세요
 ```python
 spark.sql("describe user")
+spark.sql("select * from user")
 # whereCondition = "<성별을 구별하는 조건을 작성하세요>"
 # spark.sql("select * from user").where(whereCondition)
 ```
@@ -202,6 +216,7 @@ spark.sql("describe user")
 #### 3-4-2. 상품금액이 200만원을 초과하는 매출 목록을 출력하세요
 ```python
 spark.sql("describe purchase")
+spark.sql("select * from purchase")
 # selectClause = "<금액을 필터하는 조건을 작성하세요>"
 # spark.sql(selectClause)
 ```
@@ -209,18 +224,23 @@ spark.sql("describe purchase")
 #### 3-4-3. GroupBy 구문을 이용하여 로그인, 로그아웃 횟수를 출력하세요
 ```python
 spark.sql("describe access")
+spark.sql("select * from access")
 # groupByClause="<로그인/아웃 컬럼을 기준으로 집계하는 구문을 작성하세요>"
 # spark.sql(groupByClause)
 ```
-<details><summary> :green_book: 13. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > 위에서부터 각각 "남:3, 여:2", "2개", "login:7, logout:5" 이 나오면 정답입니다
 
 </details>
 <br>
 
+[목차로 돌아가기](#5일차-데이터-엔지니어링-프로젝트)
+<br>
+<br>
 
-## 4. 기본 지표 생성
+
+## 4. :green_book: 기본 지표 생성
 
 > 생성된 테이블을 통하여 기본 지표(DAU, DPU, DR, ARPU, ARPPU) 를 생성합니다
 
@@ -237,8 +257,9 @@ display(access)
 # distinctAccessUser = "select <고객수 집계함수> as DAU from access"
 # dau = spark.sql(distinctAccessUser)
 # display(dau)
+# v_dau = dau.collect()[0]["DAU"]
 ```
-<details><summary> :green_book: 14. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > "DAU : 5"가 나오면 정답입니다 
 
@@ -259,8 +280,9 @@ display(purchase)
 # distinctPayingUser = "<구매 고객수 집계함수>"
 # pu = spark.sql(distinctPayingUser)
 # display(pu)
+# v_pu = pu.collect()[0]["PU"]
 ```
-<details><summary> :green_book: 15. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > "PU : 4"가 나오면 정답입니다
 
@@ -273,7 +295,7 @@ display(purchase)
 * 아래의 조건이 만족하는 코드를 작성하세요
   - 지표정의 : 지정한 일자에 발생한 총 매출 금액 <kbd>sum(`p_amount`)</kbd>
   - 지표산식 : 지정한 일자의 구매 테이블에 저장된 전체 매출 금액의 합
-  - 입력형태 : purchase 테이블
+  - 입력형태 : access 테이블
   - 출력형태 : number (컬럼명: DR)
 
 ```python
@@ -281,8 +303,9 @@ display(purchase)
 # sumOfDailyRevenue = "<일 별 구매금액 집계함수>"
 # dr = spark.sql(sumOfDailyRevenue)
 # display(dr)
+# v_dr = dr.collect()[0]["DR"]
 ```
-<details><summary> :green_book: 16. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > "DR : 12200000" 이 나오면 정답입니다
 
@@ -299,13 +322,14 @@ display(purchase)
   - 출력형태 : number (문자열: ARPU )
 
 ```python
-v_dau = dau.collect()[0]["DAU"]
-v_pu = pu.collect()[0]["PU"]
-v_dr = dr.collect()[0]["DR"]
-
 # print("ARPU : {}".format(<유저당 매출 금액 계산식>))
+print("+------------------+")
+print("|             ARPU |")
+print("+------------------+")
+print("|        {} |".format(v_dr / v_dau))
+print("+------------------+")
 ```
-<details><summary> :green_book: 17. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > "ARPU : 2440000.0" 가 나오면 정답입니다
 
@@ -323,16 +347,25 @@ v_dr = dr.collect()[0]["DR"]
 
 ```python
 # print("ARPPU : {}".format(<구매유저 당 매출 금액 계산식>))
+print("+------------------+")
+print("|            ARPPU |")
+print("+------------------+")
+print("|        {} |".format(v_dr / v_pu))
+print("+------------------+")
 ```
-<details><summary> :green_book: 18. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > "ARPPU : 3050000.0" 가 나오면 정답입니다
 
 </details>
 <br>
 
+[목차로 돌아가기](#5일차-데이터-엔지니어링-프로젝트)
+<br>
+<br>
 
-## 5. 고급 지표 생성
+
+## 5. :blue_book: 고급 지표 생성
 
 ### 5-1. 디멘젼 테이블을 설계 합니다
 
@@ -363,7 +396,7 @@ v_dr = dr.collect()[0]["DR"]
 * 아래의 조건이 만족하는 코드를 작성하세요
   - 지표정의 : 오늘 접속한 이용자 <kbd>select `a_uid`, count(`a_uid`) ... group by `a_uid`</kbd>
   - 지표산식 : 접속 여부는 'login' 로그가 존재하면 접속한 유저로 가정
-  - 입력형태 : access
+  - 입력형태 : user
   - 출력형태 : `a_uid`, `a_count`
   - 정렬형태 : `a_uid` asc
 
@@ -374,7 +407,7 @@ access.printSchema()
 # accs = spark.sql(countOfAccess)
 # display(accs)
 ```
-<details><summary> :green_book: 19. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > 접속 빈도가 가장 높은 이용자는 `a_id` 가 "2, 4"번으로 2명이 나오면 정답입니다
 
@@ -398,7 +431,7 @@ purchase.printSchema()
 # amts = spark.sql(sumOfCountAndAmount)
 # display(amts)
 ```
-<details><summary> :green_book: 20. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > 매출 금액이 600만원에 2회 발생한 5번 유저가 1위이면 정답입니다
 
@@ -411,7 +444,7 @@ purchase.printSchema()
 * 아래의 조건이 만족하는 코드를 작성하세요
   - 지표정의 : 이용자 데이터와 매출 정보의 결합 <kbd>leftSide.join(rightSide, joinCondition, joinHow)</kbd>
   - 지표산식 : 이용자는 반드시 존재해야하며, 매출은 없어도 됩니다 (`left_outer`)
-  - 입력형태 : accs (7-2 에서 생성한 접속정보), amts (7-3 에서 생성한 매출정보)
+  - 입력형태 : accs, amts
   - 출력형태 : `a_uid`, `a_count`, `p_uid`, `p_count`, `p_amount`
   - 정렬형태 : `a_uid` asc
 
@@ -425,7 +458,7 @@ amts.printSchema()
 # dim1.printSchema()
 # display(dim1.orderBy(asc("a_uid")))
 ```
-<details><summary> :green_book: 21. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > uid 가 4번인 이용자만 매출 정보가 null 이면 정답입니다
 
@@ -452,7 +485,7 @@ user.printSchema()
 # dim2.printSchema()
 # display(dim2.orderBy(asc("a_uid")))
 ```
-<details><summary> :green_book: 22. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > uid 가 4번인 이용자만 매출 정보가 null 이면 정답입니다
 
@@ -478,9 +511,9 @@ dim3 = dim2.drop("p_uid", "u_id")
 # dim4.printSchema()
 # display(dim4.orderBy(asc("a_uid")))
 ```
-<details><summary> :green_book: 23. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
-> uid 가 4번인 이용자만 매출 비용 및 빈도가 0 이면 정답입니다
+> uid 가 4번인 이용자만 매출 정보가 0 이면 정답입니다
 
 </details>
 <br>
@@ -509,7 +542,7 @@ dim4.printSchema()
 # )
 display(dim5.orderBy(asc("d_uid")))
 ```
-<details><summary> :green_book: 24. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > 모든 컬럼이 `d_`로 시작하고 6개의 컬럼으로 구성되어 있다면 정답입니다
 
@@ -548,7 +581,7 @@ purchase.printSchema()
 # dimension.printSchema()
 # display(dimension)
 ```
-<details><summary> :green_book: 25. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > 4번 고객의 제외한 모든 첫 번째 구매 일시가 출력되면 정답입니다
 
@@ -568,7 +601,7 @@ dimension.printSchema()
 # target_dir="<저장경로>"
 # dimension.write.mode(<저장모드>).parquet(target_dir)
 ```
-<details><summary> :green_book: 26. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > 저장 시에 오류가 없고 대상 경로(dimension/dt=20201025)가 생성되었다면 성공입니다
 
@@ -587,49 +620,81 @@ dimension.printSchema()
 # newDimension.printSchema()
 # display(newDimension)
 ```
-<details><summary> :green_book: 27. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
 > 디멘젼 테이블을 정상적으로 읽어왔고, 동일한 스키마와 데이터가 출력되었다면 정답입니다
 
 </details>
 <br>
 
-
-### 5-11. 오늘 생성된 지표를 MySQL testdb.lgde 테이블로 저장합니다
-
-* 테이블 정보
-  - host : mysql
-  - port : 3306
-  - user : sqoop
-  - password : sqoop
-  - db : testdb
-  - table : lgde
-  - schema : `dt char(10), dau int, pu int, dr int`
-
+#### 최종 결과가 아래와 일치하는 지 확인합니다
 ```python
-today = "2020-10-25"
-# lgde_today = <spark createDataFrame 메소드를 이용하여 오늘자 저장 데이터프레임을 생성합니다>
-# lgde_today <데이터 프레임을 MySQL 테이블로 저장합니다>
+print("+------------------+")
+print("|              DAU |")
+print("+------------------+")
+print("|                {} |".format(v_dau))
+print("+------------------+")
+print("+------------------+")
+print("|               PU |")
+print("+------------------+")
+print("|                {} |".format(v_pu))
+print("+------------------+")
+print("+------------------+")
+print("|               DR |")
+print("+------------------+")
+print("|         {} |".format(v_dr))
+print("+------------------+")
+print("+------------------+")
+print("|             ARPU |")
+print("+------------------+")
+print("|        {} |".format(v_dr / v_dau))
+print("+------------------+")
+print("+------------------+")
+print("|            ARPPU |")
+print("+------------------+")
+print("|        {} |".format(v_dr / v_pu))
+print("+------------------+")
 ```
 
-<details><summary> :blue_book: 28. [기본] 정답확인</summary>
+<details><summary> 정답확인</summary>
 
-> MySQL 테이블에 2020-10-25 일자의 지표가 저장되었다면 정답입니다
-
-```sql
-mysql> select * from lgde order by dt asc;
-+------------+------+------+----------+
-| DT         | DAU  | PU   | DR       |
-+------------+------+------+----------+
-| 2020-10-25 |    5 |    4 | 12200000 |
-+------------+------+------+----------+
+* 아래와 일치한다면 정답입니다
+```python
++------------------+
+|              DAU |
++------------------+
+|                5 |
++------------------+
++------------------+
+|               PU |
++------------------+
+|                4 |
++------------------+
++------------------+
+|               DR |
++------------------+
+|         12200000 |
++------------------+
++------------------+
+|             ARPU |
++------------------+
+|        2440000.0 |
++------------------+
++------------------+
+|            ARPPU |
++------------------+
+|        3050000.0 |
++------------------+
 ```
 
 </details>
+
+[목차로 돌아가기](#5일차-데이터-엔지니어링-프로젝트)
+<br>
 <br>
 
 
-## 6. 질문 및 컨테이너 종료
+## 6. :green_book: 질문 및 컨테이너 종료
 
 ### 6-1. 질문과 답변
 
