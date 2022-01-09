@@ -7,12 +7,12 @@
 
 - 목차
   * [1. 테이블 수집 기본](#테이블-수집-기본)
-    - [1-1. 최신버전 업데이트 테이블](#1-최신버전-업데이트-테이블)
-    - [1-2. 테이블 임포트 실습](#2-테이블-임포트-실습)
-    - [1-3. 테이블 익스포트 실습](#3-테이블-익스포트-실습)
+    - [1. 최신버전 업데이트 테이블](#1-최신버전-업데이트-테이블)
+    - [2. 테이블 임포트 실습](#2-테이블-임포트-실습)
+    - [3. 테이블 익스포트 실습](#3-테이블-익스포트-실습)
   * [2. 테이블 수집 고급](#테이블-수집-고급)
-    - [2-1. 아파치 스쿱 성능 튜닝](#4-아파치-스쿱-성능-튜닝)
-    - [2-2. 아파치 스쿱 유틸리티](#5-아파치-스쿱-유틸리티)
+    - [4. 아파치 스쿱 성능 튜닝](#4-아파치-스쿱-성능-튜닝)
+    - [5. 아파치 스쿱 유틸리티](#5-아파치-스쿱-유틸리티)
 <br>
 
 
@@ -25,7 +25,7 @@
 ### 1-1. 최신 소스를 내려 받습니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-${course}-training
+cd /home/ubuntu/work/data-engineer-intermediate-training
 git pull
 ```
 <br>
@@ -51,7 +51,7 @@ docker rm -f `docker ps -aq`
 ### 1-3. 실습을 위한 이미지를 내려받고 컨테이너를 기동합니다
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-${course}-training/day2
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2
 
 docker-compose pull
 docker-compose up -d
@@ -192,7 +192,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/testdb --username sqoop --passw
 
 ```bash
 # terminal
-cd /home/ubuntu/work/data-engineer-${course}-training/day2/
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2/
 docker-compose exec mysql mysql -usqoop -psqoop
 ```
 ```sql
@@ -1036,7 +1036,7 @@ ask sqoop import-all-tables --connect jdbc:mysql://mysql:3306/testdb --username 
 ### 5-2. 컨테이너 정리
 * 테이블 수집 실습이 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 ```bash
-cd /home/ubuntu/work/data-engineer-${course}-training/day2
+cd /home/ubuntu/work/data-engineer-intermediate-training/day2
 docker-compose down
 ```
 
