@@ -1,87 +1,59 @@
 version: "3"
 
 services:
-  mysql:
-    container_name: mysql
-    image: psyoblade/data-engineer-mysql:1.1
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: testdb
-      MYSQL_USER: sqoop
-      MYSQL_PASSWORD: sqoop
-    ports:
-      - '3306:3306'
-    networks:
-      - default
-    healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-      interval: 3s
-      timeout: 1s
-      retries: 3
+  namenode:
+    container_name: namenode
+    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
     volumes:
-      - ./mysql/etc:/etc/mysql/conf.d
-  mongo:
-    image: mongo:4.4.2
-    container_name: mongo
-    restart: always
-    ports:
-      - "27017:27017"
-  notebook:
-    container_name: notebook
-    user: root
-    privileged: true
-    image: psyoblade/data-engineer-notebook:1.6
-    restart: always
-    depends_on:
-      - mysql
-      - mongo
-    links:
-      - mysql
-      - mongo
-    volumes:
-      - ./notebooks:/home/jovyan/work
+      - namenode:/hadoop/dfs/name
     environment:
-      - GRANT_SUDO=yes
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop-hive.env
     ports:
-      - "4040:4040"
-      - "4041:4041"
-      - "4042:4042"
-      - "4043:4043"
+      - "50070:50070"
+  datanode:
+    container_name: datanode
+    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    volumes:
+      - datanode:/hadoop/dfs/data
+    env_file:
+      - ./hadoop-hive.env
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070"
+    ports:
+      - "50075:50075"
+  hive-server:
+    container_name: hive-server
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    volumes:
+      - ./tmp:/tmp/source
+    env_file:
+      - ./hadoop-hive.env
+    environment:
+      HIVE_CORE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore/metastore"
+      SERVICE_PRECONDITION: "hive-metastore:9083"
+    ports:
+      - "10000:10000"
+  hive-metastore:
+    container_name: hive-metastore
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    env_file:
+      - ./hadoop-hive.env
+    command: /opt/hive/bin/hive --service metastore
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 hive-metastore-postgresql:5432"
+    ports:
+      - "9083:9083"
+  hive-metastore-postgresql:
+    container_name: hive-metastore-postgresql
+    image: bde2020/hive-metastore-postgresql:2.3.0
+  presto-coordinator:
+    container_name: presto-coordinator
+    image: shawnzhu/prestodb:0.181
+    ports:
       - "8080:8080"
-      - "8888:8888"
-  zookeeper:
-    container_name: zookeeper
-    image: psyoblade/data-engineer-zookeeper:1.0
-    ports:
-      - "2181:2181"
-  kafka:
-    container_name: kafka
-    image: psyoblade/data-engineer-kafka:1.0
-    depends_on:
-      - zookeeper
-    links:
-      - zookeeper
-    ports:
-      - "9092:9092"
-    expose:
-      - "9093"
-    environment:
-      KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
-      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "events:1:1"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-  cassandra:
-    container_name: cassandra
-    image: psyoblade/data-engineer-cassandra:1.0
-    ports:
-      - "7000:7000"
 
-networks:
-  default:
-    name: default_network
-
+volumes:
+  namenode:
+  datanode:

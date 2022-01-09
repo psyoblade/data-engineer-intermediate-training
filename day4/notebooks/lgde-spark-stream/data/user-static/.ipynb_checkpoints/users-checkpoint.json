@@ -1,8 +1,0 @@
-{ "user_id":1, "age":10, "user_name":"김엘지", "gender":"남성", "reg_dt":"2014. 1. 10. 오후 11:20:54" },
-{ "user_id":2, "age":11, "user_name":"박전자", "gender":"여성", "reg_dt":"2015. 3. 2. 오후 12:37:34" },
-{ "user_id":3, "age":12, "user_name":"이데이터", "gender":"남성", "reg_dt":"2018. 7. 30. 오전 09:47:34" },
-{ "user_id":4, "age":10, "user_name":"홍엔지니어", "gender":"여성", "reg_dt":"2013. 3. 18. 오후 10:54:14" },
-{ "user_id":1, "age":20, "user_name":"김엘지", "gender":"남성", "reg_dt":"2014. 1. 10. 오후 11:20:54" },
-{ "user_id":2, "age":21, "user_name":"박전자", "gender":"여성", "reg_dt":"2015. 3. 2. 오후 12:37:34" },
-{ "user_id":3, "age":22, "user_name":"이데이터", "gender":"남성", "reg_dt":"2018. 7. 30. 오전 09:47:34" },
-{ "user_id":4, "age":20, "user_name":"홍엔지니어", "gender":"여성", "reg_dt":"2013. 3. 18. 오후 10:54:14" }
