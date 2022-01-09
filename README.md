@@ -10,5 +10,5 @@
 
 ## [4일차. 아파치 하이브](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day4/README.md)
         
-## [5일차. LGDE.com 지표](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day5/README.md)
+## [5일차. 지표 생성 프로젝트](https://github.com/psyoblade/data-engineer-intermediate-training/tree/master/day5/README.md)
 
