@@ -194,11 +194,22 @@ services:
 ...
 ```
 
-<details><summary>[실습] .env 파일을 config/env 파일로 생성하고, 패스워드 및 계정정보를 변경하여 --env-file 옵션으로 config 를 통해 제대로 수정 되었는지 확인해 보세요</summary>
+<details><summary>[실습] .env 파일을 env 파일로 생성하고, 패스워드 및 계정정보를 다른 값으로 변경하여 --env-file 옵션으로 config 를 통해 제대로 수정 되었는지 확인해 보세요</summary>
 
-> 아래와 같이 파일을 생성하고, config 결과가 나온다면 정답입니다
+> 아래와 같이 config 결과가 나온다면 정답입니다
+```bash
+docker-compose --env-file env config | head -8
+services:
+  mysql:
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: testdb
+      MYSQL_PASSWORD: pass
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+```
 
-> `config/env` 파일 
+> `env` 파일 
 ```text
 MYSQL_ROOT_PASSWORD=root
 MYSQL_DATABASE=testdb
@@ -240,8 +251,7 @@ networks:
 > 아래와 같은 방법으로 실행할 수 있습니다
 
 ```bash
-docker rm -f `docker ps -aq` # 기존의 컨테이너가 모두 종료시킵니다
-docker-compose --env-file config/env config
+docker-compose --env-file env config
 ```
 
 </details>
@@ -252,7 +262,7 @@ docker-compose --env-file config/env config
 
 ### 2-3. 기타 명령어
 
-#### 2-3-1. [logs](shttps://docs.docker.com/compose/reference/logs/) : 컨테이너의 로그를 출력합니다
+#### 2-3-1. [logs](https://docs.docker.com/compose/reference/logs/) : 컨테이너의 로그를 출력합니다
   - <kbd>-f, --follow</kbd> : 출력로그를 이어서 tailing 합니다
 ```bash
 # terminal
@@ -261,7 +271,7 @@ docker-compose logs -f mysql
 ```
 <br>
 
-#### 2-3-2. [pull](shttps://docs.docker.com/compose/reference/pull/) : 컨테이너의 모든 이미지를 다운로드 받습니다
+#### 2-3-2. [pull](https://docs.docker.com/compose/reference/pull/) : 컨테이너의 모든 이미지를 다운로드 받습니다
   - <kbd>-q, --quiet</kbd> : 다운로드 메시지를 출력하지 않습니다 
 ```bash
 # terminal
@@ -269,7 +279,7 @@ docker-compose pull
 ```
 <br>
 
-#### 2-3-3. [ps](shttps://docs.docker.com/compose/reference/ps/) : 컨테이너 들의 상태를 확인합니다
+#### 2-3-3. [ps](https://docs.docker.com/compose/reference/ps/) : 컨테이너 들의 상태를 확인합니다
   - <kbd>-a, --all</kbd> : 모든 서비스의 프로세스를 확인합니다
 ```bash
 # terminal
@@ -277,12 +287,18 @@ docker-compose ps -a
 ```
 <br>
 
-#### 2-3-4. [top](shttps://docs.docker.com/compose/reference/top/) : 컨테이너 내부에 실행되고 있는 프로세스를 출력합니다
+#### 2-3-4. [cp](https://docs.docker.com/engine/reference/commandline/compose_cp/) : 컴포즈 컨테이너와 파일을 복사합니다
+```bash
+# docker compose cp [OPTIONS] SERVICE:SRC_PATH DEST_PATH|-
+docker-compose cp ./local/path/filename ubuntu:/container/path/filename
+```
+<br>
+
+#### 2-3-5. [top](https://docs.docker.com/compose/reference/top/) : 컨테이너 내부에 실행되고 있는 프로세스를 출력합니다
 ```bash
 # docker-compose top <services>
 docker-compose top
 ```
-
 <br>
 
 ### Bash 스크립트 생성 예제
@@ -298,9 +314,9 @@ else
 fi
 ```
 
-* 아래의 명령어로 컨테이너 내부로 스크립트를 복사합니다
+* 아래의 컴포즈 `cp` 명령어로 컨테이너 내부로 스크립트를 복사합니다
 ```bash
-docker-compose ./run.sh ubunut:/run.sh
+docker-compose cp ./run.sh ubunut:/run.sh
 ```
 
 <details><summary>[실습] 환경변수 값(DEBUG=1)에 따라 결과가 달라지는 bash 스크립트를 생성 및 실행해 보세요</summary>

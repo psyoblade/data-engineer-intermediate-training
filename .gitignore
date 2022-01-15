@@ -1,5 +1,6 @@
 # Custom
 env
+run.sh
 backup/
 .template
 .DS_Store
