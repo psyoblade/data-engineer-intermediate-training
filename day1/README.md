@@ -77,16 +77,16 @@ cd /home/ubuntu/work/data-engineer-intermediate-training/day1
 #### 2-1-1. [up](https://docs.docker.com/compose/reference/up/) : `docker-compose.yml` 파일을 이용하여 컨테이너를 이미지 다운로드(pull), 생성(create) 및 시작(start) 시킵니다
   - <kbd>-d, --detach <filename></kbd> : 서비스들을 백그라운드 모드에서 수행합니다
 ```bash
-# docker-compose up <options> <services>
+# docker-compose up [options] <services>
 docker-compose up -d
 ```
 <br>
 
-#### 2-1-2. [down](https://docs.docker.com/compose/reference/down/) : 컨테이너를 종료 시킵니다
-  - <kbd>-t, --timeout [int] <filename></kbd> : 셧다운 타임아웃을 지정하여 무한정 대기(SIGTERM)하지 않고 종료(SIGKILL)합니다 (default: 10초)
+#### 2-1-2. [config](https://docs.docker.com/compose/reference/config/) : 컨테이너 실행 설정을 확인합니다
+  - <kbd>-q, --quiet</kbd> : 설정의 정상여부만 확인하고 출력하지 않습니다
 ```bash
-# docker-compose down <options> <services>
-docker-compose down
+# docker-compose config [options]
+docker-compose config
 ```
 <br>
 
@@ -99,6 +99,14 @@ docker-compose down
 ```bash
 # docker-compose exec [options] [-e KEY=VAL...] [--] SERVICE COMMAND [ARGS...]
 docker-compose exec ubuntu echo hello world
+```
+<br>
+
+#### 2-1-4. [down](https://docs.docker.com/compose/reference/down/) : 컨테이너를 종료 시킵니다
+  - <kbd>-t, --timeout [int] <filename></kbd> : 셧다운 타임아웃을 지정하여 무한정 대기(SIGTERM)하지 않고 종료(SIGKILL)합니다 (default: 10초)
+```bash
+# docker-compose down [options] <services>
+docker-compose down
 ```
 <br>
 
@@ -144,11 +152,54 @@ docker-compose up -d
 ```
 <br>
 
-<details><summary>[실습] `container_name` 을 mysql-v1 으로 변경한 `docker-compose-v1.yml` 파일을 생성하고, mysql 컨테이너의 environment 정보를 모두 v1.env 파일로 생성하여 백그라운드 모드에서 수행 및 [MySQL 서버에 접속](https://dev.mysql.com/doc/refman/8.0/en/connecting.html)해 보세요</summary>
+> [MySQL 서버에 접속](https://dev.mysql.com/doc/refman/8.0/en/connecting.html) 하는 방법
 
-> 아래와 같이 파일을 생성하고, mysql 접속이 가능하다면 성공입니다
+* 로컬 환경에서는 `--host` 정보는 입력하지 않아도 됩니다
+```bash
+mysql --host=localhost --user=user --password=pass testdb
+mysql -h localhost -u user -ppass testdb
+```
 
-> `v1.env` 파일 
+#### 2-2-2. 접속정보를 별도의 환경변수 파일에 저장하는 방법
+> 코드와 동일한 수준에서 형상관리가 되는 docker-compose.yml 파일에 접속정보를 저장하는 것은 위험할 수 있으므로 별도로 관리(ansible 등)하는 경우 `.env` 파일에 저장관리될 수 있습니다
+
+* default 값이 같은 경로에 `.env` 파일로 `KEY=VALUE` 형식으로 저장될 수 있습니다
+```bash
+MYSQL_ROOT_PASSWORD=root
+MYSQL_DATABASE=default
+MYSQL_USER=scott
+MYSQL_PASSWORD=tiger
+```
+
+* `docker-compose.yml` 설정에서 environment 설정은 아래와 같이 변수로 치환됩니다
+```yaml
+environment:
+  MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+  MYSQL_DATABASE: $MYSQL_DATABASE
+  MYSQL_USER: $MYSQL_USER
+  MYSQL_PASSWORD: $MYSQL_PASSWORD
+```
+
+* 현재 설정된 값을 출력하고 싶다면 `config` 명령으로 확인할 수 있습니다
+```bash
+$ docker-compose config
+services:
+  mysql:
+    container_name: mysql
+    environment:
+      MYSQL_DATABASE: default
+      MYSQL_PASSWORD: tiger
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: scott
+    healthcheck:
+...
+```
+
+<details><summary>[실습] `.env` 파일을 `config/env` 파일로 생성하고, 패스워드 및 계정정보를 변경하여 `--env-file` 옵션으로 config 를 통해 제대로 수정 되었는지 확인해 보세요</summary>
+
+> 아래와 같이 파일을 생성하고, config 결과가 나온다면 정답입니다
+
+> `config/env` 파일 
 ```text
 MYSQL_ROOT_PASSWORD=root
 MYSQL_DATABASE=testdb
@@ -156,7 +207,7 @@ MYSQL_USER=user
 MYSQL_PASSWORD=pass
 ```
 
-> `docker-compose-v1.yml` 파일
+> `docker-compose.yml` 파일
 ```yaml
 version: "3"
 
@@ -165,6 +216,11 @@ services:
     container_name: mysql
     image: psyoblade/data-engineer-mysql:1.1
     restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
     ports:
       - '3306:3306'
     networks:
@@ -186,17 +242,7 @@ networks:
 
 ```bash
 docker rm -f `docker ps -aq` # 기존의 컨테이너가 모두 종료시킵니다
-docker-compose -f docker-compose-v1.yml --env-file v1.env up -d
-```
-
-> 아래와 같이 접속하여 정상 접속이 되는지 확인합니다
-```bash
-docker-compose -f docker-compose-v1.yml exec mysql mysql -uuser -ppass testdb
-```
-
-> 아래와 같이 컨테이너를 종료합니다
-```bash
-docker-compose -f docker-compose-v1.yml down
+docker-compose --env-file config/env config
 ```
 
 </details>
