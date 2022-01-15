@@ -74,19 +74,19 @@ cd /home/ubuntu/work/data-engineer-intermediate-training/day1
 
 ### 2-1. 컴포즈 명령어 옵션
 
-#### 2-1-1. [up](https://docs.docker.com/compose/reference/up/) : `docker-compose.yml` 파일을 이용하여 컨테이너를 이미지 다운로드(pull), 생성(create) 및 시작(start) 시킵니다
-  - <kbd>-d, --detach <filename></kbd> : 서비스들을 백그라운드 모드에서 수행합니다
-```bash
-# docker-compose up [options] <services>
-docker-compose up -d
-```
-<br>
-
-#### 2-1-2. [config](https://docs.docker.com/compose/reference/config/) : 컨테이너 실행 설정을 확인합니다
+#### 2-1-1. [config](https://docs.docker.com/compose/reference/config/) : 컨테이너 실행 설정을 확인합니다
   - <kbd>-q, --quiet</kbd> : 설정의 정상여부만 확인하고 출력하지 않습니다
 ```bash
 # docker-compose config [options]
 docker-compose config
+```
+<br>
+
+#### 2-1-2. [up](https://docs.docker.com/compose/reference/up/) : `docker-compose.yml` 파일을 이용하여 컨테이너를 이미지 다운로드(pull), 생성(create) 및 시작(start) 시킵니다
+  - <kbd>-d, --detach <filename></kbd> : 서비스들을 백그라운드 모드에서 수행합니다
+```bash
+# docker-compose up [options] <services>
+docker-compose up -d
 ```
 <br>
 
@@ -136,19 +136,14 @@ docker-compose down
 
 ### 2-2. 컴포즈 옵션
 
-* 컴포즈를 통한 컨테이너 관리
-```bash
-$ docker-compose [compose options] [up|down] [command options]
-```
-
 <br>
 
 #### 2-2-1. compose options : 반드시 docker-compose 명령어 다음에 입력해야 하는 옵션 
   - <kbd>--file, -f [filename]</kbd> : 별도 yml 파일을 통해 기동시킵니다 (default: `-f docker-compose.yml`)
   - <kbd>--env-file [env-file]</kbd> : 별도 env 파일을 통해 환경변수를 지정합니다l (default: `--env-file .env`)
 ```bash
-# docker-compose -f docker-compose.yml --env-file .env
-docker-compose up -d
+# docker-compose [compose options] [command] [command options]
+docker-compose -f docker-compose.yml up -d
 ```
 <br>
 
@@ -156,15 +151,18 @@ docker-compose up -d
 
 * 로컬 환경에서는 `--host` 정보는 입력하지 않아도 됩니다
 ```bash
-mysql --host=localhost --user=user --password=pass testdb
-mysql -h localhost -u user -ppass testdb
+mysql --host=localhost --user=scott --password=tiger default
+mysql -hlocalhost -uscott -ptiger default
 ```
+<br>
+
 
 #### 2-2-2. 접속정보를 별도의 환경변수 파일에 저장하는 방법
 > 코드와 동일한 수준에서 형상관리가 되는 docker-compose.yml 파일에 접속정보를 저장하는 것은 위험할 수 있으므로 별도로 관리(ansible 등)하는 경우 `.env` 파일에 저장관리될 수 있습니다
 
 * default 값이 같은 경로에 `.env` 파일로 `KEY=VALUE` 형식으로 저장될 수 있습니다
 ```bash
+# cat .env
 MYSQL_ROOT_PASSWORD=root
 MYSQL_DATABASE=default
 MYSQL_USER=scott
@@ -173,6 +171,7 @@ MYSQL_PASSWORD=tiger
 
 * `docker-compose.yml` 설정에서 environment 설정은 아래와 같이 변수로 치환됩니다
 ```yaml
+# grep 'environment' -a5 docker-compose.yml
 environment:
   MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
   MYSQL_DATABASE: $MYSQL_DATABASE
@@ -182,7 +181,7 @@ environment:
 
 * 현재 설정된 값을 출력하고 싶다면 `config` 명령으로 확인할 수 있습니다
 ```bash
-$ docker-compose config
+$ docker-compose config | more
 services:
   mysql:
     container_name: mysql
@@ -195,7 +194,7 @@ services:
 ...
 ```
 
-<details><summary>[실습] `.env` 파일을 `config/env` 파일로 생성하고, 패스워드 및 계정정보를 변경하여 `--env-file` 옵션으로 config 를 통해 제대로 수정 되었는지 확인해 보세요</summary>
+<details><summary>[실습] .env 파일을 config/env 파일로 생성하고, 패스워드 및 계정정보를 변경하여 --env-file 옵션으로 config 를 통해 제대로 수정 되었는지 확인해 보세요</summary>
 
 > 아래와 같이 파일을 생성하고, config 결과가 나온다면 정답입니다
 

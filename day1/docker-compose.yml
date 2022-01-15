@@ -1,6 +1,13 @@
 version: "3"
 
 services:
+  ubuntu:
+    container_name: ubuntu
+    image: psyoblade/data-engineer-ubuntu:20.04
+    restart: always
+    tty: true
+    volumes:
+      - ./ubuntu/example:/example
   mysql:
     container_name: mysql
     image: psyoblade/data-engineer-mysql:1.1
