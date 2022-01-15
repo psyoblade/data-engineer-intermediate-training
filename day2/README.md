@@ -307,6 +307,12 @@ SELECT * FROM student;
   - <kbd>--relaxed-isolation</kbd> : 테이블에 Shared Lock 을 잡지 않고 가져옵니다
   - <kbd>--delete-target-dir</kbd> : 대상 경로가 있다면 삭제 후 수집합니다
 
+* 컨테이너에 접속합니다
+```bash
+# terminal
+docker-compose exec sqoop bash
+```
+
 * 테이블 수집 합니다
 ```bash
 # docker
