@@ -58,6 +58,16 @@ docker rm -f `docker ps -aq`
 ### 2-1. 노트북 주소를 확인하고, 크롬 브라우저로 접속합니다
 
 #### 2-1-1. 노트북 기동 및 확인
+
+* 노트북을 기동합니다
+```bash
+# terminal
+cd /home/ubuntu/work/data-engineer-intermediate-training/day5
+docker-compose pull
+docker-compose up -d
+```
+
+* 기동된 노트북의 접속정보를 확인하고 접속합니다
 ```bash
 # terminal
 docker-compose logs notebook | grep 8888
