@@ -195,11 +195,11 @@ services:
 ...
 ```
 
-<details><summary> :green_book: [실습] .env 파일을 env 파일로 생성하고, 패스워드 및 계정정보를 다른 값으로 변경하여 --env-file 옵션으로 config 를 통해 제대로 수정 되었는지 확인해 보세요</summary>
+<details><summary> :green_book: [실습] .env 파일을 env 파일로 생성하고, 패스워드(=pass), 계정정보(=user) 및 데이터베이스(testdb)으로 변경하여 --env-file 옵션으로 config 를 통해 제대로 수정 되었는지 확인해 보세요</summary>
 
 > 아래와 같이 config 결과가 나온다면 정답입니다
 ```bash
-docker-compose --env-file env config | head -8
+docker-compose --env-file env config | head -15
 services:
   mysql:
     container_name: mysql
@@ -253,6 +253,14 @@ networks:
 
 ```bash
 docker-compose --env-file env config
+```
+
+> 기존의 데이터베이스를 종료하고 다시 기동하여 접속합니다
+
+```bash
+docker-compose down
+docker-compose --env-file env up -d
+docker-compose exec mysql mysql -uuser -ppass testdb
 ```
 
 </details>
@@ -315,9 +323,9 @@ else
 fi
 ```
 
-* 아래의 컴포즈 `cp` 명령어로 컨테이너 내부로 스크립트를 복사합니다
+* 아래의 도커 `cp` 명령어로 컨테이너 내부로 스크립트를 복사합니다
 ```bash
-docker-compose cp ./run.sh ubunut:/run.sh
+docker cp ./run.sh ubuntu:/run.sh
 ```
 
 <details><summary> :green_book: [실습] 환경변수 값(DEBUG=1)에 따라 결과가 달라지는 bash 스크립트를 생성 및 실행해 보세요</summary>
