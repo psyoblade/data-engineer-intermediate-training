@@ -40,7 +40,8 @@ docker-compose logs notebook
 
 
 ## 2. 데이터 변환 기본
-### [1. 아파치 스파크 기본](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-1-basic.html)
+### [1. 아파치 스파크 기본](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-1-basic.html) - [정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-1-basic-answer.html)
+
 ### [2. 아파치 스파크 연산자](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-2-operators.html)
 ### [3. 아파치 스파크 데이타입](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-3-data-types.html)
 ### [4. 아파치 스파크 조인](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-4-join.html)
