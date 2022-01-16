@@ -32,7 +32,6 @@
 cd /home/ubuntu/work/data-engineer-intermediate-training/day4
 docker-compose down
 git pull
-docker-compose up -d
 ```
 <br>
 
