@@ -972,7 +972,7 @@ hadoop fs -put /tmp/source/user/20201025/* /user/lgde/user/dt=20201025
 hadoop fs -put /tmp/source/user/20201026/* /user/lgde/user/dt=20201026
 ```
 ```sql
-hadoop jar /tmp/source/parquet-tools-1.8.1.jar schema file:///tmp/source/purchase/20201025/38dc1f5b-d49d-436d-a84a-4e5c2a4022a5.parquet
+hadoop jar /tmp/source/parquet-tools-1.8.1.jar schema file:///tmp/source/user/20201025/2e3738ff-5e2b-4bec-bdf4-278fe21daa3b.parquet
 ```
 ```text
 message user_20201025 {
