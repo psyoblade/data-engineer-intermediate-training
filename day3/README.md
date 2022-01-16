@@ -40,11 +40,11 @@ docker-compose logs notebook
 
 
 ## 2. 데이터 변환 기본
-### [1. 아파치 스파크 기본 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-1-basic.html) - [정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-1-basic-answer.html)
-### [2. 아파치 스파크 연산자 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-2-operators.html) - [정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-2-operators-answer.html)
-### [3. 아파치 스파크 데이타입 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-3-data-types.html) - [정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-3-data-types-answer.html)
-### [4. 아파치 스파크 조인 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-4-join.html) - [정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-4-join-answer.html)
-### [5. 아파치 스파크 집계 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-5-aggregation.html) - [정답](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-5-aggregation-answer.html)
+### [1. 아파치 스파크 기본 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-1-basic.html)
+### [2. 아파치 스파크 연산자 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-2-operators.html)
+### [3. 아파치 스파크 데이타입 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-3-data-types.html)
+### [4. 아파치 스파크 조인 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-4-join.html)
+### [5. 아파치 스파크 집계 실습](http://htmlpreview.github.io/?https://github.com/psyoblade/data-engineer-intermediate-training/blob/master/day3/notebooks/lgde-spark-core/lgde-spark-core-5-aggregation.html)
 <br>
 
 
