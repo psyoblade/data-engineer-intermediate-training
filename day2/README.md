@@ -307,7 +307,7 @@ SELECT * FROM student;
   - <kbd>--relaxed-isolation</kbd> : 테이블에 Shared Lock 을 잡지 않고 가져옵니다
   - <kbd>--delete-target-dir</kbd> : 대상 경로가 있다면 삭제 후 수집합니다
 
-* 컨테이너에 접속합니다
+* 컨테이너에 접속합니다 (이미 접속된 터미널을 사용하셔도 됩니다)
 ```bash
 # terminal
 docker-compose exec sqoop bash
@@ -371,7 +371,7 @@ ask sqoop import -jt local -fs local -m 1 --connect jdbc:mysql://mysql:3306/test
 * 생성된 파일이 파케이로 저장되었는지 확인후 파일명을 기억해둡니다
 ```
 # docker
-ask ls -d1 /home/sqoop/target/student_parquet/*
+ls -d1 /home/sqoop/target/student_parquet/*
 ```
 
 </details>
@@ -410,17 +410,17 @@ hadoop jar /jdbc/parquet-tools-1.8.1.jar head file://${filename}
 * 상위 3개 문서 반환
 ```bash
 # docker
-ask hadoop jar /jdbc/parquet-tools-1.8.1.jar head -n 3 file://${filename}
+hadoop jar /jdbc/parquet-tools-1.8.1.jar head -n 3 file://${filename}
 ```
 * 스키마 출력 
 ```bash
 # docker
-ask hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
+hadoop jar /jdbc/parquet-tools-1.8.1.jar schema file://${filename}
 ```
 * 메타정보 출력
 ```bash
 # docker
-ask hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
+hadoop jar /jdbc/parquet-tools-1.8.1.jar meta file://${filename}
 ```
 
 </details>
@@ -491,8 +491,7 @@ CREATE TABLE testdb.seoul_popular_exp (
   , tel VARCHAR(20)
   , tag VARCHAR(500)
 ) CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
-```
-```sql
+
 show tables;
 ```
 <br>
@@ -503,6 +502,17 @@ show tables;
 > 적재 서비스는 스키마 불일치에 따른 실패가 자주 발생하는데 의도적으로 발생시켜 디버깅하는 방법을 익힙니다
 
 #### 3-2-1. 구분자 오류에 따른 실패 확인
+
+* 다시 컨테이너에 접속합니다 (이미 접속된 터미널을 사용하셔도 됩니다)
+```bash
+# terminal
+docker-compose exec sqoop bash
+```
+
+```bash
+# terminal
+docker-compose exec sqoop bash
+```
 
 * 적재 작업을 수행하면 오류가 발생하고 예외가 발생하게 되는데 출력된 로그와 수집된 데이터를 통해 추적합니다
 ```bash
@@ -532,6 +542,13 @@ ask sqoop import -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   --fields-terminated-by '\t' --delete-target-dir 
 ```
 
+> 수집된 파일이 아래와 같다면 성공입니다
+
+```text
+0    281    통인시장    110-043 서울 종로구 통인동 10-3     03036 서울 종로구 자하문로15길 18     02-722-0911    엽전도시락,종로통인시장,통인시장닭꼬치,런닝맨,엽전시장,통인시장데이트,효자베이커리,통인시장, 1박2일,기름떡볶이
+0    345    타르틴    140-863 서울 용산구 이태원동 119-15     04350 서울 용산구 이태원로23길 4 (이태원동)     02-3785-3400    타르틴,이태원디저트카페,파이,런닝맨,파이맛집,이태원맛집, 유재석,식신로드,타르트맛집
+```
+
 * 탭 구분자로 익스포트된 경로의 파일을 이용하여 다시 익스포트를 수행합니다
 ```bash
 ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop --password sqoop \
@@ -539,11 +556,17 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
   --fields-terminated-by '\t' 
 ```
 
-> 출력 결과가 아래와 같다면 성공입니다
+* 다시 컨테이너로 접속하여 테이블을 조회하여 레코드 수를 확인합니다
+```bash
+# terminal
+docker-compose exec mysql mysql -usqoop -psqoop
+```
 
-```text
-0    281    통인시장    110-043 서울 종로구 통인동 10-3     03036 서울 종로구 자하문로15길 18     02-722-0911    엽전도시락,종로통인시장,통인시장닭꼬치,런닝맨,엽전시장,통인시장데이트,효자베이커리,통인시장, 1박2일,기름떡볶이
-0    345    타르틴    140-863 서울 용산구 이태원동 119-15     04350 서울 용산구 이태원로23길 4 (이태원동)     02-3785-3400    타르틴,이태원디저트카페,파이,런닝맨,파이맛집,이태원맛집, 유재석,식신로드,타르트맛집
+* 카운트 수가 입력 레코드 수인 1956과 같다면 정답입니다 
+```bash
+# sql
+use testdb;
+select count(1) from seoul_popular_exp;
 ```
 
 </details>
@@ -560,6 +583,9 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/testdb --username sqoop 
 
 ```sql
 # mysql>
+
+use testdb;
+
 CREATE TABLE testdb.seoul_popular_stg (
   category INT NOT NULL
   , id INT NOT NULL
@@ -569,13 +595,19 @@ CREATE TABLE testdb.seoul_popular_stg (
   , tel VARCHAR(20)
   , tag VARCHAR(500)
 ) CHARACTER SET UTF8 COLLATE UTF8_GENERAL_CI;
-```
-```sql
+
 show tables;
 ```
 <br>
 
+
 #### 3-3-2. 수행 시에 맵 갯수를 4개로 늘려서 테스트 해보겠습니다
+
+* 다시 컨테이너에 접속합니다 (이미 접속된 터미널을 사용하셔도 됩니다)
+```bash
+# terminal
+docker-compose exec sqoop bash
+```
 
 * 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 TRUNCATE 는 수작업으로 수행되어야만 합니다
 
@@ -631,7 +663,7 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 >  스쿱을 통해 대용량 테이블 수집을 위해서는 다양한 방법으로 접근할 수 있는데, 수집 시에 성능을 향상 시키는 **병렬수집(split-by)**, 수집된 데이터가 너무 크거나 분할되어 있지 않다면 조회 및 처리 시에 영향을 주기 때문에 파티션 단위로 **분할저장(partition)** 하는 기법이 있고, 자주 사용되지는 않으나, 증분되는 데이터만 가져와서 지속적으로 **증분추가(append) 하는 기법**을 실습합니다
 
 
-* 테이블 수집 실습을 위해 컨테이너에 접속합니다
+* 컨테이너에 접속합니다 (이미 접속된 터미널을 사용하셔도 됩니다)
 ```bash
 # terminal
 docker-compose exec sqoop bash
