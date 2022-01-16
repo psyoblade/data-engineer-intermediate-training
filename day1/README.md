@@ -31,7 +31,7 @@ docker-compose --version
 git --version
 ```
 
-<details><summary>[실습] 출력 결과 확인</summary>
+<details><summary> :green_book: [실습] 출력 결과 확인</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 같다면 성공입니다
 
@@ -58,6 +58,7 @@ git version 2.17.1
 
 ```bash
 # terminal
+mkdir -p /home/ubuntu/work
 cd /home/ubuntu/work
 git clone https://github.com/psyoblade/data-engineer-intermediate-training.git
 cd /home/ubuntu/work/data-engineer-intermediate-training/day1
@@ -110,7 +111,7 @@ docker-compose down
 ```
 <br>
 
-<details><summary>[실습] `up -d` 과 down 명령어를 통해 컨테이너를 기동하고, `hello data engineer` 출력 후, 종료해 보세요</summary>
+<details><summary> :green_book: [실습] `up -d` 과 down 명령어를 통해 컨테이너를 기동하고, `hello data engineer` 출력 후, 종료해 보세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 같다면 성공입니다
 
@@ -194,7 +195,7 @@ services:
 ...
 ```
 
-<details><summary>[실습] .env 파일을 env 파일로 생성하고, 패스워드 및 계정정보를 다른 값으로 변경하여 --env-file 옵션으로 config 를 통해 제대로 수정 되었는지 확인해 보세요</summary>
+<details><summary> :green_book: [실습] .env 파일을 env 파일로 생성하고, 패스워드 및 계정정보를 다른 값으로 변경하여 --env-file 옵션으로 config 를 통해 제대로 수정 되었는지 확인해 보세요</summary>
 
 > 아래와 같이 config 결과가 나온다면 정답입니다
 ```bash
@@ -319,7 +320,7 @@ fi
 docker-compose cp ./run.sh ubunut:/run.sh
 ```
 
-<details><summary>[실습] 환경변수 값(DEBUG=1)에 따라 결과가 달라지는 bash 스크립트를 생성 및 실행해 보세요</summary>
+<details><summary> :green_book: [실습] 환경변수 값(DEBUG=1)에 따라 결과가 달라지는 bash 스크립트를 생성 및 실행해 보세요</summary>
 
 > 출력 결과가 오류가 발생하지 않고, 아래와 같다면 성공입니다
 
