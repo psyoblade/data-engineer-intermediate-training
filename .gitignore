@@ -1,4 +1,5 @@
 # Custom
+.idea/
 env
 run.sh
 backup/
