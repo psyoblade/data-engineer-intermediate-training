@@ -3,6 +3,7 @@ version: "3"
 services:
   namenode:
     container_name: namenode
+    hostname: namenode
     image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
     volumes:
       - namenode:/hadoop/dfs/name
@@ -14,6 +15,7 @@ services:
       - "50070:50070"
   datanode:
     container_name: datanode
+    hostname: datanode
     image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
     volumes:
       - datanode:/hadoop/dfs/data
@@ -25,6 +27,7 @@ services:
       - "50075:50075"
   hive-server:
     container_name: hive-server
+    hostname: hive-server
     image: bde2020/hive:2.3.2-postgresql-metastore
     volumes:
       - ./tmp:/tmp/source
@@ -37,6 +40,7 @@ services:
       - "10000:10000"
   hive-metastore:
     container_name: hive-metastore
+    hostname: hive-metastore
     image: bde2020/hive:2.3.2-postgresql-metastore
     env_file:
       - ./hadoop-hive.env
@@ -47,9 +51,11 @@ services:
       - "9083:9083"
   hive-metastore-postgresql:
     container_name: hive-metastore-postgresql
+    hostname: hive-metastore-postgresql
     image: bde2020/hive-metastore-postgresql:2.3.0
   presto-coordinator:
     container_name: presto-coordinator
+    hostname: presto-coordinator
     image: shawnzhu/prestodb:0.181
     ports:
       - "8080:8080"
@@ -57,3 +63,7 @@ services:
 volumes:
   namenode:
   datanode:
+
+networks:
+  default:
+    name: data_engineer_intermediate_day4_network
