@@ -3,6 +3,7 @@ version: "3"
 services:
   mysql:
     container_name: mysql
+    hostname: mysql
     image: psyoblade/data-engineer-mysql:1.1
     restart: always
     environment:
@@ -23,6 +24,7 @@ services:
       - ./mysql/etc:/etc/mysql/conf.d
   sqoop:
     container_name: sqoop
+    hostname: sqoop
     image: psyoblade/data-engineer-sqoop:2.0
     tty: true
     environment:
@@ -45,4 +47,4 @@ services:
 
 networks:
   default:
-    name: default_network
+    name: data_engineer_intermediate_day2_network
