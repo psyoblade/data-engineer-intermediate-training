@@ -1,10 +1,10 @@
 version: "3"
 
 services:
-  ubuntu:
+  ubuntu: 
     container_name: ubuntu
     hostname: ubuntu
-    image: psyoblade/data-engineer-ubuntu:20.04
+    image: psyoblade/data-engineer-ubuntu:22.04-slim
     restart: always
     tty: true
     volumes:
@@ -12,7 +12,7 @@ services:
   mysql:
     container_name: mysql
     hostname: mysql
-    image: psyoblade/data-engineer-mysql:1.1
+    image: psyoblade/data-engineer-mysql:1.3
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
