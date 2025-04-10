@@ -6,15 +6,16 @@ services:
     hostname: notebook
     user: root
     privileged: true
-    image: psyoblade/data-engineer-notebook:1.6.1
+    image: psyoblade/data-engineer-notebook:1.8.0
     restart: always
     volumes:
       - ./notebooks:/home/jovyan/work
     environment:
       - GRANT_SUDO=yes
+      - JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
     ports:
-      - "4040:4040"
-      - "4041:4041"
+      - "4040-4049:4040-4049"
+      - "8080:8080"
       - "8888:8888"
 
 networks:
