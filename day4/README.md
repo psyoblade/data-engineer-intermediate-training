@@ -30,7 +30,7 @@
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day4
-docker-compose down
+docker compose down
 git pull
 ```
 <br>
@@ -58,9 +58,9 @@ docker rm -f `docker ps -aq`
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day4
-docker-compose pull
-docker-compose up -d
-docker-compose ps
+docker compose pull
+docker compose up -d
+docker compose ps
 ```
 <br>
 
@@ -69,7 +69,7 @@ docker-compose ps
 ```bash
 # terminal
 docker cp data/imdb.tsv hive-server:/opt/hive/examples/imdb.tsv
-docker-compose exec hive-server ls /opt/hive/examples
+docker compose exec hive-server ls /opt/hive/examples
 ```
 
 > 마지막 ls /opt/hive/examples 명령어 결과로 imdb.tsv 파일이 확인되면 정상입니다
@@ -81,7 +81,7 @@ docker-compose exec hive-server ls /opt/hive/examples
 # terminal
 echo "하이브 서버가 기동 되는데에 시간이 좀 걸립니다... 30초 후에 접속합니다"
 sleep 30 
-docker-compose exec hive-server bash
+docker compose exec hive-server bash
 ```
 <br>
 
@@ -554,7 +554,7 @@ load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
 
 ```bash
 # terminal
-docker-compose exec hive-server bash
+docker compose exec hive-server bash
 hadoop fs -ls /user/hive/warehouse/testdb/
 ```
 > 적재된 테이블이 출력되면 정답입니다
@@ -652,9 +652,6 @@ select title from imdb_title;
 * 제목만 가진 테이블에 OVERWRITE 키워드로 입력합니다
 ```sql
 # beeline> 
-create table if not exists imdb_title (title string);
-```
-```sql
 insert overwrite table imdb_title select description from imdb_movies;
 select title from imdb_title limit 5;
 ```
@@ -693,7 +690,7 @@ select count(1) from imdb_title;
 
 
 #### 2-3-4. 테이블 데이터 삭제 - DELETE
-> Hive 2.3.2 버전에서 ACID-based transaction 을 지원하는 것은 Bucketed ORC 파일만 지원합니다
+> 설치된 Hive 버전(2.3.2)에서 ACID-based transaction 을 지원하는 것은 Bucketed ORC 파일만 지원합니다 (2025년 현재 Delta Lake, Iceberg 및 Hudi 등의 ACID Transaction 지원하는 다양한 프레임워크가 존재합니다)
   * [Hive Transactions](https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions) 
 ```sql
 /** Usages
@@ -717,7 +714,7 @@ set hive.compactor.worker.threads=1;
 
 * 해당 테이블에 2개의 레코드를 아래와 같이 입력합니다
 ```sql
-insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk'), (3, 'lgde course');
+insert into table imdb_orc values (1, 'psyoblade'), (2, 'psyoblade suhyuk'), (3, 'ubuntu course');
 ```
 
 * 제대로 설정되지 않은 경우 아래와 같은 오류를 발생시킵니다
@@ -782,7 +779,7 @@ export table imdb_orc to '/user/ubuntu/archive/imdb_orc';
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day4
-docker-compose exec hive-server bash
+docker compose exec hive-server bash
 ```
 ```bash
 # docker
@@ -871,7 +868,7 @@ git pull
 * 하이브 컨테이너로 접속합니다
 ```bash
 # terminal
-docker-compose exec hive-server bash
+docker compose exec hive-server bash
 ```
 <br>
 
@@ -892,28 +889,29 @@ message purchase_20201025 {
 
 * 경로 확인 및 생성
 ```bash
-hadoop fs -mkdir -p /user/lgde/purchase/dt=20201025
-hadoop fs -mkdir -p /user/lgde/purchase/dt=20201026
+hadoop fs -mkdir -p /user/ubuntu/purchase/dt=20201025
+hadoop fs -mkdir -p /user/ubuntu/purchase/dt=20201026
 ```
 ```sql
-hadoop fs -put /tmp/source/purchase/20201025/* /user/lgde/purchase/dt=20201025
-hadoop fs -put /tmp/source/purchase/20201026/* /user/lgde/purchase/dt=20201026
+hadoop fs -put /tmp/source/purchase/20201025/* /user/ubuntu/purchase/dt=20201025
+hadoop fs -put /tmp/source/purchase/20201026/* /user/ubuntu/purchase/dt=20201026
 ```
 
 * 하이브 명령 수행을 위해 beeline 을 실행합니다
 ```bash
 beeline
 ```
-* 콘솔로 접속하여 데이터베이스 및 테이블을 생성합니다 
+* 콘솔로 접속하여 기존 데이터베이스 다시 생성하고 테이블을 생성합니다 
 ```bash
 # beeline>
 !connect jdbc:hive2://localhost:10000 scott tiger
 ```
 ```sql
 # beeline>
+drop database if exists testdb cascade;
 create database if not exists testdb comment 'test database' 
-  location '/user/lgde/warehouse/testdb'
-  with dbproperties ('createdBy' = 'lgde');
+  location '/user/ubuntu/warehouse/testdb'
+  with dbproperties ('createdBy' = 'ubuntu');
 ```
 ```sql
 use testdb;
@@ -927,11 +925,11 @@ create external table if not exists purchase (
 ) partitioned by (dt string) 
 row format delimited 
 stored as parquet 
-location 'hdfs:///user/lgde/purchase';
+location 'hdfs:///user/ubuntu/purchase';
 ```
 ```sql
-alter table purchase add if not exists partition (dt = '20201025') location 'hdfs:///user/lgde/purchase/dt=20201025';
-alter table purchase add if not exists partition (dt = '20201026') location 'hdfs:///user/lgde/purchase/dt=20201026';
+alter table purchase add if not exists partition (dt = '20201025') location 'hdfs:///user/ubuntu/purchase/dt=20201025';
+alter table purchase add if not exists partition (dt = '20201026') location 'hdfs:///user/ubuntu/purchase/dt=20201026';
 ```
 <br>
 
@@ -957,19 +955,19 @@ select dt, count(1) as cnt from purchase group by dt;
 * 하이브 컨테이너로 접속합니다
 ```bash
 # terminal
-docker-compose exec hive-server bash
+docker compose exec hive-server bash
 ```
 
 * 파일 업로드 및 스키마 확인, 경로 생성 및 업로드
 
 ```bash
 # docker
-hadoop fs -mkdir -p /user/lgde/user/dt=20201025
-hadoop fs -mkdir -p /user/lgde/user/dt=20201026
+hadoop fs -mkdir -p /user/ubuntu/user/dt=20201025
+hadoop fs -mkdir -p /user/ubuntu/user/dt=20201026
 ```
 ```sql
-hadoop fs -put /tmp/source/user/20201025/* /user/lgde/user/dt=20201025
-hadoop fs -put /tmp/source/user/20201026/* /user/lgde/user/dt=20201026
+hadoop fs -put /tmp/source/user/20201025/* /user/ubuntu/user/dt=20201025
+hadoop fs -put /tmp/source/user/20201026/* /user/ubuntu/user/dt=20201026
 ```
 ```sql
 hadoop jar /tmp/source/parquet-tools-1.8.1.jar schema file:///tmp/source/user/20201025/2e3738ff-5e2b-4bec-bdf4-278fe21daa3b.parquet
@@ -1006,11 +1004,11 @@ create external table if not exists `user` (
 ) partitioned by (dt string)
 row format delimited 
 stored as parquet 
-location 'hdfs:///user/lgde/user';
+location 'hdfs:///user/ubuntu/user';
 ```
 ```sql
-alter table `user` add if not exists partition (dt = '20201025') location 'hdfs:///user/lgde/user/dt=20201025';
-alter table `user` add if not exists partition (dt = '20201026') location 'hdfs:///user/lgde/user/dt=20201026';
+alter table `user` add if not exists partition (dt = '20201025') location 'hdfs:///user/ubuntu/user/dt=20201025';
+alter table `user` add if not exists partition (dt = '20201026') location 'hdfs:///user/ubuntu/user/dt=20201026';
 ```
 <br>
 
@@ -1027,12 +1025,12 @@ select dt, count(1) as cnt from `user` group by dt;
 
 ### 2-4-3. Parquet 포맷과 Hive 테이블 데이터 타입
 | Parquet | Hive | Description |
-| - | - | - |
-| int32 | int | 32비트 정수 |
-| int64 | bigint | 64비트 정수 |
-| float | float | 실수형 |
-| double | double | 실수형 |
-| binary | string | 문자열 |
+| --- | --- |-------------|
+| int32 | int | 32비트 정수     |
+| int64 | bigint | 64비트 정수     |
+| float | float | 실수형         |
+| double | double | 실수형         |
+| binary | string | 문자열         |
 <br>
 
 [목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
@@ -1054,7 +1052,7 @@ select dt, count(1) as cnt from `user` group by dt;
   - 이미 접속된 세션이 있다면 그대로 사용하셔도 됩니다
 ```bash
 # terminal
-docker-compose exec hive-server bash
+docker compose exec hive-server bash
 ```
 * Beeline 통해서 하이브 서버로 접속 후, testdb 를 이용합니다
 ```sql
@@ -1333,7 +1331,7 @@ vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 * 컨테이너에 접속된 세션이 없다면 하이브 서버에 접속합니다
 ```bash
 # terminal
-docker-compose exec hive-server bash
+docker compose exec hive-server bash
 ```
 * 중복제거 하여 `emp.uniq.txt` 파일을 생성합니다
 ```bash
