@@ -133,9 +133,10 @@ docker compose exec ubuntu echo hello world
 
 #### 2-1-4. [down](https://docs.docker.com/compose/reference/down/) : 컨테이너를 종료 시킵니다
   - <kbd>-t, --timeout [int] <filename></kbd> : 셧다운 타임아웃을 지정하여 무한정 대기(SIGTERM)하지 않고 종료(SIGKILL)합니다 (default: 10초)
+  - <kbd>-v, --volumes</kbd> : 컴포즈에 의해 구성된 볼륨까지 모두 삭제하는 옵션 (특히 mysql 같이 별도의 볼륨을 가지는 경우 설정이 겹치는 경우가 있으므로 볼륨까지 삭제하여야 안전하다)
 ```bash
 # docker compose down [options] <services>
-docker compose down
+docker compose down -v
 ```
 <br>
 
@@ -153,7 +154,7 @@ docker compose down
 ```bash
 docker compose up -d
 docker compose exec ubuntu echo hello data engineer
-docker compose down
+docker compose down -v
 ```
 
 </details>
@@ -288,7 +289,7 @@ docker compose --env-file env config
 > 기존의 데이터베이스를 종료하고 다시 기동하여 접속합니다
 
 ```bash
-docker compose down
+docker compose down -v
 docker compose --env-file env up -d
 docker compose exec mysql mysql -uuser -ppass testdb
 ```

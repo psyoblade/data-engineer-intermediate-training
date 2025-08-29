@@ -180,13 +180,13 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/default --username scott --pass
 * 데이터베이스: default
 * 테이블 이름: student 
 
-| 컬럼명 | 컬럼유형 | 데이터 예제 |
-| - | - | - |
-| no | INT | `AUTO_INCREMENT` |
-| name | VARCHAR(50) | 박수혁 |
+| 컬럼명 | 컬럼유형 | 데이터 예제                |
+| --- | --- |-----------------------|
+| no | INT | `AUTO_INCREMENT`      |
+| name | VARCHAR(50) | 박수혁                   |
 | email | VARCHAR(50) | suhyuk.park@gmail.com |
-| age | INT | 30 | 나이 |
-| gender | VARCHAR(10) | 남 |
+| age | INT | 30                    | 나이 |
+| gender | VARCHAR(10) | 남                     |
 
 <details><summary> :green_book: 1. [기본] 위에서 명시한 student 테이블을 mysql 서버에 접속하여 명령어를 통해 default 에 생성하세요 </summary>
 
@@ -646,8 +646,6 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 -----------------------
 ```
 
-</details>
-
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
 
@@ -1075,7 +1073,7 @@ ask sqoop import-all-tables --connect jdbc:mysql://mysql:3306/default --username
 * 테이블 수집 실습이 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2
-docker compose down
+docker compose down -v
 ```
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
