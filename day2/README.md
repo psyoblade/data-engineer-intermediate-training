@@ -53,9 +53,9 @@ docker rm -f `docker ps -aq`
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2
 
-docker-compose pull
-docker-compose up -d
-docker-compose ps
+docker compose pull
+docker compose up -d
+docker compose ps
 ```
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
@@ -89,7 +89,7 @@ done
 #### 2-1-1. 스쿱 명령어 실습을 위해 컨테이너에 접속합니다
 ```bash
 # terminal
-docker-compose exec sqoop bash
+docker compose exec sqoop bash
 ```
 <br>
 
@@ -193,7 +193,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/default --username scott --pass
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/
-docker-compose exec mysql mysql -usqoop -psqoop
+docker compose exec mysql mysql -usqoop -psqoop
 ```
 ```sql
 # mysql>
@@ -310,7 +310,7 @@ SELECT * FROM student;
 * 컨테이너에 접속합니다 (이미 접속된 터미널을 사용하셔도 됩니다)
 ```bash
 # terminal
-docker-compose exec sqoop bash
+docker compose exec sqoop bash
 ```
 
 * 테이블 수집 합니다
@@ -474,7 +474,7 @@ hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 
 ```bash
 # terminal
-docker-compose exec mysql mysql -usqoop -psqoop
+docker compose exec mysql mysql -usqoop -psqoop
 ```
 * 테스트 적재를 위한 테이블을 생성합니다
 ```sql
@@ -506,12 +506,12 @@ show tables;
 * 다시 컨테이너에 접속합니다 (이미 접속된 터미널을 사용하셔도 됩니다)
 ```bash
 # terminal
-docker-compose exec sqoop bash
+docker compose exec sqoop bash
 ```
 
 ```bash
 # terminal
-docker-compose exec sqoop bash
+docker compose exec sqoop bash
 ```
 
 * 적재 작업을 수행하면 오류가 발생하고 예외가 발생하게 되는데 출력된 로그와 수집된 데이터를 통해 추적합니다
@@ -559,7 +559,7 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/default --username scott
 * 다시 컨테이너로 접속하여 테이블을 조회하여 레코드 수를 확인합니다
 ```bash
 # terminal
-docker-compose exec mysql mysql -usqoop -psqoop
+docker compose exec mysql mysql -usqoop -psqoop
 ```
 
 * 카운트 수가 입력 레코드 수인 1956과 같다면 정답입니다 
@@ -606,7 +606,7 @@ show tables;
 * 다시 컨테이너에 접속합니다 (이미 접속된 터미널을 사용하셔도 됩니다)
 ```bash
 # terminal
-docker-compose exec sqoop bash
+docker compose exec sqoop bash
 ```
 
 * 이미 적재된 테이블에 다시 적재하는 경우는 중복 데이터가 생성되므로  삭제 혹은 TRUNCATE 는 수작업으로 수행되어야만 합니다
@@ -666,7 +666,7 @@ cmd "SELECT COUNT(1) FROM seoul_popular_exp"
 * 컨테이너에 접속합니다 (이미 접속된 터미널을 사용하셔도 됩니다)
 ```bash
 # terminal
-docker-compose exec sqoop bash
+docker compose exec sqoop bash
 ```
 
 ### 4-1. 쿼리문을 집적 작성하여 테이블 수집
@@ -1075,7 +1075,7 @@ ask sqoop import-all-tables --connect jdbc:mysql://mysql:3306/default --username
 * 테이블 수집 실습이 종료되었으므로 <kbd><samp>Ctrl</samp>+<samp>D</samp></kbd> 혹은 <kbd>exit</kbd> 명령으로 컨테이너를 종료합니다
 ```bash
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2
-docker-compose down
+docker compose down
 ```
 
 [목차로 돌아가기](#2일차-아파치-스쿱-테이블-수집)
