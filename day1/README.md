@@ -12,16 +12,19 @@
 <br>
 
 
-## 1. 클라우드 장비에 접속
+## 1. 실습 환경에 접속
+> 로컬에 구성된 `Terminal` 프로그램 혹은 `PowerShell`을 통해 실습환경에 접속 합니다
 
-> 개인 별로 할당 받은 `ubuntu@vm[number].aiffelbiz.co.kr` 에 putty 혹은 terminal 을 이용하여 접속합니다
 
-
-### 1-1. 원격 서버로 접속합니다
+### 1-1. WSL 혹은 터미널 프로그램 실행
+> 터미널을 통한 접속이 가장 간편하지만 PowerShell 통한 접속도 가능하며 동일한 환경을 제공합니다
 ```bash
-# terminal
-# ssh ubuntu@vm001.aiffelbiz.co.kr
-# password: ******
+# Terminal
+#ubuntu@desktop-01$ 
+
+# PowerShell
+wsl -d Ubuntu-22.04 --user ubuntu
+# ubuntu@psyoblade-D02:/mnt/c/Users/psyoblade$
 ```
 
 ### 1-2. 패키지 설치 여부를 확인합니다

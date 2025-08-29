@@ -1,0 +1,2 @@
+#!/bin/bash
+sqoop eval --connect jdbc:mysql://mysql:3306/default --username scott --password tiger -e "$@"

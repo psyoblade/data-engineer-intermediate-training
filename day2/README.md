@@ -193,7 +193,7 @@ ask sqoop eval --connect jdbc:mysql://mysql:3306/default --username scott --pass
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day2/
-docker compose exec mysql mysql -usqoop -psqoop
+docker compose exec mysql mysql -uscott -ptiger
 ```
 ```sql
 # mysql>
@@ -625,8 +625,8 @@ ask sqoop export -m 4 --connect jdbc:mysql://mysql:3306/default --username scott
 
 ```sql
 # docker
-cmd "SELECT COUNT(1) FROM seoul_popular_stg"
-cmd "SELECT COUNT(1) FROM seoul_popular_exp"
+sqoop eval --connect jdbc:mysql://mysql:3306/default --username scott --password tiger -e "SELECT COUNT(1) FROM seoul_popular_stg"
+sqoop eval --connect jdbc:mysql://mysql:3306/default --username scott --password tiger -e "SELECT COUNT(1) FROM seoul_popular_exp"
 ```
 
 > 적재시에 4개의 맵 작업수로 수행된 사항에 대해서도 디버깅 해보시면 어떻게 동작하는 지 확인할 수 있습니다
