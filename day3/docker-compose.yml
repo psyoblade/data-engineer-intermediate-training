@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   notebook:
     container_name: notebook

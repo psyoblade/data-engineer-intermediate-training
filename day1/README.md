@@ -1,6 +1,6 @@
 # 1일차. 데이터 엔지니어링 기본
 
-> 전체 과정에서 사용하는 기본적인 명령어(docker, docker-compose)에 대해 실습하고 사용법을 익힙니다.
+> 전체 과정에서 사용하는 기본적인 명령어(docker, docker compose)에 대해 실습하고 사용법을 익힙니다.
 
 - 범례
   * :green_book: : 기본, :blue_book: : 중급, :closed_book: : 고급
@@ -26,9 +26,9 @@
 
 ### 1-2. 패키지 설치 여부를 확인합니다
 ```bash
-docker --version
-docker-compose --version
-git --version
+docker version && echo
+docker compose version && echo
+git version
 ```
 
 <details><summary> :green_book: [실습] 출력 결과 확인</summary>
@@ -36,9 +36,37 @@ git --version
 > 출력 결과가 오류가 발생하지 않고, 아래와 같다면 성공입니다
 
 ```text
-Docker version 20.10.6, build 370c289
-docker-compose version 1.29.1, build c34c88b2
-git version 2.17.1
+Client:
+ Version:           27.5.1
+ API version:       1.47
+ Go version:        go1.22.2
+ Git commit:        27.5.1-0ubuntu3~22.04.2
+ Built:             Mon Jun  2 12:18:38 2025
+ OS/Arch:           linux/amd64
+ Context:           default
+
+Server:
+ Engine:
+  Version:          27.5.1
+  API version:      1.47 (minimum version 1.24)
+  Go version:       go1.22.2
+  Git commit:       27.5.1-0ubuntu3~22.04.2
+  Built:            Mon Jun  2 12:18:38 2025
+  OS/Arch:          linux/amd64
+  Experimental:     false
+ containerd:
+  Version:          1.7.24
+  GitCommit:
+ runc:
+  Version:          1.1.12-0ubuntu2~22.04.1
+  GitCommit:
+ docker-init:
+  Version:          0.19.0
+  GitCommit:
+  
+Docker Compose version v2.39.2
+
+git version 2.34.1
 ```
 
 </details>
@@ -75,19 +103,19 @@ cd /home/ubuntu/work/data-engineer-intermediate-training/day1
 
 ### 2-1. 컴포즈 명령어 옵션
 
-#### 2-1-1. [config](https://docs.docker.com/compose/reference/config/) : 컨테이너 실행 설정을 확인합니다
+#### 2-1-1. [config](https://docs.docker.com/compose/reference/config/) : 도커 컴포즈 `docker-compose.yml` 실행 설정을 확인합니다
   - <kbd>-q, --quiet</kbd> : 설정의 정상여부만 확인하고 출력하지 않습니다
 ```bash
-# docker-compose config [options]
-docker-compose config
+# docker compose config [options]
+docker compose config
 ```
 <br>
 
 #### 2-1-2. [up](https://docs.docker.com/compose/reference/up/) : `docker-compose.yml` 파일을 이용하여 컨테이너를 이미지 다운로드(pull), 생성(create) 및 시작(start) 시킵니다
   - <kbd>-d, --detach <filename></kbd> : 서비스들을 백그라운드 모드에서 수행합니다
 ```bash
-# docker-compose up [options] <services>
-docker-compose up -d
+# docker compose up [options] <services>
+docker compose up -d
 ```
 <br>
 
@@ -98,16 +126,16 @@ docker-compose up -d
   - <kbd>-w, --workdir [string]</kbd> : 워킹 디렉토리를 지정합니다
 
 ```bash
-# docker-compose exec [options] [-e KEY=VAL...] [--] SERVICE COMMAND [ARGS...]
-docker-compose exec ubuntu echo hello world
+# docker compose exec [options] [-e KEY=VAL...] [--] SERVICE COMMAND [ARGS...]
+docker compose exec ubuntu echo hello world
 ```
 <br>
 
 #### 2-1-4. [down](https://docs.docker.com/compose/reference/down/) : 컨테이너를 종료 시킵니다
   - <kbd>-t, --timeout [int] <filename></kbd> : 셧다운 타임아웃을 지정하여 무한정 대기(SIGTERM)하지 않고 종료(SIGKILL)합니다 (default: 10초)
 ```bash
-# docker-compose down [options] <services>
-docker-compose down
+# docker compose down [options] <services>
+docker compose down
 ```
 <br>
 
@@ -123,9 +151,9 @@ docker-compose down
 
 > 아래와 같은 방법으로 실행할 수 있습니다
 ```bash
-docker-compose up -d
-docker-compose exec ubuntu echo hello data engineer
-docker-compose down
+docker compose up -d
+docker compose exec ubuntu echo hello data engineer
+docker compose down
 ```
 
 </details>
@@ -139,12 +167,12 @@ docker-compose down
 
 <br>
 
-#### 2-2-1. compose options : 반드시 docker-compose 명령어 다음에 입력해야 하는 옵션 
+#### 2-2-1. compose options : 반드시 docker compose 명령어 다음에 입력해야 하는 옵션 
   - <kbd>--file, -f [filename]</kbd> : 별도 yml 파일을 통해 기동시킵니다 (default: `-f docker-compose.yml`)
   - <kbd>--env-file [env-file]</kbd> : 별도 env 파일을 통해 환경변수를 지정합니다l (default: `--env-file .env`)
 ```bash
-# docker-compose [compose options] [command] [command options]
-docker-compose -f docker-compose.yml up -d
+# docker compose [compose options] [command] [command options]
+docker compose -f docker-compose.yml up -d
 ```
 <br>
 
@@ -152,12 +180,12 @@ docker-compose -f docker-compose.yml up -d
 
 * 로컬 환경에서는 `--host` 정보는 입력하지 않아도 됩니다
 ```bash
-# docker-compose exec mysql < 아래의 명령어 >
-mysql --host=localhost --user=scott --password=tiger default
-mysql -hlocalhost -uscott -ptiger default
+# docker compose exec mysql < 아래의 명령어 >
+# mysql --host=localhost --user=scott --password=tiger default
+# mysql -hlocalhost -uscott -ptiger default
 
 # 아래와 같이 명령어 수행
-docker-compose exec mysql mysql -hlocalhost -uscott -ptiger default
+docker compose exec mysql mysql -hlocalhost -uscott -ptiger default
 ```
 <br>
 
@@ -186,7 +214,7 @@ environment:
 
 * 현재 설정된 값을 출력하고 싶다면 `config` 명령으로 확인할 수 있습니다
 ```bash
-$ docker-compose config | more
+$ docker compose config | more
 services:
   mysql:
     container_name: mysql
@@ -203,7 +231,7 @@ services:
 
 > 아래와 같이 config 결과가 나온다면 정답입니다
 ```bash
-docker-compose --env-file env config | head -15
+docker compose --env-file env config | head -15
 services:
   mysql:
     container_name: mysql
@@ -224,8 +252,6 @@ MYSQL_PASSWORD=pass
 
 > `docker-compose.yml` 파일
 ```yaml
-version: "3"
-
 services:
   mysql:
     container_name: mysql
@@ -241,7 +267,7 @@ services:
     networks:
       - default
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin" ,"ping", "-uroot", "-p${MYSQL_ROOT_PASSWORD}", "-h", "localhost"]
       interval: 3s
       timeout: 1s
       retries: 3
@@ -250,21 +276,21 @@ services:
 
 networks:
   default:
-    name: default_network
+    name: data_engineer_intermediate_day1_network
 ```
 
 > 아래와 같은 방법으로 실행할 수 있습니다
 
 ```bash
-docker-compose --env-file env config
+docker compose --env-file env config
 ```
 
 > 기존의 데이터베이스를 종료하고 다시 기동하여 접속합니다
 
 ```bash
-docker-compose down
-docker-compose --env-file env up -d
-docker-compose exec mysql mysql -uuser -ppass testdb
+docker compose down
+docker compose --env-file env up -d
+docker compose exec mysql mysql -uuser -ppass testdb
 ```
 
 </details>
@@ -279,8 +305,8 @@ docker-compose exec mysql mysql -uuser -ppass testdb
   - <kbd>-f, --follow</kbd> : 출력로그를 이어서 tailing 합니다
 ```bash
 # terminal
-docker-compose up -d mysql
-docker-compose logs -f mysql
+docker compose up -d mysql
+docker compose logs -f mysql
 ```
 <br>
 
@@ -288,7 +314,7 @@ docker-compose logs -f mysql
   - <kbd>-q, --quiet</kbd> : 다운로드 메시지를 출력하지 않습니다 
 ```bash
 # terminal
-docker-compose pull
+docker compose pull
 ```
 <br>
 
@@ -296,21 +322,21 @@ docker-compose pull
   - <kbd>-a, --all</kbd> : 모든 서비스의 프로세스를 확인합니다
 ```bash
 # terminal
-docker-compose ps -a
+docker compose ps -a
 ```
 <br>
 
 #### 2-3-4. [cp](https://docs.docker.com/engine/reference/commandline/compose_cp/) : 컴포즈 컨테이너와 파일을 복사합니다
 ```bash
 # docker compose cp [OPTIONS] SERVICE:SRC_PATH DEST_PATH|-
-docker-compose cp ./local/path/filename ubuntu:/container/path/filename
+docker compose cp ./local/path/filename ubuntu:/container/path/filename
 ```
 <br>
 
 #### 2-3-5. [top](https://docs.docker.com/compose/reference/top/) : 컨테이너 내부에 실행되고 있는 프로세스를 출력합니다
 ```bash
-# docker-compose top <services>
-docker-compose top
+# docker compose top <services>
+docker compose top
 ```
 <br>
 
@@ -329,6 +355,7 @@ fi
 
 * 아래의 도커 `cp` 명령어로 컨테이너 내부로 스크립트를 복사합니다
 ```bash
+chmod u+x ./run.sh
 docker cp ./run.sh ubuntu:/run.sh
 ```
 
@@ -342,8 +369,8 @@ $ this is debug mode
 
 > 아래와 같은 방법으로 실행할 수 있습니다 (-e 옵션의 위치가 중요합니다)
 ```bash
-docker-compose exec -e DEBUG=0 ubuntu bash run.sh
-docker-compose exec -e DEBUG=1 ubuntu bash run.sh
+docker compose exec -e DEBUG=0 ubuntu bash run.sh
+docker compose exec -e DEBUG=1 ubuntu bash run.sh
 ```
 
 </details>
@@ -355,6 +382,6 @@ docker-compose exec -e DEBUG=1 ubuntu bash run.sh
 
 
 ## 3. 참고 자료
-* [Docker Compose Cheatsheet](https://devhints.io/docker-compose)
-* [Compose Cheatsheet](https://buildvirtual.net/docker-compose-cheat-sheet/)
+* [Docker Compose Cheatsheet](https://devhints.io/docker compose)
+* [Compose Cheatsheet](https://buildvirtual.net/docker compose-cheat-sheet/)
 
