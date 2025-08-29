@@ -30,7 +30,7 @@
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day4
-docker compose down
+docker compose down -v
 git pull
 ```
 <br>
