@@ -40,6 +40,7 @@ services:
       - mysql
     volumes:
       - ./sqoop/jars:/jdbc
+      - ./sbin/cmd:/home/sqoop/cmd
       - ./tmp/target:/home/sqoop/target
       - ./mysql/mysqldump:/usr/local/sqoop/bin/mysqldump
 
