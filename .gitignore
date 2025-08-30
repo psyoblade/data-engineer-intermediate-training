@@ -1,4 +1,6 @@
 # Custom
+derby.log
+**/metastore_db/
 .idea/
 env
 run.sh
