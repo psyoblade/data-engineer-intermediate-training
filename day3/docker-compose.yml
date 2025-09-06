@@ -30,7 +30,7 @@ services:
     container_name: notebook
     user: root
     privileged: true
-    image: psyoblade/data-engineer-notebook:1.8.0
+    image: psyoblade/data-engineer-notebook:1.9.0
     restart: always
     volumes:
       - ./notebooks:/home/jovyan/work

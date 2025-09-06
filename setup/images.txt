@@ -1,0 +1,15 @@
+ # hadoop images
+ bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+ bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+ bde2020/hive-metastore-postgresql:2.3.0
+ bde2020/hive:2.3.2-postgresql-metastore
+
+ # custom images
+ psyoblade/data-engineer-mysql:1.3
+ psyoblade/data-engineer-notebook:1.9.0
+ psyoblade/data-engineer-sqoop:2.0
+ psyoblade/data-engineer-ubuntu:22.04-slim
+
+ # other images
+ mongo:4.4.2
+ shawnzhu/prestodb:0.181
