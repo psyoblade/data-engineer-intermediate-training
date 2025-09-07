@@ -1,0 +1,108 @@
+services:
+  namenode:
+    container_name: namenode
+    hostname: namenode
+    image: bde2020/hadoop-namenode:2.0.0-hadoop2.7.4-java8
+    volumes:
+      - namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop-hive.env
+    ports:
+      - "50070:50070"
+  datanode:
+    container_name: datanode
+    hostname: datanode
+    image: bde2020/hadoop-datanode:2.0.0-hadoop2.7.4-java8
+    volumes:
+      - datanode:/hadoop/dfs/data
+    env_file:
+      - ./hadoop-hive.env
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070"
+    ports:
+      - "50075:50075"
+  hive-server:
+    container_name: hive-server
+    hostname: hive-server
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    volumes:
+      - ./tmp:/tmp/source
+    env_file:
+      - ./hadoop-hive.env
+    environment:
+      HIVE_CORE_CONF_javax_jdo_option_ConnectionURL: "jdbc:postgresql://hive-metastore/metastore"
+      SERVICE_PRECONDITION: "hive-metastore:9083"
+    ports:
+      - "10000:10000"
+    depends_on:
+      - hive-metastore
+  hive-metastore:
+    container_name: hive-metastore
+    hostname: hive-metastore
+    image: bde2020/hive:2.3.2-postgresql-metastore
+    env_file:
+      - ./hadoop-hive.env
+    command: /opt/hive/bin/hive --service metastore
+    environment:
+      SERVICE_PRECONDITION: "namenode:50070 datanode:50075 hive-metastore-postgresql:5432"
+    ports:
+      - "9083:9083"
+    depends_on:
+      - hive-metastore-postgresql
+  hive-metastore-postgresql:
+    container_name: hive-metastore-postgresql
+    hostname: hive-metastore-postgresql
+    image: bde2020/hive-metastore-postgresql:2.3.0
+  presto-coordinator:
+    container_name: presto-coordinator
+    hostname: presto-coordinator
+    image: shawnzhu/prestodb:0.181
+    ports:
+      - "8080:8080"
+  mysql:
+    container_name: mysql
+    hostname: mysql
+    image: psyoblade/data-engineer-mysql:1.3
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+    ports:
+      - '3306:3306'
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-uroot", "-p${MYSQL_ROOT_PASSWORD}", "-h", "localhost"]
+      interval: 3s
+      timeout: 1s
+      retries: 3
+    volumes:
+      - ./etc/mysql:/etc/mysql/conf.d
+  trino-coordinator:
+    container_name: trino-coordinator
+    hostname: trino-coordinator
+    image: trinodb/trino:latest
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./etc/trino:/etc/trino   # 트리노 설정 디렉토리 매핑
+      - ./etc/hadoop/core-site.xml:/etc/hadoop/core-site.xml
+      - ./etc/hadoop/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx2G"
+    depends_on:
+      - hive-server
+      - mysql
+
+
+volumes:
+  namenode:
+  datanode:
+
+networks:
+  default:
+    name: data_engineer_intermediate_day4_network

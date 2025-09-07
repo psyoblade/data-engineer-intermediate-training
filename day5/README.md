@@ -63,14 +63,14 @@ docker rm -f `docker ps -aq`
 ```bash
 # terminal
 cd /home/ubuntu/work/data-engineer-intermediate-training/day5
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 * 기동된 노트북의 접속정보를 확인하고 접속합니다
 ```bash
 # terminal
-docker-compose logs notebook | grep 8888
+docker compose logs notebook | grep 8888
 ```
 > 출력된  URL을 복사하여 `127.0.0.1:8888` 대신 개인 `<hostname>.aiffelbiz.co.kr:8888` 으로 변경하여 크롬 브라우저를 통해 접속하면, jupyter notebook lab 이 열리고 work 폴더가 보이면 정상기동 된 것입니다
 
@@ -117,7 +117,7 @@ spark
 ```
 <details><summary> 정답확인</summary>
 
-> 스파크 엔진의 버전 `v3.0.1`이 출력되면 성공입니다
+> 스파크 엔진의 버전 `v3.5.3`이 출력되면 성공입니다
 
 </details>
 <br> 
@@ -711,7 +711,7 @@ print("+------------------+")
 ### 6-2. 컨테이너 종료
 
 ```python
-docker-compose down
+docker compose down -v
 ```
 
 > 아래와 같은 메시지가 출력되고 모든 컨테이너가 종료되면 정상입니다
