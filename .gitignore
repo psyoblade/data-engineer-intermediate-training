@@ -1,4 +1,5 @@
 # Custom
+day5/notebooks/data
 derby.log
 **/metastore_db/
 .idea/

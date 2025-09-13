@@ -1,0 +1,22 @@
+FROM python:3.11-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl tini ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+# Jupyter + 필수 파이썬 패키지 (Spark Connect 클라이언트만)
+RUN pip install --no-cache-dir \
+    jupyterlab==4.* \
+    ipykernel==6.* \
+    pyspark==3.5.1 \
+    grpcio grpcio-status pandas pyarrow
+
+# 주피터 사용자 디렉터리
+ENV NB_USER=jovyan NB_UID=1000 NB_GID=100
+RUN useradd -m -s /bin/bash -u ${NB_UID} ${NB_USER}
+WORKDIR /home/${NB_USER}
+
+# 포트/실행
+EXPOSE 8888
+ENTRYPOINT ["/usr/bin/tini","--"]
+CMD ["jupyter", "lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--NotebookApp.token=''","--NotebookApp.password=''"]

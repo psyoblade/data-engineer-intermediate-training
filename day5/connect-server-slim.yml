@@ -1,0 +1,44 @@
+services:
+  notebook:
+    container_name: notebook
+    hostname: notebook
+    user: "1000:100"
+    privileged: true
+    image: psyoblade/notebook-slim:1.0
+    volumes:
+      - ./notebooks:/work
+      - ./data/input:/data/input:rw
+      - ./data/output:/data/output:ro
+    environment:
+      - GRANT_SUDO=yes
+    ports:
+      - "8888:8888"
+  connect-server:
+    container_name: connect-server
+    hostname: connect-server
+    image: psyoblade/data-engineer-notebook:1.9.0
+    restart: always
+    environment:
+      - SPARK_NO_DAEMONIZE=yes
+      - SPARK_MODE=standalone
+      - SPARK_LOCAL_IP=connect-server
+      - SPARK_DRIVER_MEMORY=2g
+      - SPARK_WORKER_MEMORY=3g
+      - SPARK_EXECUTOR_MEMORY=2g
+    command:
+      [
+        "/usr/local/spark/sbin/start-connect-server.sh",
+        "--conf", "spark.ui.port=4050",
+        "--conf", "spark.sql.warehouse.dir=/home/jovyan/work/spark-warehouse",
+        "--packages", "org.apache.spark:spark-connect_2.12:3.5.1"
+      ]
+    ports:
+      - "15002:15002"         # Spark Connect gRPC
+      - "4050:4050"           # Spark UI (Connect 서버 쪽)
+    volumes:
+      - ./data/input:/data/input:ro
+      - ./data/output:/data/output:rw
+
+networks:
+  default:
+    name: data_engineer_intermediate_day5_network
