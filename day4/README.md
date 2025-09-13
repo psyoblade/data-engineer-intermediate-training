@@ -18,7 +18,8 @@
     - [3-3. 비정규화를 통한 성능 개선](#3-3-비정규화를-통한-성능-개선)
     - [3-4. 글로벌 정렬 회피를 통한 성능 개선](#3-4-글로벌-정렬-회피를-통한-성능-개선)
     - [3-5. 버킷팅을 통한 성능 개선](#3-5-버킷팅을-통한-성능-개선)
-  * [4. 참고 자료](#참고-자료)
+  * [4. 트리노 엔진을 활용한 이기종 데이터 조인 실습](#4-트리노-엔진을-활용한-이기종-데이터-조인-실습)
+  * [5. 참고 자료](#5-참고-자료)
 
 <br>
 
@@ -1735,15 +1736,126 @@ explain select rank, metascore, title from imdb_parquet_bucketed where year = '2
 <br>
 <br>
 
+## 4. 트리노 엔진을 활용한 이기종 데이터 조인 실습
 
-### 참고 자료
-  * [Hive Language Manual DDL](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
-  * [Hive Language Manual DML](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML)
-  * [Top 7 Hive DDL Commands](https://data-flair.training/blogs/hive-ddl-commands/)
-  * [Top 7 Hive DML Commands](https://data-flair.training/blogs/hive-dml-commands/)
-  * [IMDB data from 2006 to 2016](https://www.kaggle.com/PromptCloudHQ/imdb-data)
-  * [Hive update, delete ERROR](https://community.cloudera.com/t5/Support-Questions/Hive-update-delete-and-insert-ERROR-in-cdh-5-4-2/td-p/29485)
+### 4-1 `trino-enabled.yml` 파일을 사용하여 컨테이너를 기동합니다
 
+#### 4-1-1. 기존 컨테이너를 안전하게 종료 합니다
+> 종료시에 기존 하둡 컨테이너에 복사된 파일은 그대로 유지되어야 합니다 (`imdb.tsv` 파일 재활용)
+```shell
+# bash
+docker-compose down
+```
+
+#### 4-1-2. `yml` 파일을 명시하여 컨테이너를 기동합니다
+> 모든 컨테이너가 정상적으로 기동될 때까지 대기(`--wait`)합니다
+```shell
+# bash
+docker-compose -f trino-enabled.yml up -d --wait
+```
+
+#### 4-1-3. 정상적으로 기동되었는지 확인합니다
+```shell
+# bash
+docker-compose -f trino-enabled.yml ps
+```
+
+
+### 4-2 [DBeaver](https://dbeaver.io/download/) 설치 및 접속정보 구성
+
+#### 4-2-1. 최신 버전 설치 후, Hive, MySQL 및 Trino 접속 생성
+
+![hive connection](images/hive-connection.png)
+![mysql-connection](images/mysql-connection.png)
+![trino-connection](images/trino-connection.png)
+
+> 모든 Connection 생성 이후에 모든 접속이 정상인지 더블클릭하여 확인합니다
+![dbeaver-connections](images/dbeaver-connections.png)
+
+#### 4-2-2. `DBeaver` 콘솔에서 `Hive` 테이블 `imdb_movies` 생성
+> 위 하이브 예제에서 데이터가 `/opt/hive/examples/imdb.tsv` 경로에 존재하기 때문에 테이블을 다시 생성하더라도 문제가 없습니다
+```hiveql
+show tables;
+
+drop table if exists imdb_movies;
+
+create table imdb_movies (
+  rank int
+  , title string
+  , genre string
+  , description string
+  , director string
+  , actors string
+  , year string
+  , runtime int
+  , rating string
+  , votes int
+  , revenue string
+  , metascore int
+) row format delimited fields terminated by '\t';
+
+load data local inpath '/opt/hive/examples/imdb.tsv' into table imdb_movies;
+
+desc formatted default.imdb_movies;
+
+SELECT `rank`, title, genre, description, director, actors, `year`, runtime, rating, votes, revenue, metascore
+FROM default.imdb_movies;
+```
+
+#### 4-2-3. `DBeaver` 콘솔에서 `Hive`, `MySQL` 및 `Trino` 페더레이션 쿼리 실행
+
+```hiveql
+-- Hive Query
+SELECT rank, title, genre
+  FROM hive."default".imdb_movies
+  WHERE genre LIKE '%Sci-Fi%'
+  ORDER BY rank
+  LIMIT 10;
+
+-- MySQL Query
+SELECT *
+  FROM mysql."default".peoples
+  WHERE people < 100
+  LIMIT 10;
+
+-- Trino Query
+SELECT h.title, h.genre, p.korean
+  FROM hive."default".imdb_movies h
+  JOIN mysql."default".peoples p
+    ON h.rank  = p.people
+  LIMIT 50;
+```
+
+### 4-3 트리노 접속 종료 후, 컨테이너 전체 종료
+> 트리노의 경우 성능을 위해 접속을 유지하고 있어서 명시적으로 접속을 종료해야 컨테이너가 정상 종료됩니다.
+> 종료시에 하둡의 볼륨까지(`-v`) 모두 안전하게 종료합니다
+
+![close-connections](images/close-connections.png)
+
+```shell
+# bash
+docker-compose -f trino-enabled.yml down -v
+```
+
+* 컨테이너가 정상종료되지 않는 경우는 아래와 같이 강제로 종료할 수 있습니다
+```shell
+docker rm -f `docker ps -aq | awk {' print $1 '}`
+```
+
+[목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
+
+<br>
+<br>
+
+
+## 5. 참고 자료
+* [Hive Language Manual DDL](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL)
+* [Hive Language Manual DML](https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DML)
+* [Top 7 Hive DDL Commands](https://data-flair.training/blogs/hive-ddl-commands/)
+* [Top 7 Hive DML Commands](https://data-flair.training/blogs/hive-dml-commands/)
+* [IMDB data from 2006 to 2016](https://www.kaggle.com/PromptCloudHQ/imdb-data)
+* [Hive update, delete ERROR](https://community.cloudera.com/t5/Support-Questions/Hive-update-delete-and-insert-ERROR-in-cdh-5-4-2/td-p/29485)
+* [DBeaver Community](https://dbeaver.io/download/)
 
 [목차로 돌아가기](#4일차-아파치-하이브-데이터-적재)
 
