@@ -475,7 +475,7 @@ hadoop fs -cat /user/sqoop/target/seoul_popular_trip/part-m-00000
 
 ```bash
 # terminal
-docker compose exec mysql mysql -usqoop -psqoop
+docker compose exec mysql mysql -uscott -ptiger
 ```
 * 테스트 적재를 위한 테이블을 생성합니다
 ```sql
@@ -560,7 +560,7 @@ ask sqoop export -m 1 --connect jdbc:mysql://mysql:3306/default --username scott
 * 다시 컨테이너로 접속하여 테이블을 조회하여 레코드 수를 확인합니다
 ```bash
 # terminal
-docker compose exec mysql mysql -usqoop -psqoop
+docker compose exec mysql mysql -uscott -ptiger
 ```
 
 * 카운트 수가 입력 레코드 수인 1956과 같다면 정답입니다 
