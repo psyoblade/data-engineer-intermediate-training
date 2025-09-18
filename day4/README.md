@@ -1358,7 +1358,11 @@ Steinberg|33|3
 * Beeline 커맨드를 통해 직원 및 부서 테이블을 생성합니다
 ```bash
 # terminal
-beeline jdbc:hive2://localhost:10000 scott tiger
+beeline
+```
+```bash
+# beeline
+!connect jdbc:hive2://localhost:10000 scott tiger
 use testdb;
 ```
 <br>
