@@ -692,7 +692,7 @@ select count(1) from imdb_title;
 
 #### 2-3-4. 테이블 데이터 삭제 - DELETE
 > 설치된 Hive 버전(2.3.2)에서 ACID-based transaction 을 지원하는 것은 Bucketed ORC 파일만 지원합니다 (2025년 현재 Delta Lake, Iceberg 및 Hudi 등의 ACID Transaction 지원하는 다양한 프레임워크가 존재합니다)
-  * [Hive Transactions](https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions) 
+  * [Hive Transactions](https://hive.apache.org/docs/latest/user/hive-transactions/) 
 ```sql
 /** Usages
     DELETE FROM tablename [WHERE expression]
