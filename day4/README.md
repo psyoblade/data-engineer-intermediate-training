@@ -1079,7 +1079,7 @@ use testdb;
 | Rating | 등급 |
 | Votes | 투표 |
 | Revenue | 매출 |
-| Metascrore | 메타스코어 |
+| Metascore | 메타스코어 |
 
 <br>
 
