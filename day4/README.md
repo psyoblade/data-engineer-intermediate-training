@@ -1329,21 +1329,17 @@ vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 
 #### 3-4-1. 실습을 위한 employee 및 department 테이블을 생성합니다
 
-* 컨테이너에 접속된 세션이 없다면 하이브 서버에 접속합니다
+* 컨테이너에 접속된 세션이 없다면 하이브 서버에 접속하여 로컬에 저장된 고객 및 부서정보를 복사합니다
 ```bash
 # terminal
 docker compose exec hive-server bash
-```
-* 중복제거 하여 `emp.uniq.txt` 파일을 생성합니다
-```bash
-# docker
-cd /opt/hive/examples/files
-cat emp.txt | sort | uniq > emp.uniq.txt
-cat emp.uniq.txt
+# terminal
+docker cp data/emp.uniq.txt hive-server:/opt/hive/examples/files
+docker cp data/dept.txt hive-server:/opt/hive/examples/files
 ```
 <br>
 
-* 최종 결과 파일은 다음과 같습니다
+* 최종 결과 파일은 다음과 비슷합니다
 ```sql
 /**
 John|31|6
