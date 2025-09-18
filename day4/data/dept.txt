@@ -1,0 +1,10 @@
+10|sales
+11|engineering
+12|clerical
+13|marketing
+14|transport
+15|hr
+16|finance
+17|it
+18|logistics
+19|operations
