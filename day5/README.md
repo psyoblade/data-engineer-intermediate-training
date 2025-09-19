@@ -227,8 +227,8 @@ spark.sql("select * from user")
 ```python
 spark.sql("describe purchase")
 spark.sql("select * from purchase")
-# selectClause = "<금액을 필터하는 조건을 작성하세요>"
-# spark.sql(selectClause)
+# whereClause = "<금액을 필터하는 조건을 작성하세요>"
+# spark.sql("select * from purchase").where(whereClause)
 ```
 
 #### 3-4-3. GroupBy 구문을 이용하여 로그인, 로그아웃 횟수를 출력하세요
