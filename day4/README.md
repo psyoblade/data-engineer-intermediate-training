@@ -1516,6 +1516,9 @@ select * from employee sort by dept_id desc;
 ```
 ##### Sort By : 해당 파티션 내에서만 정렬을 보장합니다
 * mapred.reduce.task = 2 라면 2개의 개별 파티션 내에서만 정렬됩니다
+* 분배: 쿼리가 분배 규칙을 지정하지 않았으므로, 엔진 기본(보통 해시/범위)로 여러 리듀서에 데이터가 흩어지게 됩니다
+* 정렬: 각 리듀서 내부에서만 dept_id 내림차순으로 정렬됩니다
+* 결과: 파일별로는 정렬돼 보이나, 파일 간 순서는 섞일 수 있어 전체적으로 보면 dept_id 내림차순이 깨져 보이는 것이 정상입니다
 ```bash
 +----------------+-------------------+---------------+
 | employee.name  | employee.dept_id  | employee.seq  |
@@ -1536,7 +1539,10 @@ select * from employee sort by dept_id desc;
 # beeline>
 select * from employee distribute by dept_id;
 ```
-##### Distribute By : 단순히 해당 파티션 별로 구분되어 실행됨을 보장합니다 - 정렬을 보장하지 않습니다.
+##### Distribute By : 단순히 해당 파티션 별로 구분되어 실행됨을 보장합니다
+* 분배: 같은 dept_id 값은 반드시 같은 리듀서로 가게되며 키 기반 파티셔닝을 보장합니다
+* 정렬: 없으며, 입력 도착 순서 그대로 출력될 수 있습니다
+* 결과: 파일을 열어보면 파일 단위로 특정 dept_id(또는 소수의 키들)가 몰려 있으며, 키별로 모으는 것까지만 보장하고 순서는 무작위일 수 있습니다
 ```bash
 +----------------+-------------------+---------------+
 | employee.name  | employee.dept_id  | employee.seq  |
@@ -1558,6 +1564,9 @@ select * from employee distribute by dept_id;
 select * from employee distribute by dept_id sort by dept_id asc, seq desc;
 ```
 ##### Distribute By Sort By : 파티션과 해당 필드에 대해 모두 정렬을 보장합니다
+* 분배: 같은 dept_id는 같은 리듀서로 전송합니다
+* 정렬: 리듀서 내부에서 먼저 dept_id 오름차순으로, 같은 dept_id 안에서는 seq 내림차순으로 정렬됩니다
+* 결과: 파일을 열면 dept_id 단위로 뭉쳐 있고, 그 블록 내부는 seq가 내림차순 정렬이지만 파일 간 전역 순서는 여전히 섞일 수 있습니다
 ```bash
 +----------------+-------------------+---------------+
 | employee.name  | employee.dept_id  | employee.seq  |
@@ -1577,6 +1586,9 @@ select * from employee distribute by dept_id sort by dept_id asc, seq desc;
 select * from employee cluster by dept_id;
 ```
 ##### Cluster By : 파티션 정렬만 보장합니다 - 특정필드의 정렬이 필요하면 Distribute By Sort By 를 사용해야 합니다
+* `CLUSTER BY` 는 `DISTRIBUTE BY k` + `SORT BY k(ASC)` 의 축약형 입니다
+* 정렬 방향 바꿀 수 없으며 다중 컬럼 정렬 못하고 오직 키 하나, ASC 만 지원합니다
+* 즉, 축약형이고 간결하게 사용할 뿐이지 큰 차이가 없습니다 (Syntax Sugar)
 ```bash
 +----------------+-------------------+---------------+
 | employee.name  | employee.dept_id  | employee.seq  |
