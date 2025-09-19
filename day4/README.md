@@ -1333,9 +1333,13 @@ vimdiff sort.imdb_parquet.out sort.imdb_parquet_small.out
 ```bash
 # terminal
 docker compose exec hive-server bash
-# terminal
-docker cp data/emp.uniq.txt hive-server:/opt/hive/examples/files
-docker cp data/dept.txt hive-server:/opt/hive/examples/files
+```
+* 중복제거 하여 emp.uniq.txt 파일을 생성합니다
+```bash
+# docker
+cd /opt/hive/examples/files
+cat emp.txt | sort | uniq > emp.uniq.txt
+cat emp.uniq.txt
 ```
 <br>
 
