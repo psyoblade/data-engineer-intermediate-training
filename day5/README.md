@@ -406,14 +406,14 @@ print("+------------------+")
 * 아래의 조건이 만족하는 코드를 작성하세요
   - 지표정의 : 오늘 접속한 이용자 <kbd>select `a_uid`, count(`a_uid`) ... group by `a_uid`</kbd>
   - 지표산식 : 접속 여부는 'login' 로그가 존재하면 접속한 유저로 가정
-  - 입력형태 : user
+  - 입력형태 : access
   - 출력형태 : `a_uid`, `a_count`
   - 정렬형태 : `a_uid` asc
 
 * access 테이블로부터 `a_uid` 가 'login' 인 `a_uid` 값의 빈도수를 group by `a_uid` 집계를 통해 구하시오
 ```python
 access.printSchema()
-# countOfAccess = "select a_uid, <집계함수> from user <집계 구문>"
+# countOfAccess = "select a_uid, <집계함수> from access <집계 구문>"
 # accs = spark.sql(countOfAccess)
 # display(accs)
 ```
